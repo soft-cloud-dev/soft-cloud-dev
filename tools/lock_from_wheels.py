@@ -16,7 +16,10 @@ if any(p.suffix != ".whl" for p in wheelhouse.iterdir()):
 records = {}
 for wheel in wheels:
     with zipfile.ZipFile(wheel) as archive:
-        names = [n for n in archive.namelist() if n.endswith(".dist-info/METADATA")]
+        names = [
+            n for n in archive.namelist()
+            if n.count("/") == 1 and n.endswith(".dist-info/METADATA")
+        ]
         if len(names) != 1:
             raise SystemExit(f"Ambiguous metadata: {wheel.name}")
         metadata = email.message_from_bytes(archive.read(names[0]))
