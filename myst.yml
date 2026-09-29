@@ -2,7 +2,7 @@ version: 1
 project:
   title: Research Book
   description: A computational publication built with Jupyter Book 2.
-  github: https://github.com/OWNER/REPOSITORY
+  github: https://github.com/tulik/soft-cloud-dev
   toc:
     - file: README.md
     - file: introduction.md
