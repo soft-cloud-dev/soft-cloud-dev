@@ -14,4 +14,5 @@ site:
   template: book-theme
   options:
     logo: images/logo.svg
+    logo_dark: images/logo-dark.svg
     favicon: images/favicon.ico
