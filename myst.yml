@@ -1,7 +1,7 @@
 version: 1
 project:
-  title: Research Book
-  description: A computational publication built with Jupyter Book 2.
+  title: Software Cloud
+  description: Computational publication and research platform for Software Cloud.
   github: https://github.com/soft-cloud-dev/soft-cloud-dev
   toc:
     - file: README.md
@@ -14,3 +14,4 @@ site:
   template: book-theme
   options:
     logo: images/logo.svg
+    favicon: images/favicon.ico

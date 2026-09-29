@@ -1,3 +1,3 @@
 # Introduction
 
-Project background and operational scope.
+Software Cloud background and operational scope.

@@ -1,3 +1,3 @@
 # Architecture
 
-Computational pipeline and build environment specifications.
+Software Cloud computational pipeline and build environment specifications.
