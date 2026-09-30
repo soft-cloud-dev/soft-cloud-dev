@@ -1,18 +1,39 @@
 version: 1
 project:
-  title: Software Cloud
-  description: Computational publication and research platform for Software Cloud.
+  id: hub
+  title: SoftCloud — Systems Documentation and Laboratories
+  short_title: SoftCloud Hub
+  description: >-
+    Project documentation, architecture notes, and laboratory resources for SoftCloud systems.
   github: https://github.com/soft-cloud-dev/soft-cloud-dev
+  keywords:
+    - SoftCloud
+    - Cloud Infrastructure
+    - FreeBSD
+    - Linux
+    - FreeIPA
+    - Systems Architecture
   toc:
     - file: README.md
     - file: introduction.md
     - file: architecture.md
+    - file: projects/linux.md
     - title: Computational Notebooks
       children:
         - file: notebooks/experiment.ipynb
 site:
   template: book-theme
+  nav:
+    - title: Hub
+      url: https://my.softcloud.dev/
+    - title: Node Linux
+      url: https://linux.softcloud.dev/
+    - title: FreeIPA
+      url: https://freeipa.softcloud.dev/
+    - title: GitHub
+      url: https://github.com/soft-cloud-dev
   options:
+    favicon: images/favicon.ico
     logo: images/logo.svg
     logo_dark: images/logo-dark.svg
-    favicon: images/favicon.ico
+    logo_alt: SoftCloud
