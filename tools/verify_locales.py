@@ -526,7 +526,14 @@ check(plOpt && plOpt.tagName === "A" && plOpt.getAttribute("href") === "/pl/intr
 window.location.pathname = "/projects/linux";
 initSiteLanguageSwitcher();
 const deLinux = document.querySelector(".sc-lang-switcher").querySelectorAll(".sc-lang-option").find(o => o.getAttribute("data-locale-code") === "de");
-check(deLinux && deLinux.getAttribute("href") === "/de/projects/linux", "German nested route href");
+const expectedDeLinux = lookupPageTranslation(window.__SC_ROUTE_MANIFEST__, "de", "projects/linux");
+check(
+  expectedDeLinux.available &&
+    expectedDeLinux.route &&
+    deLinux &&
+    deLinux.getAttribute("href") === expectedDeLinux.route,
+  "German nested-source route href"
+);
 window.history.pushState({{}}, "", "/es/architecture");
 (window.listeners["popstate"] || []).forEach(fn => fn());
 check(document.querySelector(".sc-lang-switcher").getAttribute("data-sc-locale") === "es", "SPA pushState locale update");
