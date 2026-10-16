@@ -104,6 +104,16 @@ Sitemap: {domain}/sitemap.xml
             f.write('\n'.join(xml_lines) + '\n')
         print(f"[OK] Generated fallback {sitemap_path} with {len(routes)} routes")
 
+    # 3. thebe artifacts & sourcemaps
+    try:
+        tools_dir = os.path.dirname(os.path.abspath(__file__))
+        if tools_dir not in sys.path:
+            sys.path.insert(0, tools_dir)
+        from fix_thebe import process_thebe
+        process_thebe(html_dir)
+    except Exception as e:
+        print(f"[INFO] Note on Thebe artifact processing: {e}", file=sys.stderr)
+
 if __name__ == "__main__":
     if len(sys.argv) < 3:
         print("Usage: fix_seo_artifacts.py <canonical_domain_url> <html_output_directory>")
