@@ -28,7 +28,7 @@ Card body containing a list:
 ```{wa-button}
 :variant: primary
 :appearance: filled
-:size: medium
+:size: m
 :href: https://my.softcloud.dev/get-started
 :target: _blank
 

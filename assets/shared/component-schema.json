@@ -56,7 +56,7 @@
         },
         "size": {
           "type": "string",
-          "enum": ["small", "medium", "large"]
+          "enum": ["s", "m", "l", "small", "medium", "large"]
         },
         "href": { "type": "string" },
         "target": {

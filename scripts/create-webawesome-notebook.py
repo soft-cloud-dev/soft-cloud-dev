@@ -107,14 +107,14 @@ notebook = {
                 "\n",
                 "- **Variants**: `brand` (primary theme action), `neutral` (secondary action), `success` (confirmation/positive action), `warning` (cautionary action), `danger` (destructive action), `default`.\n",
                 "- **Appearances**: `filled` (high contrast, default), `outlined` (subtle border), `plain` (ghost/flat button), `text`.\n",
-                "- **Sizes**: `small`, `medium` (default), `large`.\n",
+                "- **Sizes**: `s` (small), `m` (medium / default), `l` (large). Compact size tokens ensure zero runtime console deprecations.\n",
                 "- **Shapes & Modifiers**: `pill` (fully rounded caps), `circle` (equal aspect icon button), `disabled` (inaccessible state), `loading` (spinner state), `caret` (dropdown indicator).\n",
                 "- **Navigation**: `href` (validated link URL) and `target` (`_blank`, `_self`; automatically enforces `rel=\"noopener noreferrer\"`).\n",
                 "\n",
                 "```{wa-button} https://my.softcloud.dev/\n",
                 ":variant: brand\n",
                 ":appearance: filled\n",
-                ":size: medium\n",
+                ":size: m\n",
                 "Documentation Home Portal\n",
                 "```"
             ]
@@ -128,7 +128,7 @@ notebook = {
                 "# Button variants showcase\n",
                 "variants = [\"brand\", \"neutral\", \"success\", \"warning\", \"danger\"]\n",
                 "for var in variants:\n",
-                "    display(UI.button(f\"{var.capitalize()} Action\", variant=var, size=\"medium\"))"
+                "    display(UI.button(f\"{var.capitalize()} Action\", variant=var, size=\"m\"))"
             ]
         },
         {
@@ -138,9 +138,9 @@ notebook = {
             "outputs": [],
             "source": [
                 "# Button sizes, appearances, and pill modifiers\n",
-                "display(UI.button(\"Small Outlined\", variant=\"brand\", appearance=\"outlined\", size=\"small\"))\n",
-                "display(UI.button(\"Medium Filled Pill\", variant=\"brand\", pill=True, size=\"medium\"))\n",
-                "display(UI.button(\"Large Success Action\", variant=\"success\", size=\"large\"))\n",
+                "display(UI.button(\"Small Outlined\", variant=\"brand\", appearance=\"outlined\", size=\"s\"))\n",
+                "display(UI.button(\"Medium Filled Pill\", variant=\"brand\", pill=True, size=\"m\"))\n",
+                "display(UI.button(\"Large Success Action\", variant=\"success\", size=\"l\"))\n",
                 "display(UI.button(\"External Documentation\", href=\"https://my.softcloud.dev/\", variant=\"neutral\", target=\"_blank\"))"
             ]
         },
@@ -557,7 +557,7 @@ notebook = {
                 "\n",
                 "```{wa-button} https://my.softcloud.dev/\n",
                 ":variant: brand\n",
-                ":size: medium\n",
+                ":size: m\n",
                 "View Live Migration Runbook\n",
                 "```"
             ]
@@ -574,7 +574,7 @@ notebook = {
                 "    title=\"Scheduled Infrastructure Maintenance\",\n",
                 "    variant=\"warning\"\n",
                 "))\n",
-                "display(UI.button(\"View Live Migration Runbook\", href=\"https://my.softcloud.dev/\", variant=\"brand\", size=\"medium\"))"
+                "display(UI.button(\"View Live Migration Runbook\", href=\"https://my.softcloud.dev/\", variant=\"brand\", size=\"m\"))"
             ]
         },
         {

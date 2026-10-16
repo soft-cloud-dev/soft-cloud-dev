@@ -108,7 +108,9 @@ export function buildCustomElementNode(meta, lightDomChildren = []) {
         setAttr(host, 'appearance', meta.appearance);
       }
       if (meta.size) {
-        setAttr(host, 'size', meta.size);
+        const sizeMap = { small: 's', medium: 'm', large: 'l' };
+        const normalizedSize = sizeMap[String(meta.size).toLowerCase()] || meta.size;
+        setAttr(host, 'size', normalizedSize);
       }
       if (meta.href) {
         setAttr(host, 'href', meta.href);

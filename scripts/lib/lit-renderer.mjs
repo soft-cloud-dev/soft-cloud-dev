@@ -37,6 +37,9 @@ export function buildLitTemplate(tagName, attrMap) {
         circle,
       } = attrMap;
 
+      const sizeMap = { small: 's', medium: 'm', large: 'l' };
+      const normalizedSize = (size && sizeMap[String(size).toLowerCase()]) || size;
+
       return html`<wa-button
         ?disabled=${disabled !== undefined}
         ?caret=${caret !== undefined}
@@ -46,7 +49,7 @@ export function buildLitTemplate(tagName, attrMap) {
         ?circle=${circle !== undefined}
         variant=${variant || nothing}
         appearance=${appearance || nothing}
-        size=${size || nothing}
+        size=${normalizedSize || nothing}
         href=${href || nothing}
         target=${target || nothing}
         rel=${rel || nothing}

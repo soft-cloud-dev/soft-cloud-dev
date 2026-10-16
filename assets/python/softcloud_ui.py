@@ -144,7 +144,8 @@ class UI:
         if appearance:
             meta["appearance"] = appearance
         if size:
-            meta["size"] = size
+            size_map = {"small": "s", "medium": "m", "large": "l"}
+            meta["size"] = size_map.get(size.strip().lower(), size.strip().lower())
         if target:
             meta["target"] = target
             rel = sanitize_rel(rel, target)

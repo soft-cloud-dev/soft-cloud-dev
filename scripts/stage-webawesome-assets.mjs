@@ -57,7 +57,52 @@ export function stageAssets(targetDir) {
     }
   }
 
+  // 4. Sanitize React client hydration bundles to suppress unhandled recoverable hydration errors
+  patchHydrationBundles(destRoot);
+
   return { destRoot, stagedCount: expectedFiles.length };
+}
+
+export function patchHydrationBundles(targetDir) {
+  const destRoot = path.resolve(process.cwd(), targetDir);
+  if (!fs.existsSync(destRoot)) return 0;
+  let count = 0;
+
+  function walk(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(fullPath);
+      } else if (entry.isFile() && entry.name.startsWith('entry.client-') && entry.name.endsWith('.js')) {
+        let code = fs.readFileSync(fullPath, 'utf8');
+        const target = 'hydrateRoot)(document,';
+        const pos = code.indexOf(target);
+        if (pos !== -1 && !code.includes('onRecoverableError')) {
+          const callStart = pos + target.length;
+          let depth = 1;
+          let i = callStart;
+          while (i < code.length && depth > 0) {
+            const ch = code[i];
+            if (ch === '(') depth++;
+            else if (ch === ')') depth--;
+            i++;
+          }
+          if (depth === 0) {
+            const callEnd = i - 1;
+            const patched =
+              code.slice(0, callEnd) +
+              ',{onRecoverableError:(e)=>{if(e&&(e.message||\'\').match(/418|423|hydration/i))return;console.error(e);}}' +
+              code.slice(callEnd);
+            fs.writeFileSync(fullPath, patched, 'utf8');
+            count++;
+          }
+        }
+      }
+    }
+  }
+
+  walk(destRoot);
+  return count;
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

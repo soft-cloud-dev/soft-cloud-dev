@@ -3,9 +3,12 @@ import { test, expect } from '@playwright/test';
 test.describe('Web Awesome Client Hydration', () => {
   test('custom elements are defined and hydrated without errors', async ({ page }) => {
     const consoleErrors: string[] = [];
+    const consoleWarnings: string[] = [];
     page.on('console', (msg) => {
       if (msg.type() === 'error') {
         consoleErrors.push(msg.text());
+      } else if (msg.type() === 'warning') {
+        consoleWarnings.push(msg.text());
       }
     });
 
@@ -41,16 +44,20 @@ test.describe('Web Awesome Client Hydration', () => {
     });
     expect(buttonShadowIntact).toBe(true);
 
-    // Filter out expected or non-fatal network/favicon console errors if any
+    // Filter out non-fatal network/favicon console errors if any
     const realErrors = consoleErrors.filter(
       (err) =>
         !err.includes('favicon') &&
         !err.includes('thebe') &&
-        !err.includes('404') &&
-        !err.includes('React error #418') &&
-        !err.includes('deprecated')
+        !err.includes('404')
     );
     expect(realErrors).toEqual([]);
+
+    // Assert zero deprecation warnings and zero React error #418 occurrences
+    const deprecationWarnings = consoleWarnings.filter((warn) => warn.includes('deprecated'));
+    expect(deprecationWarnings).toEqual([]);
+    const react418Errors = consoleErrors.filter((err) => err.includes('React error #418'));
+    expect(react418Errors).toEqual([]);
   });
 
   test('button component responds to user interaction', async ({ page }) => {

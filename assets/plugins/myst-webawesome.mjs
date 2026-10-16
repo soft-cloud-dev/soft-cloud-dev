@@ -181,6 +181,10 @@ const waButtonDirective = {
   },
   run(data, vfile, ctx) {
     const opts = { ...data.options };
+    if (opts.size) {
+      const sizeMap = { small: 's', medium: 'm', large: 'l' };
+      opts.size = sizeMap[String(opts.size).toLowerCase()] || opts.size;
+    }
     if (!opts.href && data.arg && (data.arg.startsWith('http') || data.arg.startsWith('/') || data.arg.startsWith('#'))) {
       opts.href = data.arg.trim();
     } else if (!opts.label && data.arg && !data.body) {
