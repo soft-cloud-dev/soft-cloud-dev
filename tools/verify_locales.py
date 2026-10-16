@@ -278,6 +278,19 @@ def verify_built_html_artifact(root: Path, build_dir: Path) -> list[str]:
                     f"[{code}] Missing language-switcher.mjs mount initializer in {found_html.relative_to(build_dir)}"
                 )
 
+            # Verify button accessibility: all buttons (especially myst-search-bar) must have discernible text
+            search_btn_match = re.search(
+                r'<button\b[^>]*\bclass="[^"]*\bmyst-search-bar\b[^"]*"[^>]*>',
+                html_text,
+                re.IGNORECASE,
+            )
+            if search_btn_match:
+                tag = search_btn_match.group(0)
+                if not re.search(r'\baria-label\s*=', tag, re.IGNORECASE):
+                    errors.append(
+                        f"[{code}] <button class=\"myst-search-bar\"> missing aria-label in {found_html.relative_to(build_dir)}"
+                    )
+
             manifest_match = re.search(
                 r'<script\b[^>]*\bid=["\']softcloud-i18n-manifest["\'][^>]*>(.*?)</script>',
                 html_text,

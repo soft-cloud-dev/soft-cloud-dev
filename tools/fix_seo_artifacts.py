@@ -119,6 +119,70 @@ def _update_html_seo_head(
     return html_text
 
 
+SEARCH_LABELS: dict[str, str] = {
+    "en": "Search",
+    "pl": "Szukaj",
+    "de": "Suchen",
+    "es": "Buscar",
+    "fr": "Rechercher",
+}
+
+
+def fix_html_accessibility(
+    html_text: str,
+    loc_code: str = "en",
+    ui: dict[str, Any] | None = None,
+) -> str:
+    """Ensure interactive controls, particularly button.myst-search-bar, have discernible accessible text.
+
+    Resolves Lighthouse audit 'Buttons must have discernible text' by guaranteeing:
+    1. aria-label and title attributes on button.myst-search-bar.
+    2. A visually hidden .sr-only span with the localized search label inside the button,
+       ensuring assistive tech and AI agents detect the button name even on mobile viewports
+       where the placeholder span is hidden via CSS (.hidden.sm:block).
+    """
+    search_label = str((ui and ui.get("search")) or SEARCH_LABELS.get(loc_code, "Search"))
+
+    def _patch_search_button(match: re.Match[str]) -> str:
+        open_tag = match.group(1)
+        inner = match.group(2)
+        close_tag = match.group(3)
+
+        if not re.search(r'\baria-label\s*=', open_tag, re.IGNORECASE):
+            open_tag = re.sub(
+                r'(<button\b)',
+                rf'\1 aria-label="{search_label}"',
+                open_tag,
+                count=1,
+            )
+        if not re.search(r'\btitle\s*=', open_tag, re.IGNORECASE):
+            open_tag = re.sub(
+                r'(<button\b)',
+                rf'\1 title="{search_label}"',
+                open_tag,
+                count=1,
+            )
+
+        if '<span class="sr-only">' not in inner and "sr-only" not in inner:
+            sr_span = f'<span class="sr-only">{search_label}</span>'
+            placeholder_re = re.compile(
+                r'(<span\b[^>]*\bclass="[^"]*\bmyst-search-text-placeholder\b[^"]*"[^>]*>)',
+                re.IGNORECASE,
+            )
+            if placeholder_re.search(inner):
+                inner = placeholder_re.sub(rf"{sr_span}\1", inner, count=1)
+            else:
+                inner = sr_span + inner
+
+        return f"{open_tag}{inner}{close_tag}"
+
+    button_re = re.compile(
+        r'(<button\b[^>]*\bclass="[^"]*\bmyst-search-bar\b[^"]*"[^>]*>)(.*?)(</button>)',
+        re.DOTALL | re.IGNORECASE,
+    )
+    return button_re.sub(_patch_search_button, html_text)
+
+
 def process_site(domain: str, html_dir: str) -> None:
     domain = domain.rstrip("/")
     html_root = Path(html_dir).resolve()
@@ -171,11 +235,12 @@ def process_site(domain: str, html_dir: str) -> None:
         raw_html = path.read_text(encoding="utf-8")
         raw_html = re.sub(r"https?://localhost:3000/?", f"{domain}/", raw_html)
         updated_html = _update_html_seo_head(raw_html, html_lang, self_canonical, alternates)
+        updated_html = fix_html_accessibility(updated_html, loc_code, loc_info.get("ui"))
         atomic_write_text(path, updated_html)
         updated_pages += 1
 
     print(
-        f"[OK] Updated <html lang>, self-referencing canonical, and reciprocal hreflang tags in {updated_pages} HTML pages"
+        f"[OK] Updated <html lang>, canonical, hreflang, and button accessibility in {updated_pages} HTML pages"
     )
 
     # 4. Remove any nested per-locale sitemap.xml or robots.txt so there is a single unified root sitemap

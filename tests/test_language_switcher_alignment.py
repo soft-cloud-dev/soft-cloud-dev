@@ -10,10 +10,15 @@ Unit tests for widgets/language-switcher.mjs:
 from __future__ import annotations
 
 import re
+import sys
 import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+TOOLS_DIR = ROOT / "tools"
+if str(TOOLS_DIR) not in sys.path:
+    sys.path.insert(0, str(TOOLS_DIR))
+
 SWITCHER_PATH = ROOT / "widgets" / "language-switcher.mjs"
 
 
@@ -148,6 +153,63 @@ class TestLanguageSwitcherAlignment(unittest.TestCase):
         # adjustPanelAlignment must have runtime guard against vertical overlap and right viewport overflow
         self.assertIn("postRect.top < triggerRect.bottom", self.content)
         self.assertIn("postRect.right > viewportWidth - 8", self.content)
+
+    def test_search_button_accessibility_and_selector(self) -> None:
+        """Verify MyST search bar button accessibility remediation and control selector."""
+        # Ensure searchControl selector includes button.myst-search-bar
+        self.assertIn("button.myst-search-bar", self.content)
+        self.assertIn(".myst-search-bar", self.content)
+
+        # Ensure ensureAccessibleControls function and localized search labels exist
+        self.assertIn("function ensureAccessibleControls(", self.content)
+        self.assertIn("SEARCH_LABELS", self.content)
+        self.assertIn('"Search"', self.content)
+        self.assertIn('"Szukaj"', self.content)
+        self.assertIn('"Suchen"', self.content)
+        self.assertIn('"Buscar"', self.content)
+        self.assertIn('"Rechercher"', self.content)
+
+        # Ensure aria-label, title, and sr-only insertion
+        self.assertIn('btn.setAttribute("aria-label", searchLabel)', self.content)
+        self.assertIn('btn.setAttribute("title", searchLabel)', self.content)
+        self.assertIn('srSpan.className = "sr-only"', self.content)
+
+    def test_fix_seo_artifacts_accessibility(self) -> None:
+        """Verify fix_seo_artifacts.py patches button.myst-search-bar with discernible text."""
+        fix_seo_path = ROOT / "tools" / "fix_seo_artifacts.py"
+        self.assertTrue(fix_seo_path.is_file(), f"Missing {fix_seo_path}")
+        from fix_seo_artifacts import fix_html_accessibility
+
+        sample_html = (
+            '<header class="myst-top-nav">'
+            '<nav class="myst-top-nav-bar">'
+            '<div class="flex">'
+            '<button type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed" '
+            'class="myst-search-bar flex items-center h-10 aspect-square sm:w-64 text-left text-myst-text-secondary '
+            'border border-myst-border-strong rounded-lg bg-myst-bg-secondary dark:bg-myst-surface-hover myst-search-bar-disabled">'
+            '<svg class="w-10 h-10"></svg>'
+            '<span class="myst-search-text-placeholder hidden sm:block grow">Search</span>'
+            '</button>'
+            '</div></nav></header>'
+        )
+
+        # Test English remediation
+        en_patched = fix_html_accessibility(sample_html, loc_code="en")
+        self.assertIn('aria-label="Search"', en_patched)
+        self.assertIn('title="Search"', en_patched)
+        self.assertIn('<span class="sr-only">Search</span>', en_patched)
+
+        # Test Polish remediation
+        pl_patched = fix_html_accessibility(sample_html, loc_code="pl")
+        self.assertIn('aria-label="Szukaj"', pl_patched)
+        self.assertIn('title="Szukaj"', pl_patched)
+        self.assertIn('<span class="sr-only">Szukaj</span>', pl_patched)
+
+        # Verify idempotence (does not double inject)
+        re_patched = fix_html_accessibility(en_patched, loc_code="en")
+        self.assertEqual(en_patched.count('aria-label="Search"'), 1)
+        self.assertEqual(re_patched.count('aria-label="Search"'), 1)
+        self.assertEqual(re_patched.count('<span class="sr-only">Search</span>'), 1)
 
 
 if __name__ == "__main__":

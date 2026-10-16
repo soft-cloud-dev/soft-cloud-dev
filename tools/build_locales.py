@@ -292,6 +292,15 @@ def stage_locale_workspace(
     return ws
 
 
+SEARCH_LABELS: dict[str, str] = {
+    "en": "Search",
+    "pl": "Szukaj",
+    "de": "Suchen",
+    "es": "Buscar",
+    "fr": "Rechercher",
+}
+
+
 def generate_mock_html_for_workspace(
     ws: Path,
     locale_code: str,
@@ -307,6 +316,9 @@ def generate_mock_html_for_workspace(
     site_title = str(
         locale_info.get("site", {}).get("title")
         or base_myst.get("project", {}).get("title", "SoftCloud")
+    )
+    search_label = str(
+        locale_info.get("ui", {}).get("search") or SEARCH_LABELS.get(locale_code, "Search")
     )
 
     for rel_file in toc_files:
@@ -346,6 +358,10 @@ def generate_mock_html_for_workspace(
     <div class="myst-header-bar">
       <a href="{locale_base_url or '/'}">{site_title}</a>
       <div class="navbar-header-items__end">
+        <button type="button" aria-label="{search_label}" title="{search_label}" aria-haspopup="dialog" aria-expanded="false" data-state="closed" class="myst-search-bar flex items-center h-10 aspect-square sm:w-64 text-left text-myst-text-secondary border border-myst-border-strong rounded-lg bg-myst-bg-secondary dark:bg-myst-surface-hover myst-search-bar-disabled hover:ring-myst-focus-ring hover:border-myst-focus-ring">
+          <span class="sr-only">{search_label}</span>
+          <span class="myst-search-text-placeholder hidden sm:block grow">{search_label}</span>
+        </button>
         <button class="theme-toggle" aria-label="Toggle Theme" title="Toggle Theme">🌙</button>
       </div>
     </div>
@@ -543,6 +559,35 @@ def inject_language_switcher_into_html(
                     f'  <div id="softcloud-lang-switcher-root" class="sc-lang-host-floating" data-sc-lang-switcher="1" data-sc-base-url="{clean_base}"></div>\n</body>',
                     1,
                 )
+        # Ensure search bar buttons have discernible text and well-formed accessibility tree entries
+        search_btn_re = re.compile(
+            r'(<button\b[^>]*\bclass="[^"]*\bmyst-search-bar\b[^"]*"[^>]*>)(.*?)(</button>)',
+            re.DOTALL | re.IGNORECASE,
+        )
+
+        def _patch_btn(m: re.Match[str]) -> str:
+            open_tag = m.group(1)
+            inner = m.group(2)
+            close_tag = m.group(3)
+            if not re.search(r'\baria-label\s*=', open_tag, re.IGNORECASE):
+                open_tag = re.sub(r'(<button\b)', r'\1 aria-label="Search"', open_tag, count=1)
+            if not re.search(r'\btitle\s*=', open_tag, re.IGNORECASE):
+                open_tag = re.sub(r'(<button\b)', r'\1 title="Search"', open_tag, count=1)
+            if '<span class="sr-only">' not in inner and "sr-only" not in inner:
+                sr_span = '<span class="sr-only">Search</span>'
+                if 'class="myst-search-text-placeholder' in inner:
+                    inner = re.sub(
+                        r'(<span\b[^>]*\bclass="[^"]*\bmyst-search-text-placeholder\b[^"]*"[^>]*>)',
+                        rf"{sr_span}\1",
+                        inner,
+                        count=1,
+                    )
+                else:
+                    inner = sr_span + inner
+            return f"{open_tag}{inner}{close_tag}"
+
+        text = search_btn_re.sub(_patch_btn, text)
+
         if "</body>" in text:
             text = text.replace("</body>", f"{script_snippet}</body>", 1)
             atomic_write_text(html_file, text)

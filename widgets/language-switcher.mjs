@@ -427,6 +427,47 @@ function isAdjacent(el1, el2) {
   return el1.nextElementSibling === el2 || el1.previousElementSibling === el2;
 }
 
+export const SEARCH_LABELS = {
+  en: "Search",
+  pl: "Szukaj",
+  de: "Suchen",
+  es: "Buscar",
+  fr: "Rechercher",
+};
+
+/**
+ * Ensure all header interactive elements, particularly the MyST search bar button,
+ * expose a discernible accessible name across all viewports (desktop and mobile icon-only).
+ */
+export function ensureAccessibleControls(
+  doc = typeof document !== "undefined" ? document : null,
+  locale = "en",
+  ui = {}
+) {
+  if (!doc || typeof doc.querySelectorAll !== "function") return;
+  const searchButtons = doc.querySelectorAll("button.myst-search-bar, .myst-search-bar");
+  const searchLabel = (ui && ui.search) || SEARCH_LABELS[locale] || "Search";
+  for (const btn of searchButtons) {
+    if (!btn.getAttribute("aria-label")) {
+      btn.setAttribute("aria-label", searchLabel);
+    }
+    if (!btn.getAttribute("title")) {
+      btn.setAttribute("title", searchLabel);
+    }
+    if (!btn.querySelector(".sr-only")) {
+      const srSpan = doc.createElement("span");
+      srSpan.className = "sr-only";
+      srSpan.textContent = searchLabel;
+      const placeholder = btn.querySelector(".myst-search-text-placeholder");
+      if (placeholder && placeholder.parentElement === btn) {
+        btn.insertBefore(srSpan, placeholder);
+      } else {
+        btn.appendChild(srSpan);
+      }
+    }
+  }
+}
+
 /**
  * Ensure a `[data-sc-lang-switcher]` host element exists in the document and is positioned
  * next to the site theme switch toggle when available.
@@ -434,9 +475,11 @@ function isAdjacent(el1, el2) {
 export function ensureLanguageSwitcherHost(doc = typeof document !== "undefined" ? document : null) {
   if (!doc || typeof doc.querySelector !== "function") return null;
 
+  ensureAccessibleControls(doc);
+
   const themeToggle = findThemeToggle(doc);
   const searchControl = doc.querySelector(
-    '.DocSearch-Button, button[aria-label*="Search" i], input[type="search"], [data-search-button]'
+    '.DocSearch-Button, button.myst-search-bar, .myst-search-bar, button[aria-label*="Search" i], input[type="search"], [data-search-button]'
   );
   const headerContainer =
     (themeToggle && themeToggle.parentElement) ||
@@ -870,6 +913,8 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
     ...(currentLocaleInfo.ui || {}),
   };
 
+  ensureAccessibleControls(doc, currentLocaleCode, ui);
+
   const styleEl = doc.createElement("style");
   styleEl.textContent = SWITCHER_STYLES;
 
@@ -1216,6 +1261,7 @@ export function installNavigationSync(options = {}) {
   let lastPathname = window.location?.pathname || "/";
 
   const syncIfNeeded = () => {
+    ensureAccessibleControls(document);
     const currentPathname = window.location?.pathname || "/";
     const hostEl = document.querySelector("[data-sc-lang-switcher]");
     const mountedSwitcher = hostEl?.querySelector(".sc-lang-switcher");
@@ -1249,6 +1295,7 @@ export function installNavigationSync(options = {}) {
 
   if (typeof MutationObserver !== "undefined" && document.body) {
     const observer = new MutationObserver(() => {
+      ensureAccessibleControls(document);
       const hostEl = document.querySelector("[data-sc-lang-switcher]");
       const themeToggle = findThemeToggle(document);
       const adjacent = themeToggle && hostEl ? isAdjacent(hostEl, themeToggle) : true;
@@ -1278,6 +1325,7 @@ function render({ model, el }) {
 // Auto-mount on static documentation pages and install client-side navigation sync
 if (typeof document !== "undefined") {
   const boot = () => {
+    ensureAccessibleControls(document);
     initSiteLanguageSwitcher();
     installNavigationSync();
   };
@@ -1293,6 +1341,8 @@ export default {
   mountLanguageSwitcher,
   initSiteLanguageSwitcher,
   installNavigationSync,
+  ensureAccessibleControls,
+  SEARCH_LABELS,
   loadEmbeddedRouteManifest,
   ensureLanguageSwitcherHost,
   findThemeToggle,
