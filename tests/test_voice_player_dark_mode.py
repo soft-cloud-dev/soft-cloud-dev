@@ -77,5 +77,13 @@ class TestVoicePlayerDarkMode(unittest.TestCase):
         self.assertIn("#a1a1aa", self.content)
 
 
+    def test_dynamic_theme_toggle_reactivity(self) -> None:
+        """Verify dynamic theme toggle handlers and observers operate without page reload."""
+        self.assertIn("subtree: true", self.content)
+        self.assertIn("handleDocClick", self.content)
+        self.assertIn("handleStorage", self.content)
+        self.assertIn("color-scheme", self.content)
+
+
 if __name__ == "__main__":
     unittest.main()

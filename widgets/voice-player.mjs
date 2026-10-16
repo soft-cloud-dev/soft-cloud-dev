@@ -141,24 +141,7 @@ export function isDarkModeActive(doc = typeof document !== "undefined" ? documen
   const docEl = doc.documentElement;
   const body = doc.body;
 
-  // 1. Check if el or host has dark class / theme
-  const host = el?.host || (typeof el?.getRootNode === "function" && el.getRootNode()?.host);
-  if (
-    host?.classList?.contains("dark") ||
-    host?.getAttribute?.("data-theme") === "dark" ||
-    host?.getAttribute?.("data-mode") === "dark"
-  ) {
-    return true;
-  }
-  if (
-    host?.classList?.contains("light") ||
-    host?.getAttribute?.("data-theme") === "light" ||
-    host?.getAttribute?.("data-mode") === "light"
-  ) {
-    return false;
-  }
-
-  // 2. Explicit dark class or data attributes on root / body
+  // 1. Explicit dark class or data attributes on root / body
   if (
     docEl?.classList?.contains("dark") ||
     body?.classList?.contains("dark") ||
@@ -170,7 +153,7 @@ export function isDarkModeActive(doc = typeof document !== "undefined" ? documen
     return true;
   }
 
-  // 3. Explicit light class or data attributes on root / body
+  // 2. Explicit light class or data attributes on root / body
   if (
     docEl?.classList?.contains("light") ||
     body?.classList?.contains("light") ||
@@ -182,19 +165,82 @@ export function isDarkModeActive(doc = typeof document !== "undefined" ? documen
     return false;
   }
 
-  // 4. Stored preference
+  // 3. Enclosing ancestor outside the widget host (e.g. section container, #root, .book-theme)
+  const host = el?.host || (typeof el?.getRootNode === "function" && el.getRootNode()?.host);
+  const contextNode = host || el;
+  const ancestor = contextNode?.parentElement?.closest?.(
+    ".dark, .light, [data-theme], [data-mode], [data-theme-mode]"
+  );
+  if (ancestor) {
+    if (
+      ancestor.classList.contains("dark") ||
+      ancestor.getAttribute("data-theme") === "dark" ||
+      ancestor.getAttribute("data-mode") === "dark" ||
+      ancestor.getAttribute("data-theme-mode") === "dark"
+    ) {
+      return true;
+    }
+    if (
+      ancestor.classList.contains("light") ||
+      ancestor.getAttribute("data-theme") === "light" ||
+      ancestor.getAttribute("data-mode") === "light" ||
+      ancestor.getAttribute("data-theme-mode") === "light"
+    ) {
+      return false;
+    }
+  }
+
+  // 4. Check for any top-level app wrapper with dark class in the document
+  if (
+    doc.querySelector?.(
+      "html.dark, body.dark, #root.dark, #__next.dark, .myst-app.dark"
+    )
+  ) {
+    return true;
+  }
+
+  // 5. Check <meta name="color-scheme">
+  const metaScheme = doc.querySelector?.('meta[name="color-scheme"]')?.getAttribute("content");
+  if (metaScheme === "dark") return true;
+  if (metaScheme === "light") return false;
+
+  // 6. Stored preference
   try {
     if (typeof window !== "undefined" && window.localStorage) {
       const stored =
         window.localStorage.getItem("theme") ||
         window.localStorage.getItem("myst-theme") ||
-        window.localStorage.getItem("color-theme");
+        window.localStorage.getItem("color-theme") ||
+        window.localStorage.getItem("color-scheme") ||
+        window.localStorage.getItem("theme-mode");
       if (stored === "dark") return true;
       if (stored === "light") return false;
     }
   } catch (_e) {}
 
-  // 5. System color scheme
+  // 7. Computed style color-scheme or background brightness on body/root
+  try {
+    if (typeof window !== "undefined" && window.getComputedStyle) {
+      const targetElement = body || docEl;
+      if (targetElement) {
+        const cs = window.getComputedStyle(targetElement);
+        if (cs.colorScheme === "dark") return true;
+        if (cs.colorScheme === "light") return false;
+        const bg = cs.backgroundColor;
+        if (bg && bg !== "transparent" && bg !== "rgba(0, 0, 0, 0)") {
+          const m = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+          if (m) {
+            const r = Number(m[1]), g = Number(m[2]), b = Number(m[3]);
+            const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+            if (brightness < 90) return true;
+            if (brightness > 180) return false;
+          }
+        }
+      }
+    }
+  } catch (_e) {}
+
+  // 8. System color scheme
   if (typeof window !== "undefined" && window.matchMedia) {
     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
       return true;
@@ -1100,27 +1146,34 @@ function render({ model, el }) {
   container.setAttribute("data-sc-page", pageId);
   container.tabIndex = 0;
 
+  let isSyncingTheme = false;
   function syncTheme() {
-    const targetDoc = container.ownerDocument || (typeof document !== "undefined" ? document : null);
-    const isDark = isDarkModeActive(targetDoc, el);
-    container.classList.toggle("dark", isDark);
-    container.classList.toggle("light", !isDark);
-    container.setAttribute("data-theme", isDark ? "dark" : "light");
+    if (isSyncingTheme) return;
+    isSyncingTheme = true;
+    try {
+      const targetDoc = container.ownerDocument || (typeof document !== "undefined" ? document : null);
+      const isDark = isDarkModeActive(targetDoc, el);
+      container.classList.toggle("dark", isDark);
+      container.classList.toggle("light", !isDark);
+      container.setAttribute("data-theme", isDark ? "dark" : "light");
 
-    if (el && el.classList) {
-      el.classList.toggle("dark", isDark);
-      el.classList.toggle("light", !isDark);
-      if (typeof el.setAttribute === "function") {
-        el.setAttribute("data-theme", isDark ? "dark" : "light");
+      if (el && el.classList) {
+        el.classList.toggle("dark", isDark);
+        el.classList.toggle("light", !isDark);
+        if (typeof el.setAttribute === "function") {
+          el.setAttribute("data-theme", isDark ? "dark" : "light");
+        }
       }
-    }
-    const host = el?.host || (typeof el?.getRootNode === "function" && el.getRootNode()?.host);
-    if (host && host.classList) {
-      host.classList.toggle("dark", isDark);
-      host.classList.toggle("light", !isDark);
-      if (typeof host.setAttribute === "function") {
-        host.setAttribute("data-theme", isDark ? "dark" : "light");
+      const host = el?.host || (typeof el?.getRootNode === "function" && el.getRootNode()?.host);
+      if (host && host.classList) {
+        host.classList.toggle("dark", isDark);
+        host.classList.toggle("light", !isDark);
+        if (typeof host.setAttribute === "function") {
+          host.setAttribute("data-theme", isDark ? "dark" : "light");
+        }
       }
+    } finally {
+      isSyncingTheme = false;
     }
   }
 
@@ -1129,28 +1182,65 @@ function render({ model, el }) {
   let themeObserver = null;
   const targetDoc = container.ownerDocument || (typeof document !== "undefined" ? document : null);
   if (typeof MutationObserver !== "undefined" && targetDoc) {
-    themeObserver = new MutationObserver(() => {
+    themeObserver = new MutationObserver((mutations) => {
+      const currentHost = el?.host || (typeof el?.getRootNode === "function" && el.getRootNode()?.host);
+      const isInternal = mutations.every(
+        (m) => m.target === container || m.target === el || m.target === currentHost || container.contains?.(m.target)
+      );
+      if (isInternal) return;
       syncTheme();
     });
+
     if (targetDoc.documentElement) {
       themeObserver.observe(targetDoc.documentElement, {
         attributes: true,
-        attributeFilter: ["class", "data-theme", "data-mode"],
+        attributeFilter: ["class", "data-theme", "data-mode", "style"],
+        subtree: true,
       });
     }
-    if (targetDoc.body) {
+    if (targetDoc.body && targetDoc.body !== targetDoc.documentElement) {
       themeObserver.observe(targetDoc.body, {
         attributes: true,
-        attributeFilter: ["class", "data-theme", "data-mode"],
+        attributeFilter: ["class", "data-theme", "data-mode", "style"],
       });
     }
-    const host = el?.host || (typeof el?.getRootNode === "function" && el.getRootNode()?.host);
-    if (host && host.nodeType === 1) {
-      themeObserver.observe(host, {
-        attributes: true,
-        attributeFilter: ["class", "data-theme", "data-mode"],
-      });
+  }
+
+  // React to theme button clicks anywhere on the page without waiting for page reload
+  const handleDocClick = (e) => {
+    const btn = e.target?.closest?.("button, [role='button'], a, input");
+    if (btn) {
+      const desc = `${btn.getAttribute("aria-label") || ""} ${btn.getAttribute("title") || ""} ${btn.className || ""} ${btn.id || ""}`.toLowerCase();
+      if (
+        desc.includes("theme") ||
+        desc.includes("dark") ||
+        desc.includes("light") ||
+        desc.includes("mode") ||
+        desc.includes("color")
+      ) {
+        if (typeof requestAnimationFrame === "function") {
+          requestAnimationFrame(() => syncTheme());
+        }
+        setTimeout(syncTheme, 50);
+        setTimeout(syncTheme, 150);
+        setTimeout(syncTheme, 300);
+      }
     }
+  };
+  if (targetDoc && typeof targetDoc.addEventListener === "function") {
+    targetDoc.addEventListener("click", handleDocClick, { passive: true });
+  }
+
+  const handleStorage = (e) => {
+    if (!e.key || e.key.includes("theme") || e.key.includes("mode") || e.key.includes("color")) {
+      syncTheme();
+    }
+  };
+  const handleCustomThemeEvent = () => syncTheme();
+  if (typeof window !== "undefined") {
+    window.addEventListener("storage", handleStorage);
+    window.addEventListener("theme-change", handleCustomThemeEvent);
+    window.addEventListener("myst-theme-change", handleCustomThemeEvent);
   }
 
   let mediaQueryList = null;
@@ -1337,6 +1427,10 @@ function render({ model, el }) {
   expandedBody.append(metaRow, sectionHeading, scrubberContainer, controlsRow);
   container.append(headerRow, errorBanner, expandedBody);
   el.append(styleEl, container);
+  syncTheme();
+  if (typeof requestAnimationFrame === "function") {
+    requestAnimationFrame(() => syncTheme());
+  }
 
   // Audio & State
   const audio = new Audio();
@@ -1614,6 +1708,14 @@ function render({ model, el }) {
     if (themeObserver) {
       themeObserver.disconnect();
       themeObserver = null;
+    }
+    if (targetDoc && typeof targetDoc.removeEventListener === "function") {
+      targetDoc.removeEventListener("click", handleDocClick);
+    }
+    if (typeof window !== "undefined") {
+      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener("theme-change", handleCustomThemeEvent);
+      window.removeEventListener("myst-theme-change", handleCustomThemeEvent);
     }
     if (mediaQueryList) {
       if (typeof mediaQueryList.removeEventListener === "function") {
