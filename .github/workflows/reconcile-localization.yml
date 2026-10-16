@@ -1,0 +1,76 @@
+name: Reconcile Localization
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: reconcile-localization-main
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    outputs:
+      locales: ${{ steps.plan.outputs.locales }}
+      count: ${{ steps.plan.outputs.count }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Configure Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+          architecture: x64
+
+      - name: Install locked environment
+        run: |
+          python -c 'import sys; assert sys.implementation.name == "cpython" and sys.version_info[:3] == (3, 12, 14), sys.version'
+          python -m venv .venv
+          .venv/bin/python -m pip install \
+            --require-hashes \
+            --only-binary=:all: \
+            -r requirements.lock
+          .venv/bin/python -m pip check
+
+      - name: Compute reconciliation plan
+        id: plan
+        run: |
+          . .venv/bin/activate
+          python tools/plan_localization.py --json --output plan.json
+          python -c '
+          import json, os
+          with open("plan.json") as f:
+              p = json.load(f)
+          needed = p.get("locales_needing_work", [])
+          print(f"Locales needing reconciliation: {needed}")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as gh:
+              gh.write(f"locales={json.dumps(needed)}\n")
+              gh.write(f"count={len(needed)}\n")
+          '
+
+  reconcile:
+    needs: plan
+    if: needs.plan.outputs.count != '0'
+    strategy:
+      matrix:
+        locale: ${{ fromJson(needs.plan.outputs.locales) }}
+      max-parallel: 2
+      fail-fast: false
+    uses: ./.github/workflows/_generate-locale.yml
+    with:
+      locale: ${{ matrix.locale }}
+    secrets: inherit

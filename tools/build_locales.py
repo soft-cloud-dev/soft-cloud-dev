@@ -46,7 +46,94 @@ from i18n_utils import (
     load_yaml_file,
     page_slug_from_rel_path,
     route_url_for_page,
+    sha256_file,
 )
+from generate_audio import page_id_from_path
+
+
+def strip_voice_player_widget(text: str) -> str:
+    """Strip MyST {anywidget} blocks referencing voice-player.mjs so un-narrated pages render no audio controls."""
+    pattern = re.compile(
+        r"```\{anywidget\}\s+[^\n]*voice-player\.mjs[^\n]*\n.*?\n```\s*\n?",
+        re.DOTALL,
+    )
+    return pattern.sub("", text)
+
+
+def is_page_narration_current(
+    root: Path,
+    locale_code: str,
+    default_locale: str,
+    rel_file: str,
+) -> bool:
+    """Check if narration is fully generated and current for a specific page and locale."""
+    is_default = locale_code == default_locale
+    audio_dir = root / ("audio" if is_default else f"audio/{locale_code}")
+    page_id = page_id_from_path(rel_file)
+    page_audio_dir = audio_dir / page_id
+    manifest_path = page_audio_dir / "manifest.json"
+    if not manifest_path.is_file():
+        return False
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if manifest.get("locale") != locale_code:
+            return False
+        src_file = (root / rel_file) if is_default else (root / "i18n" / locale_code / rel_file)
+        if not src_file.is_file():
+            return False
+        if manifest.get("source_file_sha256") != sha256_file(src_file):
+            return False
+        t_path = page_audio_dir / str(manifest.get("transcript_file", "transcript.json"))
+        if not t_path.is_file():
+            return False
+        for ch in manifest.get("chunks", []):
+            ch_f = page_audio_dir / str(ch.get("audio_file", ""))
+            if not ch_f.is_file() or sha256_file(ch_f) != ch.get("audio_sha256"):
+                return False
+        return True
+    except Exception:
+        return False
+
+
+def is_page_translation_current(
+    root: Path,
+    locale_code: str,
+    default_locale: str,
+    rel_file: str,
+    prov_cache: dict[str, dict[str, Any]],
+) -> bool:
+    """Check if translation is present and current for a specific page and locale."""
+    if locale_code == default_locale:
+        return (root / rel_file).is_file()
+    loc_file = root / "i18n" / locale_code / rel_file
+    if not loc_file.is_file():
+        return False
+    en_file = root / rel_file
+    if not en_file.is_file():
+        return False
+    prov = prov_cache.get(locale_code)
+    if prov is None:
+        prov_path = root / "i18n" / locale_code / "provenance.json"
+        if prov_path.is_file():
+            try:
+                prov = json.loads(prov_path.read_text(encoding="utf-8"))
+            except Exception:
+                prov = {}
+        else:
+            prov = {}
+        prov_cache[locale_code] = prov
+
+    doc_entry = prov.get("documents", {}).get(rel_file)
+    if not isinstance(doc_entry, dict):
+        return True
+    try:
+        if doc_entry.get("source_sha256") != sha256_file(en_file):
+            return False
+        if doc_entry.get("translated_sha256") != sha256_file(loc_file):
+            return False
+    except Exception:
+        return False
+    return True
 
 
 def discover_toc_files(toc: list[dict[str, Any]]) -> list[str]:
@@ -65,6 +152,7 @@ def build_localized_myst_config(
     base_myst: dict[str, Any],
     locale_code: str,
     locale_info: dict[str, Any],
+    staged_files: set[str] | None = None,
 ) -> dict[str, Any]:
     """Produce a locale-specific myst.yml dictionary preserving all JB2 profile rules."""
     cfg = copy.deepcopy(base_myst)
@@ -92,6 +180,25 @@ def build_localized_myst_config(
                     localize_toc(entry["children"])
 
         localize_toc(project["toc"])
+
+    # Progressive publication: prune TOC entries whose files are not staged for this locale
+    if staged_files is not None and isinstance(project.get("toc"), list):
+        def prune_toc(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+            pruned: list[dict[str, Any]] = []
+            for entry in entries:
+                if not isinstance(entry, dict):
+                    continue
+                f = entry.get("file")
+                children = entry.get("children")
+                new_children = prune_toc(children) if isinstance(children, list) else None
+                if f in staged_files or new_children:
+                    new_entry = dict(entry)
+                    if new_children is not None:
+                        new_entry["children"] = new_children
+                    pruned.append(new_entry)
+            return pruned
+
+        project["toc"] = prune_toc(project["toc"])
 
     nav_titles = (
         site_meta.get("nav_titles", {}) if isinstance(site_meta, dict) else {}
@@ -126,11 +233,7 @@ def stage_locale_workspace(
         shutil.rmtree(ws)
     ws.mkdir(parents=True, exist_ok=True)
 
-    # 1. Write localized myst.yml
-    localized_myst = build_localized_myst_config(base_myst, locale_code, locale_info)
-    atomic_write_text(ws / "myst.yml", dump_yaml_text(localized_myst))
-
-    # 2. Copy TOC source files from authoritative root (en) or i18n/<locale>/
+    # 1. Copy TOC source files from authoritative root (en) or i18n/<locale>/
     toc_files = discover_toc_files(base_myst.get("project", {}).get("toc", []))
     source_root = (
         root
@@ -138,15 +241,31 @@ def stage_locale_workspace(
         else (root / str(locale_info.get("source_dir", f"i18n/{locale_code}")))
     )
 
+    staged_files: set[str] = set()
     for rel_file in toc_files:
         src_path = source_root / rel_file
         if not src_path.is_file():
+            if locale_code != default_locale:
+                # Progressive publication: unlocalized source is not staged as a translated route
+                continue
             raise FileNotFoundError(
                 f"Missing source file for locale '{locale_code}': {src_path.relative_to(root)}"
             )
         dst_path = ws / rel_file
         dst_path.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(src_path, dst_path)
+
+        # Progressive audio controls: only render voice-player if narration is current
+        text_content = src_path.read_text(encoding="utf-8")
+        if not is_page_narration_current(root, locale_code, default_locale, rel_file):
+            text_content = strip_voice_player_widget(text_content)
+        atomic_write_text(dst_path, text_content)
+        staged_files.add(rel_file)
+
+    # 2. Write localized myst.yml with pruned TOC matching staged files
+    localized_myst = build_localized_myst_config(
+        base_myst, locale_code, locale_info, staged_files=staged_files
+    )
+    atomic_write_text(ws / "myst.yml", dump_yaml_text(localized_myst))
 
     # 3. Copy static assets (images, widgets, CNAME, sourcemaps)
     for asset_dir_name in ("images", "widgets"):
@@ -298,6 +417,7 @@ def build_route_manifest(
             "ui": info.get("ui", {}),
         }
 
+    prov_cache: dict[str, dict[str, Any]] = {}
     pages_meta: dict[str, Any] = {}
     for rel_file in toc_files:
         raw_slug = page_slug_from_rel_path(rel_file)
@@ -325,14 +445,14 @@ def build_route_manifest(
                 else (root / str(info.get("source_dir", f"i18n/{code}")))
             )
             src_file = src_dir / rel_file
-            exists = src_file.is_file()
+            is_avail = is_page_translation_current(root, code, default_locale, rel_file, prov_cache)
             route = route_url_for_page(prefix, active_slug, base_url=outer_base_url)
             canonical = canonical_url_for_page(domain, prefix, active_slug)
             translations[code] = {
-                "available": exists,
-                "route": route if exists else None,
-                "canonical_url": canonical if exists else None,
-                "source_path": src_file.relative_to(root).as_posix() if exists else None,
+                "available": is_avail,
+                "route": route if is_avail else None,
+                "canonical_url": canonical if is_avail else None,
+                "source_path": src_file.relative_to(root).as_posix() if is_avail else None,
             }
 
         entry_obj = {

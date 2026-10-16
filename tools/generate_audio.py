@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import copy
 import hashlib
 import json
 import os
@@ -90,6 +91,15 @@ def build_code_summary_system_prompt(locale: str = DEFAULT_LOCALE) -> str:
     )
 
 
+def validate_tts_model_identifier(model_name: str) -> str:
+    cleaned = (model_name or "").strip()
+    if not cleaned:
+        raise NarrationError("TTS model identifier cannot be empty.")
+    if not re.match(r"^[a-zA-Z0-9_\.\-\/]+$", cleaned):
+        raise NarrationError(f"Invalid TTS model identifier: {model_name!r}")
+    return cleaned
+
+
 class NarrationError(Exception):
     """Raised when any fail-closed narration requirement or validation fails."""
 
@@ -107,6 +117,11 @@ class NarrationConfig:
     sample_rate: int = DEFAULT_SAMPLE_RATE
     mp3_bitrate: str = DEFAULT_MP3_BITRATE
     max_chunk_chars: int = DEFAULT_MAX_CHUNK_CHARS
+
+    def __post_init__(self) -> None:
+        validate_tts_model_identifier(self.tts_model)
+        if not (self.text_model or "").strip():
+            raise NarrationError("Text model identifier cannot be empty.")
 
     def text_config_dict(self) -> dict[str, Any]:
         return {
@@ -166,6 +181,66 @@ def sha256_json(obj: Any) -> str:
 def sha256_file(path: Path) -> str:
     with path.open("rb") as f:
         return hashlib.file_digest(f, "sha256").hexdigest()
+
+
+def compute_speech_input_hash(locale: str, text_sha256: str, tts_config_hash: str) -> str:
+    """Compute speech-input hash independent of document position and element IDs."""
+    return sha256_json(
+        {
+            "locale": locale,
+            "text_sha256": text_sha256,
+            "tts_config_hash": tts_config_hash,
+        }
+    )
+
+
+def resolve_locale_narration_config(
+    root: Path,
+    locale: str,
+    cli_text_model: str | None = None,
+    cli_tts_model: str | None = None,
+    cli_voice: str | None = None,
+) -> NarrationConfig:
+    """Resolve NarrationConfig for a locale from i18n/locales.yml, respecting explicit CLI overrides."""
+    norm_locale = (locale or DEFAULT_LOCALE).strip().lower()
+    voice_cfg: dict[str, Any] = {}
+    try:
+        tools_dir = str((root / "tools").resolve())
+        if tools_dir not in sys.path:
+            sys.path.insert(0, tools_dir)
+        from i18n_utils import get_enabled_locales, load_locales_config
+
+        cfg = load_locales_config(root)
+        enabled = get_enabled_locales(cfg)
+        loc_info = enabled.get(norm_locale, {})
+        voice_cfg = loc_info.get("voice", {}) if isinstance(loc_info.get("voice"), dict) else {}
+    except Exception:
+        pass
+
+    text_model = (
+        cli_text_model
+        if (cli_text_model and cli_text_model != DEFAULT_TEXT_MODEL)
+        else str(voice_cfg.get("text_model") or DEFAULT_TEXT_MODEL)
+    )
+    tts_model = (
+        cli_tts_model
+        if (cli_tts_model and cli_tts_model != DEFAULT_TTS_MODEL)
+        else str(voice_cfg.get("tts_model") or DEFAULT_TTS_MODEL)
+    )
+    voice_name = (
+        cli_voice
+        if (cli_voice and cli_voice != DEFAULT_VOICE_NAME)
+        else str(voice_cfg.get("voice_name") or DEFAULT_VOICE_NAME)
+    )
+    prompt = build_code_summary_system_prompt(norm_locale)
+
+    return NarrationConfig(
+        locale=norm_locale,
+        text_model=text_model,
+        tts_model=tts_model,
+        voice_name=voice_name,
+        text_system_prompt=prompt,
+    )
 
 
 def atomic_write_bytes(target: Path, data: bytes) -> None:
@@ -1075,9 +1150,10 @@ class NarrationChunk:
     text: str
     text_sha256: str
     chunk_hash: str
+    speech_input_hash: str = ""
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        d = {
             "chunk_id": self.chunk_id,
             "chunk_index": self.chunk_index,
             "section_anchor": self.section_anchor,
@@ -1088,6 +1164,9 @@ class NarrationChunk:
             "text_sha256": self.text_sha256,
             "chunk_hash": self.chunk_hash,
         }
+        if self.speech_input_hash:
+            d["speech_input_hash"] = self.speech_input_hash
+        return d
 
 
 def assemble_narration_transcript(
@@ -1136,6 +1215,11 @@ def assemble_narration_transcript(
                     spoken_parts.append(t)
             full_text = "\n\n".join(spoken_parts)
             text_sha256 = sha256_text(full_text)
+            speech_input_hash = compute_speech_input_hash(
+                locale=config.locale,
+                text_sha256=text_sha256,
+                tts_config_hash=config.tts_config_hash(),
+            )
             chunk_hash = sha256_json(
                 {
                     "locale": config.locale,
@@ -1159,6 +1243,7 @@ def assemble_narration_transcript(
                     text=full_text,
                     text_sha256=text_sha256,
                     chunk_hash=chunk_hash,
+                    speech_input_hash=speech_input_hash,
                 )
             )
             current_segments = []
@@ -1245,6 +1330,14 @@ def validate_transcript_file(
         stored = json.loads(transcript_path.read_text(encoding="utf-8"))
         expected = assemble_narration_transcript(doc, code_summaries, config)
         if stored == expected:
+            return stored
+        # Backward compatibility for existing transcripts that do not have speech_input_hash
+        expected_compat = copy.deepcopy(expected)
+        for ch in expected_compat.get("chunks", []):
+            ch.pop("speech_input_hash", None)
+        expected_compat.pop("transcript_sha256", None)
+        expected_compat["transcript_sha256"] = sha256_json(expected_compat)
+        if stored == expected_compat:
             return stored
     except Exception:
         return None
@@ -1447,6 +1540,12 @@ def validate_chunk_artifact(
     if manifest_chunk.get("tts_config_hash") != config.tts_config_hash():
         return False
 
+    exp_speech_hash = expected_chunk.get("speech_input_hash") or compute_speech_input_hash(
+        config.locale, expected_chunk["text_sha256"], config.tts_config_hash()
+    )
+    if "speech_input_hash" in manifest_chunk and manifest_chunk["speech_input_hash"] != exp_speech_hash:
+        return False
+
     audio_rel = manifest_chunk.get("audio_file")
     if not isinstance(audio_rel, str) or not audio_rel.endswith(".mp3"):
         return False
@@ -1534,17 +1633,51 @@ def process_page(
         atomic_write_json(transcript_path, expected_transcript)
         valid_transcript = expected_transcript
 
-    # 3. Load existing manifest if available to reuse valid audio chunks
+    # 3. Load existing manifests if available to reuse valid audio chunks
     existing_chunks_by_hash: dict[str, dict[str, Any]] = {}
+    existing_chunks_by_speech: dict[str, tuple[Path, dict[str, Any]]] = {}
+
+    def _index_chunk_candidate(ch_entry: dict[str, Any], ch_dir: Path) -> None:
+        if not isinstance(ch_entry, dict):
+            return
+        c_hash = ch_entry.get("chunk_hash")
+        if c_hash:
+            existing_chunks_by_hash[c_hash] = ch_entry
+        t_sha = ch_entry.get("text_sha256")
+        c_loc = ch_entry.get("locale")
+        c_tts_cfg = ch_entry.get("tts_config_hash")
+        a_file = ch_entry.get("audio_file")
+        if t_sha and c_loc == config.locale and c_tts_cfg == config.tts_config_hash() and a_file:
+            s_hash = ch_entry.get("speech_input_hash") or compute_speech_input_hash(c_loc, t_sha, c_tts_cfg)
+            cand_path = ch_dir / a_file
+            if cand_path.is_file():
+                try:
+                    actual_sha = sha256_file(cand_path)
+                    if actual_sha == ch_entry.get("audio_sha256"):
+                        existing_chunks_by_speech[s_hash] = (cand_path, ch_entry)
+                except Exception:
+                    pass
+
     if manifest_path.is_file():
         try:
             old_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
             if isinstance(old_manifest, dict) and old_manifest.get("locale") == config.locale:
                 for ch in old_manifest.get("chunks", []):
-                    if isinstance(ch, dict) and "chunk_hash" in ch:
-                        existing_chunks_by_hash[ch["chunk_hash"]] = ch
+                    _index_chunk_candidate(ch, page_audio_dir)
         except Exception:
             pass
+
+    if audio_root.is_dir():
+        for sibling_manifest in audio_root.glob("*/manifest.json"):
+            if sibling_manifest == manifest_path:
+                continue
+            try:
+                sib_m = json.loads(sibling_manifest.read_text(encoding="utf-8"))
+                if isinstance(sib_m, dict) and sib_m.get("locale") == config.locale:
+                    for ch in sib_m.get("chunks", []):
+                        _index_chunk_candidate(ch, sibling_manifest.parent)
+            except Exception:
+                pass
 
     # 4. Validate or synthesize TTS audio chunks
     manifest_chunks: list[dict[str, Any]] = []
@@ -1552,18 +1685,59 @@ def process_page(
 
     for ch in valid_transcript["chunks"]:
         chunk_hash = ch["chunk_hash"]
+        speech_hash = ch.get("speech_input_hash") or compute_speech_input_hash(
+            config.locale, ch["text_sha256"], config.tts_config_hash()
+        )
+        ch["speech_input_hash"] = speech_hash
         expected_filename = f"{ch['chunk_id']}-{chunk_hash[:12]}.mp3"
         expected_audio_files.add(expected_filename)
         audio_path = page_audio_dir / expected_filename
 
+        # Option A: Exact chunk_hash and filename match from existing manifest
         cached_entry = existing_chunks_by_hash.get(chunk_hash)
         if (
             cached_entry is not None
             and cached_entry.get("audio_file") == expected_filename
             and validate_chunk_artifact(cached_entry, ch, page_audio_dir, config)
         ):
+            if "speech_input_hash" not in cached_entry:
+                cached_entry = dict(cached_entry)
+                cached_entry["speech_input_hash"] = speech_hash
             manifest_chunks.append(cached_entry)
             continue
+
+        # Option B: Speech reuse independent of chunk position or element IDs
+        if speech_hash in existing_chunks_by_speech and not check_only:
+            src_audio_path, donor_chunk = existing_chunks_by_speech[speech_hash]
+            try:
+                if not audio_path.is_file() or sha256_file(audio_path) != donor_chunk.get("audio_sha256"):
+                    atomic_write_bytes(audio_path, src_audio_path.read_bytes())
+
+                reused_entry = {
+                    "locale": config.locale,
+                    "chunk_id": ch["chunk_id"],
+                    "chunk_index": ch["chunk_index"],
+                    "section_anchor": ch["section_anchor"],
+                    "section_title": ch["section_title"],
+                    "element_ids": ch["element_ids"],
+                    "text_sha256": ch["text_sha256"],
+                    "speech_input_hash": speech_hash,
+                    "chunk_hash": chunk_hash,
+                    "model": config.tts_model,
+                    "voice": config.voice_name,
+                    "audio_format": config.audio_format,
+                    "tts_config_hash": config.tts_config_hash(),
+                    "audio_file": expected_filename,
+                    "audio_sha256": donor_chunk["audio_sha256"],
+                    "duration_seconds": donor_chunk["duration_seconds"],
+                    "size_bytes": donor_chunk["size_bytes"],
+                }
+                if validate_chunk_artifact(reused_entry, ch, page_audio_dir, config):
+                    manifest_chunks.append(reused_entry)
+                    existing_chunks_by_speech[speech_hash] = (audio_path, reused_entry)
+                    continue
+            except Exception:
+                pass
 
         # Cache miss or invalid audio artifact
         if no_api or client is None:
@@ -1591,6 +1765,7 @@ def process_page(
             "section_title": ch["section_title"],
             "element_ids": ch["element_ids"],
             "text_sha256": ch["text_sha256"],
+            "speech_input_hash": speech_hash,
             "chunk_hash": chunk_hash,
             "model": config.tts_model,
             "voice": config.voice_name,
@@ -1606,6 +1781,7 @@ def process_page(
                 f"Synthesized audio chunk failed post-generation validation: {audio_path}"
             )
         manifest_chunks.append(new_entry)
+        existing_chunks_by_speech[speech_hash] = (audio_path, new_entry)
 
     # 5. Assemble and validate complete page manifest
     total_duration = round(sum(c["duration_seconds"] for c in manifest_chunks), 3)
@@ -1634,6 +1810,14 @@ def process_page(
             current_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
             if current_manifest == expected_manifest:
                 manifest_matches = True
+            else:
+                exp_compat = copy.deepcopy(expected_manifest)
+                for ch in exp_compat.get("chunks", []):
+                    ch.pop("speech_input_hash", None)
+                exp_compat.pop("manifest_sha256", None)
+                exp_compat["manifest_sha256"] = sha256_json(exp_compat)
+                if current_manifest == exp_compat:
+                    manifest_matches = True
         except Exception:
             manifest_matches = False
 
@@ -1682,8 +1866,11 @@ def discover_enabled_pages(
     requested_pages: list[str] | None = None,
     include_notebooks: bool = False,
     locale: str = DEFAULT_LOCALE,
+    plan_path: Path | None = None,
+    plan_needed_only: bool = False,
+    narrated_only: bool = False,
 ) -> list[Path]:
-    """Discover enabled documentation pages from myst.yml or explicit CLI arguments for a given locale."""
+    """Discover enabled documentation pages from myst.yml, explicit CLI arguments, or a localization plan."""
     norm_locale = (locale or DEFAULT_LOCALE).strip().lower()
     if requested_pages:
         pages: list[Path] = []
@@ -1694,22 +1881,109 @@ def discover_enabled_pages(
             pages.append(p)
         return pages
 
+    if narrated_only:
+        audio_root = default_audio_root_for_locale(root, "audio", norm_locale)
+        pages = []
+        if audio_root.is_dir():
+            for m_path in sorted(audio_root.glob("*/manifest.json")):
+                p_id = m_path.parent.name
+                myst_path = root / "myst.yml"
+                if myst_path.is_file():
+                    config = load_yaml_file(myst_path)
+                    toc = config.get("project", {}).get("toc", [])
+                    toc_files: list[str] = []
+
+                    def walk_t(entries: list[Any]) -> None:
+                        for entry in entries:
+                            if isinstance(entry, dict):
+                                if "file" in entry:
+                                    toc_files.append(entry["file"])
+                                if "children" in entry and isinstance(entry["children"], list):
+                                    walk_t(entry["children"])
+
+                    walk_t(toc)
+                    for rel_doc in toc_files:
+                        if page_id_from_path(rel_doc) == p_id:
+                            fpath = resolve_locale_page_path(root, rel_doc, norm_locale)
+                            if fpath.is_file():
+                                pages.append(fpath)
+        return pages
+
+    if plan_path or plan_needed_only:
+        plan: dict[str, Any]
+        if plan_path and plan_path.is_file():
+            plan = json.loads(plan_path.read_text(encoding="utf-8"))
+        else:
+            tools_dir = str((root / "tools").resolve())
+            if tools_dir not in sys.path:
+                sys.path.insert(0, tools_dir)
+            from plan_localization import build_plan
+
+            plan = build_plan(root, norm_locale)
+
+        loc_data = plan.get("locales", {}).get(norm_locale, {})
+        doc_entries = loc_data.get("documents", [])
+        if plan_needed_only:
+            selected_rel_paths = [
+                d["document"]
+                for d in doc_entries
+                if "narrate" in d.get("actions", [])
+            ]
+        else:
+            narrated_set = set(plan.get("narrated_documents", []))
+            selected_rel_paths = [
+                d["document"]
+                for d in doc_entries
+                if d.get("document") in narrated_set
+            ]
+
+        pages = []
+        for rel in selected_rel_paths:
+            fpath = resolve_locale_page_path(root, rel, norm_locale)
+            if fpath.is_file():
+                pages.append(fpath)
+        return pages
+
     myst_path = root / "myst.yml"
     if not myst_path.is_file():
         raise NarrationError(f"Missing myst.yml in {root}")
     config = load_yaml_file(myst_path)
     toc = config.get("project", {}).get("toc", [])
+
+    narration_mode = "all_except"
+    opt_out_set: set[str] = set()
+    allowlist_set: set[str] = set()
+    try:
+        tools_dir = str((root / "tools").resolve())
+        if tools_dir not in sys.path:
+            sys.path.insert(0, tools_dir)
+        from i18n_utils import load_locales_config
+
+        lcfg = load_locales_config(root)
+        pol = lcfg.get("localization", {}).get("narration", {})
+        narration_mode = str(pol.get("mode", "all_except"))
+        opt_out_set = set(pol.get("opt_out") or [])
+        allowlist_set = set(lcfg.get("narrated_pages") or [])
+    except Exception:
+        pass
+
     discovered: list[Path] = []
 
     def walk(entries: list[Any]) -> None:
         for entry in entries:
             if isinstance(entry, dict):
                 if "file" in entry:
-                    fpath = resolve_locale_page_path(root, entry["file"], norm_locale)
-                    if fpath.is_file() and (
-                        fpath.suffix == ".md" or (include_notebooks and fpath.suffix == ".ipynb")
-                    ):
-                        discovered.append(fpath)
+                    rel_doc = str(entry["file"]).strip()
+                    if narration_mode == "allowlist" and rel_doc not in allowlist_set:
+                        pass
+                    elif narration_mode == "all_except" and rel_doc in opt_out_set:
+                        pass
+                    else:
+                        fpath = resolve_locale_page_path(root, rel_doc, norm_locale)
+                        if fpath.is_file() and (
+                            fpath.suffix == ".md" or (include_notebooks and fpath.suffix == ".ipynb")
+                        ):
+                            discovered.append(fpath)
                 if "children" in entry and isinstance(entry["children"], list):
                     walk(entry["children"])
 
@@ -1760,7 +2034,13 @@ def _sync_and_verify_target_dir(
 
     pub_manifest = json.loads(pub_manifest_path.read_text(encoding="utf-8"))
     if pub_manifest != manifest:
-        raise NarrationError(f"Published manifest mismatch in {pub_manifest_path}")
+        exp_compat = copy.deepcopy(manifest)
+        for ch in exp_compat.get("chunks", []):
+            ch.pop("speech_input_hash", None)
+        exp_compat.pop("manifest_sha256", None)
+        exp_compat["manifest_sha256"] = sha256_json(exp_compat)
+        if pub_manifest != exp_compat:
+            raise NarrationError(f"Published manifest mismatch in {pub_manifest_path}")
     if pub_manifest.get("locale") != manifest.get("locale"):
         raise NarrationError(f"Published manifest locale mismatch in {pub_manifest_path}")
     if sha256_file(pub_transcript_path) != manifest["transcript_sha256"] and (
@@ -1868,19 +2148,34 @@ def main(argv: list[str] | None = None) -> int:
         help="Verify and sync published static audio assets inside the built HTML directory (e.g. _build/html).",
     )
     parser.add_argument(
+        "--plan",
+        default="",
+        help="Path to localization plan JSON file (from plan_localization.py).",
+    )
+    parser.add_argument(
+        "--plan-needed",
+        action="store_true",
+        help="Only process pages that require narration work according to the localization plan.",
+    )
+    parser.add_argument(
+        "--narrated-only",
+        action="store_true",
+        help="Only process pages that already have existing narration manifests on disk.",
+    )
+    parser.add_argument(
         "--text-model",
-        default=os.environ.get("SOFTCLOUD_TEXT_MODEL", DEFAULT_TEXT_MODEL),
-        help=f"Gemini text model for code explanations (default: {DEFAULT_TEXT_MODEL}).",
+        default=None,
+        help="Gemini text model for code explanations (defaults to voice config in i18n/locales.yml).",
     )
     parser.add_argument(
         "--tts-model",
-        default=os.environ.get("SOFTCLOUD_TTS_MODEL", DEFAULT_TTS_MODEL),
-        help=f"Gemini TTS model for speech synthesis (default: {DEFAULT_TTS_MODEL}).",
+        default=None,
+        help="Gemini TTS model for speech synthesis (defaults to voice config in i18n/locales.yml).",
     )
     parser.add_argument(
         "--voice",
-        default=os.environ.get("SOFTCLOUD_TTS_VOICE", DEFAULT_VOICE_NAME),
-        help=f"Prebuilt voice name for TTS synthesis (default: {DEFAULT_VOICE_NAME}).",
+        default=None,
+        help="Prebuilt voice name for TTS synthesis (defaults to voice config in i18n/locales.yml).",
     )
     args = parser.parse_args(argv)
 
@@ -1911,21 +2206,28 @@ def main(argv: list[str] | None = None) -> int:
 
         for loc in target_locales:
             audio_root = default_audio_root_for_locale(root, args.audio_dir, loc)
-            config = NarrationConfig(
+            config = resolve_locale_narration_config(
+                root=root,
                 locale=loc,
-                text_model=args.text_model,
-                text_system_prompt=build_code_summary_system_prompt(loc),
-                tts_model=args.tts_model,
-                voice_name=args.voice,
+                cli_text_model=args.text_model or os.environ.get("SOFTCLOUD_TEXT_MODEL"),
+                cli_tts_model=args.tts_model or os.environ.get("SOFTCLOUD_TTS_MODEL"),
+                cli_voice=args.voice or os.environ.get("SOFTCLOUD_TTS_VOICE"),
             )
 
+            plan_path_obj = Path(args.plan).resolve() if args.plan else None
             pages = discover_enabled_pages(
                 root=root,
                 requested_pages=args.pages,
                 include_notebooks=args.include_notebooks,
                 locale=loc,
+                plan_path=plan_path_obj,
+                plan_needed_only=args.plan_needed,
+                narrated_only=args.narrated_only,
             )
             if not pages:
+                if args.plan_needed:
+                    print(f"All narration up-to-date for locale '{loc}'. Nothing to generate.")
+                    continue
                 raise NarrationError(f"No enabled documentation pages found to process for locale '{loc}'.")
 
             manifests: list[dict[str, Any]] = []

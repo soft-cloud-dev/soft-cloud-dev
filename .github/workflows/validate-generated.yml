@@ -1,0 +1,66 @@
+name: Validate Generated Localization
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout pull request head
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Configure Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+          architecture: x64
+
+      - name: Install locked environment
+        run: |
+          python -c 'import sys; assert sys.implementation.name == "cpython" and sys.version_info[:3] == (3, 12, 14), sys.version'
+          python -m venv .venv
+          .venv/bin/python -m pip install \
+            --require-hashes \
+            --only-binary=:all: \
+            -r requirements.lock
+          .venv/bin/python -m pip check
+
+      - name: Verify JB2 profile and provenance
+        env:
+          BASE_URL: ""
+        run: |
+          . .venv/bin/activate
+          python tools/check_profile.py
+          python tools/translate_sources.py --check-only
+
+      - name: Verify localized narration audio checksums (API-free)
+        run: |
+          . .venv/bin/activate
+          python tools/generate_audio.py --all-locales --narrated-only --check-only
+
+      - name: Verify multilingual configuration and progressive publication
+        run: |
+          . .venv/bin/activate
+          python tools/verify_locales.py --progressive
+
+      - name: Run verification test suites
+        run: |
+          . .venv/bin/activate
+          python -m unittest discover -s tests

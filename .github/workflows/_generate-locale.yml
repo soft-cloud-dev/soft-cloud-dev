@@ -1,0 +1,215 @@
+name: Generate Locale Automation
+
+on:
+  workflow_call:
+    inputs:
+      locale:
+        description: 'Target locale code to reconcile (e.g. en, pl, de, es, fr)'
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      locale:
+        description: 'Target locale code to reconcile (e.g. en, pl, de, es, fr)'
+        required: true
+        type: string
+        default: 'pl'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: localization-${{ github.repository }}-${{ inputs.locale }}
+  cancel-in-progress: false
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Generate GitHub App token
+        id: app-token
+        if: ${{ env.HAVE_APP == 'true' }}
+        env:
+          HAVE_APP: ${{ secrets.APP_ID != '' && secrets.APP_PRIVATE_KEY != '' }}
+        uses: actions/create-github-app-token@5d869da34e18e7287c1dda53900e3ae45b5f310 # v1.11.0
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          token: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Configure Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.14'
+          architecture: x64
+
+      - name: Install locked environment
+        run: |
+          python -c 'import sys; assert sys.implementation.name == "cpython" and sys.version_info[:3] == (3, 12, 14), sys.version'
+          python -m venv .venv
+          .venv/bin/python -m pip install \
+            --require-hashes \
+            --only-binary=:all: \
+            -r requirements.lock
+          .venv/bin/python -m pip check
+
+      - name: Prepare automation branch
+        id: branch
+        run: |
+          LOCALE="${{ inputs.locale }}"
+          if [ "$LOCALE" = "en" ]; then
+            TARGET_BRANCH="automation/narration/en"
+          else
+            TARGET_BRANCH="automation/localize/${LOCALE}"
+          fi
+          echo "target_branch=$TARGET_BRANCH" >> "$GITHUB_OUTPUT"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+
+          # Check if the automation branch already exists on origin
+          if git ls-remote --exit-code --heads origin "$TARGET_BRANCH" >/dev/null 2>&1; then
+            echo "Branch $TARGET_BRANCH exists on remote. Checking out and rebasing on main..."
+            git fetch origin "$TARGET_BRANCH":"$TARGET_BRANCH"
+            git checkout "$TARGET_BRANCH"
+            git merge origin/main -m "Merge branch 'main' into $TARGET_BRANCH" || {
+              echo "Merge conflict rebasing automation branch on main. Resetting to origin/main..."
+              git merge --abort || true
+              git reset --hard origin/main
+            }
+          else
+            echo "Branch $TARGET_BRANCH does not exist on remote. Creating from main..."
+            git checkout -b "$TARGET_BRANCH" origin/main
+          fi
+
+      - name: Reconcile translations and narration
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          . .venv/bin/activate
+          LOCALE="${{ inputs.locale }}"
+
+          if [ "$LOCALE" != "en" ]; then
+            echo "==> Reconciling translations for $LOCALE..."
+            python tools/translate_sources.py --locale "$LOCALE" --prepare
+          else
+            echo "==> English is authoritative; skipping translation."
+          fi
+
+          echo "==> Reconciling narration audio for $LOCALE..."
+          python tools/generate_audio.py --locale "$LOCALE" --plan-needed
+
+      - name: Validate generated locale assets (API-free)
+        env:
+          BASE_URL: ""
+        run: |
+          . .venv/bin/activate
+          LOCALE="${{ inputs.locale }}"
+
+          echo "==> Verifying profile..."
+          python tools/check_profile.py
+
+          if [ "$LOCALE" != "en" ]; then
+            echo "==> Verifying translation provenance..."
+            python tools/translate_sources.py --locale "$LOCALE" --check-only
+          fi
+
+          echo "==> Verifying audio checksums..."
+          python tools/generate_audio.py --locale "$LOCALE" --narrated-only --check-only
+
+          echo "==> Verifying multilingual configuration..."
+          python tools/verify_locales.py --progressive
+
+          echo "==> Running test suite..."
+          python -m unittest discover -s tests
+
+      - name: Synchronize pull request
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
+        run: |
+          LOCALE="${{ inputs.locale }}"
+          TARGET_BRANCH="${{ steps.branch.outputs.target_branch }}"
+
+          git add i18n/ audio/
+          if ! git diff --cached --quiet; then
+            git commit -m "Reconcile localization & narration for ${LOCALE}"
+          fi
+
+          # Check if there is any diff against origin/main
+          if git diff --quiet origin/main..HEAD; then
+            echo "Branch $TARGET_BRANCH is identical to origin/main. Checking for existing PR to close..."
+            EXISTING_PR=$(gh pr list --head "$TARGET_BRANCH" --base main --state open --json number --jq '.[0].number')
+            if [ -n "$EXISTING_PR" ]; then
+              gh pr close "$EXISTING_PR" --comment "All localization changes for $TARGET_BRANCH are now in main. Closing automated PR." || true
+            fi
+            exit 0
+          fi
+
+          echo "Pushing $TARGET_BRANCH to origin..."
+          git push origin "$TARGET_BRANCH" --force-with-lease
+
+          if [ "$LOCALE" = "en" ]; then
+            PR_TITLE="[Automation] Reconcile English audio narration assets"
+            PR_BODY="### SoftCloud English Audio Narration
+
+This pull request was automatically generated by the localization reconciliation workflow to synchronize English audio narration assets with the authoritative documentation sources.
+
+- **Authoritative locale:** English (\`en\`)
+- **Type:** Narration only
+- **Branch:** \`$TARGET_BRANCH\`
+
+All audio chunk checksums and speech hash identities have been verified against the English documentation.
+"
+            LABELS=("automation" "narration" "en")
+          else
+            PR_TITLE="[Automation] Reconcile ${LOCALE} localization & narration"
+            PR_BODY="### SoftCloud Localization & Narration Reconciler
+
+This pull request was automatically generated by the localization reconciliation workflow. It contains synchronized translations and matching narration assets for the **${LOCALE}** locale.
+
+- **Locale:** \`${LOCALE}\`
+- **Authoritative source:** English (\`en\`)
+- **Branch:** \`$TARGET_BRANCH\`
+
+#### Quality & Integrity Verification
+- Byte-for-byte code block and executable cell preservation: **Verified**
+- Provenance section and cell hash tracking: **Updated**
+- Narration speech input hash and audio chunk checksums: **Verified**
+- Progressive publication compatibility: **Verified**
+
+> [!NOTE]
+> Reviewers should inspect the translated prose and approve the PR when ready.
+> Merging this pull request into \`main\` will mark the translations as accepted and deploy the updated localized documentation.
+"
+            LABELS=("automation" "localization" "$LOCALE")
+          fi
+
+          for lbl in "${LABELS[@]}"; do
+            gh label create "$lbl" --force || true
+          done
+
+          LABEL_ARGS=()
+          for lbl in "${LABELS[@]}"; do
+            LABEL_ARGS+=(--label "$lbl")
+          done
+
+          EXISTING_PR=$(gh pr list --head "$TARGET_BRANCH" --base main --state open --json number --jq '.[0].number')
+          if [ -n "$EXISTING_PR" ]; then
+            echo "Updating existing PR #$EXISTING_PR..."
+            gh pr edit "$EXISTING_PR" --title "$PR_TITLE" --body "$PR_BODY"
+          else
+            echo "Creating new PR for $TARGET_BRANCH..."
+            gh pr create --base main --head "$TARGET_BRANCH" --title "$PR_TITLE" --body "$PR_BODY" "${LABEL_ARGS[@]}"
+          fi

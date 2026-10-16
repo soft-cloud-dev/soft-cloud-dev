@@ -180,6 +180,14 @@ def verify_built_html_artifact(root: Path, build_dir: Path) -> list[str]:
         if not (build_dir / "widgets" / wname).is_file():
             errors.append(f"Missing widget in built artifact: _build/html/widgets/{wname}")
 
+    route_manifest_obj: dict[str, Any] = {}
+    if route_manifest_path.is_file():
+        try:
+            route_manifest_obj = json.loads(route_manifest_path.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    rm_pages = route_manifest_obj.get("pages", {})
+
     # 3. Verify every localized page route exists and has valid lang, canonical, and reciprocal hreflang
     expected_sitemap_locs: set[str] = set()
     for rel_doc in docs:
@@ -195,14 +203,27 @@ def verify_built_html_artifact(root: Path, build_dir: Path) -> list[str]:
             ):
                 active_slug = flat_slug
 
+        slug_key = active_slug if active_slug else "index"
+        page_rec = rm_pages.get(slug_key) or rm_pages.get(raw_slug if raw_slug else "index") or {}
+        page_translations = page_rec.get("translations", {})
+
         expected_alternates: dict[str, str] = {}
         for code, info in enabled_locales.items():
-            prefix = str(info.get("prefix", ""))
-            hreflang = str(info.get("hreflang", code))
-            expected_alternates[hreflang] = canonical_url_for_page(domain, prefix, active_slug)
+            t_info = page_translations.get(code, {})
+            # Progressive publication: only include available translations in alternate hreflang
+            if t_info.get("available") is not False:
+                prefix = str(info.get("prefix", ""))
+                hreflang = str(info.get("hreflang", code))
+                expected_alternates[hreflang] = canonical_url_for_page(domain, prefix, active_slug)
         expected_alternates["x-default"] = canonical_url_for_page(domain, "", active_slug)
 
         for code, info in enabled_locales.items():
+            t_info = page_translations.get(code, {})
+            is_available = t_info.get("available") is not False
+            if not is_available:
+                # Progressive publication: unready/untranslated page is NOT expected to have a built route
+                continue
+
             prefix = str(info.get("prefix", "")).strip("/")
             html_lang = str(info.get("html_lang", code))
             self_canonical = canonical_url_for_page(domain, str(info.get("prefix", "")), active_slug)
@@ -551,6 +572,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default="",
         help="Optional built HTML directory (e.g. _build/html) to validate routes, SEO tags, and published audio.",
     )
+    parser.add_argument(
+        "--progressive",
+        action="store_true",
+        help="Permit progressive publication coverage (untranslated pages omitted from locale routes).",
+    )
     return parser.parse_args(argv)
 
 
@@ -571,10 +597,10 @@ def main(argv: list[str] | None = None) -> int:
     for code in enabled_locales:
         if code == default_locale:
             continue
-        errors.extend(check_locale_provenance(root, code, docs))
+        errors.extend(check_locale_provenance(root, code, docs, progressive=args.progressive))
 
     # 3. Localized Narration Audio Verification across all enabled locales
-    ga_args = ["--all-locales", "--page", "introduction.md", "--check-only"]
+    ga_args = ["--all-locales", "--narrated-only", "--check-only"]
     if args.verify_build_dir:
         ga_args.extend(["--verify-build-dir", args.verify_build_dir])
     if ga.main(ga_args) != 0:

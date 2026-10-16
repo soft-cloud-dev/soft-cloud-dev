@@ -1,6 +1,7 @@
 #!/bin/sh
 set -eu
 export JB_ALLOW_NODEENV=0
+export BASE_URL="${BASE_URL:-}"
 command -v node
 command -v npm
 node --version
@@ -9,7 +10,6 @@ python --version
 python -m pip --version
 python tools/check_profile.py
 python tools/translate_sources.py --check-only
-python tools/generate_audio.py --all-locales --page introduction.md
 jupyter book --version
 python tools/build_locales.py
 if [ -f CNAME ]; then
@@ -24,7 +24,7 @@ fi
 if [ -f tools/fix_thebe.py ]; then
   python tools/fix_thebe.py _build/html
 fi
-python tools/generate_audio.py --all-locales --page introduction.md --check-only --verify-build-dir _build/html
+python tools/generate_audio.py --all-locales --narrated-only --check-only --verify-build-dir _build/html
 python tools/verify_locales.py --verify-build-dir _build/html
 test -s _build/html/index.html
 test -s _build/html/pl/index.html

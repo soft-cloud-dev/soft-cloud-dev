@@ -1119,6 +1119,8 @@ function render({ model, el }) {
 
     if (loadedManifest) {
       manifest = loadedManifest;
+      container.hidden = false;
+      container.style.display = "";
       const totalSec = manifest.total_duration_seconds || 0;
       overviewSubtitle.textContent = `${manifest.chunks.length} ${ui.topics_unit} · ${formatDurationSeconds(totalSec, ui)}`;
       toggleBtn.disabled = false;
@@ -1127,6 +1129,8 @@ function render({ model, el }) {
       manifest = null;
       toggleBtn.disabled = true;
       setExpanded(false);
+      container.hidden = true;
+      container.style.display = "none";
       overviewSubtitle.textContent = ui.narration_unavailable;
       showError(`${ui.narration_unavailable} (${lastErr?.message || "missing manifest"}).`);
     }

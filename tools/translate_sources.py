@@ -379,7 +379,7 @@ def build_provenance_manifest(
     return manifest
 
 
-def check_locale_provenance(root: Path, locale: str, docs: list[str]) -> list[str]:
+def check_locale_provenance(root: Path, locale: str, docs: list[str], progressive: bool = False) -> list[str]:
     """Validate translation files, code preservation, and provenance.json for a target locale."""
     errors: list[str] = []
     locales_cfg = load_locales_config(root)
@@ -417,7 +417,8 @@ def check_locale_provenance(root: Path, locale: str, docs: list[str]) -> list[st
         en_path = root / rel_doc
         loc_path = loc_root / rel_doc
         if not loc_path.is_file():
-            errors.append(f"[{locale}] Missing translated document: {loc_path.relative_to(root)}")
+            if not progressive:
+                errors.append(f"[{locale}] Missing translated document: {loc_path.relative_to(root)}")
             continue
 
         errors.extend(verify_document_preservation(en_path, loc_path, locale))
