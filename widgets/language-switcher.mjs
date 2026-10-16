@@ -479,9 +479,13 @@ const SWITCHER_STYLES = `
     display: inline-flex;
     align-items: center;
     vertical-align: middle;
+    margin: 0 0.5rem;
+    margin-inline: 0.5rem;
+    padding: 0;
   }
 
   [data-sc-lang-switcher].sc-lang-host-floating {
+    margin: 0;
     position: fixed;
     top: 0.75rem;
     right: 1rem;
@@ -493,6 +497,8 @@ const SWITCHER_STYLES = `
     display: inline-flex;
     flex-direction: column;
     align-items: flex-end;
+    height: 36px;
+    min-height: 36px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-size: 0.8125rem;
     z-index: 1000;
@@ -1022,7 +1028,11 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
       removeClass(panel, "sc-lang-panel-align-left");
       addClass(panel, "sc-lang-panel-align-right");
       const currentRect = panel.getBoundingClientRect();
-      if (currentRect.left < 8) {
+      if (
+        currentRect.left < 8 &&
+        currentRect.width > 0 &&
+        triggerRect.left + currentRect.width <= viewportWidth - 8
+      ) {
         removeClass(panel, "sc-lang-panel-align-right");
         addClass(panel, "sc-lang-panel-align-left");
       }
@@ -1030,7 +1040,11 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
       removeClass(panel, "sc-lang-panel-align-right");
       addClass(panel, "sc-lang-panel-align-left");
       const currentRect = panel.getBoundingClientRect();
-      if (currentRect.right > viewportWidth - 8) {
+      if (
+        currentRect.right > viewportWidth - 8 &&
+        currentRect.width > 0 &&
+        triggerRect.right - currentRect.width >= 8
+      ) {
         removeClass(panel, "sc-lang-panel-align-left");
         addClass(panel, "sc-lang-panel-align-right");
       }

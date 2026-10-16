@@ -96,6 +96,24 @@ class TestLanguageSwitcherAlignment(unittest.TestCase):
         self.assertIn("function removeClass(", self.content)
         self.assertIn("function hasClass(", self.content)
 
+    def test_safari_even_spacing_and_dropdown_alignment(self) -> None:
+        """Verify even spacing between search, lang switcher and theme toggle, and Safari height fix."""
+        host_pattern = re.search(r"\[data-sc-lang-switcher\]\s*\{([^}]+)\}", self.content)
+        self.assertIsNotNone(host_pattern, "Could not find [data-sc-lang-switcher] CSS rule")
+        host_css = host_pattern.group(1)
+        self.assertTrue(
+            "margin: 0 0.5rem;" in host_css or "margin-inline: 0.5rem;" in host_css,
+            "Expected even margin around language switcher host element",
+        )
+
+        switcher_pattern = re.search(r"\.sc-lang-switcher\s*\{([^}]+)\}", self.content)
+        self.assertIsNotNone(switcher_pattern, "Could not find .sc-lang-switcher CSS rule")
+        switcher_css = switcher_pattern.group(1)
+        self.assertIn("height: 36px;", switcher_css, "Expected definite height on .sc-lang-switcher for Safari WebKit layout")
+
+        self.assertIn("currentRect.width > 0", self.content)
+        self.assertIn("viewportWidth - 8", self.content)
+
 
 if __name__ == "__main__":
     unittest.main()
