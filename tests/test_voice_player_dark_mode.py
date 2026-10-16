@@ -84,6 +84,25 @@ class TestVoicePlayerDarkMode(unittest.TestCase):
         self.assertIn("handleStorage", self.content)
         self.assertIn("color-scheme", self.content)
 
+    def test_safari_mobile_compatibility(self) -> None:
+        """Verify Safari/WebKit compatibility: no :host-context mixed into standard selector lists."""
+        self.assertIn("myst:theme", self.content)
+        self.assertIn("touchend", self.content)
+        self.assertIn("pointerup", self.content)
+
+        # In WebKit/Safari, an invalid selector like :host-context invalidates the entire
+        # comma-separated selector block. Standard selectors must never share a block with :host-context.
+        # Find all blocks between { and }
+        parts = self.content.split("const PLAYER_STYLES = `")[1].split("`;")[0]
+        rules = re.findall(r"([^{}]+)\{([^}]+)\}", parts)
+        for selector_list, _body in rules:
+            if ":host-context" in selector_list:
+                self.assertNotIn(
+                    ".sc-player.dark",
+                    selector_list,
+                    f"Safari WebKit bug: :host-context grouped with .sc-player.dark in '{selector_list.strip()}'",
+                )
+
 
 if __name__ == "__main__":
     unittest.main()
