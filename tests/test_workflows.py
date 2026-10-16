@@ -32,6 +32,38 @@ class WorkflowIntegrityTests(unittest.TestCase):
             self.assertIn("name", data)
             self.assertIn("jobs", data)
 
+    def test_workflow_run_blocks_have_valid_indentation(self):
+        """Ensure all multiline script blocks inside workflows maintain consistent indentation."""
+        for wf_path in self.workflows_dir.glob("*.yml"):
+            lines = wf_path.read_text(encoding="utf-8").splitlines()
+            in_run_block = False
+            base_run_indent = 0
+            for lineno, line in enumerate(lines, 1):
+                stripped = line.strip()
+                if not stripped or stripped.startswith("#"):
+                    continue
+                indent = len(line) - len(line.lstrip())
+                if line.rstrip().endswith(("run: |", "run: |-", "run: |+")):
+                    in_run_block = True
+                    base_run_indent = indent
+                    continue
+                if in_run_block:
+                    if indent <= base_run_indent:
+                        if (
+                            stripped.startswith("- ")
+                            or (indent <= 4 and ":" in stripped)
+                            or any(
+                                stripped.startswith(k + ":")
+                                for k in ("name", "uses", "with", "env", "id", "if", "needs", "jobs", "outputs", "steps", "strategy")
+                            )
+                        ):
+                            in_run_block = False
+                        else:
+                            self.fail(
+                                f"Invalid YAML indentation in {wf_path.name}:{lineno}: "
+                                f"line has indent {indent} <= base {base_run_indent}: '{stripped}'"
+                            )
+
     def test_deploy_workflow_is_offline_and_secret_free(self):
         deploy_path = self.workflows_dir / "deploy.yml"
         content = deploy_path.read_text(encoding="utf-8")
