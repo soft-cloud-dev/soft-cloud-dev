@@ -24,6 +24,116 @@ project:
       children:
         - file: notebooks/experiment.ipynb
         - file: notebooks/webawesome-docs.ipynb
+    - title: Web Awesome Components
+      children:
+        - file: components/index.md
+        - title: Actions
+          children:
+            - file: components/actions/button.md
+            - file: components/actions/button-group.md
+            - file: components/actions/copy-button.md
+            - file: components/actions/dropdown.md
+            - file: components/actions/dropdown-item.md
+        - title: Forms
+          children:
+            - file: components/forms/checkbox.md
+            - file: components/forms/checkbox-group.md
+            - file: components/forms/color-picker.md
+            - file: components/forms/combobox.md
+            - file: components/forms/date-input.md
+            - file: components/forms/date-picker.md
+            - file: components/forms/file-input.md
+            - file: components/forms/input.md
+            - file: components/forms/known-date.md
+            - file: components/forms/number-input.md
+            - file: components/forms/otp-input.md
+            - file: components/forms/radio-group.md
+            - file: components/forms/radio.md
+            - file: components/forms/rating.md
+            - file: components/forms/select.md
+            - file: components/forms/option.md
+            - file: components/forms/slider.md
+            - file: components/forms/switch.md
+            - file: components/forms/tag-input.md
+            - file: components/forms/textarea.md
+            - file: components/forms/time-input.md
+        - title: Layout
+          children:
+            - file: components/layout/accordion.md
+            - file: components/layout/accordion-item.md
+            - file: components/layout/card.md
+            - file: components/layout/details.md
+            - file: components/layout/dialog.md
+            - file: components/layout/divider.md
+            - file: components/layout/drawer.md
+            - file: components/layout/page.md
+            - file: components/layout/scroller.md
+            - file: components/layout/split-panel.md
+        - title: Navigation
+          children:
+            - file: components/navigation/breadcrumb.md
+            - file: components/navigation/breadcrumb-item.md
+            - file: components/navigation/pagination.md
+            - file: components/navigation/stepper.md
+            - file: components/navigation/step.md
+            - file: components/navigation/tab-group.md
+            - file: components/navigation/tab.md
+            - file: components/navigation/tab-panel.md
+            - file: components/navigation/tree.md
+            - file: components/navigation/tree-item.md
+        - title: Feedback
+          children:
+            - file: components/feedback/badge.md
+            - file: components/feedback/callout.md
+            - file: components/feedback/progress-bar.md
+            - file: components/feedback/progress-ring.md
+            - file: components/feedback/skeleton.md
+            - file: components/feedback/spinner.md
+            - file: components/feedback/tag.md
+            - file: components/feedback/toast.md
+            - file: components/feedback/toast-item.md
+            - file: components/feedback/tooltip.md
+        - title: Media
+          children:
+            - file: components/media/animated-image.md
+            - file: components/media/avatar.md
+            - file: components/media/carousel.md
+            - file: components/media/carousel-item.md
+            - file: components/media/comparison.md
+            - file: components/media/icon.md
+            - file: components/media/markdown.md
+            - file: components/media/qr-code.md
+            - file: components/media/video.md
+            - file: components/media/video-playlist.md
+            - file: components/media/zoomable-frame.md
+        - title: Data Visualization
+          children:
+            - file: components/data-viz/bar-chart.md
+            - file: components/data-viz/bubble-chart.md
+            - file: components/data-viz/chart.md
+            - file: components/data-viz/data-grid.md
+            - file: components/data-viz/doughnut-chart.md
+            - file: components/data-viz/line-chart.md
+            - file: components/data-viz/pie-chart.md
+            - file: components/data-viz/polar-area-chart.md
+            - file: components/data-viz/radar-chart.md
+            - file: components/data-viz/scatter-chart.md
+            - file: components/data-viz/sparkline.md
+        - title: Helpers
+          children:
+            - file: components/helpers/animation.md
+            - file: components/helpers/format-bytes.md
+            - file: components/helpers/format-date.md
+            - file: components/helpers/format-number.md
+            - file: components/helpers/include.md
+            - file: components/helpers/intersection-observer.md
+            - file: components/helpers/mutation-observer.md
+            - file: components/helpers/popover.md
+            - file: components/helpers/popup.md
+            - file: components/helpers/random-content.md
+            - file: components/helpers/relative-time.md
+            - file: components/helpers/resize-observer.md
+
 site:
   template: book-theme
   nav:

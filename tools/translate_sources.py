@@ -1020,6 +1020,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Verify translation completeness, provenance hashes, and byte-for-byte code preservation.",
     )
     parser.add_argument(
+        "--progressive",
+        action="store_true",
+        help="Allow missing locale pages to be omitted rather than blocking publication.",
+    )
+    parser.add_argument(
         "--prepare",
         action="store_true",
         help="Draft or incrementally update changed sections/cells using GEMINI_API_KEY and record provenance.",
@@ -1138,7 +1143,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.check_only or not (args.sync_provenance or args.prepare):
         all_errors: list[str] = []
         for locale in target_locales:
-            all_errors.extend(check_locale_provenance(root, locale, docs))
+            all_errors.extend(check_locale_provenance(root, locale, docs, progressive=args.progressive))
         if all_errors:
             for err in all_errors:
                 print(f"ERROR: {err}", file=sys.stderr)

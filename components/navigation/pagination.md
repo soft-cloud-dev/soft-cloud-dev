@@ -1,0 +1,40 @@
+# Pagination `<wa-pagination>`
+
+Moves among numbered pages of results.
+
+> “the process of navigating a network of information resources” — [Wikipedia: Web navigation](wiki:Web_navigation). This quote supplies general domain context, not an API definition.
+
+**Category:** [Navigation](../index.md) · **Availability:** Core · **Maturity:** Experimental.
+
+**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/next/packages/webawesome/src/components/pagination/pagination.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/pagination/).
+
+:::{wa-callout} Integration status
+:variant: brand
+:appearance: soft
+
+Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
+:::
+
+## Live preview
+
+```{anywidget} ../../widgets/webawesome-demo.mjs
+{
+  "tree": {
+    "tag": "wa-pagination",
+    "attrs": {
+      "page": "2",
+      "pages": "8",
+      "label": "Results pages"
+    },
+    "children": []
+  }
+}
+```
+
+## Markdown code snippet
+
+```html
+<wa-pagination page="2" pages="8" label="Results pages"></wa-pagination>
+```
+
+For direct MyST integration, place this trusted markup in a Markdown HTML block or use the corresponding built-in MyST directive/role when supported. 

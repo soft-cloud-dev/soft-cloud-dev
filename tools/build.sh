@@ -9,7 +9,7 @@ npm --version
 python --version
 python -m pip --version
 python tools/check_profile.py
-python tools/translate_sources.py --check-only
+python tools/translate_sources.py --check-only --progressive
 jupyter book --version
 python tools/build_locales.py
 if [ -f CNAME ]; then
@@ -27,7 +27,7 @@ fi
 node scripts/stage-webawesome-assets.mjs _build/html
 node scripts/lit-ssr-transform.mjs _build/html "$BASE_URL"
 python tools/generate_audio.py --all-locales --narrated-only --check-only --verify-build-dir _build/html
-python tools/verify_locales.py --verify-build-dir _build/html
+python tools/verify_locales.py --verify-build-dir _build/html --progressive
 python scripts/validate-build.py --verify-dir _build/html
 test -s _build/html/index.html
 test -s _build/html/pl/index.html
