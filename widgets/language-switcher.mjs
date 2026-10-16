@@ -15,9 +15,23 @@
  * - Full keyboard accessibility (Tab, ArrowDown/ArrowUp, Home/End, Enter/Space, Escape).
  */
 
+export const DEFAULT_LOCALE_FLAGS = {
+  en: "🇬🇧",
+  pl: "🇵🇱",
+  de: "🇩🇪",
+  es: "🇪🇸",
+  fr: "🇫🇷",
+};
+
+export function getLocaleFlag(localeCode, localeInfo = null) {
+  const code = String(localeCode || "").toLowerCase();
+  return (localeInfo && localeInfo.flag) || DEFAULT_LOCALE_FLAGS[code] || "🌐";
+}
+
 export const DEFAULT_LOCALES = {
   en: {
     code: "en",
+    flag: "🇬🇧",
     name: "English",
     native_name: "English",
     html_lang: "en",
@@ -33,6 +47,7 @@ export const DEFAULT_LOCALES = {
   },
   pl: {
     code: "pl",
+    flag: "🇵🇱",
     name: "Polish",
     native_name: "Polski",
     html_lang: "pl",
@@ -48,6 +63,7 @@ export const DEFAULT_LOCALES = {
   },
   de: {
     code: "de",
+    flag: "🇩🇪",
     name: "German",
     native_name: "Deutsch",
     html_lang: "de",
@@ -63,6 +79,7 @@ export const DEFAULT_LOCALES = {
   },
   es: {
     code: "es",
+    flag: "🇪🇸",
     name: "Spanish",
     native_name: "Español",
     html_lang: "es",
@@ -78,6 +95,7 @@ export const DEFAULT_LOCALES = {
   },
   fr: {
     code: "fr",
+    flag: "🇫🇷",
     name: "French",
     native_name: "Français",
     html_lang: "fr",
@@ -343,23 +361,94 @@ function hasClass(el, name) {
   return String(el.className || "").split(/\s+/).includes(name);
 }
 
+export function findThemeToggle(doc = typeof document !== "undefined" ? document : null) {
+  if (!doc || typeof doc.querySelector !== "function") return null;
+
+  const selector = [
+    'button[aria-label*="theme" i]',
+    'button[aria-label*="dark" i]',
+    'button[aria-label*="light" i]',
+    'button[aria-label*="mode" i]',
+    'button[aria-label*="color" i]',
+    'button[title*="theme" i]',
+    'button[title*="dark" i]',
+    'button[title*="light" i]',
+    'button[title*="mode" i]',
+    'button.theme-toggle',
+    'button.theme-switch',
+    'button.theme-switch-button',
+    '.theme-switch-button button',
+    '[data-theme-toggle]',
+    '.myst-theme-toggle',
+    'header button.theme-switch',
+  ].join(", ");
+
+  const direct = doc.querySelector(selector);
+  if (direct) return direct;
+
+  const headerButtons = doc.querySelectorAll("header button, .myst-top-nav button, nav button");
+  for (const btn of headerButtons) {
+    const text = `${btn.getAttribute("aria-label") || ""} ${btn.getAttribute("title") || ""} ${btn.className || ""} ${btn.id || ""}`.toLowerCase();
+    if (text.includes("theme") || text.includes("dark") || text.includes("light") || text.includes("mode")) {
+      return btn;
+    }
+  }
+
+  for (const btn of headerButtons) {
+    const html = btn.innerHTML || "";
+    if (
+      html.includes("moon") || html.includes("sun") ||
+      html.includes("theme") || html.includes("mode")
+    ) {
+      return btn;
+    }
+  }
+
+  return null;
+}
+
+function insertBeforeOrAppend(parent, newChild, refChild) {
+  if (!parent || !newChild) return;
+  if (refChild && typeof parent.insertBefore === "function") {
+    parent.insertBefore(newChild, refChild);
+  } else if (typeof parent.appendChild === "function") {
+    parent.appendChild(newChild);
+  }
+}
+
+function isAdjacent(el1, el2) {
+  if (!el1 || !el2 || !el1.parentElement || el1.parentElement !== el2.parentElement) return false;
+  const parent = el1.parentElement;
+  if (Array.isArray(parent.children)) {
+    const idx1 = parent.children.indexOf(el1);
+    const idx2 = parent.children.indexOf(el2);
+    return Math.abs(idx1 - idx2) === 1;
+  }
+  return el1.nextElementSibling === el2 || el1.previousElementSibling === el2;
+}
+
 /**
  * Ensure a `[data-sc-lang-switcher]` host element exists in the document and is positioned
- * in the site header bar when available.
+ * next to the site theme switch toggle when available.
  */
 export function ensureLanguageSwitcherHost(doc = typeof document !== "undefined" ? document : null) {
   if (!doc || typeof doc.querySelector !== "function") return null;
 
-  const headerContainer = doc.querySelector(
-    ".myst-top-nav .myst-header-bar, .myst-top-nav, header .navbar-header-items__end, header nav, header"
-  );
+  const themeToggle = findThemeToggle(doc);
+  const headerContainer =
+    (themeToggle && themeToggle.parentElement) ||
+    doc.querySelector(
+      "header .navbar-header-items__end, .navbar-header-items__end, .myst-top-nav .myst-header-bar, .myst-top-nav, header nav, header"
+    );
 
   let hostEl = doc.querySelector("[data-sc-lang-switcher]");
   if (!hostEl) {
     hostEl = doc.createElement("div");
     hostEl.id = "softcloud-lang-switcher-root";
     hostEl.setAttribute("data-sc-lang-switcher", "1");
-    if (headerContainer) {
+    if (themeToggle && themeToggle.parentElement) {
+      insertBeforeOrAppend(themeToggle.parentElement, hostEl, themeToggle);
+    } else if (headerContainer) {
       headerContainer.appendChild(hostEl);
     } else if (doc.body) {
       addClass(hostEl, "sc-lang-host-floating");
@@ -368,8 +457,13 @@ export function ensureLanguageSwitcherHost(doc = typeof document !== "undefined"
     return hostEl;
   }
 
-  // If the injected host is at the end of <body> and a header container is present, move it into the header
-  if (
+  // If hostEl exists, position it immediately next to the theme toggle
+  if (themeToggle && themeToggle.parentElement) {
+    if (!isAdjacent(hostEl, themeToggle)) {
+      removeClass(hostEl, "sc-lang-host-floating");
+      insertBeforeOrAppend(themeToggle.parentElement, hostEl, themeToggle);
+    }
+  } else if (
     headerContainer &&
     hostEl.parentElement === doc.body &&
     !headerContainer.contains(hostEl)
@@ -381,6 +475,12 @@ export function ensureLanguageSwitcherHost(doc = typeof document !== "undefined"
 }
 
 const SWITCHER_STYLES = `
+  [data-sc-lang-switcher] {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+  }
+
   [data-sc-lang-switcher].sc-lang-host-floating {
     position: fixed;
     top: 0.75rem;
@@ -392,14 +492,10 @@ const SWITCHER_STYLES = `
     position: relative;
     display: inline-flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-end;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-size: 0.8125rem;
     z-index: 1000;
-  }
-
-  [data-sc-lang-switcher].sc-lang-host-floating .sc-lang-switcher {
-    align-items: flex-end;
   }
 
   .sc-lang-trigger {
@@ -408,19 +504,21 @@ const SWITCHER_STYLES = `
     border: 1px solid #e4e4e7;
     background: #ffffff;
     color: #18181b;
-    border-radius: 9999px;
-    min-block-size: 28px;
-    min-inline-size: 28px;
-    padding: 0.35rem 0.75rem;
-    font-size: 0.8125rem;
-    font-weight: 500;
-    line-height: 1.25;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    padding: 0;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    transition: background-color 0.15s ease, border-color 0.15s ease;
-    white-space: nowrap;
+    justify-content: center;
+    line-height: 1;
+    font-size: 1.25rem;
+    box-sizing: border-box;
+    transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+    user-select: none;
   }
 
   html.dark .sc-lang-trigger,
@@ -455,6 +553,14 @@ const SWITCHER_STYLES = `
     outline-color: #fafafa;
   }
 
+  .sc-lang-flag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    font-size: 1.25rem;
+  }
+
   .sc-lang-code-badge {
     font-size: 0.6875rem;
     font-weight: 700;
@@ -478,9 +584,9 @@ const SWITCHER_STYLES = `
     position: absolute;
     position-anchor: --sc-lang-trigger;
     top: calc(100% + 0.4rem);
-    left: 0;
-    right: auto;
-    min-width: 14rem;
+    right: 0;
+    left: auto;
+    min-width: 14.5rem;
     max-width: calc(100vw - 1.5rem);
     box-sizing: border-box;
     background: #ffffff;
@@ -495,43 +601,36 @@ const SWITCHER_STYLES = `
     z-index: 1001;
   }
 
-  .sc-lang-panel.sc-lang-panel-align-right,
-  [data-sc-lang-switcher].sc-lang-host-floating .sc-lang-panel {
-    left: auto;
-    right: 0;
-  }
-
   .sc-lang-panel.sc-lang-panel-align-left {
     left: 0;
     right: auto;
   }
 
-  @supports (position-area: bottom span-right) {
+  .sc-lang-panel.sc-lang-panel-align-right {
+    left: auto;
+    right: 0;
+  }
+
+  @supports (position-area: bottom span-left) {
     .sc-lang-panel.sc-lang-TriggerAnchored {
-      position-area: bottom span-right;
+      position-area: bottom span-left;
       position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline;
       top: auto;
       left: auto;
       right: auto;
       bottom: auto;
     }
-    [data-sc-lang-switcher].sc-lang-host-floating .sc-lang-panel.sc-lang-TriggerAnchored {
-      position-area: bottom span-left;
-    }
   }
 
-  @supports not (position-area: bottom span-right) {
-    @supports (position-area: block-end span-inline-end) {
+  @supports not (position-area: bottom span-left) {
+    @supports (position-area: block-end span-inline-start) {
       .sc-lang-panel.sc-lang-TriggerAnchored {
-        position-area: block-end span-inline-end;
+        position-area: block-end span-inline-start;
         position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline;
         top: auto;
         left: auto;
         right: auto;
         bottom: auto;
-      }
-      [data-sc-lang-switcher].sc-lang-host-floating .sc-lang-panel.sc-lang-TriggerAnchored {
-        position-area: block-end span-inline-start;
       }
     }
   }
@@ -560,7 +659,7 @@ const SWITCHER_STYLES = `
     text-align: left;
     text-decoration: none;
     border-radius: 6px;
-    min-block-size: 28px;
+    min-block-size: 32px;
     padding: 0.45rem 0.65rem;
     font-size: 0.8125rem;
     line-height: 1.3;
@@ -608,10 +707,27 @@ const SWITCHER_STYLES = `
     cursor: not-allowed;
   }
 
+  .sc-lang-option-left {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-width: 0;
+  }
+
+  .sc-lang-option-flag {
+    font-size: 1.25rem;
+    line-height: 1;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .sc-lang-option-main {
     display: flex;
     flex-direction: column;
     gap: 0.1rem;
+    min-width: 0;
   }
 
   .sc-lang-option-native {
@@ -740,24 +856,16 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
 
   const panelId = `sc-lang-panel-${Math.random().toString(36).slice(2, 8)}`;
 
+  const currentFlag = getLocaleFlag(currentLocaleCode, currentLocaleInfo);
+
   const triggerBtn = doc.createElement("button");
   triggerBtn.type = "button";
   triggerBtn.className = "sc-lang-trigger";
   triggerBtn.setAttribute("aria-expanded", "false");
   triggerBtn.setAttribute("aria-controls", panelId);
   triggerBtn.setAttribute("aria-label", `${ui.switch_language}: ${currentLocaleInfo.native_name}`);
-  triggerBtn.innerHTML = `
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="10"></circle>
-      <line x1="2" y1="12" x2="22" y2="12"></line>
-      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-    </svg>
-    <span lang="${currentLocaleInfo.html_lang || currentLocaleCode}">${currentLocaleInfo.native_name}</span>
-    <span class="sc-lang-code-badge" aria-hidden="true">${currentLocaleCode.toUpperCase()}</span>
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <polyline points="6 9 12 15 18 9"></polyline>
-    </svg>
-  `;
+  triggerBtn.setAttribute("title", `${ui.switch_language}: ${currentLocaleInfo.native_name}`);
+  triggerBtn.innerHTML = `<span class="sc-lang-flag" role="img" aria-hidden="true">${currentFlag}</span>`;
 
   const panel = doc.createElement("div");
   panel.id = panelId;
@@ -809,6 +917,12 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
       item.setAttribute("aria-disabled", "true");
     }
 
+    const flagSpan = doc.createElement("span");
+    flagSpan.className = "sc-lang-option-flag";
+    flagSpan.setAttribute("role", "img");
+    flagSpan.setAttribute("aria-hidden", "true");
+    flagSpan.textContent = getLocaleFlag(code, locInfo);
+
     const mainSpan = doc.createElement("span");
     mainSpan.className = "sc-lang-option-main";
 
@@ -833,12 +947,16 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
 
     mainSpan.append(nativeSpan, subSpan);
 
+    const leftContainer = doc.createElement("div");
+    leftContainer.className = "sc-lang-option-left";
+    leftContainer.append(flagSpan, mainSpan);
+
     const badge = doc.createElement("span");
     badge.className = "sc-lang-code-badge";
     badge.setAttribute("aria-hidden", "true");
     badge.textContent = isCurrent ? `✓ ${code.toUpperCase()}` : code.toUpperCase();
 
-    item.append(mainSpan, badge);
+    item.append(leftContainer, badge);
 
     item.addEventListener("click", (e) => {
       if (!available) {
@@ -882,39 +1000,39 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
   function adjustPanelAlignment() {
     if (!isOpen) return;
 
-    const isFloating = hasClass(hostEl, "sc-lang-host-floating");
-    if (isFloating) {
-      removeClass(panel, "sc-lang-panel-align-left");
-      addClass(panel, "sc-lang-panel-align-right");
-    } else {
-      removeClass(panel, "sc-lang-panel-align-right");
-      addClass(panel, "sc-lang-panel-align-left");
-    }
-
     if (
       typeof window === "undefined" ||
       typeof triggerBtn.getBoundingClientRect !== "function" ||
       typeof panel.getBoundingClientRect !== "function"
     ) {
+      removeClass(panel, "sc-lang-panel-align-left");
+      addClass(panel, "sc-lang-panel-align-right");
       return;
     }
 
-    const panelRect = panel.getBoundingClientRect();
     const triggerRect = triggerBtn.getBoundingClientRect();
     const viewportWidth =
       (doc.documentElement && doc.documentElement.clientWidth) ||
       window.innerWidth ||
       1024;
 
-    if (!hasClass(panel, "sc-lang-panel-align-right")) {
-      if (panelRect.right > viewportWidth - 8 && triggerRect.right - panelRect.width >= 8) {
-        removeClass(panel, "sc-lang-panel-align-left");
-        addClass(panel, "sc-lang-panel-align-right");
-      }
-    } else {
-      if (panelRect.left < 8) {
+    const isRightSide = triggerRect.left > viewportWidth / 2;
+
+    if (isRightSide) {
+      removeClass(panel, "sc-lang-panel-align-left");
+      addClass(panel, "sc-lang-panel-align-right");
+      const currentRect = panel.getBoundingClientRect();
+      if (currentRect.left < 8) {
         removeClass(panel, "sc-lang-panel-align-right");
         addClass(panel, "sc-lang-panel-align-left");
+      }
+    } else {
+      removeClass(panel, "sc-lang-panel-align-right");
+      addClass(panel, "sc-lang-panel-align-left");
+      const currentRect = panel.getBoundingClientRect();
+      if (currentRect.right > viewportWidth - 8) {
+        removeClass(panel, "sc-lang-panel-align-left");
+        addClass(panel, "sc-lang-panel-align-right");
       }
     }
   }
@@ -1045,8 +1163,11 @@ export function installNavigationSync(options = {}) {
     const currentPathname = window.location?.pathname || "/";
     const hostEl = document.querySelector("[data-sc-lang-switcher]");
     const mountedSwitcher = hostEl?.querySelector(".sc-lang-switcher");
-    if (!hostEl || !mountedSwitcher || currentPathname !== lastPathname) {
+    const themeToggle = findThemeToggle(document);
+    const adjacent = themeToggle && hostEl ? isAdjacent(hostEl, themeToggle) : true;
+    if (!hostEl || !mountedSwitcher || !adjacent || currentPathname !== lastPathname) {
       lastPathname = currentPathname;
+      ensureLanguageSwitcherHost(document);
       initSiteLanguageSwitcher(options);
     }
   };
@@ -1073,7 +1194,9 @@ export function installNavigationSync(options = {}) {
   if (typeof MutationObserver !== "undefined" && document.body) {
     const observer = new MutationObserver(() => {
       const hostEl = document.querySelector("[data-sc-lang-switcher]");
-      if (!hostEl || !hostEl.querySelector(".sc-lang-switcher")) {
+      const themeToggle = findThemeToggle(document);
+      const adjacent = themeToggle && hostEl ? isAdjacent(hostEl, themeToggle) : true;
+      if (!hostEl || !hostEl.querySelector(".sc-lang-switcher") || !adjacent) {
         syncIfNeeded();
       }
     });
@@ -1116,6 +1239,11 @@ export default {
   installNavigationSync,
   loadEmbeddedRouteManifest,
   ensureLanguageSwitcherHost,
+  findThemeToggle,
+  isAdjacent,
+  getLocaleFlag,
+  DEFAULT_LOCALE_FLAGS,
+  DEFAULT_LOCALES,
   parsePathnameRoute,
   normalizePageSlug,
   buildLocalizedRouteUrl,

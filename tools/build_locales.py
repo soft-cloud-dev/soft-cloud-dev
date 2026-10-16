@@ -345,6 +345,9 @@ def generate_mock_html_for_workspace(
   <header class="myst-top-nav">
     <div class="myst-header-bar">
       <a href="{locale_base_url or '/'}">{site_title}</a>
+      <div class="navbar-header-items__end">
+        <button class="theme-toggle" aria-label="Toggle Theme" title="Toggle Theme">🌙</button>
+      </div>
     </div>
   </header>
   <main id="main-content">
@@ -403,11 +406,20 @@ def build_route_manifest(
     enabled_locales = get_enabled_locales(locales_cfg)
     toc_files = discover_toc_files(base_myst.get("project", {}).get("toc", []))
 
+    DEFAULT_FLAGS = {
+        "en": "🇬🇧",
+        "pl": "🇵🇱",
+        "de": "🇩🇪",
+        "es": "🇪🇸",
+        "fr": "🇫🇷",
+    }
+
     locales_meta: dict[str, Any] = {}
     for code, info in enabled_locales.items():
         prefix = str(info.get("prefix", ""))
         locales_meta[code] = {
             "code": code,
+            "flag": str(info.get("flag") or DEFAULT_FLAGS.get(code, "🌐")),
             "html_lang": str(info.get("html_lang", code)),
             "hreflang": str(info.get("hreflang", code)),
             "native_name": str(info.get("native_name", code)),
@@ -512,8 +524,18 @@ def inject_language_switcher_into_html(
         if 'id="softcloud-i18n-manifest"' in text:
             continue
         if "data-sc-lang-switcher" not in text:
+            theme_btn_re = re.compile(
+                r'(<button\b[^>]*\b(?:theme-toggle|theme-switch|theme-switch-button)[^>]*>.*?</button>|<button\b[^>]*(?:aria-label|title)="[^"]*(?:theme|dark|light|mode)[^"]*"[^>]*>.*?</button>)',
+                re.I | re.DOTALL,
+            )
+            header_end_re = re.compile(r'(<div\b[^>]*\bclass="[^"]*\bnavbar-header-items__end\b[^"]*"[^>]*>)', re.I)
             header_bar_re = re.compile(r'(<div\b[^>]*\bclass="[^"]*\bmyst-header-bar\b[^"]*"[^>]*>)', re.I)
-            if header_bar_re.search(text):
+
+            if theme_btn_re.search(text):
+                text = theme_btn_re.sub(rf"{host_markup}\n        \1", text, count=1)
+            elif header_end_re.search(text):
+                text = header_end_re.sub(rf"\1\n      {host_markup}", text, count=1)
+            elif header_bar_re.search(text):
                 text = header_bar_re.sub(rf"\1\n      {host_markup}", text, count=1)
             elif "</body>" in text:
                 text = text.replace(
