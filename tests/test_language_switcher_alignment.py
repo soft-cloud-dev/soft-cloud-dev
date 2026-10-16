@@ -126,6 +126,29 @@ class TestLanguageSwitcherAlignment(unittest.TestCase):
         self.assertIn("currentRect.width > 0", self.content)
         self.assertIn("viewportWidth - 8", self.content)
 
+    def test_safari_inset_safety_and_badge_shrink(self) -> None:
+        """Verify WebKit/Safari does not suffer from inset clearing or badge shrinkage."""
+        badge_pattern = re.search(r"\.sc-lang-code-badge\s*\{([^}]+)\}", self.content)
+        self.assertIsNotNone(badge_pattern, "Could not find .sc-lang-code-badge CSS rule")
+        badge_css = badge_pattern.group(1)
+        self.assertIn("flex-shrink: 0;", badge_css, "Badge chips must have flex-shrink: 0 to prevent WebKit clipping")
+
+        # Alignment classes must have !important to override any browser quirk
+        align_right_pattern = re.search(r"\.sc-lang-panel\.sc-lang-panel-align-right\s*\{([^}]+)\}", self.content)
+        self.assertIsNotNone(align_right_pattern, "Could not find .sc-lang-panel-align-right CSS rule")
+        self.assertIn("right: 0 !important;", align_right_pattern.group(1))
+
+        # Anchor positioning blocks must NOT clear top or right to auto
+        supports_blocks = re.findall(r"@supports\s*\([^\)]+\)\s*\{([^}]+(?:\{[^}]+\}[^}]*)*)\}", self.content)
+        for block in supports_blocks:
+            if "position-area" in block:
+                self.assertNotIn("top: auto;", block, "@supports block must not clear top to auto")
+                self.assertNotIn("right: auto;", block, "@supports block must not clear right to auto")
+
+        # adjustPanelAlignment must have runtime guard against vertical overlap and right viewport overflow
+        self.assertIn("postRect.top < triggerRect.bottom", self.content)
+        self.assertIn("postRect.right > viewportWidth - 8", self.content)
+
 
 if __name__ == "__main__":
     unittest.main()

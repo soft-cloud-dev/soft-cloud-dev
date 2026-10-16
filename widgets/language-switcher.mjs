@@ -601,6 +601,7 @@ const SWITCHER_STYLES = `
     border-radius: 9999px;
     background: #f4f4f5;
     color: #3f3f46;
+    flex-shrink: 0;
   }
 
   html.dark .sc-lang-code-badge,
@@ -633,23 +634,19 @@ const SWITCHER_STYLES = `
   }
 
   .sc-lang-panel.sc-lang-panel-align-left {
-    left: 0;
-    right: auto;
+    left: 0 !important;
+    right: auto !important;
   }
 
   .sc-lang-panel.sc-lang-panel-align-right {
-    left: auto;
-    right: 0;
+    left: auto !important;
+    right: 0 !important;
   }
 
   @supports (position-area: bottom span-left) {
     .sc-lang-panel.sc-lang-TriggerAnchored {
       position-area: bottom span-left;
       position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline;
-      top: auto;
-      left: auto;
-      right: auto;
-      bottom: auto;
     }
   }
 
@@ -658,10 +655,6 @@ const SWITCHER_STYLES = `
       .sc-lang-panel.sc-lang-TriggerAnchored {
         position-area: block-end span-inline-start;
         position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline;
-        top: auto;
-        left: auto;
-        right: auto;
-        bottom: auto;
       }
     }
   }
@@ -1081,6 +1074,20 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
         addClass(panel, "sc-lang-panel-align-right");
       }
     }
+
+    // Defensive check for Safari / WebKit and browsers with partial anchor positioning:
+    // If the panel overlaps the trigger button vertically or overflows horizontally,
+    // enforce deterministic insets.
+    const postRect = panel.getBoundingClientRect();
+    if (postRect.width > 0 && postRect.height > 0) {
+      if (postRect.top < triggerRect.bottom - 2) {
+        panel.style.top = "calc(100% + 0.4rem)";
+      }
+      if (postRect.right > viewportWidth - 8) {
+        panel.style.right = "0";
+        panel.style.left = "auto";
+      }
+    }
   }
 
   function setOpen(open) {
@@ -1089,6 +1096,9 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
     triggerBtn.setAttribute("aria-expanded", String(isOpen));
     if (!isOpen) {
       noticeBox.hidden = true;
+      panel.style.top = "";
+      panel.style.right = "";
+      panel.style.left = "";
     } else {
       adjustPanelAlignment();
     }
