@@ -71,6 +71,10 @@ jobs:
             --only-binary=:all: \
             -r requirements.lock
           .venv/bin/python -m pip check
+          .venv/bin/python -m ipykernel install \
+            --sys-prefix \
+            --name jb2-python \
+            --display-name 'Python (JB2)'
 
       - name: Prepare automation branch
         id: branch
