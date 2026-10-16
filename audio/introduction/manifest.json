@@ -1,0 +1,111 @@
+{
+  "chunks": [
+    {
+      "audio_file": "chunk-001-d8b319df2372.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "1f5e615a1f31016382bc5d55c027c5db445f73e7a8b975294ed5d489a18531d4",
+      "chunk_hash": "d8b319df2372dd9e60a0f4655c98a7b6c4654ccc8f7180022ac3350767627f81",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "duration_seconds": 10.728,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph"
+      ],
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "introduction",
+      "section_title": "Introduction",
+      "size_bytes": 85824,
+      "text_sha256": "b1822eb53c9625daf49eaefabe8466651ae68218c3262c1d36cdab9183f776e2",
+      "tts_config_hash": "fad383d1f1e5d6893996e1e29fd2c793c8d3b1f9e686250284fa9d933e5f09b6",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-002-bab06445a629.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "2851a9c6020f6325a83f72f9f7a1c626fd8d75df3cee493765fc2cba1f8355d5",
+      "chunk_hash": "bab06445a629bb27952e3657e50905bf1bd981c98f86194fc76e68273c8ab99d",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "duration_seconds": 40.968,
+      "element_ids": [
+        "el-0003-heading",
+        "el-0004-paragraph",
+        "el-0005-list",
+        "el-0006-paragraph"
+      ],
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "the-challenge-of-computational-reproducibility",
+      "section_title": "The Challenge of Computational Reproducibility",
+      "size_bytes": 327744,
+      "text_sha256": "56a9d3b79e332989fb5f9721af4734042e0c736c068e295bf41c8fc80e5e50aa",
+      "tts_config_hash": "fad383d1f1e5d6893996e1e29fd2c793c8d3b1f9e686250284fa9d933e5f09b6",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-003-c79672bd7098.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "0a0ffb8b14d53f24b29778163cc15084256c7415e141de840b669ef2a7ba05a3",
+      "chunk_hash": "c79672bd709805d2ad589abe72248709b7f8feea1bb53c154996e0d8b236918a",
+      "chunk_id": "chunk-003",
+      "chunk_index": 3,
+      "duration_seconds": 57.696,
+      "element_ids": [
+        "el-0007-heading",
+        "el-0008-paragraph",
+        "el-0009-list"
+      ],
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "operational-scope",
+      "section_title": "Operational Scope",
+      "size_bytes": 461568,
+      "text_sha256": "0d6d05a27b4933fc8514672153c93cbc44a3093afff08fafcabe3a0aed15204e",
+      "tts_config_hash": "fad383d1f1e5d6893996e1e29fd2c793c8d3b1f9e686250284fa9d933e5f09b6",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-004-65f2f0deead2.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "234887502fce9e746cd97725cfbd0b11c152ca285f7ee628fb423f8fb61f210b",
+      "chunk_hash": "65f2f0deead23ed9f39849f5da4bd8d76f6bb0a511f7abf5299b864d26fea751",
+      "chunk_id": "chunk-004",
+      "chunk_index": 4,
+      "duration_seconds": 10.128,
+      "element_ids": [
+        "el-0010-heading",
+        "el-0011-paragraph"
+      ],
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "next-steps",
+      "section_title": "Next Steps",
+      "size_bytes": 81024,
+      "text_sha256": "d86b203081c7fc38a3f291afb033d35d648fccb3cc2af59f839c929bf0f97826",
+      "tts_config_hash": "fad383d1f1e5d6893996e1e29fd2c793c8d3b1f9e686250284fa9d933e5f09b6",
+      "voice": "Kore"
+    }
+  ],
+  "config_hash": "07467a65a13dc77cd8d09906ae9ec3776534725622952b7b8aee3f1a0250b6e4",
+  "manifest_sha256": "0d6c4626f647f23f60bf4ec667f91b69db11eeeb58c8d4bffbc9434d9b80154f",
+  "narration_config": {
+    "audio_format": "mp3",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "introduction",
+  "page_source_hash": "ed20d41ec4253d5afa1443cbcee799db301017586a76c10173eca6bae23c0cfd",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "d27451030aa96a3853c1cdbcf99697e64c7ecd6909c0dafdce35e7ae04320682",
+  "source_path": "introduction.md",
+  "status": "complete",
+  "total_chunks": 4,
+  "total_duration_seconds": 119.52,
+  "transcript_file": "transcript.json",
+  "transcript_sha256": "bc4e5088523d5b1a62216cbefb14c51caeaa4777d3f06e8723c7f0bc6d0cf507"
+}

@@ -127,4 +127,15 @@ for path in files:
                     f"Review executable Markdown execution controls: {path}")
 require(not Path("_config.yml").exists() and not Path("_toc.yml").exists(),
         "Remove legacy configuration from this profile")
+local_file("tools/generate_audio.py")
+local_file("widgets/voice-player.mjs")
+audio_dir = root / "audio"
+if audio_dir.is_dir():
+    for manifest_path in sorted(audio_dir.glob("*/manifest.json")):
+        manifest = json.loads(manifest_path.read_text())
+        require(manifest.get("status") == "complete", f"Incomplete audio manifest: {manifest_path}")
+        local_file(manifest.get("source_path", ""))
+        local_file(str((manifest_path.parent / manifest.get("transcript_file", "")).relative_to(root)))
+        for chunk in manifest.get("chunks", []):
+            local_file(str((manifest_path.parent / chunk.get("audio_file", "")).relative_to(root)))
 print(f"Preflight passed for {len(files)} TOC files")

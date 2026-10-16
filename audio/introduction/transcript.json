@@ -1,0 +1,271 @@
+{
+  "chunks": [
+    {
+      "chunk_hash": "d8b319df2372dd9e60a0f4655c98a7b6c4654ccc8f7180022ac3350767627f81",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph"
+      ],
+      "section_anchor": "introduction",
+      "section_title": "Introduction",
+      "segments": [
+        {
+          "element_id": "el-0001-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "085c5465ad5cf9032936e6ffbc790cec0c2645a0234afeb83fe582d01e2e98d9",
+          "spoken_text": "Introduction"
+        },
+        {
+          "element_id": "el-0002-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "96ddd7594ebad2e7e5997bd3694f7ecbc42538ffc9e75ca5497fd081bf2188bb",
+          "spoken_text": "Software Cloud provides an open, reproducible framework for computational research, architectural documentation, and cloud software engineering."
+        }
+      ],
+      "text": "Introduction.\n\nSoftware Cloud provides an open, reproducible framework for computational research, architectural documentation, and cloud software engineering.",
+      "text_sha256": "b1822eb53c9625daf49eaefabe8466651ae68218c3262c1d36cdab9183f776e2"
+    },
+    {
+      "chunk_hash": "bab06445a629bb27952e3657e50905bf1bd981c98f86194fc76e68273c8ab99d",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "element_ids": [
+        "el-0003-heading",
+        "el-0004-paragraph",
+        "el-0005-list",
+        "el-0006-paragraph"
+      ],
+      "section_anchor": "the-challenge-of-computational-reproducibility",
+      "section_title": "The Challenge of Computational Reproducibility",
+      "segments": [
+        {
+          "element_id": "el-0003-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "21acf00df063c16eac7734cb12457cbe605e3c619e72c46344533238895fa2dd",
+          "spoken_text": "The Challenge of Computational Reproducibility"
+        },
+        {
+          "element_id": "el-0004-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "6ce10afca6e4037ce3792772820c5a96b495ebc21729a1b3d44303b4dee48a7b",
+          "spoken_text": "Scientific inquiry and high-reliability software systems depend critically on reproducibility. However, modern development workflows frequently suffer from subtle environment non-determinism:"
+        },
+        {
+          "element_id": "el-0005-list",
+          "is_ai_summary": false,
+          "kind": "list",
+          "source_hash": "8a821ac0142eee8b526e81d995a0fbe86c816d6a1c42f3fb121d5b4af45496a2",
+          "spoken_text": "Unpinned transitive dependencies silently changing upstream. Divergent platform binaries across macOS, Linux, and Windows. Implicit environment variable leaks affecting execution paths. Unmonitored runtime kernel versions leading to divergent execution outcomes."
+        },
+        {
+          "element_id": "el-0006-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "ef89e2f7f6891596b41202c8674041110e1af0ace71702ec054b205fe654d270",
+          "spoken_text": "To resolve these failure modes, the Software Cloud platform implements a strictly governed publication profile."
+        }
+      ],
+      "text": "The Challenge of Computational Reproducibility.\n\nScientific inquiry and high-reliability software systems depend critically on reproducibility. However, modern development workflows frequently suffer from subtle environment non-determinism:\n\nUnpinned transitive dependencies silently changing upstream. Divergent platform binaries across macOS, Linux, and Windows. Implicit environment variable leaks affecting execution paths. Unmonitored runtime kernel versions leading to divergent execution outcomes.\n\nTo resolve these failure modes, the Software Cloud platform implements a strictly governed publication profile.",
+      "text_sha256": "56a9d3b79e332989fb5f9721af4734042e0c736c068e295bf41c8fc80e5e50aa"
+    },
+    {
+      "chunk_hash": "c79672bd709805d2ad589abe72248709b7f8feea1bb53c154996e0d8b236918a",
+      "chunk_id": "chunk-003",
+      "chunk_index": 3,
+      "element_ids": [
+        "el-0007-heading",
+        "el-0008-paragraph",
+        "el-0009-list"
+      ],
+      "section_anchor": "operational-scope",
+      "section_title": "Operational Scope",
+      "segments": [
+        {
+          "element_id": "el-0007-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "2e42c84d494c803af3c74851dd0292c64a8a12f0309024d58b88d48077408009",
+          "spoken_text": "Operational Scope"
+        },
+        {
+          "element_id": "el-0008-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "72a7f55767ef9c533f4514ea8af313d72d68cc74877e0f402c0f788b26d954e1",
+          "spoken_text": "Software Cloud addresses these challenges through four interconnected mechanisms:"
+        },
+        {
+          "element_id": "el-0009-list",
+          "is_ai_summary": false,
+          "kind": "list",
+          "source_hash": "c7e52518e5d2195dc7955769b968250dadc5bc6449fa5192b3057d65aad379e7",
+          "spoken_text": "Specification by Memorandum: Core repository architecture, licensing, tooling, and pipeline configurations are codified as formal specifications. Deterministic Wheelhouse Resolution: Direct requirements are locked into cryptographic wheel digests resolved exclusively against standard Linux/x86-64 wheels. Automated Runtime Verification: Every pull request and release build executes a preflight audit verifying virtual environment activation, interpreter provenance, Jupyter Server presence, and TOC completeness. Live Artifact Publication: Accepted builds are published directly as static sites with high-performance HTTPS delivery at my.softcloud.dev."
+        }
+      ],
+      "text": "Operational Scope.\n\nSoftware Cloud addresses these challenges through four interconnected mechanisms:\n\nSpecification by Memorandum: Core repository architecture, licensing, tooling, and pipeline configurations are codified as formal specifications. Deterministic Wheelhouse Resolution: Direct requirements are locked into cryptographic wheel digests resolved exclusively against standard Linux/x86-64 wheels. Automated Runtime Verification: Every pull request and release build executes a preflight audit verifying virtual environment activation, interpreter provenance, Jupyter Server presence, and TOC completeness. Live Artifact Publication: Accepted builds are published directly as static sites with high-performance HTTPS delivery at my.softcloud.dev.",
+      "text_sha256": "0d6d05a27b4933fc8514672153c93cbc44a3093afff08fafcabe3a0aed15204e"
+    },
+    {
+      "chunk_hash": "65f2f0deead23ed9f39849f5da4bd8d76f6bb0a511f7abf5299b864d26fea751",
+      "chunk_id": "chunk-004",
+      "chunk_index": 4,
+      "element_ids": [
+        "el-0010-heading",
+        "el-0011-paragraph"
+      ],
+      "section_anchor": "next-steps",
+      "section_title": "Next Steps",
+      "segments": [
+        {
+          "element_id": "el-0010-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "19bfe209957276183dc74da19db52c12ab4d2416b6ec7325214d73e557ae91f4",
+          "spoken_text": "Next Steps"
+        },
+        {
+          "element_id": "el-0011-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "5aefe9dac715ad6fd54bc7ea97118128890aae1a9129efc97e686ad4727d439b",
+          "spoken_text": "To explore the low-level technical design, repository scaffold, and toolchain implementations, proceed to the Architecture & Memorandum Reference."
+        }
+      ],
+      "text": "Next Steps.\n\nTo explore the low-level technical design, repository scaffold, and toolchain implementations, proceed to the Architecture & Memorandum Reference.",
+      "text_sha256": "d86b203081c7fc38a3f291afb033d35d648fccb3cc2af59f839c929bf0f97826"
+    }
+  ],
+  "code_summary_hashes": {},
+  "config_hash": "07467a65a13dc77cd8d09906ae9ec3776534725622952b7b8aee3f1a0250b6e4",
+  "element_ids": [
+    "el-0001-heading",
+    "el-0002-paragraph",
+    "el-0003-heading",
+    "el-0004-paragraph",
+    "el-0005-list",
+    "el-0006-paragraph",
+    "el-0007-heading",
+    "el-0008-paragraph",
+    "el-0009-list",
+    "el-0010-heading",
+    "el-0011-paragraph"
+  ],
+  "elements": [
+    {
+      "element_id": "el-0001-heading",
+      "heading_level": 1,
+      "kind": "heading",
+      "section_anchor": "introduction",
+      "section_title": "Introduction",
+      "source_hash": "085c5465ad5cf9032936e6ffbc790cec0c2645a0234afeb83fe582d01e2e98d9",
+      "text": "Introduction"
+    },
+    {
+      "element_id": "el-0002-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "introduction",
+      "section_title": "Introduction",
+      "source_hash": "96ddd7594ebad2e7e5997bd3694f7ecbc42538ffc9e75ca5497fd081bf2188bb",
+      "text": "Software Cloud provides an open, reproducible framework for computational research, architectural documentation, and cloud software engineering."
+    },
+    {
+      "element_id": "el-0003-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "the-challenge-of-computational-reproducibility",
+      "section_title": "The Challenge of Computational Reproducibility",
+      "source_hash": "21acf00df063c16eac7734cb12457cbe605e3c619e72c46344533238895fa2dd",
+      "text": "The Challenge of Computational Reproducibility"
+    },
+    {
+      "element_id": "el-0004-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "the-challenge-of-computational-reproducibility",
+      "section_title": "The Challenge of Computational Reproducibility",
+      "source_hash": "6ce10afca6e4037ce3792772820c5a96b495ebc21729a1b3d44303b4dee48a7b",
+      "text": "Scientific inquiry and high-reliability software systems depend critically on reproducibility. However, modern development workflows frequently suffer from subtle environment non-determinism:"
+    },
+    {
+      "element_id": "el-0005-list",
+      "kind": "list",
+      "section_anchor": "the-challenge-of-computational-reproducibility",
+      "section_title": "The Challenge of Computational Reproducibility",
+      "source_hash": "8a821ac0142eee8b526e81d995a0fbe86c816d6a1c42f3fb121d5b4af45496a2",
+      "text": "Unpinned transitive dependencies silently changing upstream. Divergent platform binaries across macOS, Linux, and Windows. Implicit environment variable leaks affecting execution paths. Unmonitored runtime kernel versions leading to divergent execution outcomes."
+    },
+    {
+      "element_id": "el-0006-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "the-challenge-of-computational-reproducibility",
+      "section_title": "The Challenge of Computational Reproducibility",
+      "source_hash": "ef89e2f7f6891596b41202c8674041110e1af0ace71702ec054b205fe654d270",
+      "text": "To resolve these failure modes, the Software Cloud platform implements a strictly governed publication profile."
+    },
+    {
+      "element_id": "el-0007-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "operational-scope",
+      "section_title": "Operational Scope",
+      "source_hash": "2e42c84d494c803af3c74851dd0292c64a8a12f0309024d58b88d48077408009",
+      "text": "Operational Scope"
+    },
+    {
+      "element_id": "el-0008-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "operational-scope",
+      "section_title": "Operational Scope",
+      "source_hash": "72a7f55767ef9c533f4514ea8af313d72d68cc74877e0f402c0f788b26d954e1",
+      "text": "Software Cloud addresses these challenges through four interconnected mechanisms:"
+    },
+    {
+      "element_id": "el-0009-list",
+      "kind": "list",
+      "section_anchor": "operational-scope",
+      "section_title": "Operational Scope",
+      "source_hash": "c7e52518e5d2195dc7955769b968250dadc5bc6449fa5192b3057d65aad379e7",
+      "text": "Specification by Memorandum: Core repository architecture, licensing, tooling, and pipeline configurations are codified as formal specifications. Deterministic Wheelhouse Resolution: Direct requirements are locked into cryptographic wheel digests resolved exclusively against standard Linux/x86-64 wheels. Automated Runtime Verification: Every pull request and release build executes a preflight audit verifying virtual environment activation, interpreter provenance, Jupyter Server presence, and TOC completeness. Live Artifact Publication: Accepted builds are published directly as static sites with high-performance HTTPS delivery at my.softcloud.dev."
+    },
+    {
+      "element_id": "el-0010-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "next-steps",
+      "section_title": "Next Steps",
+      "source_hash": "19bfe209957276183dc74da19db52c12ab4d2416b6ec7325214d73e557ae91f4",
+      "text": "Next Steps"
+    },
+    {
+      "element_id": "el-0011-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "next-steps",
+      "section_title": "Next Steps",
+      "source_hash": "5aefe9dac715ad6fd54bc7ea97118128890aae1a9129efc97e686ad4727d439b",
+      "text": "To explore the low-level technical design, repository scaffold, and toolchain implementations, proceed to the Architecture & Memorandum Reference."
+    }
+  ],
+  "narration_config": {
+    "audio_format": "mp3",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "introduction",
+  "page_source_hash": "ed20d41ec4253d5afa1443cbcee799db301017586a76c10173eca6bae23c0cfd",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "d27451030aa96a3853c1cdbcf99697e64c7ecd6909c0dafdce35e7ae04320682",
+  "source_path": "introduction.md",
+  "transcript_sha256": "bc4e5088523d5b1a62216cbefb14c51caeaa4777d3f06e8723c7f0bc6d0cf507"
+}

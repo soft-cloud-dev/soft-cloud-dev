@@ -1,5 +1,11 @@
 # Introduction
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "introduction"
+}
+```
+
 **Software Cloud** provides an open, reproducible framework for computational research, architectural documentation, and cloud software engineering.
 
 ---

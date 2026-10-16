@@ -58,6 +58,8 @@ jobs:
         env:
           BASE_URL: ""
           JB_ALLOW_NODEENV: '0'
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SOFTCLOUD_AUDIO_OFFLINE: ${{ secrets.GEMINI_API_KEY == '' && '1' || '0' }}
         run: |
           . .venv/bin/activate
           sh tools/build.sh
