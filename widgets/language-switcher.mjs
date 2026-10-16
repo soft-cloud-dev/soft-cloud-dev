@@ -312,6 +312,37 @@ export function loadEmbeddedRouteManifest(doc = typeof document !== "undefined" 
   return null;
 }
 
+function addClass(el, name) {
+  if (!el || !name) return;
+  if (el.classList && typeof el.classList.add === "function") {
+    el.classList.add(name);
+  } else {
+    const list = String(el.className || "").split(/\s+/).filter(Boolean);
+    if (!list.includes(name)) {
+      list.push(name);
+      el.className = list.join(" ");
+    }
+  }
+}
+
+function removeClass(el, name) {
+  if (!el || !name) return;
+  if (el.classList && typeof el.classList.remove === "function") {
+    el.classList.remove(name);
+  } else {
+    const list = String(el.className || "").split(/\s+/).filter((c) => c && c !== name);
+    el.className = list.join(" ");
+  }
+}
+
+function hasClass(el, name) {
+  if (!el || !name) return false;
+  if (el.classList && typeof el.classList.contains === "function") {
+    return el.classList.contains(name);
+  }
+  return String(el.className || "").split(/\s+/).includes(name);
+}
+
 /**
  * Ensure a `[data-sc-lang-switcher]` host element exists in the document and is positioned
  * in the site header bar when available.
@@ -331,7 +362,7 @@ export function ensureLanguageSwitcherHost(doc = typeof document !== "undefined"
     if (headerContainer) {
       headerContainer.appendChild(hostEl);
     } else if (doc.body) {
-      hostEl.classList.add("sc-lang-host-floating");
+      addClass(hostEl, "sc-lang-host-floating");
       doc.body.appendChild(hostEl);
     }
     return hostEl;
@@ -343,7 +374,7 @@ export function ensureLanguageSwitcherHost(doc = typeof document !== "undefined"
     hostEl.parentElement === doc.body &&
     !headerContainer.contains(hostEl)
   ) {
-    hostEl.classList.remove("sc-lang-host-floating");
+    removeClass(hostEl, "sc-lang-host-floating");
     headerContainer.appendChild(hostEl);
   }
   return hostEl;
@@ -361,13 +392,18 @@ const SWITCHER_STYLES = `
     position: relative;
     display: inline-flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: flex-start;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-size: 0.8125rem;
     z-index: 1000;
   }
 
+  [data-sc-lang-switcher].sc-lang-host-floating .sc-lang-switcher {
+    align-items: flex-end;
+  }
+
   .sc-lang-trigger {
+    anchor-name: --sc-lang-trigger;
     appearance: none;
     border: 1px solid #e4e4e7;
     background: #ffffff;
@@ -440,9 +476,13 @@ const SWITCHER_STYLES = `
 
   .sc-lang-panel {
     position: absolute;
+    position-anchor: --sc-lang-trigger;
     top: calc(100% + 0.4rem);
-    right: 0;
+    left: 0;
+    right: auto;
     min-width: 14rem;
+    max-width: calc(100vw - 1.5rem);
+    box-sizing: border-box;
     background: #ffffff;
     color: #18181b;
     border: 1px solid #e4e4e7;
@@ -455,9 +495,44 @@ const SWITCHER_STYLES = `
     z-index: 1001;
   }
 
-  @supports (position-area: block-end span-inline-start) {
-    .sc-lang-TriggerAnchored {
-      position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+  .sc-lang-panel.sc-lang-panel-align-right,
+  [data-sc-lang-switcher].sc-lang-host-floating .sc-lang-panel {
+    left: auto;
+    right: 0;
+  }
+
+  .sc-lang-panel.sc-lang-panel-align-left {
+    left: 0;
+    right: auto;
+  }
+
+  @supports (position-area: bottom span-right) {
+    .sc-lang-panel.sc-lang-TriggerAnchored {
+      position-area: bottom span-right;
+      position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline;
+      top: auto;
+      left: auto;
+      right: auto;
+      bottom: auto;
+    }
+    [data-sc-lang-switcher].sc-lang-host-floating .sc-lang-panel.sc-lang-TriggerAnchored {
+      position-area: bottom span-left;
+    }
+  }
+
+  @supports not (position-area: bottom span-right) {
+    @supports (position-area: block-end span-inline-end) {
+      .sc-lang-panel.sc-lang-TriggerAnchored {
+        position-area: block-end span-inline-end;
+        position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline;
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+      }
+      [data-sc-lang-switcher].sc-lang-host-floating .sc-lang-panel.sc-lang-TriggerAnchored {
+        position-area: block-end span-inline-start;
+      }
     }
   }
 
@@ -748,7 +823,10 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
       ...(DEFAULT_LOCALES[code]?.ui || {}),
       ...(locInfo.ui || {}),
     };
-    const displayEnglishName = locInfo.english_name || locInfo.name || code;
+    const displayEnglishName =
+      (locInfo.english_name && locInfo.english_name !== code)
+        ? locInfo.english_name
+        : (locInfo.name || DEFAULT_LOCALES[code]?.name || code);
     subSpan.textContent = available
       ? displayEnglishName
       : locUi.translation_unavailable || ui.translation_unavailable;
@@ -785,6 +863,8 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
         e.preventDefault();
         options.onNavigate({ locale: code, url: targetUrl, pageSlug: currentPageSlug });
         setOpen(false);
+      } else {
+        setOpen(false);
       }
     });
 
@@ -799,12 +879,54 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
 
   let isOpen = false;
 
+  function adjustPanelAlignment() {
+    if (!isOpen) return;
+
+    const isFloating = hasClass(hostEl, "sc-lang-host-floating");
+    if (isFloating) {
+      removeClass(panel, "sc-lang-panel-align-left");
+      addClass(panel, "sc-lang-panel-align-right");
+    } else {
+      removeClass(panel, "sc-lang-panel-align-right");
+      addClass(panel, "sc-lang-panel-align-left");
+    }
+
+    if (
+      typeof window === "undefined" ||
+      typeof triggerBtn.getBoundingClientRect !== "function" ||
+      typeof panel.getBoundingClientRect !== "function"
+    ) {
+      return;
+    }
+
+    const panelRect = panel.getBoundingClientRect();
+    const triggerRect = triggerBtn.getBoundingClientRect();
+    const viewportWidth =
+      (doc.documentElement && doc.documentElement.clientWidth) ||
+      window.innerWidth ||
+      1024;
+
+    if (!hasClass(panel, "sc-lang-panel-align-right")) {
+      if (panelRect.right > viewportWidth - 8 && triggerRect.right - panelRect.width >= 8) {
+        removeClass(panel, "sc-lang-panel-align-left");
+        addClass(panel, "sc-lang-panel-align-right");
+      }
+    } else {
+      if (panelRect.left < 8) {
+        removeClass(panel, "sc-lang-panel-align-right");
+        addClass(panel, "sc-lang-panel-align-left");
+      }
+    }
+  }
+
   function setOpen(open) {
     isOpen = Boolean(open);
     panel.hidden = !isOpen;
     triggerBtn.setAttribute("aria-expanded", String(isOpen));
     if (!isOpen) {
       noticeBox.hidden = true;
+    } else {
+      adjustPanelAlignment();
     }
   }
 
@@ -860,8 +982,20 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
 
   doc.addEventListener("pointerdown", onDocumentPointerDown);
 
+  const onResize = () => {
+    if (isOpen) {
+      adjustPanelAlignment();
+    }
+  };
+  if (typeof window !== "undefined" && typeof window.addEventListener === "function") {
+    window.addEventListener("resize", onResize);
+  }
+
   const cleanup = () => {
     doc.removeEventListener("pointerdown", onDocumentPointerDown);
+    if (typeof window !== "undefined" && typeof window.removeEventListener === "function") {
+      window.removeEventListener("resize", onResize);
+    }
     wrapper.remove();
     styleEl.remove();
     hostEl.removeAttribute("data-sc-mounted");
