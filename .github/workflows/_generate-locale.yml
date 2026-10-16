@@ -54,6 +54,14 @@ jobs:
           python-version: '3.12.14'
           architecture: x64
 
+      - name: Install FFmpeg for narration
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg
+          command -v ffmpeg
+          command -v ffprobe
+          ffmpeg -hide_banner -encoders | grep 'libmp3lame'
+
       - name: Install locked environment
         run: |
           python -c 'import sys; assert sys.implementation.name == "cpython" and sys.version_info[:3] == (3, 12, 14), sys.version'
@@ -63,6 +71,10 @@ jobs:
             --only-binary=:all: \
             -r requirements.lock
           .venv/bin/python -m pip check
+          .venv/bin/python -m ipykernel install \
+            --sys-prefix \
+            --name jb2-python \
+            --display-name 'Python (JB2)'
 
       - name: Prepare automation branch
         id: branch
