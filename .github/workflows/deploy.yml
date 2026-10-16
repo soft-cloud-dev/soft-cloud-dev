@@ -66,6 +66,8 @@ jobs:
             --display-name 'Python (JB2)'
 
       - name: Preflight profile and security checks
+        env:
+          BASE_URL: ""
         run: |
           . .venv/bin/activate
           python tools/check_profile.py
