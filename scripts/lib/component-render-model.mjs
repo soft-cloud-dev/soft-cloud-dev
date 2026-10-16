@@ -73,24 +73,33 @@ export function buildCustomElementNode(meta, lightDomChildren = []) {
       if (meta.appearance && meta.appearance !== 'default') {
         setAttr(host, 'appearance', meta.appearance);
       }
-      if (meta.icon) {
-        setAttr(host, 'icon', meta.icon);
-      }
       if (meta.class) {
         setAttr(host, 'class', meta.class);
       }
 
-      // 1. Title slot
-      if (meta.title) {
-        const titleSpan = createElement('span', [{ name: 'slot', value: 'title' }]);
-        const textNode = createTextNode(meta.title);
-        titleSpan.childNodes.push(textNode);
-        textNode.parentNode = titleSpan;
-        host.childNodes.push(titleSpan);
-        titleSpan.parentNode = host;
+      // Web Awesome 3.14 has an icon slot but no title slot or icon attribute.
+      if (meta.icon) {
+        const icon = createElement('wa-icon', [
+          { name: 'slot', value: 'icon' },
+          { name: 'name', value: meta.icon },
+        ]);
+        host.childNodes.push(icon);
+        icon.parentNode = host;
       }
 
-      // 2. Body light-DOM children
+      // Keep the author-supplied heading visible in the default slot.
+      if (meta.title) {
+        const heading = createElement('strong', [
+          { name: 'class', value: 'sc-wa-callout-title' },
+        ]);
+        const label = createTextNode(meta.title);
+        heading.childNodes.push(label);
+        label.parentNode = heading;
+        host.childNodes.push(heading);
+        heading.parentNode = host;
+      }
+
+      // Body light-DOM children
       for (const child of lightDomChildren) {
         host.childNodes.push(child);
         child.parentNode = host;
@@ -125,7 +134,7 @@ export function buildCustomElementNode(meta, lightDomChildren = []) {
         setAttr(host, 'disabled', '');
       }
       if (meta.caret) {
-        setAttr(host, 'caret', '');
+        setAttr(host, 'with-caret', '');
       }
       if (meta.loading) {
         setAttr(host, 'loading', '');

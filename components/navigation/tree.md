@@ -6,7 +6,7 @@ Represents an expandable tree of nested item atoms.
 
 **Category:** [Navigation](../index.md) · **Availability:** Core · **Maturity:** Stable.
 
-**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/next/packages/webawesome/src/components/tree/tree.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/tree/).
+**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/v3.14.0/packages/webawesome/src/components/tree/tree.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/tree/).
 
 :::{wa-callout} Integration status
 :variant: brand

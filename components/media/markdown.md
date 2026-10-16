@@ -6,7 +6,7 @@ Renders a fragment of Markdown client-side.
 
 **Category:** [Media](../index.md) · **Availability:** Core · **Maturity:** Experimental.
 
-**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/next/packages/webawesome/src/components/markdown/markdown.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/markdown/).
+**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/v3.14.0/packages/webawesome/src/components/markdown/markdown.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/markdown/).
 
 :::{wa-callout} Integration status
 :variant: brand

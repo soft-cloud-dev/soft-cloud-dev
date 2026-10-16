@@ -31,6 +31,7 @@ export function buildLitTemplate(tagName, attrMap) {
         rel,
         disabled,
         caret,
+        'with-caret': withCaret,
         loading,
         outline,
         pill,
@@ -42,7 +43,7 @@ export function buildLitTemplate(tagName, attrMap) {
 
       return html`<wa-button
         ?disabled=${disabled !== undefined}
-        ?caret=${caret !== undefined}
+        ?with-caret=${withCaret !== undefined || caret !== undefined}
         ?loading=${loading !== undefined}
         ?outline=${outline !== undefined}
         ?pill=${pill !== undefined}
@@ -62,12 +63,11 @@ export function buildLitTemplate(tagName, attrMap) {
     }
 
     case 'wa-callout': {
-      const { variant, appearance, icon } = attrMap;
+      const { variant, appearance } = attrMap;
       return html`<wa-callout
         variant=${variant || nothing}
         appearance=${appearance || nothing}
-        icon=${icon || nothing}
-      ></wa-callout>`;
+       ></wa-callout>`;
     }
 
     case 'wa-icon': {

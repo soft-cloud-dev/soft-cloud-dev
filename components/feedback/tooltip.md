@@ -6,7 +6,7 @@ Explains an action through brief contextual text.
 
 **Category:** [Feedback](../index.md) · **Availability:** Core · **Maturity:** Stable.
 
-**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/next/packages/webawesome/src/components/tooltip/tooltip.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/tooltip/).
+**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/v3.14.0/packages/webawesome/src/components/tooltip/tooltip.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/tooltip/).
 
 :::{wa-callout} Integration status
 :variant: brand

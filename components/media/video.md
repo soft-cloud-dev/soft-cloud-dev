@@ -6,7 +6,7 @@ Provides custom media playback controls.
 
 **Category:** [Media](../index.md) · **Availability:** Pro · **Maturity:** Experimental.
 
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/2129ba7307f624bbfb0579eef56e969c09620837/components/media/video.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/video/).
+**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/feat/webawesome-component-catalog-20261017/components/media/video.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/video/).
 
 :::{wa-callout} Integration status
 :variant: warning

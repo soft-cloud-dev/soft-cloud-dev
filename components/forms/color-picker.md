@@ -6,7 +6,7 @@ Presents a palette and a field for specifying a color.
 
 **Category:** [Forms](../index.md) · **Availability:** Core · **Maturity:** Stable.
 
-**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/next/packages/webawesome/src/components/color-picker/color-picker.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/color-picker/).
+**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/v3.14.0/packages/webawesome/src/components/color-picker/color-picker.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/color-picker/).
 
 :::{wa-callout} Integration status
 :variant: brand

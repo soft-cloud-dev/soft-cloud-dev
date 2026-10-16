@@ -6,7 +6,7 @@ Splits an already-known date into day, month, and year parts.
 
 **Category:** [Forms](../index.md) · **Availability:** Core · **Maturity:** Experimental.
 
-**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/next/packages/webawesome/src/components/known-date/known-date.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/known-date/).
+**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/v3.14.0/packages/webawesome/src/components/known-date/known-date.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/known-date/).
 
 :::{wa-callout} Integration status
 :variant: brand

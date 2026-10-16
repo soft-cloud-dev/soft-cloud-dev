@@ -73,6 +73,7 @@
         'footer',
         'image',
         'image_alt',
+        'icon',
       ]);
 
       for (const [k, v] of Object.entries(meta)) {
@@ -80,16 +81,25 @@
         if (typeof v === 'boolean') {
           if (v) el.setAttribute(k, '');
         } else if (v !== undefined && v !== null) {
-          el.setAttribute(k, String(v));
+          el.setAttribute(k === 'caret' ? 'with-caret' : k, String(v));
         }
       }
 
-      // Slot handling for callout
-      if (tag === 'wa-callout' && meta.title) {
-        const titleSpan = document.createElement('span');
-        titleSpan.slot = 'title';
-        titleSpan.textContent = meta.title;
-        el.appendChild(titleSpan);
+      // Web Awesome 3.14 callouts accept icon content in the icon slot.
+      // Titles are placed in the default slot, not a nonexistent title slot.
+      if (tag === 'wa-callout') {
+        if (meta.icon) {
+          const icon = document.createElement('wa-icon');
+          icon.slot = 'icon';
+          icon.name = meta.icon;
+          el.appendChild(icon);
+        }
+        if (meta.title) {
+          const heading = document.createElement('strong');
+          heading.className = 'sc-wa-callout-title';
+          heading.textContent = meta.title;
+          el.appendChild(heading);
+        }
       }
 
       // Slot handling for card

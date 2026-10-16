@@ -6,7 +6,7 @@ Selects files from the user device.
 
 **Category:** [Forms](../index.md) · **Availability:** Pro · **Maturity:** Stable.
 
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/2129ba7307f624bbfb0579eef56e969c09620837/components/forms/file-input.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/file-input/).
+**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/feat/webawesome-component-catalog-20261017/components/forms/file-input.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/file-input/).
 
 :::{wa-callout} Integration status
 :variant: warning

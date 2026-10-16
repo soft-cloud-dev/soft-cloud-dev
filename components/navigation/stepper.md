@@ -6,7 +6,7 @@ Coordinates experimental multi-step workflows.
 
 **Category:** [Navigation](../index.md) · **Availability:** Core · **Maturity:** Experimental.
 
-**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/next/packages/webawesome/src/components/stepper/stepper.ts#L1-L24) (MyST GitHub transformer); [official component directory](https://webawesome.com/docs/components) (not listed).
+**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/v3.14.0/packages/webawesome/src/components/stepper/stepper.ts#L1-L24) (MyST GitHub transformer); [official component directory](https://webawesome.com/docs/components) (not listed).
 
 :::{wa-callout} Integration status
 :variant: warning

@@ -6,7 +6,7 @@ Represents one value and visible label in a Select.
 
 **Category:** [Forms](../index.md) · **Availability:** Core · **Maturity:** Stable.
 
-**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/next/packages/webawesome/src/components/option/option.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/option/).
+**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/v3.14.0/packages/webawesome/src/components/option/option.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/option/).
 
 :::{wa-callout} Integration status
 :variant: brand

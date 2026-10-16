@@ -42,8 +42,9 @@ test('Transforms wa-callout placeholder with slots and variant', () => {
   assert.ok(html.includes('<wa-callout'));
   assert.ok(html.includes('variant="brand"'));
   assert.ok(html.includes('appearance="soft"'));
-  assert.ok(html.includes('icon="info"'));
-  assert.ok(html.includes('<span slot="title">Notice</span>'));
+  assert.ok(html.includes('<wa-icon slot="icon" name="info"></wa-icon>'));
+  assert.ok(html.includes('<strong class="sc-wa-callout-title">Notice</strong>'));
+  assert.ok(!html.includes('slot="title"'));
   assert.ok(html.includes('<p>Callout description text.</p>'));
 });
 
@@ -93,4 +94,11 @@ test('Transforms nested components (button inside card)', () => {
   assert.ok(html.includes('Action'));
   assert.ok(html.includes('</wa-button>'));
   assert.ok(!html.includes('sc-wa-host'));
+});
+
+test('Maps button caret metadata to the Web Awesome 3.14 attribute', () => {
+  const input = '<div class="sc-wa-host sc-wa-button"><span class="sc-wa-meta">{"schema_version":"1.0.0","component":"wa-button","caret":true}</span>Menu</div>';
+  const { html } = transformPlaceholders(input, { isFragment: true });
+  assert.ok(html.includes('<wa-button with-caret="">'));
+  assert.ok(!html.includes(' caret='));
 });

@@ -50,7 +50,7 @@ wa-callout {
   margin: 1.25rem 0;
 }
 
-wa-callout [slot="title"] {
+wa-callout .sc-wa-callout-title {
   font-weight: 600;
 }
 

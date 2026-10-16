@@ -6,7 +6,7 @@ Presents byte quantities with human-readable units.
 
 **Category:** [Helpers](../index.md) · **Availability:** Core · **Maturity:** Stable.
 
-**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/next/packages/webawesome/src/components/format-bytes/format-bytes.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/format-bytes/).
+**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/v3.14.0/packages/webawesome/src/components/format-bytes/format-bytes.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/format-bytes/).
 
 :::{wa-callout} Integration status
 :variant: brand

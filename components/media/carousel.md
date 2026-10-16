@@ -6,7 +6,7 @@ Coordinates a sequence of carousel item slides.
 
 **Category:** [Media](../index.md) · **Availability:** Core · **Maturity:** Experimental.
 
-**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/next/packages/webawesome/src/components/carousel/carousel.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/carousel/).
+**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/v3.14.0/packages/webawesome/src/components/carousel/carousel.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/carousel/).
 
 :::{wa-callout} Integration status
 :variant: brand

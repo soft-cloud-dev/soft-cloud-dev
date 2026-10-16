@@ -6,7 +6,7 @@ Compares multivariate profiles on radial axes.
 
 **Category:** [Data Visualization](../index.md) · **Availability:** Pro · **Maturity:** Stable.
 
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/2129ba7307f624bbfb0579eef56e969c09620837/components/data-viz/radar-chart.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/radar-chart/).
+**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/feat/webawesome-component-catalog-20261017/components/data-viz/radar-chart.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/radar-chart/).
 
 :::{wa-callout} Integration status
 :variant: warning

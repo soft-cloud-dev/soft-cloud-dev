@@ -6,7 +6,7 @@ Represents one mutually exclusive choice in a group.
 
 **Category:** [Forms](../index.md) · **Availability:** Core · **Maturity:** Stable.
 
-**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/next/packages/webawesome/src/components/radio/radio.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/radio/).
+**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/v3.14.0/packages/webawesome/src/components/radio/radio.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/radio/).
 
 :::{wa-callout} Integration status
 :variant: brand
