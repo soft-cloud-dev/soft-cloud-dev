@@ -6,11 +6,11 @@ Coordinates experimental multi-step workflows.
 
 **Category:** [Navigation](../index.md) · **Availability:** Core · **Maturity:** Experimental.
 
-**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/next/packages/webawesome/src/components/stepper/stepper.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/stepper/) (not listed).
+**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/next/packages/webawesome/src/components/stepper/stepper.ts#L1-L24) (MyST GitHub transformer); [official component directory](https://webawesome.com/docs/components) (not listed).
 
 :::{wa-callout} Integration status
 :variant: warning
-:appearance: soft
+:appearance: filled
 
 Source-only experimental component: not currently listed in the public 3.14 directory; API and runtime availability are unverified.
 :::
@@ -26,9 +26,10 @@ Live preview intentionally unavailable: the component is not documented in the p
 ## Markdown code snippet
 
 ```html
-<wa-stepper>
-  <wa-step label="Configure"></wa-step>
-  <wa-step label="Deploy"></wa-step>
+<wa-stepper active="deploy" label="Deployment progress">
+  <wa-step name="configure" completed>Configure</wa-step>
+  <wa-step name="deploy" active>Deploy</wa-step>
+  <wa-step name="verify">Verify</wa-step>
 </wa-stepper>
 ```
 

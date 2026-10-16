@@ -10,7 +10,7 @@ Organizes expandable accordion items.
 
 :::{wa-callout} Integration status
 :variant: brand
-:appearance: soft
+:appearance: filled
 
 Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 :::
@@ -30,7 +30,7 @@ Reuse: [Accordion Item](../layout/accordion-item.md). The full nested markup bel
       {
         "tag": "wa-accordion-item",
         "attrs": {
-          "summary": "Prerequisites"
+          "label": "Prerequisites"
         },
         "children": [
           "Install dependencies."
@@ -39,7 +39,7 @@ Reuse: [Accordion Item](../layout/accordion-item.md). The full nested markup bel
       {
         "tag": "wa-accordion-item",
         "attrs": {
-          "summary": "Verification"
+          "label": "Verification"
         },
         "children": [
           "Run the tests."
@@ -54,8 +54,8 @@ Reuse: [Accordion Item](../layout/accordion-item.md). The full nested markup bel
 
 ```html
 <wa-accordion>
-  <wa-accordion-item summary="Prerequisites">Install dependencies.</wa-accordion-item>
-  <wa-accordion-item summary="Verification">Run the tests.</wa-accordion-item>
+  <wa-accordion-item label="Prerequisites">Install dependencies.</wa-accordion-item>
+  <wa-accordion-item label="Verification">Run the tests.</wa-accordion-item>
 </wa-accordion>
 ```
 

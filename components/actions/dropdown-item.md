@@ -10,7 +10,7 @@ Represents one action or selectable option within a dropdown.
 
 :::{wa-callout} Integration status
 :variant: brand
-:appearance: soft
+:appearance: filled
 
 Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 :::
@@ -30,7 +30,8 @@ Reuse: [Dropdown](../actions/dropdown.md), [Button](../actions/button.md). The f
       {
         "tag": "wa-button",
         "attrs": {
-          "slot": "trigger"
+          "slot": "trigger",
+          "with-caret": ""
         },
         "children": [
           "Choose"
@@ -38,14 +39,18 @@ Reuse: [Dropdown](../actions/dropdown.md), [Button](../actions/button.md). The f
       },
       {
         "tag": "wa-dropdown-item",
-        "attrs": {},
+        "attrs": {
+          "value": "inspect"
+        },
         "children": [
           "Inspect"
         ]
       },
       {
         "tag": "wa-dropdown-item",
-        "attrs": {},
+        "attrs": {
+          "value": "restart"
+        },
         "children": [
           "Restart"
         ]
@@ -59,9 +64,9 @@ Reuse: [Dropdown](../actions/dropdown.md), [Button](../actions/button.md). The f
 
 ```html
 <wa-dropdown>
-  <wa-button slot="trigger">Choose</wa-button>
-  <wa-dropdown-item>Inspect</wa-dropdown-item>
-  <wa-dropdown-item>Restart</wa-dropdown-item>
+  <wa-button slot="trigger" with-caret="">Choose</wa-button>
+  <wa-dropdown-item value="inspect">Inspect</wa-dropdown-item>
+  <wa-dropdown-item value="restart">Restart</wa-dropdown-item>
 </wa-dropdown>
 ```
 

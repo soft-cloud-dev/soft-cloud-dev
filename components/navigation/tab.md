@@ -10,7 +10,7 @@ Names and activates a matching tab panel.
 
 :::{wa-callout} Integration status
 :variant: brand
-:appearance: soft
+:appearance: filled
 
 Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 :::
@@ -25,14 +25,14 @@ Reuse: [Tab Group](../navigation/tab-group.md), [Tab Panel](../navigation/tab-pa
 {
   "tree": {
     "tag": "wa-tab-group",
-    "attrs": {},
+    "attrs": {
+      "active": "network"
+    },
     "children": [
       {
         "tag": "wa-tab",
         "attrs": {
-          "slot": "nav",
-          "panel": "network",
-          "active": ""
+          "panel": "network"
         },
         "children": [
           "Network"
@@ -55,8 +55,8 @@ Reuse: [Tab Group](../navigation/tab-group.md), [Tab Panel](../navigation/tab-pa
 ## Markdown code snippet
 
 ```html
-<wa-tab-group>
-  <wa-tab slot="nav" panel="network" active="">Network</wa-tab>
+<wa-tab-group active="network">
+  <wa-tab panel="network">Network</wa-tab>
   <wa-tab-panel name="network">Network settings</wa-tab-panel>
 </wa-tab-group>
 ```

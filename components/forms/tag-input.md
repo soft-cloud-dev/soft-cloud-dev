@@ -6,11 +6,11 @@ Collects discrete tag values via an experimental control.
 
 **Category:** [Forms](../index.md) · **Availability:** Core · **Maturity:** Experimental.
 
-**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/next/packages/webawesome/src/components/tag-input/tag-input.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/tag-input/) (not listed).
+**Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/next/packages/webawesome/src/components/tag-input/tag-input.ts#L1-L24) (MyST GitHub transformer); [official component directory](https://webawesome.com/docs/components) (not currently listed).
 
 :::{wa-callout} Integration status
 :variant: warning
-:appearance: soft
+:appearance: filled
 
 Source-only experimental component: not currently listed in the public 3.14 directory; API and runtime availability are unverified.
 :::

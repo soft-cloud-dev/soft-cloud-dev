@@ -11,6 +11,7 @@ const permittedAttrs = new Set([
   'name', 'navigation', 'open', 'page', 'pages', 'panel', 'pagination',
   'pill', 'placeholder', 'play', 'position', 'rows', 'size', 'slot', 'src',
   'status', 'step', 'summary', 'target', 'title', 'type', 'value', 'variant',
+  'with-caret', 'page-size', 'total', 'copy-label',
   'year', 'data-demo-action', 'data-demo-target'
 ]);
 const validUrl = /^(?:https:\/\/|\/(?!\/)|#)/i;

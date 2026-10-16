@@ -10,7 +10,7 @@ Moves among numbered pages of results.
 
 :::{wa-callout} Integration status
 :variant: brand
-:appearance: soft
+:appearance: filled
 
 Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 :::
@@ -22,8 +22,9 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
   "tree": {
     "tag": "wa-pagination",
     "attrs": {
-      "page": "2",
-      "pages": "8",
+      "total": "237",
+      "page-size": "10",
+      "page": "3",
       "label": "Results pages"
     },
     "children": []
@@ -34,7 +35,7 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 ## Markdown code snippet
 
 ```html
-<wa-pagination page="2" pages="8" label="Results pages"></wa-pagination>
+<wa-pagination total="237" page-size="10" page="3" label="Results pages"></wa-pagination>
 ```
 
 For direct MyST integration, place this trusted markup in a Markdown HTML block or use the corresponding built-in MyST directive/role when supported. 

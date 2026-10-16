@@ -10,7 +10,7 @@ Combines a trigger button with reusable menu item controls.
 
 :::{wa-callout} Integration status
 :variant: brand
-:appearance: soft
+:appearance: filled
 
 Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 :::
@@ -31,7 +31,7 @@ Reuse: [Button](../actions/button.md), [Dropdown Item](../actions/dropdown-item.
         "tag": "wa-button",
         "attrs": {
           "slot": "trigger",
-          "caret": ""
+          "with-caret": ""
         },
         "children": [
           "Actions"
@@ -39,14 +39,18 @@ Reuse: [Button](../actions/button.md), [Dropdown Item](../actions/dropdown-item.
       },
       {
         "tag": "wa-dropdown-item",
-        "attrs": {},
+        "attrs": {
+          "value": "inspect"
+        },
         "children": [
           "Inspect"
         ]
       },
       {
         "tag": "wa-dropdown-item",
-        "attrs": {},
+        "attrs": {
+          "value": "restart"
+        },
         "children": [
           "Restart"
         ]
@@ -60,9 +64,9 @@ Reuse: [Button](../actions/button.md), [Dropdown Item](../actions/dropdown-item.
 
 ```html
 <wa-dropdown>
-  <wa-button slot="trigger" caret="">Actions</wa-button>
-  <wa-dropdown-item>Inspect</wa-dropdown-item>
-  <wa-dropdown-item>Restart</wa-dropdown-item>
+  <wa-button slot="trigger" with-caret="">Actions</wa-button>
+  <wa-dropdown-item value="inspect">Inspect</wa-dropdown-item>
+  <wa-dropdown-item value="restart">Restart</wa-dropdown-item>
 </wa-dropdown>
 ```
 

@@ -6,11 +6,11 @@ Connects sequential values to show trends.
 
 **Category:** [Data Visualization](../index.md) · **Availability:** Pro · **Maturity:** Stable.
 
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/data-viz/line-chart.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/line-chart/).
+**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/2129ba7307f624bbfb0579eef56e969c09620837/components/data-viz/line-chart.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/line-chart/).
 
 :::{wa-callout} Integration status
 :variant: warning
-:appearance: soft
+:appearance: filled
 
 Web Awesome Pro only: not installed in the existing Core runtime. No interactive preview or licensed code is distributed.
 :::

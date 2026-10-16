@@ -10,7 +10,7 @@ Coordinates tab buttons and their corresponding panels.
 
 :::{wa-callout} Integration status
 :variant: brand
-:appearance: soft
+:appearance: filled
 
 Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 :::
@@ -25,14 +25,14 @@ Reuse: [Tab](../navigation/tab.md), [Tab Panel](../navigation/tab-panel.md). The
 {
   "tree": {
     "tag": "wa-tab-group",
-    "attrs": {},
+    "attrs": {
+      "active": "overview"
+    },
     "children": [
       {
         "tag": "wa-tab",
         "attrs": {
-          "slot": "nav",
-          "panel": "overview",
-          "active": ""
+          "panel": "overview"
         },
         "children": [
           "Overview"
@@ -41,7 +41,6 @@ Reuse: [Tab](../navigation/tab.md), [Tab Panel](../navigation/tab-panel.md). The
       {
         "tag": "wa-tab",
         "attrs": {
-          "slot": "nav",
           "panel": "metrics"
         },
         "children": [
@@ -74,9 +73,9 @@ Reuse: [Tab](../navigation/tab.md), [Tab Panel](../navigation/tab-panel.md). The
 ## Markdown code snippet
 
 ```html
-<wa-tab-group>
-  <wa-tab slot="nav" panel="overview" active="">Overview</wa-tab>
-  <wa-tab slot="nav" panel="metrics">Metrics</wa-tab>
+<wa-tab-group active="overview">
+  <wa-tab panel="overview">Overview</wa-tab>
+  <wa-tab panel="metrics">Metrics</wa-tab>
   <wa-tab-panel name="overview">System overview</wa-tab-panel>
   <wa-tab-panel name="metrics">CPU and memory</wa-tab-panel>
 </wa-tab-group>

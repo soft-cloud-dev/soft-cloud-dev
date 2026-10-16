@@ -10,7 +10,7 @@ Contains content selected by a matching tab.
 
 :::{wa-callout} Integration status
 :variant: brand
-:appearance: soft
+:appearance: filled
 
 Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 :::
@@ -25,14 +25,14 @@ Reuse: [Tab Group](../navigation/tab-group.md), [Tab](../navigation/tab.md). The
 {
   "tree": {
     "tag": "wa-tab-group",
-    "attrs": {},
+    "attrs": {
+      "active": "usage"
+    },
     "children": [
       {
         "tag": "wa-tab",
         "attrs": {
-          "slot": "nav",
-          "panel": "usage",
-          "active": ""
+          "panel": "usage"
         },
         "children": [
           "Usage"
@@ -55,8 +55,8 @@ Reuse: [Tab Group](../navigation/tab-group.md), [Tab](../navigation/tab.md). The
 ## Markdown code snippet
 
 ```html
-<wa-tab-group>
-  <wa-tab slot="nav" panel="usage" active="">Usage</wa-tab>
+<wa-tab-group active="usage">
+  <wa-tab panel="usage">Usage</wa-tab>
   <wa-tab-panel name="usage">Resource consumption</wa-tab-panel>
 </wa-tab-group>
 ```

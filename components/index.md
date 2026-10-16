@@ -4,7 +4,7 @@ The complete **90-component** catalog is split into one self-contained MyST Mark
 
 :::{wa-callout} Rendering strategy
 :variant: brand
-:appearance: soft
+:appearance: filled
 
 The existing four typed MyST Web Awesome integrations (`wa-button`, `wa-card`, `wa-callout`, `wa-icon`) retain genuine Lit SSR and Declarative Shadow DOM. Other available Core components use the existing MyST `{anywidget}` integration to load self-hosted Web Awesome modules. The 17 Pro components are reference-only.
 :::

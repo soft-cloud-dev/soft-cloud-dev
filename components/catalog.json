@@ -626,7 +626,7 @@
       "tag": "wa-markdown",
       "pro": false,
       "sourceOnly": false,
-      "live": true,
+      "live": false,
       "deps": []
     },
     {

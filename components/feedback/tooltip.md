@@ -10,7 +10,7 @@ Explains an action through brief contextual text.
 
 :::{wa-callout} Integration status
 :variant: brand
-:appearance: soft
+:appearance: filled
 
 Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 :::
@@ -23,30 +23,35 @@ Reuse: [Button](../actions/button.md). The full nested markup below remains inde
 
 ```{anywidget} ../../widgets/webawesome-demo.mjs
 {
-  "tree": {
-    "tag": "wa-tooltip",
-    "attrs": {
-      "content": "Node health"
+  "tree": [
+    {
+      "tag": "wa-button",
+      "attrs": {
+        "id": "node-tooltip-trigger"
+      },
+      "children": [
+        "Hover for help"
+      ]
     },
-    "children": [
-      {
-        "tag": "wa-button",
-        "attrs": {},
-        "children": [
-          "Hover for help"
-        ]
-      }
-    ]
-  }
+    {
+      "tag": "wa-tooltip",
+      "attrs": {
+        "for": "node-tooltip-trigger"
+      },
+      "children": [
+        "Node health"
+      ]
+    }
+  ]
 }
 ```
 
 ## Markdown code snippet
 
 ```html
-<wa-tooltip content="Node health">
-  <wa-button>Hover for help</wa-button>
-</wa-tooltip>
+<wa-button id="node-tooltip-trigger">Hover for help</wa-button>
+
+<wa-tooltip for="node-tooltip-trigger">Node health</wa-tooltip>
 ```
 
 For direct MyST integration, place this trusted markup in a Markdown HTML block or use the corresponding built-in MyST directive/role when supported. 

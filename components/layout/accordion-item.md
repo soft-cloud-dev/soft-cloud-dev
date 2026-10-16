@@ -10,7 +10,7 @@ Defines one expandable section in an accordion.
 
 :::{wa-callout} Integration status
 :variant: brand
-:appearance: soft
+:appearance: filled
 
 Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 :::
@@ -30,7 +30,7 @@ Reuse: [Accordion](../layout/accordion.md). The full nested markup below remains
       {
         "tag": "wa-accordion-item",
         "attrs": {
-          "summary": "More information"
+          "label": "More information"
         },
         "children": [
           "Expand to read more."
@@ -45,7 +45,7 @@ Reuse: [Accordion](../layout/accordion.md). The full nested markup below remains
 
 ```html
 <wa-accordion>
-  <wa-accordion-item summary="More information">Expand to read more.</wa-accordion-item>
+  <wa-accordion-item label="More information">Expand to read more.</wa-accordion-item>
 </wa-accordion>
 ```
 

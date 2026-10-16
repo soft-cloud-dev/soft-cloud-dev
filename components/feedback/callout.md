@@ -10,7 +10,7 @@ Displays a contextual warning, note, or operational status.
 
 :::{wa-callout} Integration status
 :variant: brand
-:appearance: soft
+:appearance: filled
 
 Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 :::
@@ -23,14 +23,20 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
     "tag": "wa-callout",
     "attrs": {
       "variant": "warning",
-      "appearance": "soft"
+      "appearance": "filled"
     },
     "children": [
       {
-        "tag": "strong",
+        "tag": "wa-icon",
         "attrs": {
-          "slot": "title"
+          "slot": "icon",
+          "name": "triangle-exclamation"
         },
+        "children": []
+      },
+      {
+        "tag": "strong",
+        "attrs": {},
         "children": [
           "Notice"
         ]
@@ -50,8 +56,9 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 ## Markdown code snippet
 
 ```html
-<wa-callout variant="warning" appearance="soft">
-  <strong slot="title">Notice</strong>
+<wa-callout variant="warning" appearance="filled">
+  <wa-icon slot="icon" name="triangle-exclamation"></wa-icon>
+  <strong>Notice</strong>
   <p>Maintenance is scheduled.</p>
 </wa-callout>
 ```
