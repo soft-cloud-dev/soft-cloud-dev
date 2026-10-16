@@ -36,7 +36,7 @@ jobs:
         if: ${{ env.HAVE_APP == 'true' }}
         env:
           HAVE_APP: ${{ secrets.APP_ID != '' && secrets.APP_PRIVATE_KEY != '' }}
-        uses: actions/create-github-app-token@5d869da34e18e7287c1dda53900e3ae45b5f310 # v1.11.0
+        uses: actions/create-github-app-token@5d869da34e18e7287c1daad50e0b8ea0f506ce69 # v1.11.0
         with:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}

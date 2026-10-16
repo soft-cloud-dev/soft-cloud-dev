@@ -95,6 +95,23 @@ class WorkflowIntegrityTests(unittest.TestCase):
         self.assertIn("generate_audio.py", content)
         self.assertIn("--plan-needed", content)
 
+    def test_pinned_action_shas_are_valid_full_hashes(self):
+        """Ensure all external GitHub Actions pinned by SHA use full 40-character git commit hashes."""
+        import re
+        sha_pattern = re.compile(r"^[0-9a-f]{40}$")
+        for wf_path in self.workflows_dir.glob("*.yml"):
+            content = wf_path.read_text(encoding="utf-8")
+            for m in re.finditer(r"uses:\s*([\w\-]+/[\w\-]+)@([a-f0-9]+|\S+)", content):
+                action, ref = m.group(1), m.group(2)
+                if action.startswith("."):
+                    continue
+                # If pinned by hash (hex string), verify it is exactly 40 chars
+                if re.match(r"^[0-9a-fA-F]+$", ref):
+                    self.assertTrue(
+                        sha_pattern.match(ref),
+                        f"Action {action} in {wf_path.name} has invalid commit SHA: '{ref}' (len {len(ref)} != 40)"
+                    )
+
 
 if __name__ == "__main__":
     unittest.main()
