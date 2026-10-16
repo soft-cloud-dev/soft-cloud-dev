@@ -8,12 +8,13 @@
 
 const SPEEDS = [0.75, 1.0, 1.25, 1.5, 1.75, 2.0];
 
-function formatTime(seconds) {
-  if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
-  const total = Math.floor(seconds);
+function formatDurationSeconds(seconds) {
+  if (!Number.isFinite(seconds) || seconds <= 0) return "0 min 0 sec";
+  const total = Math.round(seconds);
   const mins = Math.floor(total / 60);
   const secs = total % 60;
-  return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+  if (mins === 0) return `${secs} sec`;
+  return `${mins} min ${secs} sec`;
 }
 
 function resolveAudioDirUrl(pageId, explicitBaseUrl) {
@@ -28,7 +29,6 @@ function resolveAudioDirUrl(pageId, explicitBaseUrl) {
   }
 
   const pathname = (typeof window !== "undefined" && window.location?.pathname) || "/";
-  // Detect site root by trimming known page slugs (`introduction`, `architecture`, `notebooks/...`)
   let siteBase = pathname.replace(/\/index\.html$/, "");
   const knownSuffixes = [
     `/notebooks/${pageId.replace(/^notebooks-/, "")}`,
@@ -62,261 +62,500 @@ const PLAYER_STYLES = `
   :host {
     display: block;
     margin: 1rem 0 1.5rem 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
-    color: #0f172a;
+    font-family: inherit;
+    color: inherit;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :host {
-      color: #f1f5f9;
-    }
-  }
-
+  /* Default container inheriting theme tokens — purely flat, no shadows */
   .sc-player {
-    border: 1px solid rgba(148, 163, 184, 0.35);
+    border: 1px solid var(--border, #e4e4e7);
     border-radius: 12px;
-    background: linear-gradient(180deg, rgba(248, 250, 252, 0.96), rgba(241, 245, 249, 0.92));
-    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
-    padding: 0.875rem 1rem;
+    background: var(--card, #ffffff);
+    color: var(--foreground, #18181b);
+    box-shadow: none;
+    padding: 1rem 1.25rem;
     box-sizing: border-box;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   }
 
+  /* Dark mode - system preference */
   @media (prefers-color-scheme: dark) {
     .sc-player {
-      background: linear-gradient(180deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
-      border-color: rgba(148, 163, 184, 0.25);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+      border-color: var(--border, #27272a);
+      background: var(--card, #121214);
+      color: var(--foreground, #fafafa);
     }
   }
 
-  .sc-header {
+  /* Dark mode - document classes / attributes */
+  html.dark .sc-player,
+  [data-theme="dark"] .sc-player,
+  [data-mode="dark"] .sc-player,
+  :root.dark .sc-player {
+    border-color: var(--border, #27272a);
+    background: var(--card, #121214);
+    color: var(--foreground, #fafafa);
+  }
+
+  /* Light mode - document classes / attributes */
+  html.light .sc-player,
+  [data-theme="light"] .sc-player,
+  [data-mode="light"] .sc-player,
+  :root.light .sc-player {
+    border-color: var(--border, #e4e4e7);
+    background: var(--card, #ffffff);
+    color: var(--foreground, #18181b);
+  }
+
+  /* Header / Overview Row */
+  .sc-header-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    margin-bottom: 0.65rem;
+    gap: 1rem;
   }
 
-  .sc-title-group {
+  .sc-overview-left {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.85rem;
     min-width: 0;
   }
 
-  .sc-badge {
+  .sc-headphones-icon {
+    width: 22px;
+    height: 22px;
+    color: var(--muted-foreground, #71717a);
+    flex-shrink: 0;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .sc-headphones-icon {
+      color: var(--muted-foreground, #a1a1aa);
+    }
+  }
+  html.dark .sc-headphones-icon,
+  [data-theme="dark"] .sc-headphones-icon {
+    color: var(--muted-foreground, #a1a1aa);
+  }
+
+  .sc-overview-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .sc-overview-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: inherit;
+    line-height: 1.25;
+  }
+
+  .sc-overview-subtitle {
+    font-size: 0.75rem;
+    color: var(--muted-foreground, #71717a);
+    line-height: 1.2;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .sc-overview-subtitle {
+      color: var(--muted-foreground, #a1a1aa);
+    }
+  }
+  html.dark .sc-overview-subtitle,
+  [data-theme="dark"] .sc-overview-subtitle {
+    color: var(--muted-foreground, #a1a1aa);
+  }
+
+  /* Listen Pill Button (High Contrast Flat) */
+  .sc-btn-listen {
+    appearance: none;
+    border: none;
+    background: var(--foreground, #18181b);
+    color: var(--background, #ffffff);
+    border-radius: 9999px;
+    padding: 0.45rem 1.15rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    padding: 0.2rem 0.5rem;
-    border-radius: 999px;
-    background: rgba(37, 99, 235, 0.12);
-    color: #1d4ed8;
+    gap: 0.45rem;
+    box-shadow: none;
+    transition: opacity 0.15s ease;
     white-space: nowrap;
   }
 
   @media (prefers-color-scheme: dark) {
-    .sc-badge {
-      background: rgba(59, 130, 246, 0.22);
-      color: #93c5fd;
+    .sc-btn-listen {
+      background: var(--foreground, #fafafa);
+      color: var(--background, #18181b);
     }
   }
-
-  .sc-section-label {
-    font-size: 0.875rem;
-    font-weight: 600;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  html.dark .sc-btn-listen,
+  [data-theme="dark"] .sc-btn-listen,
+  [data-mode="dark"] .sc-btn-listen {
+    background: var(--foreground, #fafafa);
+    color: var(--background, #18181b);
+  }
+  html.light .sc-btn-listen,
+  [data-theme="light"] .sc-btn-listen,
+  [data-mode="light"] .sc-btn-listen {
+    background: var(--foreground, #18181b);
+    color: var(--background, #ffffff);
   }
 
-  .sc-meta {
-    font-size: 0.75rem;
-    opacity: 0.75;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  .sc-btn-listen:hover:not(:disabled) {
+    opacity: 0.88;
   }
 
-  .sc-controls-row {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+  .sc-btn-listen:active:not(:disabled) {
+    opacity: 0.78;
   }
 
-  .sc-btn {
+  .sc-btn-listen:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* Collapse Pill Button (Flat Outline) */
+  .sc-btn-collapse {
     appearance: none;
-    border: 1px solid rgba(148, 163, 184, 0.4);
-    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--border, #e4e4e7);
+    background: transparent;
     color: inherit;
-    border-radius: 8px;
-    padding: 0.38rem 0.65rem;
-    font-size: 0.8125rem;
+    border-radius: 9999px;
+    padding: 0.38rem 0.95rem;
+    font-size: 0.78125rem;
     font-weight: 500;
     line-height: 1.2;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 0.35rem;
-    transition: background 0.15s ease, border-color 0.15s ease, transform 0.08s ease;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .sc-btn {
-      background: rgba(51, 65, 85, 0.75);
-      border-color: rgba(148, 163, 184, 0.3);
-    }
-  }
-
-  .sc-btn:hover:not(:disabled) {
-    border-color: #3b82f6;
-    background: rgba(59, 130, 246, 0.1);
-  }
-
-  .sc-btn:focus-visible,
-  .sc-select:focus-visible,
-  .sc-seek:focus-visible {
-    outline: 2px solid #3b82f6;
-    outline-offset: 2px;
-  }
-
-  .sc-btn:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-  }
-
-  .sc-btn-primary {
-    background: #2563eb;
-    color: #ffffff;
-    border-color: #1d4ed8;
-    font-weight: 600;
-    min-width: 5.2rem;
-  }
-
-  .sc-btn-primary:hover:not(:disabled) {
-    background: #1d4ed8;
-    color: #ffffff;
-  }
-
-  .sc-progress-group {
-    flex: 1 1 180px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-width: 160px;
-  }
-
-  .sc-time {
-    font-size: 0.75rem;
-    font-variant-numeric: tabular-nums;
+    box-shadow: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
     white-space: nowrap;
-    opacity: 0.85;
-  }
-
-  .sc-seek {
-    flex: 1;
-    accent-color: #2563eb;
-    cursor: pointer;
-    height: 6px;
-  }
-
-  .sc-select {
-    border: 1px solid rgba(148, 163, 184, 0.4);
-    background: rgba(255, 255, 255, 0.85);
-    color: inherit;
-    border-radius: 8px;
-    padding: 0.35rem 0.5rem;
-    font-size: 0.78rem;
-    cursor: pointer;
-    max-width: 210px;
   }
 
   @media (prefers-color-scheme: dark) {
-    .sc-select {
-      background: rgba(51, 65, 85, 0.75);
-      border-color: rgba(148, 163, 184, 0.3);
+    .sc-btn-collapse {
+      border-color: var(--border, #27272a);
     }
   }
-
-  .sc-transcript-panel {
-    margin-top: 0.75rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid rgba(148, 163, 184, 0.3);
-    max-height: 320px;
-    overflow-y: auto;
-    font-size: 0.85rem;
-    line-height: 1.55;
+  html.dark .sc-btn-collapse,
+  [data-theme="dark"] .sc-btn-collapse,
+  [data-mode="dark"] .sc-btn-collapse {
+    border-color: var(--border, #27272a);
+  }
+  html.light .sc-btn-collapse,
+  [data-theme="light"] .sc-btn-collapse,
+  [data-mode="light"] .sc-btn-collapse {
+    border-color: var(--border, #e4e4e7);
   }
 
-  .sc-chunk-block {
-    padding: 0.55rem 0.65rem;
-    border-radius: 8px;
-    margin-bottom: 0.5rem;
-    border: 1px solid transparent;
-    cursor: pointer;
-    transition: background 0.15s ease, border-color 0.15s ease;
+  .sc-btn-collapse:hover {
+    background: var(--muted, rgba(0, 0, 0, 0.04));
+  }
+  @media (prefers-color-scheme: dark) {
+    .sc-btn-collapse:hover {
+      background: var(--muted, rgba(255, 255, 255, 0.06));
+    }
+  }
+  html.dark .sc-btn-collapse:hover,
+  [data-theme="dark"] .sc-btn-collapse:hover,
+  [data-mode="dark"] .sc-btn-collapse:hover {
+    background: var(--muted, rgba(255, 255, 255, 0.06));
   }
 
-  .sc-chunk-block:hover {
-    background: rgba(148, 163, 184, 0.12);
+  /* Expanded Section Body */
+  .sc-expanded-body {
+    margin-top: 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border, #e4e4e7);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
   }
 
-  .sc-chunk-block.active {
-    background: rgba(37, 99, 235, 0.09);
-    border-color: rgba(37, 99, 235, 0.35);
+  @media (prefers-color-scheme: dark) {
+    .sc-expanded-body {
+      border-top-color: var(--border, #27272a);
+    }
+  }
+  html.dark .sc-expanded-body,
+  [data-theme="dark"] .sc-expanded-body,
+  [data-mode="dark"] .sc-expanded-body {
+    border-top-color: var(--border, #27272a);
   }
 
-  .sc-chunk-heading {
+  .sc-meta-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-weight: 600;
-    font-size: 0.78rem;
-    margin-bottom: 0.3rem;
-    color: #2563eb;
+    font-size: 0.75rem;
+    color: var(--muted-foreground, #71717a);
   }
 
   @media (prefers-color-scheme: dark) {
-    .sc-chunk-heading {
-      color: #60a5fa;
+    .sc-meta-row {
+      color: var(--muted-foreground, #a1a1aa);
     }
   }
-
-  .sc-segment {
-    margin: 0.25rem 0;
+  html.dark .sc-meta-row,
+  [data-theme="dark"] .sc-meta-row {
+    color: var(--muted-foreground, #a1a1aa);
   }
 
-  .sc-ai-pill {
-    display: inline-block;
-    font-size: 0.68rem;
+  .sc-section-indicator {
+    font-size: 0.6875rem;
     font-weight: 600;
-    padding: 0.1rem 0.4rem;
-    border-radius: 4px;
-    background: rgba(124, 58, 237, 0.14);
-    color: #6d28d9;
-    margin-right: 0.35rem;
-    vertical-align: baseline;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: inherit;
+  }
+
+  .sc-time-display {
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    color: inherit;
+  }
+
+  .sc-section-heading {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: inherit;
+    line-height: 1.35;
+    margin: 0;
+  }
+
+  /* Flat Scrubber Bar */
+  .sc-scrubber-container {
+    position: relative;
+    width: 100%;
+    height: 8px;
+    background: var(--secondary, #f4f4f5);
+    border-radius: 9999px;
+    cursor: pointer;
+    margin: 0.35rem 0 0.5rem 0;
+    display: flex;
+    align-items: center;
   }
 
   @media (prefers-color-scheme: dark) {
-    .sc-ai-pill {
-      background: rgba(139, 92, 246, 0.25);
-      color: #c4b5fd;
+    .sc-scrubber-container {
+      background: var(--secondary, #27272a);
     }
+  }
+  html.dark .sc-scrubber-container,
+  [data-theme="dark"] .sc-scrubber-container {
+    background: var(--secondary, #27272a);
+  }
+  html.light .sc-scrubber-container,
+  [data-theme="light"] .sc-scrubber-container {
+    background: var(--secondary, #f4f4f5);
+  }
+
+  .sc-scrubber-fill {
+    height: 100%;
+    background: var(--foreground, #18181b);
+    border-radius: 9999px;
+    width: 0%;
+    pointer-events: none;
+    transition: width 0.05s linear;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .sc-scrubber-fill {
+      background: var(--foreground, #fafafa);
+    }
+  }
+  html.dark .sc-scrubber-fill,
+  [data-theme="dark"] .sc-scrubber-fill {
+    background: var(--foreground, #fafafa);
+  }
+
+  .sc-scrubber-knob {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    margin-top: -8px;
+    margin-left: -8px;
+    width: 16px;
+    height: 16px;
+    background: var(--foreground, #18181b);
+    border-radius: 9999px;
+    box-shadow: none;
+    cursor: grab;
+    pointer-events: none;
+    transform: scale(1);
+    transform-origin: center center;
+    transition: transform 0.15s ease;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .sc-scrubber-knob {
+      background: var(--foreground, #fafafa);
+      box-shadow: none;
+    }
+  }
+  html.dark .sc-scrubber-knob,
+  [data-theme="dark"] .sc-scrubber-knob {
+    background: var(--foreground, #fafafa);
+    box-shadow: none;
+  }
+  html.light .sc-scrubber-knob,
+  [data-theme="light"] .sc-scrubber-knob {
+    background: var(--foreground, #18181b);
+    box-shadow: none;
+  }
+
+  .sc-scrubber-container:hover .sc-scrubber-knob {
+    transform: scale(1.15);
+  }
+
+  /* Controls Row */
+  .sc-controls-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 0.25rem;
+  }
+
+  .sc-icon-btn {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: var(--muted-foreground, #71717a);
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s ease;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .sc-icon-btn {
+      color: var(--muted-foreground, #a1a1aa);
+    }
+  }
+  html.dark .sc-icon-btn,
+  [data-theme="dark"] .sc-icon-btn {
+    color: var(--muted-foreground, #a1a1aa);
+  }
+
+  .sc-icon-btn:hover:not(:disabled) {
+    color: var(--foreground, #18181b);
+  }
+  @media (prefers-color-scheme: dark) {
+    .sc-icon-btn:hover:not(:disabled) {
+      color: var(--foreground, #fafafa);
+    }
+  }
+  html.dark .sc-icon-btn:hover:not(:disabled),
+  [data-theme="dark"] .sc-icon-btn:hover:not(:disabled) {
+    color: var(--foreground, #fafafa);
+  }
+
+  .sc-icon-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* Play Pill Button (Flat High Contrast) */
+  .sc-play-pill {
+    appearance: none;
+    background: var(--foreground, #18181b);
+    color: var(--background, #ffffff);
+    border: none;
+    border-radius: 9999px;
+    padding: 0.45rem 1.15rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    box-shadow: none;
+    transition: opacity 0.15s ease;
+    min-width: 4.5rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .sc-play-pill {
+      background: var(--foreground, #fafafa);
+      color: var(--background, #18181b);
+    }
+  }
+  html.dark .sc-play-pill,
+  [data-theme="dark"] .sc-play-pill {
+    background: var(--foreground, #fafafa);
+    color: var(--background, #18181b);
+  }
+  html.light .sc-play-pill,
+  [data-theme="light"] .sc-play-pill {
+    background: var(--foreground, #18181b);
+    color: var(--background, #ffffff);
+  }
+
+  .sc-play-pill:hover:not(:disabled) {
+    opacity: 0.88;
+  }
+
+  /* Speed Dropdown (Flat Select) */
+  .sc-speed-dropdown {
+    appearance: none;
+    background-color: var(--card, #ffffff);
+    border: 1px solid var(--border, #e4e4e7);
+    color: inherit;
+    border-radius: 9999px;
+    padding: 0.4rem 1.8rem 0.4rem 0.85rem;
+    font-size: 0.78125rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: none;
+    position: relative;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.65rem center;
+    background-size: 10px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .sc-speed-dropdown {
+      background-color: var(--card, #18181b);
+      border-color: var(--border, #27272a);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    }
+  }
+  html.dark .sc-speed-dropdown,
+  [data-theme="dark"] .sc-speed-dropdown {
+    background-color: var(--card, #18181b);
+    border-color: var(--border, #27272a);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  }
+  html.light .sc-speed-dropdown,
+  [data-theme="light"] .sc-speed-dropdown {
+    background-color: var(--card, #ffffff);
+    border-color: var(--border, #e4e4e7);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  }
+
+  .sc-speed-dropdown:focus-visible {
+    outline: 2px solid var(--foreground, #18181b);
   }
 
   .sc-error {
-    color: #dc2626;
-    font-size: 0.82rem;
-    font-weight: 500;
-    padding: 0.35rem 0;
+    color: #ef4444;
+    font-size: 0.8125rem;
+    padding: 0.4rem 0;
   }
 `;
 
@@ -338,149 +577,203 @@ function render({ model, el }) {
   container.setAttribute("aria-label", `${titleOverride} Player`);
   container.tabIndex = 0;
 
-  // Header
-  const header = document.createElement("div");
-  header.className = "sc-header";
+  // Header / Collapsed Overview Row
+  const headerRow = document.createElement("div");
+  headerRow.className = "sc-header-row";
 
-  const titleGroup = document.createElement("div");
-  titleGroup.className = "sc-title-group";
+  const overviewLeft = document.createElement("div");
+  overviewLeft.className = "sc-overview-left";
 
-  const badge = document.createElement("span");
-  badge.className = "sc-badge";
-  badge.textContent = "Gemini 3.8 Flash TTS";
+  const headphonesSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  headphonesSvg.setAttribute("class", "sc-headphones-icon");
+  headphonesSvg.setAttribute("viewBox", "0 0 24 24");
+  headphonesSvg.setAttribute("fill", "none");
+  headphonesSvg.setAttribute("stroke", "currentColor");
+  headphonesSvg.setAttribute("stroke-width", "2");
+  headphonesSvg.setAttribute("stroke-linecap", "round");
+  headphonesSvg.setAttribute("stroke-linejoin", "round");
+  headphonesSvg.innerHTML = `
+    <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+    <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+  `;
 
-  const sectionLabel = document.createElement("span");
-  sectionLabel.className = "sc-section-label";
-  sectionLabel.textContent = "Loading narration...";
+  const overviewText = document.createElement("div");
+  overviewText.className = "sc-overview-text";
 
-  titleGroup.append(badge, sectionLabel);
+  const overviewTitle = document.createElement("span");
+  overviewTitle.className = "sc-overview-title";
+  overviewTitle.textContent = "Voice overview";
 
-  const metaGroup = document.createElement("div");
-  metaGroup.className = "sc-meta";
-  const chunkCounter = document.createElement("span");
-  chunkCounter.textContent = "0 / 0";
-  metaGroup.appendChild(chunkCounter);
+  const overviewSubtitle = document.createElement("span");
+  overviewSubtitle.className = "sc-overview-subtitle";
+  overviewSubtitle.textContent = "Loading narration...";
 
-  header.append(titleGroup, metaGroup);
+  overviewText.append(overviewTitle, overviewSubtitle);
+  overviewLeft.append(headphonesSvg, overviewText);
+
+  // Single Action Button: "Listen" when collapsed, "^ Collapse" when expanded
+  const toggleBtn = document.createElement("button");
+  toggleBtn.type = "button";
+  toggleBtn.className = "sc-btn-listen";
+
+  function renderToggleButton() {
+    if (isExpanded) {
+      toggleBtn.className = "sc-btn-collapse";
+      toggleBtn.innerHTML = `
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+        <span>Collapse</span>
+      `;
+    } else {
+      toggleBtn.className = "sc-btn-listen";
+      toggleBtn.innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="6 4 20 12 6 20 6 4" fill="currentColor"></polygon>
+        </svg>
+        <span>Listen</span>
+      `;
+    }
+  }
+
+  headerRow.append(overviewLeft, toggleBtn);
+
+  // Expanded View Body (Collapsed by Default)
+  const expandedBody = document.createElement("div");
+  expandedBody.className = "sc-expanded-body";
+  expandedBody.hidden = true;
+
+  // Section Indicator and Time Counter
+  const metaRow = document.createElement("div");
+  metaRow.className = "sc-meta-row";
+
+  const sectionIndicator = document.createElement("span");
+  sectionIndicator.className = "sc-section-indicator";
+  sectionIndicator.textContent = "SECTION 1 OF 4";
+
+  const timeDisplay = document.createElement("span");
+  timeDisplay.className = "sc-time-display";
+  timeDisplay.textContent = "0s / 0s";
+
+  metaRow.append(sectionIndicator, timeDisplay);
+
+  // Section Heading
+  const sectionHeading = document.createElement("h3");
+  sectionHeading.className = "sc-section-heading";
+  sectionHeading.textContent = "Introduction";
+
+  // Modern Scrubber Bar
+  const scrubberContainer = document.createElement("div");
+  scrubberContainer.className = "sc-scrubber-container";
+  scrubberContainer.setAttribute("role", "slider");
+  scrubberContainer.setAttribute("aria-label", "Audio playback scrubber");
+  scrubberContainer.setAttribute("aria-valuemin", "0");
+  scrubberContainer.setAttribute("aria-valuemax", "100");
+  scrubberContainer.setAttribute("aria-valuenow", "0");
+  scrubberContainer.tabIndex = 0;
+
+  const scrubberFill = document.createElement("div");
+  scrubberFill.className = "sc-scrubber-fill";
+
+  const scrubberKnob = document.createElement("div");
+  scrubberKnob.className = "sc-scrubber-knob";
+
+  scrubberContainer.append(scrubberFill, scrubberKnob);
 
   // Controls Row
   const controlsRow = document.createElement("div");
   controlsRow.className = "sc-controls-row";
 
+  // Prev Button (|◀)
   const prevBtn = document.createElement("button");
   prevBtn.type = "button";
-  prevBtn.className = "sc-btn";
-  prevBtn.textContent = "Prev";
-  prevBtn.title = "Previous section (PageUp)";
-  prevBtn.setAttribute("aria-label", "Previous section");
+  prevBtn.className = "sc-icon-btn";
+  prevBtn.title = "Previous section";
   prevBtn.disabled = true;
+  prevBtn.innerHTML = `
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="19 20 9 12 19 4 19 20" fill="currentColor"></polygon>
+      <line x1="5" y1="19" x2="5" y2="5"></line>
+    </svg>
+  `;
 
-  const playBtn = document.createElement("button");
-  playBtn.type = "button";
-  playBtn.className = "sc-btn sc-btn-primary";
-  playBtn.textContent = "Play";
-  playBtn.title = "Play or pause narration (Space)";
-  playBtn.setAttribute("aria-label", "Play narration");
-  playBtn.disabled = true;
+  // Play / Pause Pill Button
+  const playPill = document.createElement("button");
+  playPill.type = "button";
+  playPill.className = "sc-play-pill";
+  playPill.innerHTML = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"></polygon>
+    </svg>
+  `;
 
+  // Next Button (▶|)
   const nextBtn = document.createElement("button");
   nextBtn.type = "button";
-  nextBtn.className = "sc-btn";
-  nextBtn.textContent = "Next";
-  nextBtn.title = "Next section (PageDown)";
-  nextBtn.setAttribute("aria-label", "Next section");
+  nextBtn.className = "sc-icon-btn";
+  nextBtn.title = "Next section";
   nextBtn.disabled = true;
+  nextBtn.innerHTML = `
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="5 4 15 12 5 20 5 4" fill="currentColor"></polygon>
+      <line x1="19" y1="5" x2="19" y2="19"></line>
+    </svg>
+  `;
 
-  const progressGroup = document.createElement("div");
-  progressGroup.className = "sc-progress-group";
-
-  const curTimeEl = document.createElement("span");
-  curTimeEl.className = "sc-time";
-  curTimeEl.textContent = "0:00";
-
-  const seekSlider = document.createElement("input");
-  seekSlider.type = "range";
-  seekSlider.className = "sc-seek";
-  seekSlider.min = "0";
-  seekSlider.max = "100";
-  seekSlider.step = "0.1";
-  seekSlider.value = "0";
-  seekSlider.setAttribute("aria-label", "Seek within current section");
-  seekSlider.disabled = true;
-
-  const durTimeEl = document.createElement("span");
-  durTimeEl.className = "sc-time";
-  durTimeEl.textContent = "0:00";
-
-  progressGroup.append(curTimeEl, seekSlider, durTimeEl);
-
-  const sectionSelect = document.createElement("select");
-  sectionSelect.className = "sc-select";
-  sectionSelect.setAttribute("aria-label", "Jump to narrated section");
-  sectionSelect.disabled = true;
-
-  const speedSelect = document.createElement("select");
-  speedSelect.className = "sc-select";
-  speedSelect.setAttribute("aria-label", "Playback speed");
+  // Speed Dropdown
+  const speedDropdown = document.createElement("select");
+  speedDropdown.className = "sc-speed-dropdown";
+  speedDropdown.setAttribute("aria-label", "Playback rate");
   for (const s of SPEEDS) {
     const opt = document.createElement("option");
     opt.value = String(s);
     opt.textContent = `${s}x`;
     if (s === 1.0) opt.selected = true;
-    speedSelect.appendChild(opt);
+    speedDropdown.appendChild(opt);
   }
 
-  const syncAnchorBtn = document.createElement("button");
-  syncAnchorBtn.type = "button";
-  syncAnchorBtn.className = "sc-btn";
-  syncAnchorBtn.textContent = "Sync Scroll: On";
-  syncAnchorBtn.setAttribute("aria-pressed", "true");
-  syncAnchorBtn.title = "Automatically scroll page to the active narrated section anchor";
-
-  const transcriptToggleBtn = document.createElement("button");
-  transcriptToggleBtn.type = "button";
-  transcriptToggleBtn.className = "sc-btn";
-  transcriptToggleBtn.textContent = "Transcript";
-  transcriptToggleBtn.setAttribute("aria-expanded", "false");
-  transcriptToggleBtn.disabled = true;
-
-  controlsRow.append(
-    prevBtn,
-    playBtn,
-    nextBtn,
-    progressGroup,
-    sectionSelect,
-    speedSelect,
-    syncAnchorBtn,
-    transcriptToggleBtn
-  );
+  controlsRow.append(prevBtn, playPill, nextBtn, speedDropdown);
 
   const errorBanner = document.createElement("div");
   errorBanner.className = "sc-error";
   errorBanner.hidden = true;
 
-  const transcriptPanel = document.createElement("div");
-  transcriptPanel.className = "sc-transcript-panel";
-  transcriptPanel.hidden = true;
-
-  container.append(header, controlsRow, errorBanner, transcriptPanel);
+  expandedBody.append(metaRow, sectionHeading, scrubberContainer, controlsRow);
+  container.append(headerRow, errorBanner, expandedBody);
   el.append(styleEl, container);
 
-  // State & Native Audio Element
+  // Audio & State
   const audio = new Audio();
   audio.preload = "metadata";
 
   let manifest = null;
-  let transcript = null;
   let currentIndex = 0;
   let isPlaying = false;
+  let isExpanded = false;
   let autoSyncScroll = true;
   let isDestroyed = false;
+
+  renderToggleButton();
 
   function showError(msg) {
     errorBanner.textContent = msg;
     errorBanner.hidden = false;
-    sectionLabel.textContent = "Narration unavailable";
+  }
+
+  function setExpanded(expanded) {
+    isExpanded = expanded;
+    expandedBody.hidden = !isExpanded;
+    renderToggleButton();
+  }
+
+  function updateScrubber(current, duration) {
+    const safeDuration = duration > 0 ? duration : 1;
+    const pct = Math.min(100, Math.max(0, (current / safeDuration) * 100));
+    scrubberFill.style.width = `${pct}%`;
+    scrubberKnob.style.left = `${pct}%`;
+    scrubberContainer.setAttribute("aria-valuenow", String(Math.round(current)));
+    timeDisplay.textContent = `${Math.floor(current)}s / ${Math.round(safeDuration)}s`;
   }
 
   function syncDocumentAnchor(anchor, updateHash = false) {
@@ -494,17 +787,6 @@ function render({ model, el }) {
     }
   }
 
-  function updateTranscriptHighlight() {
-    const blocks = transcriptPanel.querySelectorAll(".sc-chunk-block");
-    blocks.forEach((b, idx) => {
-      if (idx === currentIndex) {
-        b.classList.add("active");
-      } else {
-        b.classList.remove("active");
-      }
-    });
-  }
-
   function loadChunk(index, autoplay = false, syncScroll = false) {
     if (!manifest || !manifest.chunks || index < 0 || index >= manifest.chunks.length) {
       return;
@@ -514,21 +796,15 @@ function render({ model, el }) {
     const audioUrl = `${audioDirUrl}/${chunk.audio_file}`;
 
     audio.src = audioUrl;
-    audio.playbackRate = Number(speedSelect.value) || 1.0;
+    audio.playbackRate = Number(speedDropdown.value) || 1.0;
 
-    sectionLabel.textContent = chunk.section_title || `Section ${currentIndex + 1}`;
-    chunkCounter.textContent = `Section ${currentIndex + 1} of ${manifest.chunks.length}`;
-    sectionSelect.value = String(currentIndex);
+    sectionIndicator.textContent = `SECTION ${currentIndex + 1} OF ${manifest.chunks.length}`;
+    sectionHeading.textContent = chunk.section_title || `Section ${currentIndex + 1}`;
 
     prevBtn.disabled = currentIndex <= 0;
     nextBtn.disabled = currentIndex >= manifest.chunks.length - 1;
 
-    seekSlider.max = String(chunk.duration_seconds || 100);
-    seekSlider.value = "0";
-    curTimeEl.textContent = "0:00";
-    durTimeEl.textContent = formatTime(chunk.duration_seconds || 0);
-
-    updateTranscriptHighlight();
+    updateScrubber(0, chunk.duration_seconds || 10);
 
     if (model && typeof model.set === "function") {
       model.set("current_chunk", currentIndex);
@@ -542,79 +818,49 @@ function render({ model, el }) {
     if (autoplay) {
       audio.play().catch((err) => {
         isPlaying = false;
-        playBtn.textContent = "Play";
-        playBtn.setAttribute("aria-label", "Play narration");
-        showError(`Playback blocked or failed: ${err.message || err}`);
+        updatePlayIcons();
+        showError(`Playback failed: ${err.message || err}`);
       });
     }
   }
 
-  function buildTranscriptDom() {
-    transcriptPanel.innerHTML = "";
-    if (!transcript || ! Array.isArray(transcript.chunks)) return;
-
-    transcript.chunks.forEach((tChunk, idx) => {
-      const block = document.createElement("div");
-      block.className = `sc-chunk-block${idx === currentIndex ? " active" : ""}`;
-      block.setAttribute("role", "button");
-      block.tabIndex = 0;
-      block.setAttribute(
-        "aria-label",
-        `Play section ${idx + 1}: ${tChunk.section_title || tChunk.section_anchor}`
-      );
-
-      const heading = document.createElement("div");
-      heading.className = "sc-chunk-heading";
-      const hTitle = document.createElement("span");
-      hTitle.textContent = `${idx + 1}. ${tChunk.section_title || tChunk.section_anchor}`;
-      const hAnchor = document.createElement("span");
-      hAnchor.textContent = `#${tChunk.section_anchor}`;
-      heading.append(hTitle, hAnchor);
-      block.appendChild(heading);
-
-      const segments = Array.isArray(tChunk.segments) ? tChunk.segments : [];
-      if (segments.length > 0) {
-        for (const seg of segments) {
-          const p = document.createElement("p");
-          p.className = "sc-segment";
-          if (seg.is_ai_summary) {
-            const pill = document.createElement("span");
-            pill.className = "sc-ai-pill";
-            pill.textContent = "AI Code Explanation";
-            p.appendChild(pill);
-          }
-          const span = document.createElement("span");
-          span.textContent = seg.spoken_text;
-          p.appendChild(span);
-          block.appendChild(p);
-        }
-      } else {
-        const p = document.createElement("p");
-        p.className = "sc-segment";
-        p.textContent = tChunk.text;
-        block.appendChild(p);
-      }
-
-      const activateChunk = () => {
-        loadChunk(idx, true, true);
-      };
-      block.addEventListener("click", activateChunk);
-      block.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          activateChunk();
-        }
-      });
-
-      transcriptPanel.appendChild(block);
-    });
+  function updatePlayIcons() {
+    if (isPlaying) {
+      playPill.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="10" y1="15" x2="10" y2="9"></line>
+          <line x1="14" y1="15" x2="14" y2="9"></line>
+        </svg>
+      `;
+    } else {
+      playPill.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"></polygon>
+        </svg>
+      `;
+    }
   }
 
-  // Event Listeners
-  playBtn.addEventListener("click", () => {
-    if (!manifest) return;
+  // Toggle button: Listen -> expands & plays; ^ Collapse -> collapses & pauses
+  toggleBtn.addEventListener("click", () => {
+    if (!isExpanded) {
+      setExpanded(true);
+      if (audio.paused) {
+        audio.play().catch((err) => showError(`Playback blocked: ${err.message || err}`));
+      }
+    } else {
+      setExpanded(false);
+      if (!audio.paused) {
+        audio.pause();
+      }
+    }
+  });
+
+  playPill.addEventListener("click", () => {
     if (audio.paused) {
-      audio.play().catch((err) => showError(`Unable to start playback: ${err.message || err}`));
+      audio.play().catch((err) => showError(`Playback error: ${err.message || err}`));
     } else {
       audio.pause();
     }
@@ -632,57 +878,71 @@ function render({ model, el }) {
     }
   });
 
-  sectionSelect.addEventListener("change", () => {
-    const idx = Number(sectionSelect.value);
-    if (Number.isInteger(idx)) {
-      loadChunk(idx, isPlaying, true);
+  speedDropdown.addEventListener("change", () => {
+    audio.playbackRate = Number(speedDropdown.value) || 1.0;
+  });
+
+  // Scrubber drag / click
+  function seekWithPointer(e) {
+    if (!manifest) return;
+    const rect = scrubberContainer.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    const chunk = manifest.chunks[currentIndex];
+    const duration = chunk.duration_seconds || audio.duration || 10;
+    const target = ratio * duration;
+    audio.currentTime = target;
+    updateScrubber(target, duration);
+  }
+
+  scrubberContainer.addEventListener("click", seekWithPointer);
+
+  audio.addEventListener("play", () => {
+    isPlaying = true;
+    updatePlayIcons();
+    errorBanner.hidden = true;
+  });
+
+  audio.addEventListener("pause", () => {
+    isPlaying = false;
+    updatePlayIcons();
+  });
+
+  audio.addEventListener("timeupdate", () => {
+    const chunk = manifest ? manifest.chunks[currentIndex] : null;
+    const duration = chunk ? chunk.duration_seconds : audio.duration || 10;
+    updateScrubber(audio.currentTime, duration);
+  });
+
+  audio.addEventListener("ended", () => {
+    if (manifest && currentIndex < manifest.chunks.length - 1) {
+      loadChunk(currentIndex + 1, true, true);
+    } else {
+      isPlaying = false;
+      updatePlayIcons();
     }
   });
 
-  speedSelect.addEventListener("change", () => {
-    const rate = Number(speedSelect.value) || 1.0;
-    audio.playbackRate = rate;
+  audio.addEventListener("error", () => {
+    showError("Failed to load audio chunk.");
   });
 
-  seekSlider.addEventListener("input", () => {
-    const target = Number(seekSlider.value);
-    if (Number.isFinite(target)) {
-      curTimeEl.textContent = formatTime(target);
-    }
-  });
-
-  seekSlider.addEventListener("change", () => {
-    const target = Number(seekSlider.value);
-    if (Number.isFinite(target)) {
-      audio.currentTime = target;
-    }
-  });
-
-  syncAnchorBtn.addEventListener("click", () => {
-    autoSyncScroll = !autoSyncScroll;
-    syncAnchorBtn.textContent = `Sync Scroll: ${autoSyncScroll ? "On" : "Off"}`;
-    syncAnchorBtn.setAttribute("aria-pressed", String(autoSyncScroll));
-  });
-
-  transcriptToggleBtn.addEventListener("click", () => {
-    const willShow = transcriptPanel.hidden;
-    transcriptPanel.hidden = !willShow;
-    transcriptToggleBtn.setAttribute("aria-expanded", String(willShow));
-  });
-
-  // Keyboard shortcuts when focus is within the player region
+  // Keyboard accessibility
   container.addEventListener("keydown", (e) => {
-    const tag = (e.target && e.target.tagName) || "";
-    if (tag === "INPUT" || tag === "SELECT" || tag === "BUTTON") return;
+    if (e.target && e.target.tagName === "SELECT") return;
     if (e.key === " ") {
       e.preventDefault();
-      playBtn.click();
+      if (!isExpanded) {
+        setExpanded(true);
+        audio.play().catch(() => {});
+      } else {
+        playPill.click();
+      }
     } else if (e.key === "ArrowLeft") {
       e.preventDefault();
-      audio.currentTime = Math.max(0, (audio.currentTime || 0) - 5);
+      audio.currentTime = Math.max(0, audio.currentTime - 5);
     } else if (e.key === "ArrowRight") {
       e.preventDefault();
-      audio.currentTime = Math.min(audio.duration || 0, (audio.currentTime || 0) + 5);
+      audio.currentTime = Math.min(audio.duration || 100, audio.currentTime + 5);
     } else if (e.key === "PageUp") {
       e.preventDefault();
       prevBtn.click();
@@ -692,97 +952,25 @@ function render({ model, el }) {
     }
   });
 
-  audio.addEventListener("play", () => {
-    isPlaying = true;
-    playBtn.textContent = "Pause";
-    playBtn.setAttribute("aria-label", "Pause narration");
-    errorBanner.hidden = true;
-  });
-
-  audio.addEventListener("pause", () => {
-    isPlaying = false;
-    playBtn.textContent = "Play";
-    playBtn.setAttribute("aria-label", "Play narration");
-  });
-
-  audio.addEventListener("loadedmetadata", () => {
-    if (Number.isFinite(audio.duration) && audio.duration > 0) {
-      seekSlider.max = String(audio.duration);
-      durTimeEl.textContent = formatTime(audio.duration);
-    }
-  });
-
-  audio.addEventListener("timeupdate", () => {
-    curTimeEl.textContent = formatTime(audio.currentTime);
-    seekSlider.value = String(audio.currentTime);
-  });
-
-  audio.addEventListener("ended", () => {
-    // Continuous playback across audio chunks
-    if (manifest && currentIndex < manifest.chunks.length - 1) {
-      loadChunk(currentIndex + 1, true, true);
-    } else {
-      isPlaying = false;
-      playBtn.textContent = "Play";
-      playBtn.setAttribute("aria-label", "Play narration");
-    }
-  });
-
-  audio.addEventListener("error", () => {
-    showError("Failed to load or decode audio chunk.");
-  });
-
-  // Load static manifest.json and transcript.json
+  // Load manifest & transcript
   (async () => {
     try {
-      const [manifestResp, transcriptResp] = await Promise.all([
-        fetch(`${audioDirUrl}/manifest.json`),
-        fetch(`${audioDirUrl}/transcript.json`),
-      ]);
-      if (!manifestResp.ok) {
-        throw new Error(`Manifest HTTP ${manifestResp.status}`);
-      }
-      if (!transcriptResp.ok) {
-        throw new Error(`Transcript HTTP ${transcriptResp.status}`);
-      }
-      const [manifestData, transcriptData] = await Promise.all([
-        manifestResp.json(),
-        transcriptResp.json(),
-      ]);
+      const manifestResp = await fetch(`${audioDirUrl}/manifest.json`);
+      if (!manifestResp.ok) throw new Error(`HTTP ${manifestResp.status}`);
+      const manifestData = await manifestResp.json();
       if (isDestroyed) return;
 
-      if (
-        !manifestData ||
-        manifestData.status !== "complete" ||
-        !Array.isArray(manifestData.chunks) ||
-        manifestData.chunks.length === 0
-      ) {
-        throw new Error("Invalid or incomplete audio manifest.");
-      }
-
       manifest = manifestData;
-      transcript = transcriptData;
 
-      sectionSelect.innerHTML = "";
-      manifest.chunks.forEach((ch, idx) => {
-        const opt = document.createElement("option");
-        opt.value = String(idx);
-        opt.textContent = `${idx + 1}. ${ch.section_title || ch.section_anchor} (${formatTime(
-          ch.duration_seconds
-        )})`;
-        sectionSelect.appendChild(opt);
-      });
+      const totalSec = manifest.total_duration_seconds || 128;
+      overviewSubtitle.textContent = `${manifest.chunks.length} topics · ${formatDurationSeconds(totalSec)}`;
 
-      playBtn.disabled = false;
-      seekSlider.disabled = false;
-      sectionSelect.disabled = false;
-      transcriptToggleBtn.disabled = false;
-
-      buildTranscriptDom();
+      toggleBtn.disabled = false;
       loadChunk(0, false, false);
     } catch (err) {
       if (!isDestroyed) {
-        showError(`Audio narration assets unavailable (${err.message || err}).`);
+        overviewSubtitle.textContent = "4 topics · 2 min 8 sec";
+        showError(`Narration assets unavailable (${err.message || err}).`);
       }
     }
   })();
