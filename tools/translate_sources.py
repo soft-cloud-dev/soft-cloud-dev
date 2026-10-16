@@ -6,21 +6,27 @@ Translation preparation and provenance verification workflow for SoftCloud multi
 
 Supports two distinct workflows per the Multilingual Implementation Memorandum:
 1. Translation preparation (`--prepare` / `--sync-provenance`):
-   - Uses Gemini (`gemini-2.5-flash`) with `i18n/glossary.yml` terminology rules to draft or
-     incrementally update changed sections while preserving code blocks, executable cells,
-     notebook metadata, math expressions, directives, and links byte-for-byte.
-   - Records source hashes, section-level hashes, code fingerprints, and revision state in
-     `i18n/<locale>/provenance.json`.
+   - Uses Gemini (`gemini-2.5-flash`) with `i18n/glossary.yml` (`domain_terms` and `invariant_terms`)
+     to draft or incrementally update only changed sections while preserving unchanged reviewed
+     sections, code blocks (` ``` `, `~~~`, `:::`, and nested directives), executable notebook
+     cells, notebook metadata, mathematical expressions, inline code spans, directives, and links
+     byte-for-byte.
+   - Handles both Markdown (`.md`) and Jupyter Notebook (`.ipynb`) documents, translating notebook
+     Markdown cells separately from executable code cells.
+   - Records source hashes, section-level hashes, code fingerprints, and per-document revision
+     state in `i18n/<locale>/provenance.json`.
 2. Publication verification (`--check-only`):
    - Strictly verifies that all translated documents exist, match their recorded `source_sha256`,
      `section_hashes`, and `translated_sha256` in `i18n/<locale>/provenance.json`, have
-     `revision_state == "approved"`, and preserve all code blocks and notebook code cells/metadata
-     byte-for-byte against the authoritative English source.
+     `revision_state == "approved"`, and preserve all code blocks, math expressions, inline code,
+     directives, links, and notebook code cells/metadata byte-for-byte against the authoritative
+     English source.
 """
 
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import os
 import re
@@ -28,7 +34,7 @@ import sys
 import urllib.error
 import urllib.request
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 TOOLS_DIR = Path(__file__).resolve().parent
 if str(TOOLS_DIR) not in sys.path:
@@ -36,9 +42,13 @@ if str(TOOLS_DIR) not in sys.path:
 
 from i18n_utils import (
     atomic_write_json,
+    atomic_write_text,
     extract_code_fingerprint,
     extract_fenced_code_blocks_from_markdown,
+    extract_inline_code_spans,
     extract_markdown_links,
+    extract_math_expressions,
+    extract_myst_directives,
     get_enabled_locales,
     load_glossary,
     load_locales_config,
@@ -111,8 +121,60 @@ def compute_document_section_hashes(path: Path) -> list[dict[str, str]]:
     raise ValueError(f"Unsupported document suffix: {path}")
 
 
+def verify_markdown_protected_constructs(
+    en_text: str,
+    loc_text: str,
+    locale: str,
+    doc_label: str,
+) -> list[str]:
+    """Verify that protected MyST constructs (math, inline code, directives, links, section count) match."""
+    errors: list[str] = []
+
+    en_math = extract_math_expressions(en_text)
+    loc_math = extract_math_expressions(loc_text)
+    if en_math != loc_math:
+        errors.append(
+            f"[{locale}] Mathematical expressions altered in {doc_label}: "
+            f"expected {en_math}, got {loc_math}"
+        )
+
+    en_inline = extract_inline_code_spans(en_text)
+    loc_inline = extract_inline_code_spans(loc_text)
+    if en_inline != loc_inline:
+        errors.append(
+            f"[{locale}] Inline code spans altered in {doc_label}: "
+            f"expected {en_inline}, got {loc_inline}"
+        )
+
+    en_dirs = extract_myst_directives(en_text)
+    loc_dirs = extract_myst_directives(loc_text)
+    if en_dirs != loc_dirs:
+        errors.append(
+            f"[{locale}] MyST directives or attributes altered in {doc_label}: "
+            f"expected {en_dirs}, got {loc_dirs}"
+        )
+
+    en_links = extract_markdown_links(en_text)
+    loc_links = extract_markdown_links(loc_text)
+    if en_links != loc_links:
+        errors.append(
+            f"[{locale}] Markdown link targets altered in {doc_label}: "
+            f"expected {en_links}, got {loc_links}"
+        )
+
+    _, en_secs = split_markdown_sections(en_text)
+    _, loc_secs = split_markdown_sections(loc_text)
+    if len(en_secs) != len(loc_secs):
+        errors.append(
+            f"[{locale}] Markdown section count mismatch in {doc_label}: "
+            f"expected {len(en_secs)}, got {len(loc_secs)}"
+        )
+
+    return errors
+
+
 def verify_document_preservation(en_path: Path, loc_path: Path, locale: str) -> list[str]:
-    """Verify code blocks, notebook cells/metadata, and link targets between English and localized docs."""
+    """Verify code blocks, math, inline code, directives, links, and notebook cells/metadata."""
     errors: list[str] = []
     en_fp = extract_code_fingerprint(en_path)
     loc_fp = extract_code_fingerprint(loc_path)
@@ -127,20 +189,7 @@ def verify_document_preservation(en_path: Path, loc_path: Path, locale: str) -> 
     if en_path.suffix == ".md":
         en_text = en_path.read_text(encoding="utf-8")
         loc_text = loc_path.read_text(encoding="utf-8")
-        en_links = extract_markdown_links(en_text)
-        loc_links = extract_markdown_links(loc_text)
-        if en_links != loc_links:
-            errors.append(
-                f"[{locale}] Markdown link targets altered in {loc_path.name}: "
-                f"expected {en_links}, got {loc_links}"
-            )
-        _, en_secs = split_markdown_sections(en_text)
-        _, loc_secs = split_markdown_sections(loc_text)
-        if len(en_secs) != len(loc_secs):
-            errors.append(
-                f"[{locale}] Markdown section count mismatch in {loc_path.name}: "
-                f"expected {len(en_secs)}, got {len(loc_secs)}"
-            )
+        errors.extend(verify_markdown_protected_constructs(en_text, loc_text, locale, loc_path.name))
     elif en_path.suffix == ".ipynb":
         en_nb = json.loads(en_path.read_text(encoding="utf-8"))
         loc_nb = json.loads(loc_path.read_text(encoding="utf-8"))
@@ -157,6 +206,18 @@ def verify_document_preservation(en_path: Path, loc_path: Path, locale: str) -> 
                     f"[{locale}] Notebook cell {idx} type mismatch in {loc_path.name}: "
                     f"expected {ec.get('cell_type')}, got {lc.get('cell_type')}"
                 )
+            elif ec.get("cell_type") == "markdown":
+                ec_text = "".join(ec.get("source", []))
+                lc_text = "".join(lc.get("source", []))
+                if extract_fenced_code_blocks_from_markdown(ec_text) != extract_fenced_code_blocks_from_markdown(lc_text):
+                    errors.append(
+                        f"[{locale}] Embedded code block mismatch in {loc_path.name} markdown cell {idx}"
+                    )
+                errors.extend(
+                    verify_markdown_protected_constructs(
+                        ec_text, lc_text, locale, f"{loc_path.name}#cell-{idx}"
+                    )
+                )
     return errors
 
 
@@ -165,6 +226,7 @@ def build_provenance_manifest(
     locale: str,
     docs: list[str],
     revision_state: str = "approved",
+    per_doc_revision_states: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     """Build deterministic provenance.json structure for a target locale."""
     locales_cfg = load_locales_config(root)
@@ -206,6 +268,12 @@ def build_provenance_manifest(
                 }
             )
 
+        doc_rev_state = (
+            per_doc_revision_states.get(rel_doc, revision_state)
+            if per_doc_revision_states
+            else revision_state
+        )
+
         documents_meta[rel_doc] = {
             "source_path": rel_doc,
             "localized_path": loc_path.relative_to(root).as_posix(),
@@ -214,7 +282,7 @@ def build_provenance_manifest(
             "code_fingerprint_sha256": en_fp["sha256"],
             "localized_code_fingerprint_sha256": loc_fp["sha256"],
             "code_block_count": en_fp["count"],
-            "revision_state": revision_state,
+            "revision_state": doc_rev_state,
             "sections": section_records,
         }
 
@@ -324,6 +392,56 @@ def check_locale_provenance(root: Path, locale: str, docs: list[str]) -> list[st
     return errors
 
 
+def extract_glossary_term_map(glossary: dict[str, Any], target_locale: str) -> dict[str, str]:
+    """Extract English-to-target-locale preferred domain terminology from `i18n/glossary.yml`."""
+    entries: list[dict[str, Any]] = []
+    domain_terms = glossary.get("domain_terms")
+    if isinstance(domain_terms, dict):
+        for val in domain_terms.values():
+            if isinstance(val, dict):
+                entries.append(val)
+    elif isinstance(domain_terms, list):
+        for val in domain_terms:
+            if isinstance(val, dict):
+                entries.append(val)
+
+    legacy_terms = glossary.get("terms")
+    if isinstance(legacy_terms, list):
+        for val in legacy_terms:
+            if isinstance(val, dict):
+                entries.append(val)
+
+    term_map: dict[str, str] = {}
+    for entry in entries:
+        en_term = entry.get("en")
+        if isinstance(en_term, str) and en_term.strip():
+            target_term = entry.get(target_locale, en_term)
+            if isinstance(target_term, str) and target_term.strip():
+                term_map[en_term] = target_term
+    return term_map
+
+
+def build_translation_prompt(
+    section_text: str,
+    target_locale: str,
+    language_name: str,
+    glossary: dict[str, Any],
+) -> str:
+    """Build the Gemini translation prompt incorporating invariant terms and `domain_terms`."""
+    invariants = ", ".join(str(x) for x in glossary.get("invariant_terms", []))
+    term_map = extract_glossary_term_map(glossary, target_locale)
+    return (
+        f"Translate the following MyST Markdown section from English into {language_name} ({target_locale}).\n"
+        "STRICT RULES:\n"
+        "1. Preserve ALL fenced code blocks (```, ~~~, :::), inline code spans, URLs, link targets, and MyST directive names/attributes byte-for-byte.\n"
+        "2. Preserve mathematical expressions ($...$, $$...$$, {math}) byte-for-byte.\n"
+        f"3. Keep these technical identifiers untranslated: {invariants}\n"
+        f"4. Preferred domain terminology in {language_name}: {json.dumps(term_map, ensure_ascii=False)}\n"
+        "5. Output ONLY the translated Markdown text without wrapping it in outer code fences.\n\n"
+        f"SOURCE SECTION:\n{section_text}"
+    )
+
+
 def translate_section_with_gemini(
     section_text: str,
     target_locale: str,
@@ -333,22 +451,7 @@ def translate_section_with_gemini(
     model: str = DEFAULT_TRANSLATION_MODEL,
 ) -> str:
     """Translate a Markdown section using Gemini while preserving code blocks and MyST directives byte-for-byte."""
-    invariants = ", ".join(str(x) for x in glossary.get("invariant_terms", []))
-    term_map = {
-        entry["en"]: entry.get(target_locale, entry["en"])
-        for entry in glossary.get("terms", [])
-        if isinstance(entry, dict) and "en" in entry
-    }
-    prompt = (
-        f"Translate the following MyST Markdown section from English into {language_name} ({target_locale}).\n"
-        "STRICT RULES:\n"
-        "1. Preserve ALL fenced code blocks, inline code spans, URLs, link targets, and MyST directive names/attributes byte-for-byte.\n"
-        "2. Preserve mathematical expressions byte-for-byte.\n"
-        f"3. Keep these technical identifiers untranslated: {invariants}\n"
-        f"4. Preferred domain terminology in {language_name}: {json.dumps(term_map, ensure_ascii=False)}\n"
-        "5. Output ONLY the translated Markdown text without wrapping it in outer code fences.\n\n"
-        f"SOURCE SECTION:\n{section_text}"
-    )
+    prompt = build_translation_prompt(section_text, target_locale, language_name, glossary)
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
     payload = {
         "contents": [{"role": "user", "parts": [{"text": prompt}]}],
@@ -370,7 +473,191 @@ def translate_section_with_gemini(
     translated = "".join(p.get("text", "") for p in parts if isinstance(p, dict)).strip()
     if not translated:
         raise RuntimeError(f"Empty translation response from Gemini for locale {target_locale}")
+
+    # Localize `{anywidget}` `"locale"` property if present in the section
+    translated = re.sub(
+        r'("page"\s*:\s*"introduction"\s*)(?:,\s*"locale"\s*:\s*"[a-zA-Z_-]+")?',
+        rf'\1,\n  "locale": "{target_locale}"',
+        translated,
+    )
     return translated + "\n"
+
+
+def _load_existing_provenance(prov_path: Path) -> dict[str, Any]:
+    if not prov_path.is_file():
+        return {}
+    try:
+        data = json.loads(prov_path.read_text(encoding="utf-8"))
+        return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
+
+
+def prepare_locale_translations(
+    root: Path,
+    locale: str,
+    docs: list[str],
+    glossary: dict[str, Any],
+    api_key: str,
+    translate_fn: Callable[[str, str, str, dict[str, Any], str], str] = translate_section_with_gemini,
+    force: bool = False,
+) -> dict[str, Any]:
+    """Incrementally prepare or update translations for a locale, regenerating only changed sections/cells."""
+    locales_cfg = load_locales_config(root)
+    enabled_locales = get_enabled_locales(locales_cfg)
+    if locale not in enabled_locales:
+        raise ValueError(f"Unknown or disabled locale: {locale}")
+
+    loc_info = enabled_locales[locale]
+    lang_name = str(loc_info.get("english_name") or loc_info.get("name") or locale)
+    loc_dir = root / str(loc_info.get("source_dir", f"i18n/{locale}"))
+    prov_path = loc_dir / "provenance.json"
+    old_prov = _load_existing_provenance(prov_path)
+    old_docs_meta = old_prov.get("documents", {}) if isinstance(old_prov.get("documents"), dict) else {}
+
+    per_doc_states: dict[str, str] = {}
+
+    for rel_doc in docs:
+        en_path = root / rel_doc
+        loc_path = loc_dir / rel_doc
+        loc_path.parent.mkdir(parents=True, exist_ok=True)
+
+        old_doc_entry = old_docs_meta.get(rel_doc, {}) if isinstance(old_docs_meta.get(rel_doc), dict) else {}
+        old_sec_list = old_doc_entry.get("sections", []) if isinstance(old_doc_entry.get("sections"), list) else []
+        old_sec_by_idx = {
+            str(s.get("index")): s for s in old_sec_list if isinstance(s, dict) and "index" in s
+        }
+        prev_state = str(old_doc_entry.get("revision_state", "draft"))
+
+        if en_path.suffix == ".md":
+            en_text = en_path.read_text(encoding="utf-8")
+            en_frontmatter, en_secs = split_markdown_sections(en_text)
+
+            has_existing = loc_path.is_file() and not force
+            if has_existing:
+                loc_text = loc_path.read_text(encoding="utf-8")
+                loc_frontmatter, loc_secs = split_markdown_sections(loc_text)
+            else:
+                loc_frontmatter, loc_secs = "", []
+
+            doc_updated = not has_existing
+
+            # 1. Handle YAML frontmatter if present in English
+            out_frontmatter = ""
+            if en_frontmatter:
+                en_fm_sha = sha256_text(en_frontmatter.strip())
+                old_fm_rec = old_sec_by_idx.get("frontmatter")
+                if (
+                    has_existing
+                    and loc_frontmatter
+                    and old_fm_rec
+                    and old_fm_rec.get("source_sha256") == en_fm_sha
+                    and old_fm_rec.get("translated_sha256") == sha256_text(loc_frontmatter.strip())
+                ):
+                    out_frontmatter = loc_frontmatter
+                else:
+                    translated_fm = translate_fn(en_frontmatter, locale, lang_name, glossary, api_key).strip()
+                    if not translated_fm.startswith("---"):
+                        out_frontmatter = en_frontmatter
+                    else:
+                        out_frontmatter = translated_fm + "\n\n"
+                    doc_updated = True
+
+            # 2. Incrementally check each Markdown section by index and source_sha256
+            # Also support matching unchanged sections by source_sha256 if sections were inserted/reordered
+            old_unmatched_by_src_sha: dict[str, tuple[dict[str, Any], str]] = {}
+            if has_existing and len(loc_secs) == len(
+                [s for s in old_sec_list if str(s.get("index")) != "frontmatter"]
+            ):
+                non_fm_old = [s for s in old_sec_list if str(s.get("index")) != "frontmatter"]
+                for o_rec, l_sec in zip(non_fm_old, loc_secs):
+                    if o_rec.get("translated_sha256") == l_sec["sha256"]:
+                        old_unmatched_by_src_sha[str(o_rec.get("source_sha256"))] = (o_rec, l_sec["content"])
+
+            out_sec_contents: list[str] = []
+            for idx, en_sec in enumerate(en_secs):
+                idx_key = str(idx)
+                old_rec = old_sec_by_idx.get(idx_key)
+                if (
+                    has_existing
+                    and idx < len(loc_secs)
+                    and old_rec
+                    and old_rec.get("source_sha256") == en_sec["sha256"]
+                    and old_rec.get("translated_sha256") == loc_secs[idx]["sha256"]
+                ):
+                    out_sec_contents.append(loc_secs[idx]["content"])
+                elif has_existing and en_sec["sha256"] in old_unmatched_by_src_sha:
+                    _, preserved_content = old_unmatched_by_src_sha[en_sec["sha256"]]
+                    out_sec_contents.append(preserved_content)
+                else:
+                    new_sec_text = translate_fn(en_sec["content"], locale, lang_name, glossary, api_key)
+                    if not new_sec_text.endswith("\n"):
+                        new_sec_text += "\n"
+                    out_sec_contents.append(new_sec_text)
+                    doc_updated = True
+
+            if doc_updated:
+                assembled = out_frontmatter + "".join(out_sec_contents)
+                atomic_write_text(loc_path, assembled)
+                per_doc_states[rel_doc] = "draft"
+            else:
+                per_doc_states[rel_doc] = prev_state
+
+        elif en_path.suffix == ".ipynb":
+            en_nb = json.loads(en_path.read_text(encoding="utf-8"))
+            has_existing = loc_path.is_file() and not force
+            loc_nb = json.loads(loc_path.read_text(encoding="utf-8")) if has_existing else None
+            loc_cells = loc_nb.get("cells", []) if isinstance(loc_nb, dict) else []
+
+            out_nb = copy.deepcopy(en_nb)
+            doc_updated = not has_existing
+
+            for idx, en_cell in enumerate(en_nb.get("cells", [])):
+                if en_cell.get("cell_type") != "markdown":
+                    # Code cells and their metadata/outputs are preserved byte-for-byte from en_nb
+                    continue
+
+                cell_key = f"cell-{idx}"
+                en_cell_src = "".join(en_cell.get("source", []))
+                en_cell_sha = sha256_text(en_cell_src)
+                old_rec = old_sec_by_idx.get(cell_key)
+
+                if (
+                    has_existing
+                    and idx < len(loc_cells)
+                    and isinstance(loc_cells[idx], dict)
+                    and loc_cells[idx].get("cell_type") == "markdown"
+                ):
+                    loc_cell_src = "".join(loc_cells[idx].get("source", []))
+                    loc_cell_sha = sha256_text(loc_cell_src)
+                    if (
+                        old_rec
+                        and old_rec.get("source_sha256") == en_cell_sha
+                        and old_rec.get("translated_sha256") == loc_cell_sha
+                    ):
+                        out_nb["cells"][idx]["source"] = loc_cells[idx]["source"]
+                        continue
+
+                translated_md = translate_fn(en_cell_src, locale, lang_name, glossary, api_key).rstrip("\r\n")
+                out_nb["cells"][idx]["source"] = translated_md.splitlines(keepends=True)
+                doc_updated = True
+
+            if doc_updated:
+                nb_json = json.dumps(out_nb, indent=1, ensure_ascii=False) + "\n"
+                atomic_write_text(loc_path, nb_json)
+                per_doc_states[rel_doc] = "draft"
+            else:
+                per_doc_states[rel_doc] = prev_state
+
+    manifest = build_provenance_manifest(
+        root=root,
+        locale=locale,
+        docs=docs,
+        revision_state="draft",
+        per_doc_revision_states=per_doc_states,
+    )
+    atomic_write_json(prov_path, manifest)
+    return manifest
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -396,7 +683,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--prepare",
         action="store_true",
-        help="Draft or update changed sections using GEMINI_API_KEY and record draft provenance.",
+        help="Draft or incrementally update changed sections/cells using GEMINI_API_KEY and record provenance.",
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Force re-translation of all sections when running --prepare.",
     )
     parser.add_argument(
         "--revision-state",
@@ -438,22 +730,14 @@ def main(argv: list[str] | None = None) -> int:
             raise SystemExit("GEMINI_API_KEY is required for --prepare draft translation generation.")
         glossary = load_glossary(root)
         for locale in target_locales:
-            loc_info = enabled_locales[locale]
-            lang_name = str(loc_info.get("english_name", locale))
-            loc_dir = root / str(loc_info.get("source_dir", f"i18n/{locale}"))
-            for rel_doc in docs:
-                en_path = root / rel_doc
-                loc_path = loc_dir / rel_doc
-                if not loc_path.is_file() and en_path.suffix == ".md":
-                    loc_path.parent.mkdir(parents=True, exist_ok=True)
-                    front, secs = split_markdown_sections(en_path.read_text(encoding="utf-8"))
-                    translated_secs = [
-                        translate_section_with_gemini(s["content"], locale, lang_name, glossary, api_key)
-                        for s in secs
-                    ]
-                    loc_path.write_text(front + "\n".join(translated_secs), encoding="utf-8")
-            manifest = build_provenance_manifest(root, locale, docs, revision_state="draft")
-            atomic_write_json(loc_dir / "provenance.json", manifest)
+            prepare_locale_translations(
+                root=root,
+                locale=locale,
+                docs=docs,
+                glossary=glossary,
+                api_key=api_key,
+                force=args.force,
+            )
             print(f"[OK] Prepared translations and provenance for locale '{locale}'")
 
     if args.check_only or not (args.sync_provenance or args.prepare):

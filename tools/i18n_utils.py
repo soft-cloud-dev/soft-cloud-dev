@@ -351,61 +351,284 @@ def canonical_url_for_page(domain: str, prefix: str, slug: str) -> str:
 
 
 # ---------------------------------------------------------------------------
-# Code Block, Directive, Link, and Notebook Integrity Extraction
+# Code Block, Directive, Math, Inline Code, Link, and Notebook Integrity Extraction
 # ---------------------------------------------------------------------------
 
+CODE_DIRECTIVE_NAMES = frozenset({"code-block", "code", "code-cell", "sourcecode"})
+MATH_DIRECTIVE_NAMES = frozenset({"math", "amsmath"})
+LOCALIZED_BODY_DIRECTIVES = frozenset({"anywidget"})
 
-def extract_fenced_code_blocks_from_markdown(markdown_text: str) -> list[dict[str, str]]:
-    """Extract all code fenced blocks and executable code directives from Markdown byte-for-byte."""
-    front_match = re.match(r"\A---\r?\n(.*?)\r?\n---(?:\r?\n|\Z)", markdown_text, re.S)
-    body = markdown_text[front_match.end() :] if front_match else markdown_text
-    lines = body.splitlines()
+
+def _strip_frontmatter_with_offset(markdown_text: str) -> tuple[str, str, int]:
+    """Return (frontmatter_slice, body_slice, body_start_offset) from original markdown_text."""
+    front_match = re.match(r"\A(---\r?\n.*?\r?\n---(?:\r?\n|\Z))", markdown_text, re.S)
+    if front_match:
+        return front_match.group(1), markdown_text[front_match.end() :], front_match.end()
+    return "", markdown_text, 0
+
+
+def _split_directive_options(inner_slice: str) -> tuple[dict[str, str], str]:
+    """Split MyST directive options (`:key: val` or `--- ... ---`) from the directive body slice."""
+    options: dict[str, str] = {}
+    if not inner_slice:
+        return options, ""
+
+    # Check YAML-style option block at top of directive
+    yaml_opt_match = re.match(r"\A([ \t]*---\r?\n(.*?)\r?\n[ \t]*---(?:\r?\n|\Z))", inner_slice, re.S)
+    if yaml_opt_match:
+        raw_opts = yaml_opt_match.group(2)
+        for line in raw_opts.splitlines():
+            if ":" in line:
+                k, v = line.split(":", 1)
+                options[k.strip()] = v.strip()
+        return options, inner_slice[yaml_opt_match.end() :]
+
+    # Check `:key: value` option lines at top of directive
+    lines = inner_slice.splitlines(keepends=True)
+    consumed = 0
+    for line in lines:
+        opt_match = re.match(r"^[ \t]*:([a-zA-Z0-9_.-]+):[ \t]*(.*?)\r?\n?$", line)
+        if opt_match:
+            options[opt_match.group(1)] = opt_match.group(2).strip()
+            consumed += len(line)
+        else:
+            break
+    return options, inner_slice[consumed:]
+
+
+def _parse_myst_document_slice(body_slice: str) -> dict[str, Any]:
+    """Recursively parse a MyST Markdown slice using exact source offsets.
+
+    Supports backtick (```), tilde (~~~), and colon (:::) fences, as well as nested
+    container directives (e.g. code blocks or math inside `:::{note}` or ````{dropdown}`).
+    """
+    lines = body_slice.splitlines(keepends=True)
     n = len(lines)
+    offsets: list[int] = [0]
+    for line in lines:
+        offsets.append(offsets[-1] + len(line))
+
+    code_blocks: list[dict[str, str]] = []
+    math_blocks: list[str] = []
+    directives: list[dict[str, Any]] = []
+    prose_slices: list[str] = []
+
     i = 0
-    blocks: list[dict[str, str]] = []
+    prose_start_line = 0
 
     while i < n:
         line = lines[i]
-        fence_match = re.match(r"^(\s*)(`{3,}|:{3,})\s*(.*)$", line)
+        fence_match = re.match(r"^([ \t]*)(`{3,}|~{3,}|:{3,})[ \t]*(.*?)[ \t]*\r?\n?$", line)
         if fence_match:
-            _, fence_chars, info = fence_match.groups()
+            _, fence_chars, info_stripped = fence_match.groups()
             fence_char = fence_chars[0]
             fence_len = len(fence_chars)
-            info_stripped = info.strip()
-            i += 1
-            block_lines: list[str] = []
-            while i < n:
-                if re.match(rf"^\s*{re.escape(fence_char)}{{{fence_len},}}\s*$", lines[i]):
-                    i += 1
-                    break
-                block_lines.append(lines[i])
-                i += 1
 
-            dir_match = re.match(r"^\{([a-zA-Z0-9_-]+)\}\s*(.*)$", info_stripped)
-            if dir_match or fence_char == ":":
-                dir_name = (
-                    dir_match.group(1).lower()
-                    if dir_match
-                    else (info_stripped.split()[0].lower() if info_stripped else "directive")
+            # Per CommonMark/MyST spec, backtick fence info strings cannot contain backticks
+            if fence_char == "`" and "`" in info_stripped:
+                i += 1
+                continue
+
+            # Flush preceding prose slice
+            if i > prose_start_line:
+                prose_slices.append(body_slice[offsets[prose_start_line] : offsets[i]])
+
+            # Locate matching closing fence, accounting for nested same-character colon fences
+            j = i + 1
+            colon_nesting = 0
+            close_line_idx = n
+            while j < n:
+                cand = lines[j]
+                if fence_char == ":":
+                    # Check if cand opens a nested colon directive of >= fence_len
+                    open_colon = re.match(r"^[ \t]*(:{3,})[ \t]*(\{[a-zA-Z0-9_-]+\}|[a-zA-Z0-9_-]+)", cand)
+                    if open_colon and len(open_colon.group(1)) == fence_len:
+                        colon_nesting += 1
+                        j += 1
+                        continue
+                close_match = re.match(
+                    rf"^[ \t]*{re.escape(fence_char)}{{{fence_len},}}[ \t]*\r?\n?$",
+                    cand,
                 )
-                if dir_name in ("code-block", "code", "code-cell", "sourcecode"):
-                    blocks.append(
-                        {
-                            "info": info_stripped,
-                            "content": "\n".join(block_lines),
-                        }
-                    )
+                if close_match:
+                    if fence_char == ":" and colon_nesting > 0:
+                        colon_nesting -= 1
+                        j += 1
+                        continue
+                    close_line_idx = j
+                    break
+                j += 1
+
+            raw_inner = body_slice[offsets[i + 1] : offsets[close_line_idx]]
+            if raw_inner.endswith("\r\n"):
+                exact_inner = raw_inner[:-2]
+            elif raw_inner.endswith("\n"):
+                exact_inner = raw_inner[:-1]
             else:
-                blocks.append(
+                exact_inner = raw_inner
+
+            dir_match = re.match(r"^\{([a-zA-Z0-9_-]+)\}[ \t]*(.*)$", info_stripped)
+            colon_dir_match = (
+                re.match(r"^([a-zA-Z0-9_-]+)[ \t]*(.*)$", info_stripped)
+                if (fence_char == ":" and not dir_match)
+                else None
+            )
+
+            if dir_match or colon_dir_match or fence_char == ":":
+                if dir_match:
+                    dir_name = dir_match.group(1).lower()
+                    dir_arg = dir_match.group(2).strip()
+                elif colon_dir_match:
+                    dir_name = colon_dir_match.group(1).lower()
+                    dir_arg = colon_dir_match.group(2).strip()
+                else:
+                    dir_name = "directive"
+                    dir_arg = info_stripped
+
+                dir_options, dir_body = _split_directive_options(raw_inner)
+                directives.append(
                     {
-                        "info": info_stripped,
-                        "content": "\n".join(block_lines),
+                        "name": dir_name,
+                        "argument": dir_arg,
+                        "options": sorted(dir_options.keys()),
                     }
                 )
+
+                if dir_name in CODE_DIRECTIVE_NAMES:
+                    code_blocks.append(
+                        {
+                            "info": info_stripped,
+                            "content": exact_inner,
+                        }
+                    )
+                elif dir_name in MATH_DIRECTIVE_NAMES:
+                    math_blocks.append(dir_body.strip())
+                elif dir_name in LOCALIZED_BODY_DIRECTIVES:
+                    pass
+                else:
+                    # Container / admonition directive: recursively parse inner body!
+                    nested = _parse_myst_document_slice(dir_body)
+                    code_blocks.extend(nested["code_blocks"])
+                    math_blocks.extend(nested["math_blocks"])
+                    directives.extend(nested["directives"])
+                    prose_slices.extend(nested["prose_slices"])
+            else:
+                # Standard backtick or tilde fenced code block
+                code_blocks.append(
+                    {
+                        "info": info_stripped,
+                        "content": exact_inner,
+                    }
+                )
+
+            i = close_line_idx + 1
+            prose_start_line = i
             continue
+
         i += 1
 
-    return blocks
+    if prose_start_line < n:
+        prose_slices.append(body_slice[offsets[prose_start_line] : offsets[n]])
+
+    return {
+        "code_blocks": code_blocks,
+        "math_blocks": math_blocks,
+        "directives": directives,
+        "prose_slices": prose_slices,
+    }
+
+
+def extract_fenced_code_blocks_from_markdown(markdown_text: str) -> list[dict[str, str]]:
+    """Extract all code fenced blocks (```, ~~~, :::) and executable code directives byte-for-byte,
+    including code blocks nested inside MyST admonitions and container directives."""
+    _, body, _ = _strip_frontmatter_with_offset(markdown_text)
+    parsed = _parse_myst_document_slice(body)
+    return parsed["code_blocks"]
+
+
+def _extract_inline_protected_from_prose(prose_slices: list[str]) -> dict[str, list[str]]:
+    """Extract display math, inline math, inline code spans, and link targets from non-code prose."""
+    display_math: list[str] = []
+    inline_math: list[str] = []
+    inline_code: list[str] = []
+    links: list[str] = []
+
+    for chunk in prose_slices:
+        # 1. Extract display math $$ ... $$ before scanning inline code/math
+        def _collect_display_math(m: re.Match[str]) -> str:
+            display_math.append(m.group(1).strip())
+            return " "
+
+        without_display_math = re.sub(r"\$\$(.+?)\$\$", _collect_display_math, chunk, flags=re.S)
+
+        # 2. Extract {math}`...` roles before generic inline code
+        def _collect_math_role(m: re.Match[str]) -> str:
+            inline_math.append(m.group(2).strip())
+            return " "
+
+        without_math_role = re.sub(
+            r"\{math\}(`+)(.+?)\1",
+            _collect_math_role,
+            without_display_math,
+            flags=re.S,
+        )
+
+        # 3. Extract inline code spans `...` (so $ or []() inside inline code are ignored by math/link scanners)
+        def _collect_inline_code(m: re.Match[str]) -> str:
+            inline_code.append(m.group(2))
+            return " "
+
+        without_inline_code = re.sub(
+            r"(`+)([^`]+?)\1",
+            _collect_inline_code,
+            without_math_role,
+        )
+
+        # 4. Extract inline math $...$ (excluding escaped \$)
+        for m in re.finditer(r"(?<!\\)\$(?!\s)([^\$\n]+?)(?<!\s|\\)\$", without_inline_code):
+            inline_math.append(m.group(1).strip())
+
+        # 5. Extract Markdown link and image targets
+        for m in re.finditer(r"(!?\[[^\]]*\])\(([^)]+)\)", without_inline_code):
+            links.append(m.group(2).strip())
+
+    return {
+        "display_math": display_math,
+        "inline_math": inline_math,
+        "inline_code": inline_code,
+        "links": links,
+    }
+
+
+def extract_math_expressions(markdown_text: str) -> list[str]:
+    """Extract all MyST mathematical expressions (directive math, $$...$$, {math}`...`, and $...$)."""
+    _, body, _ = _strip_frontmatter_with_offset(markdown_text)
+    parsed = _parse_myst_document_slice(body)
+    inline_res = _extract_inline_protected_from_prose(parsed["prose_slices"])
+    return parsed["math_blocks"] + inline_res["display_math"] + inline_res["inline_math"]
+
+
+def extract_inline_code_spans(markdown_text: str) -> list[str]:
+    """Extract all inline code spans (`...`) outside fenced code and math blocks."""
+    _, body, _ = _strip_frontmatter_with_offset(markdown_text)
+    parsed = _parse_myst_document_slice(body)
+    inline_res = _extract_inline_protected_from_prose(parsed["prose_slices"])
+    return inline_res["inline_code"]
+
+
+def extract_myst_directives(markdown_text: str) -> list[dict[str, Any]]:
+    """Extract all MyST directives (name, argument, option keys) across all nesting levels."""
+    _, body, _ = _strip_frontmatter_with_offset(markdown_text)
+    parsed = _parse_myst_document_slice(body)
+    return parsed["directives"]
+
+
+def extract_markdown_links(markdown_text: str) -> list[str]:
+    """Extract all markdown link targets outside fenced code blocks."""
+    _, body, _ = _strip_frontmatter_with_offset(markdown_text)
+    parsed = _parse_myst_document_slice(body)
+    inline_res = _extract_inline_protected_from_prose(parsed["prose_slices"])
+    return inline_res["links"]
 
 
 def extract_code_fingerprint(path: Path) -> dict[str, Any]:
@@ -447,36 +670,9 @@ def extract_code_fingerprint(path: Path) -> dict[str, Any]:
     raise ValueError(f"Unsupported document type for code fingerprint: {path}")
 
 
-def extract_markdown_links(markdown_text: str) -> list[str]:
-    """Extract all markdown link targets outside fenced code blocks."""
-    front_match = re.match(r"\A---\r?\n(.*?)\r?\n---(?:\r?\n|\Z)", markdown_text, re.S)
-    body = markdown_text[front_match.end() :] if front_match else markdown_text
-    lines = body.splitlines()
-    n = len(lines)
-    i = 0
-    non_code_lines: list[str] = []
-    while i < n:
-        line = lines[i]
-        fence_match = re.match(r"^(\s*)(`{3,})\s*(.*)$", line)
-        if fence_match:
-            fence_len = len(fence_match.group(2))
-            i += 1
-            while i < n and not re.match(rf"^\s*`{{{fence_len},}}\s*$", lines[i]):
-                i += 1
-            i += 1
-            continue
-        non_code_lines.append(line)
-        i += 1
-    prose = "\n".join(non_code_lines)
-    targets = [m.group(2).strip() for m in re.finditer(r"(!?\[[^\]]*\])\(([^)]+)\)", prose)]
-    return targets
-
-
 def split_markdown_sections(markdown_text: str) -> tuple[str, list[dict[str, str]]]:
     """Split a Markdown document into (frontmatter_block, list of sections) for section-level provenance."""
-    front_match = re.match(r"\A(---\r?\n.*?\r?\n---(?:\r?\n|\Z))", markdown_text, re.S)
-    frontmatter = front_match.group(1) if front_match else ""
-    body = markdown_text[front_match.end() :] if front_match else markdown_text
+    frontmatter, body, _ = _strip_frontmatter_with_offset(markdown_text)
 
     lines = body.splitlines(keepends=True)
     sections: list[dict[str, str]] = []
@@ -488,7 +684,7 @@ def split_markdown_sections(markdown_text: str) -> tuple[str, list[dict[str, str
 
     for line in lines:
         if not in_fence:
-            fm = re.match(r"^(\s*)(`{3,}|:{3,})", line)
+            fm = re.match(r"^([ \t]*)(`{3,}|~{3,}|:{3,})", line)
             if fm:
                 in_fence = True
                 fence_char = fm.group(2)[0]
@@ -510,7 +706,7 @@ def split_markdown_sections(markdown_text: str) -> tuple[str, list[dict[str, str
                 curr_lines = [line]
                 continue
         else:
-            if re.match(rf"^\s*{re.escape(fence_char)}{{{fence_len},}}\s*$", line):
+            if re.match(rf"^[ \t]*{re.escape(fence_char)}{{{fence_len},}}[ \t]*\r?\n?$", line):
                 in_fence = False
         curr_lines.append(line)
 

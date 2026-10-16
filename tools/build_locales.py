@@ -194,7 +194,19 @@ def generate_mock_html_for_workspace(
         slug = page_slug_from_rel_path(rel_file)
         src_path = ws / rel_file
         raw = src_path.read_text(encoding="utf-8")
-        title_match = re.search(r"^#\s+(.+)$", raw, re.MULTILINE)
+        if src_path.suffix == ".ipynb":
+            try:
+                nb_obj = json.loads(raw)
+                md_text = "\n\n".join(
+                    "".join(c.get("source", []))
+                    for c in nb_obj.get("cells", [])
+                    if c.get("cell_type") == "markdown"
+                )
+            except Exception:
+                md_text = raw
+        else:
+            md_text = raw
+        title_match = re.search(r"^#\s+(.+)$", md_text, re.MULTILINE)
         page_title = title_match.group(1).strip() if title_match else (slug or site_title)
 
         out_file = (html_out / "index.html") if not slug else (html_out / slug / "index.html")
@@ -347,13 +359,28 @@ def inject_language_switcher_into_html(
     route_manifest: dict[str, Any],
     outer_base_url: str = "",
 ) -> int:
-    """Inject the language switcher widget script and route manifest into built HTML files."""
+    """Inject the language switcher host element, route manifest, and module initializer into built HTML files."""
     clean_base = outer_base_url.rstrip("/")
     widget_src = f"{clean_base}/widgets/language-switcher.mjs"
     manifest_json = json.dumps(route_manifest, ensure_ascii=False, separators=(",", ":"))
-    snippet = (
+    host_markup = (
+        f'<div id="softcloud-lang-switcher-root" data-sc-lang-switcher="1" '
+        f'data-sc-base-url="{clean_base}"></div>'
+    )
+    script_snippet = (
         f'<script id="softcloud-i18n-manifest" type="application/json">{manifest_json}</script>\n'
-        f'<script type="module" src="{widget_src}" data-softcloud-lang-switcher="1"></script>\n'
+        f'<script type="module" data-softcloud-lang-switcher="1">\n'
+        f'import {{ mountLanguageSwitcher, ensureLanguageSwitcherHost, loadEmbeddedRouteManifest, installNavigationSync }} from "{widget_src}";\n'
+        f'const manifest = loadEmbeddedRouteManifest(document);\n'
+        f'const baseUrl = {json.dumps(clean_base)};\n'
+        f'window.__SC_ROUTE_MANIFEST__ = manifest;\n'
+        f'window.__SC_ROOT_BASE_URL__ = baseUrl;\n'
+        f'const hostEl = ensureLanguageSwitcherHost(document);\n'
+        f'if (hostEl) {{\n'
+        f'  mountLanguageSwitcher(hostEl, {{ routeManifest: manifest, baseUrl }});\n'
+        f'}}\n'
+        f'installNavigationSync({{ routeManifest: manifest, baseUrl }});\n'
+        f'</script>\n'
     )
 
     count = 0
@@ -363,8 +390,18 @@ def inject_language_switcher_into_html(
         text = html_file.read_text(encoding="utf-8")
         if 'id="softcloud-i18n-manifest"' in text:
             continue
+        if "data-sc-lang-switcher" not in text:
+            header_bar_re = re.compile(r'(<div\b[^>]*\bclass="[^"]*\bmyst-header-bar\b[^"]*"[^>]*>)', re.I)
+            if header_bar_re.search(text):
+                text = header_bar_re.sub(rf"\1\n      {host_markup}", text, count=1)
+            elif "</body>" in text:
+                text = text.replace(
+                    "</body>",
+                    f'  <div id="softcloud-lang-switcher-root" class="sc-lang-host-floating" data-sc-lang-switcher="1" data-sc-base-url="{clean_base}"></div>\n</body>',
+                    1,
+                )
         if "</body>" in text:
-            text = text.replace("</body>", f"{snippet}</body>", 1)
+            text = text.replace("</body>", f"{script_snippet}</body>", 1)
             atomic_write_text(html_file, text)
             count += 1
     return count

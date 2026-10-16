@@ -21,22 +21,29 @@ TOOLS_DIR = Path(__file__).resolve().parent
 if str(TOOLS_DIR) not in sys.path:
     sys.path.insert(0, str(TOOLS_DIR))
 
+import subprocess
 import generate_audio as ga
 from i18n_utils import (
     canonical_url_for_page,
+    extract_fenced_code_blocks_from_markdown,
     get_enabled_locales,
     load_glossary,
     load_locales_config,
     load_yaml_file,
     page_slug_from_rel_path,
 )
-from translate_sources import check_locale_provenance, discover_source_documents
+from translate_sources import (
+    build_translation_prompt,
+    check_locale_provenance,
+    discover_source_documents,
+    verify_document_preservation,
+)
 
 API_KEY_LEAK_RE = re.compile(r"AIza[0-9A-Za-z_-]{35}")
 
 
 def verify_locales_configuration(root: Path) -> list[str]:
-    """Validate i18n/locales.yml and i18n/glossary.yml structure and completeness."""
+    """Validate i18n/locales.yml and i18n/glossary.yml structure, prompt glossary injection, and validator invariants."""
     errors: list[str] = []
     try:
         locales_cfg = load_locales_config(root)
@@ -97,8 +104,34 @@ def verify_locales_configuration(root: Path) -> list[str]:
                             errors.append(
                                 f"Glossary term {term_id!r} missing translation for locale '{code}'"
                             )
+            # Verify glossary domain_terms reach build_translation_prompt for all target locales
+            for code, info in enabled.items():
+                if code == default_locale:
+                    continue
+                prompt_text = build_translation_prompt(
+                    "# Heading", code, str(info.get("english_name") or info.get("name", code)), glossary
+                )
+                for term_id, term_entry in domain_terms.items():
+                    if isinstance(term_entry, dict):
+                        en_val = str(term_entry.get("en", "")).strip()
+                        loc_val = str(term_entry.get(code, "")).strip()
+                        if en_val and loc_val and f'"{en_val}": "{loc_val}"' not in prompt_text:
+                            errors.append(
+                                f"[{code}] Glossary term {term_id!r} ({en_val!r} -> {loc_val!r}) missing from translation prompt"
+                            )
     except Exception as exc:
         errors.append(f"Failed to load i18n/glossary.yml: {exc}")
+
+    # Self-test code-preservation validator against tilde fences and nested directive code blocks
+    b_tilde_1 = extract_fenced_code_blocks_from_markdown("~~~python\nprint(1)\n~~~\n")
+    b_tilde_2 = extract_fenced_code_blocks_from_markdown("~~~python\nprint(2)\n~~~\n")
+    if len(b_tilde_1) != 1 or b_tilde_1 == b_tilde_2:
+        errors.append("Code-preservation extractor failed to distinguish ~~~python tilde fences")
+
+    b_nested_1 = extract_fenced_code_blocks_from_markdown(":::{note}\n```python\nprint(1)\n```\n:::\n")
+    b_nested_2 = extract_fenced_code_blocks_from_markdown(":::{note}\n```python\nprint(2)\n```\n:::\n")
+    if len(b_nested_1) != 1 or b_nested_1 == b_nested_2:
+        errors.append("Code-preservation extractor failed to inspect code blocks nested inside ::: directives")
 
     return errors
 
@@ -214,11 +247,45 @@ def verify_built_html_artifact(root: Path, build_dir: Path) -> list[str]:
                         f"[{code}] Missing hreflang='{hlang}' -> '{hurl}' in {found_html.relative_to(build_dir)}"
                     )
 
-            # Verify language switcher script injection
-            if "language-switcher.mjs" not in html_text:
+            # Verify language switcher host element, embedded manifest, and explicit initializer
+            if not re.search(r'<[a-zA-Z0-9-]+\b[^>]*\bdata-sc-lang-switcher\b', html_text):
                 errors.append(
-                    f"[{code}] Language switcher not injected in {found_html.relative_to(build_dir)}"
+                    f"[{code}] Missing [data-sc-lang-switcher] host element in {found_html.relative_to(build_dir)}"
                 )
+            if "language-switcher.mjs" not in html_text or "mountLanguageSwitcher(" not in html_text or "loadEmbeddedRouteManifest(" not in html_text:
+                errors.append(
+                    f"[{code}] Missing language-switcher.mjs mount initializer in {found_html.relative_to(build_dir)}"
+                )
+
+            manifest_match = re.search(
+                r'<script\b[^>]*\bid=["\']softcloud-i18n-manifest["\'][^>]*>(.*?)</script>',
+                html_text,
+                flags=re.IGNORECASE | re.DOTALL,
+            )
+            if not manifest_match:
+                errors.append(
+                    f"[{code}] Missing #softcloud-i18n-manifest script in {found_html.relative_to(build_dir)}"
+                )
+            else:
+                try:
+                    embedded_rm = json.loads(manifest_match.group(1))
+                    rm_pages = embedded_rm.get("pages", {})
+                    slug_key = active_slug if active_slug else "index"
+                    page_rec = rm_pages.get(slug_key) or rm_pages.get(raw_slug if raw_slug else "index")
+                    if not isinstance(page_rec, dict):
+                        errors.append(
+                            f"[{code}] Embedded manifest missing page entry for '{slug_key}' in {found_html.relative_to(build_dir)}"
+                        )
+                    else:
+                        t_rec = page_rec.get("translations", {}).get(code)
+                        if not isinstance(t_rec, dict) or t_rec.get("available") is not True or not t_rec.get("route"):
+                            errors.append(
+                                f"[{code}] Embedded manifest missing available route for '{slug_key}' in {found_html.relative_to(build_dir)}"
+                            )
+                except Exception as exc:
+                    errors.append(
+                        f"[{code}] Malformed JSON in #softcloud-i18n-manifest in {found_html.relative_to(build_dir)}: {exc}"
+                    )
 
     # 4. Verify unified root sitemap.xml and absence of duplicate per-locale sitemaps
     sitemap_path = build_dir / "sitemap.xml"
@@ -249,6 +316,228 @@ def verify_built_html_artifact(root: Path, build_dir: Path) -> list[str]:
         nested_sitemap = build_dir / prefix / "sitemap.xml"
         if nested_sitemap.exists():
             errors.append(f"Duplicate per-locale sitemap found at {nested_sitemap.relative_to(build_dir)}")
+
+    # 5. Execute language-switcher runtime DOM & navigation verification against built artifact
+    errors.extend(verify_language_switcher_runtime(root, build_dir))
+
+    return errors
+
+
+def verify_language_switcher_runtime(root: Path, build_dir: Path) -> list[str]:
+    """Execute widgets/language-switcher.mjs against the built HTML manifest to verify mounting,
+    builder manifest schema consumption, nested-source routing, SPA navigation, and unavailable fixtures."""
+    import shutil
+
+    errors: list[str] = []
+    intro_html = build_dir / "introduction" / "index.html"
+    switcher_mjs = build_dir / "widgets" / "language-switcher.mjs"
+    if not switcher_mjs.is_file():
+        switcher_mjs = root / "widgets" / "language-switcher.mjs"
+    if not intro_html.is_file() or not switcher_mjs.is_file():
+        return errors
+
+    html_text = intro_html.read_text(encoding="utf-8")
+    m_match = re.search(
+        r'<script\b[^>]*\bid=["\']softcloud-i18n-manifest["\'][^>]*>(.*?)</script>',
+        html_text,
+        flags=re.S,
+    )
+    if not m_match:
+        return ["Missing #softcloud-i18n-manifest in built introduction/index.html"]
+    embedded_manifest_str = m_match.group(1)
+
+    jsc_bin = Path("/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc")
+    node_bin = shutil.which("node")
+    runner_cmd: list[str] | None = None
+    if jsc_bin.is_file():
+        runner_cmd = [str(jsc_bin)]
+    elif node_bin:
+        runner_cmd = [node_bin]
+    if not runner_cmd:
+        return errors
+
+    switcher_code = switcher_mjs.read_text(encoding="utf-8")
+    switcher_plain = re.sub(r"^export\s+default\s+\{.*?\};?\s*$", "", switcher_code, flags=re.M | re.S)
+    switcher_plain = re.sub(r"^export\s+(const|function)\s+", r"\1 ", switcher_plain, flags=re.M)
+
+    js_script = f"""
+const _out = (typeof print === "function") ? print : console.log;
+const _quit = (typeof quit === "function") ? quit : (c) => process.exit(c);
+class MockElement {{
+  constructor(tagName, ownerDocument) {{
+    this.tagName = String(tagName || "DIV").toUpperCase();
+    this.ownerDocument = ownerDocument;
+    this.attributes = {{}};
+    this.children = [];
+    this.parentElement = null;
+    this.textContent = "";
+    this._innerHTML = "";
+    this.className = "";
+    this.id = "";
+    this.hidden = false;
+    this.type = "";
+    this.href = "";
+    this.listeners = {{}};
+  }}
+  set innerHTML(val) {{ this._innerHTML = String(val); if (val === "") this.children = []; }}
+  get innerHTML() {{ return this._innerHTML; }}
+  setAttribute(k, v) {{
+    this.attributes[k] = String(v);
+    if (k === "id") this.id = String(v);
+    if (k === "href") this.href = String(v);
+    if (k === "class") this.className = String(v);
+  }}
+  getAttribute(k) {{
+    if (k === "id" && this.id) return this.id;
+    if (k === "href" && this.href) return this.href;
+    return Object.prototype.hasOwnProperty.call(this.attributes, k) ? this.attributes[k] : null;
+  }}
+  removeAttribute(k) {{ delete this.attributes[k]; }}
+  appendChild(child) {{
+    if (child.parentElement) {{
+      const idx = child.parentElement.children.indexOf(child);
+      if (idx >= 0) child.parentElement.children.splice(idx, 1);
+    }}
+    child.parentElement = this;
+    this.children.push(child);
+    return child;
+  }}
+  append(...nodes) {{ nodes.forEach(n => this.appendChild(n)); }}
+  remove() {{
+    if (this.parentElement) {{
+      const idx = this.parentElement.children.indexOf(this);
+      if (idx >= 0) this.parentElement.children.splice(idx, 1);
+      this.parentElement = null;
+    }}
+  }}
+  contains(target) {{
+    if (target === this) return true;
+    return this.children.some(c => c.contains && c.contains(target));
+  }}
+  addEventListener(type, fn) {{
+    if (!this.listeners[type]) this.listeners[type] = [];
+    this.listeners[type].push(fn);
+  }}
+  removeEventListener(type, fn) {{
+    if (!this.listeners[type]) return;
+    this.listeners[type] = this.listeners[type].filter(f => f !== fn);
+  }}
+  click() {{
+    let defaultPrevented = false;
+    const evt = {{ target: this, preventDefault: () => {{ defaultPrevented = true; }} }};
+    (this.listeners["click"] || []).forEach(fn => fn(evt));
+    return !defaultPrevented;
+  }}
+  focus() {{ if (this.ownerDocument) this.ownerDocument.activeElement = this; }}
+  matches(sel) {{
+    if (sel === "[data-sc-lang-switcher]") return this.getAttribute("data-sc-lang-switcher") !== null;
+    if (sel === ".sc-lang-switcher") return this.className.split(/\\s+/).includes("sc-lang-switcher");
+    if (sel === ".sc-lang-option") return this.className.split(/\\s+/).includes("sc-lang-option");
+    if (sel === ".sc-lang-notice") return this.className.split(/\\s+/).includes("sc-lang-notice");
+    if (sel === ".sc-lang-notice-link") return this.className.split(/\\s+/).includes("sc-lang-notice-link");
+    if (sel.includes("myst-header-bar")) return this.tagName === "HEADER" || this.className.includes("myst-header-bar");
+    if (sel.includes("softcloud-i18n-manifest")) return this.tagName === "SCRIPT" && this.id === "softcloud-i18n-manifest";
+    return false;
+  }}
+  querySelectorAll(sel) {{
+    const out = [];
+    const walk = (node) => {{
+      for (const c of node.children) {{
+        if (c.matches && c.matches(sel)) out.push(c);
+        walk(c);
+      }}
+    }};
+    walk(this);
+    return out;
+  }}
+  querySelector(sel) {{ return this.querySelectorAll(sel)[0] || null; }}
+}}
+class MockDocument {{
+  constructor(manifestJsonText) {{
+    this.readyState = "complete";
+    this.activeElement = null;
+    this.listeners = {{}};
+    this.body = new MockElement("BODY", this);
+    this.headerBar = new MockElement("DIV", this);
+    this.headerBar.className = "myst-header-bar";
+    this.body.appendChild(this.headerBar);
+    const host = new MockElement("DIV", this);
+    host.setAttribute("id", "softcloud-lang-switcher-root");
+    host.setAttribute("data-sc-lang-switcher", "1");
+    host.setAttribute("data-sc-base-url", "");
+    this.headerBar.appendChild(host);
+    const script = new MockElement("SCRIPT", this);
+    script.setAttribute("id", "softcloud-i18n-manifest");
+    script.textContent = manifestJsonText;
+    this.body.appendChild(script);
+  }}
+  createElement(tag) {{ return new MockElement(tag, this); }}
+  getElementById(id) {{
+    const walk = (n) => {{
+      if (n.id === id) return n;
+      for (const c of n.children) {{ const f = walk(c); if (f) return f; }}
+      return null;
+    }};
+    return walk(this.body);
+  }}
+  querySelectorAll(sel) {{ return this.body.querySelectorAll(sel); }}
+  querySelector(sel) {{ return this.body.querySelector(sel); }}
+  addEventListener() {{}}
+  removeEventListener() {{}}
+}}
+globalThis.window = {{
+  location: {{ pathname: "/introduction", hash: "" }},
+  listeners: {{}},
+  addEventListener(type, fn) {{ (this.listeners[type] = this.listeners[type] || []).push(fn); }},
+  history: {{
+    pushState(_s, _t, u) {{ window.location.pathname = u; }},
+    replaceState(_s, _t, u) {{ window.location.pathname = u; }},
+  }},
+}};
+globalThis.document = new MockDocument({json.dumps(embedded_manifest_str)});
+{switcher_plain}
+function check(cond, msg) {{ if (!cond) {{ _out("FAIL: " + msg); _quit(1); }} }}
+const sw = document.querySelector(".sc-lang-switcher");
+check(sw !== null, "Switcher must mount into [data-sc-lang-switcher] on initial load");
+check(sw.getAttribute("data-sc-locale") === "en" && sw.getAttribute("data-sc-page-slug") === "introduction", "Initial route state");
+const plOpt = sw.querySelectorAll(".sc-lang-option").find(o => o.getAttribute("data-locale-code") === "pl");
+check(plOpt && plOpt.tagName === "A" && plOpt.getAttribute("href") === "/pl/introduction", "Polish introduction href");
+window.location.pathname = "/projects/linux";
+initSiteLanguageSwitcher();
+const deLinux = document.querySelector(".sc-lang-switcher").querySelectorAll(".sc-lang-option").find(o => o.getAttribute("data-locale-code") === "de");
+check(deLinux && deLinux.getAttribute("href") === "/de/projects/linux", "German nested route href");
+window.history.pushState({{}}, "", "/es/architecture");
+(window.listeners["popstate"] || []).forEach(fn => fn());
+check(document.querySelector(".sc-lang-switcher").getAttribute("data-sc-locale") === "es", "SPA pushState locale update");
+const unavailManifest = {{
+  schema_version: "1.0",
+  default_locale: "en",
+  locales: window.__SC_ROUTE_MANIFEST__.locales,
+  pages: {{ introduction: {{ slug: "introduction", translations: {{ en: {{ available: true, route: "/introduction" }}, pl: {{ available: false, route: null }} }} }} }}
+}};
+window.location.pathname = "/introduction";
+initSiteLanguageSwitcher({{ routeManifest: unavailManifest }});
+const plBtn = document.querySelector(".sc-lang-switcher").querySelectorAll(".sc-lang-option").find(o => o.getAttribute("data-locale-code") === "pl");
+check(plBtn && plBtn.tagName === "BUTTON" && plBtn.getAttribute("aria-disabled") === "true", "Unavailable translation renders disabled button");
+check(plBtn.click() === false, "Clicking unavailable option prevents navigation");
+check(document.querySelector(".sc-lang-notice").hidden === false, "Unavailable notice shown");
+"""
+    tmp_js = build_dir / ".tmp_verify_switcher.js"
+    try:
+        tmp_js.write_text(js_script, encoding="utf-8")
+        proc = subprocess.run(
+            [*runner_cmd, str(tmp_js)],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if proc.returncode != 0:
+            errors.append(
+                f"Language-switcher runtime verification failed ({proc.returncode}): "
+                f"{(proc.stdout + proc.stderr).strip()}"
+            )
+    finally:
+        tmp_js.unlink(missing_ok=True)
 
     return errors
 
