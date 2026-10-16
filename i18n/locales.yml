@@ -10,6 +10,17 @@ required_pages:
   - "projects/linux.md"
   - "notebooks/experiment.ipynb"
 
+localization:
+  branch_prefix: "automation/localize/"
+  english_narration_branch: "automation/narration/en"
+  max_parallel_locales: 2
+  translation:
+    model: "gemini-2.5-flash"
+    policy_version: 1
+  narration:
+    mode: "all_except"
+    opt_out: []
+
 locales:
   en:
     code: "en"
