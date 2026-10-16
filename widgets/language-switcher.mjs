@@ -435,10 +435,14 @@ export function ensureLanguageSwitcherHost(doc = typeof document !== "undefined"
   if (!doc || typeof doc.querySelector !== "function") return null;
 
   const themeToggle = findThemeToggle(doc);
+  const searchControl = doc.querySelector(
+    '.DocSearch-Button, button[aria-label*="Search" i], input[type="search"], [data-search-button]'
+  );
   const headerContainer =
     (themeToggle && themeToggle.parentElement) ||
+    (searchControl && searchControl.closest("nav, header, .flex")) ||
     doc.querySelector(
-      "header .navbar-header-items__end, .navbar-header-items__end, .myst-top-nav .myst-header-bar, .myst-top-nav, header nav, header"
+      "header .navbar-header-items__end, .navbar-header-items__end, .myst-top-nav .myst-header-bar, .myst-top-nav, header nav, nav, header"
     );
 
   let hostEl = doc.querySelector("[data-sc-lang-switcher]");
@@ -448,6 +452,12 @@ export function ensureLanguageSwitcherHost(doc = typeof document !== "undefined"
     hostEl.setAttribute("data-sc-lang-switcher", "1");
     if (themeToggle && themeToggle.parentElement) {
       insertBeforeOrAppend(themeToggle.parentElement, hostEl, themeToggle);
+    } else if (searchControl && searchControl.parentElement) {
+      if (searchControl.nextSibling) {
+        searchControl.parentElement.insertBefore(hostEl, searchControl.nextSibling);
+      } else {
+        searchControl.parentElement.appendChild(hostEl);
+      }
     } else if (headerContainer) {
       headerContainer.appendChild(hostEl);
     } else if (doc.body) {
@@ -457,11 +467,18 @@ export function ensureLanguageSwitcherHost(doc = typeof document !== "undefined"
     return hostEl;
   }
 
-  // If hostEl exists, position it immediately next to the theme toggle
+  // If hostEl exists, position it immediately next to the theme toggle or search control
   if (themeToggle && themeToggle.parentElement) {
     if (!isAdjacent(hostEl, themeToggle)) {
       removeClass(hostEl, "sc-lang-host-floating");
       insertBeforeOrAppend(themeToggle.parentElement, hostEl, themeToggle);
+    }
+  } else if (searchControl && searchControl.parentElement && !isAdjacent(hostEl, searchControl)) {
+    removeClass(hostEl, "sc-lang-host-floating");
+    if (searchControl.nextSibling) {
+      searchControl.parentElement.insertBefore(hostEl, searchControl.nextSibling);
+    } else {
+      searchControl.parentElement.appendChild(hostEl);
     }
   } else if (
     headerContainer &&
@@ -557,6 +574,14 @@ const SWITCHER_STYLES = `
   html.dark .sc-lang-trigger:focus-visible,
   .dark .sc-lang-trigger:focus-visible {
     outline-color: #fafafa;
+  }
+
+  .sc-lang-icon {
+    display: block;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    pointer-events: none;
   }
 
   .sc-lang-flag {
@@ -867,11 +892,18 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
   const triggerBtn = doc.createElement("button");
   triggerBtn.type = "button";
   triggerBtn.className = "sc-lang-trigger";
+  triggerBtn.setAttribute("aria-haspopup", "true");
   triggerBtn.setAttribute("aria-expanded", "false");
   triggerBtn.setAttribute("aria-controls", panelId);
   triggerBtn.setAttribute("aria-label", `${ui.switch_language}: ${currentLocaleInfo.native_name}`);
   triggerBtn.setAttribute("title", `${ui.switch_language}: ${currentLocaleInfo.native_name}`);
-  triggerBtn.innerHTML = `<span class="sc-lang-flag" role="img" aria-hidden="true">${currentFlag}</span>`;
+  triggerBtn.innerHTML = `
+    <svg class="sc-lang-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="2" y1="12" x2="22" y2="12"></line>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+    </svg>
+  `.trim();
 
   const panel = doc.createElement("div");
   panel.id = panelId;

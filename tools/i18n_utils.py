@@ -37,7 +37,15 @@ def sha256_json(obj: Any) -> str:
 
 def sha256_file(path: Path) -> str:
     with path.open("rb") as f:
-        return hashlib.file_digest(f, "sha256").hexdigest()
+        if hasattr(hashlib, "file_digest"):
+            return hashlib.file_digest(f, "sha256").hexdigest()
+        h = hashlib.sha256()
+        while True:
+            chunk = f.read(65536)
+            if not chunk:
+                break
+            h.update(chunk)
+        return h.hexdigest()
 
 
 def atomic_write_bytes(target: Path, data: bytes) -> None:

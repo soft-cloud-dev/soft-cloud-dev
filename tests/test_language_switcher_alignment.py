@@ -23,7 +23,7 @@ class TestLanguageSwitcherAlignment(unittest.TestCase):
         self.content = SWITCHER_PATH.read_text(encoding="utf-8")
 
     def test_round_trigger_button_styling(self) -> None:
-        """The trigger button must be a 36px circular button matching the theme switch toggle."""
+        """The trigger button must be a 36px circular button matching the theme switch toggle with an SVG icon."""
         trigger_pattern = re.search(r"\.sc-lang-trigger\s*\{([^}]+)\}", self.content)
         self.assertIsNotNone(trigger_pattern, "Could not find .sc-lang-trigger CSS rule")
         trigger_css = trigger_pattern.group(1)
@@ -35,6 +35,18 @@ class TestLanguageSwitcherAlignment(unittest.TestCase):
         self.assertIn("display: inline-flex;", trigger_css)
         self.assertIn("align-items: center;", trigger_css)
         self.assertIn("justify-content: center;", trigger_css)
+
+        # SVG icon styling and trigger button template
+        icon_pattern = re.search(r"\.sc-lang-icon\s*\{([^}]+)\}", self.content)
+        self.assertIsNotNone(icon_pattern, "Could not find .sc-lang-icon CSS rule")
+        icon_css = icon_pattern.group(1)
+        self.assertIn("width: 18px;", icon_css)
+        self.assertIn("height: 18px;", icon_css)
+
+        # Trigger button markup template
+        self.assertIn('<svg class="sc-lang-icon"', self.content)
+        self.assertIn('setAttribute("aria-haspopup", "true")', self.content)
+        self.assertIn('setAttribute("aria-expanded", "false")', self.content)
 
         # Flag span styling
         flag_pattern = re.search(r"\.sc-lang-flag\s*\{([^}]+)\}", self.content)
