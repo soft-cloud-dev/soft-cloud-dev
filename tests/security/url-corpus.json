@@ -1,0 +1,56 @@
+[
+  { "url": "https://my.softcloud.dev/docs", "context": "link", "valid": true, "reason": "valid https link" },
+  { "url": "http://example.com/page?test=1#heading", "context": "link", "valid": true, "reason": "valid http link with query and hash" },
+  { "url": "/docs/architecture", "context": "link", "valid": true, "reason": "valid absolute-path relative link" },
+  { "url": "introduction.html", "context": "link", "valid": true, "reason": "valid relative link" },
+  { "url": "../projects/linux", "context": "link", "valid": true, "reason": "valid parent-relative link" },
+  { "url": "#section-2", "context": "link", "valid": true, "reason": "valid fragment link" },
+  { "url": "?query=value", "context": "link", "valid": true, "reason": "valid query link" },
+  { "url": "mailto:admin@softcloud.dev", "context": "link", "valid": true, "reason": "valid mailto link" },
+  { "url": "mailto:user@example.com?subject=Help", "context": "link", "valid": true, "reason": "valid mailto with subject" },
+
+  { "url": "https://cdn.example.com/images/logo.png", "context": "media", "valid": true, "reason": "valid https media" },
+  { "url": "http://assets.softcloud.dev/pic.jpg", "context": "media", "valid": true, "reason": "valid http media" },
+  { "url": "images/diagram.svg", "context": "media", "valid": true, "reason": "valid relative media" },
+  { "url": "/images/diagram.svg", "context": "media", "valid": true, "reason": "valid root-relative media" },
+  { "url": "../images/icon.png", "context": "media", "valid": true, "reason": "valid parent-relative media" },
+
+  { "url": "mailto:admin@softcloud.dev", "context": "media", "valid": false, "reason": "mailto rejected for media" },
+  { "url": "javascript:alert(1)", "context": "link", "valid": false, "reason": "javascript scheme rejected" },
+  { "url": "javascript:alert(1)", "context": "media", "valid": false, "reason": "javascript scheme rejected for media" },
+  { "url": "JAVASCRIPT:alert(1)", "context": "link", "valid": false, "reason": "case-insensitive javascript rejected" },
+  { "url": "java\nscript:alert(1)", "context": "link", "valid": false, "reason": "control character in scheme" },
+  { "url": "java\tscript:alert(1)", "context": "link", "valid": false, "reason": "tab in scheme" },
+  { "url": "vbscript:msgbox(1)", "context": "link", "valid": false, "reason": "vbscript scheme rejected" },
+  { "url": "data:text/html;base64,PHNjcmlwdD4=", "context": "link", "valid": false, "reason": "data scheme rejected for links" },
+  { "url": "data:image/svg+xml;utf8,<svg></svg>", "context": "media", "valid": false, "reason": "data scheme rejected for media" },
+  { "url": "file:///etc/passwd", "context": "link", "valid": false, "reason": "file scheme rejected" },
+  { "url": "file:///C:/Windows/System32", "context": "media", "valid": false, "reason": "file scheme rejected for media" },
+  { "url": "ftp://ftp.example.com/file.txt", "context": "link", "valid": false, "reason": "ftp scheme rejected" },
+
+  { "url": "//evil.com/phish", "context": "link", "valid": false, "reason": "protocol-relative url rejected" },
+  { "url": "//evil.com/image.png", "context": "media", "valid": false, "reason": "protocol-relative media rejected" },
+
+  { "url": "https://user:password@example.com/", "context": "link", "valid": false, "reason": "credentials rejected" },
+  { "url": "https://user@example.com/", "context": "link", "valid": false, "reason": "userinfo rejected" },
+  { "url": "http://admin:secret@site.com/img.png", "context": "media", "valid": false, "reason": "credentials rejected for media" },
+
+  { "url": "https://example.com/foo\\bar", "context": "link", "valid": false, "reason": "backslash rejected" },
+  { "url": "\\\\evil.com\\share", "context": "link", "valid": false, "reason": "leading backslash rejected" },
+  { "url": "images\\logo.png", "context": "media", "valid": false, "reason": "backslash rejected in relative media" },
+
+  { "url": "https://example.com/test\u0000bad", "context": "link", "valid": false, "reason": "null byte rejected" },
+  { "url": "https://example.com/test\u001fbad", "context": "link", "valid": false, "reason": "control char rejected" },
+  { "url": "https://example.com/test\u007fbad", "context": "link", "valid": false, "reason": "delete char rejected" },
+  { "url": "/docs/test\nbad", "context": "link", "valid": false, "reason": "newline in relative link rejected" },
+
+  { "url": "https://", "context": "link", "valid": false, "reason": "empty authority rejected" },
+  { "url": "https://?foo=bar", "context": "link", "valid": false, "reason": "empty authority with query rejected" },
+  { "url": "https://#hash", "context": "link", "valid": false, "reason": "empty authority with hash rejected" },
+  { "url": "http://", "context": "media", "valid": false, "reason": "empty authority for media rejected" },
+
+  { "url": "<script>alert(1)</script>", "context": "link", "valid": false, "reason": "html tag rejected" },
+  { "url": "\" onmouseover=\"alert(1)\"", "context": "link", "valid": false, "reason": "attribute injection rejected" },
+  { "url": "'>\"><script>alert(1)</script>", "context": "media", "valid": false, "reason": "tag escape rejected" },
+  { "url": "", "context": "link", "valid": false, "reason": "empty string url rejected" }
+]

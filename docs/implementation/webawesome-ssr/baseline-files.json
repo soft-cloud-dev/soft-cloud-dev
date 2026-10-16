@@ -1,0 +1,15 @@
+{
+  "revision": "e62f3db005f8940f5242dd466bbd08187b19f9f4",
+  "sha256": {
+    "requirements.lock": "9e4cc1e6b691e9ee95474f5c0e1f2fca4955af4a73e13220469015f19b13029a",
+    "myst.yml": "39aada72b664a9fba24744f5a3c407b3b41ca7f722df30599c9da7b62583cdd1",
+    "tools/build.sh": "bbc076f1754ee34cc1a4bef30e999c3aae143fcadb22962681ac895d2fa16b22",
+    "tools/check_profile.py": "ae5c0ef6ea66c1bf580b361326bf480a20de544eb06d0147d1ace42a7040775e",
+    "tools/build_locales.py": "b6b2d22c14957f0b3b09416cfceb6d2e39e99ae3ab8b84152ecc400615d16869",
+    ".github/workflows/deploy.yml": "738c0f9f5f9298bf086087af41cd04b13f9e1875c29fcf460c15b06454632f49",
+    "i18n/pl/provenance.json": "8c8247418042d129027808a66a1a63744d4705fcd467ed982035c15e565a9893",
+    "i18n/de/provenance.json": "a20ce1c9e5db050f321ce22de370628173e673b963da3314565066a28a01a151",
+    "i18n/fr/provenance.json": "c9f29fe52c3d9d236036898c8656160eedaf643c4c8e9be87b081c40e35b9fff",
+    "i18n/es/provenance.json": "de4c6e36c54342b78791ea5d7e5ab1299535401a471171f288ef2c770a698f66"
+  }
+}

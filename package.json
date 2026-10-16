@@ -1,0 +1,30 @@
+{
+  "name": "softcloud-webawesome-ssr",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Web Awesome Lit SSR integration for SoftCloud documentation",
+  "scripts": {
+    "check:dependencies": "node scripts/check-node-dependencies.mjs",
+    "test:security": "node --test tests/security/test-url-policy.mjs",
+    "test:transform": "node --test tests/transform/test-placeholder-transform.mjs tests/transform/test-transform-security.mjs tests/transform/test-transform-idempotence.mjs",
+    "test:ssr": "node --test tests/ssr/test-lit-renderer.mjs tests/ssr/test-dsd-structure.mjs tests/ssr/test-nested-components.mjs",
+    "test:assets": "node --test tests/assets/test-asset-staging.mjs tests/assets/test-base-paths.mjs",
+    "test:browser": "playwright test",
+    "test": "node --test tests/**/*.mjs",
+    "test:all": "node tests/run-all.mjs",
+    "test:ci": "bash scripts/ci-test-driver.sh",
+    "verify": "node scripts/ci-test-driver.mjs"
+  },
+  "dependencies": {
+    "@awesome.me/webawesome": "3.14.0",
+    "@fortawesome/fontawesome-free": "6.5.2",
+    "@lit-labs/ssr": "4.1.0",
+    "@lit-labs/ssr-client": "1.1.8",
+    "lit": "3.3.3",
+    "parse5": "7.3.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1"
+  }
+}

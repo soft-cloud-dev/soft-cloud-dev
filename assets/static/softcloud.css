@@ -1,0 +1,72 @@
+/**
+ * assets/static/softcloud.css
+ * SoftCloud Web Awesome SSR styling, theme integration, and accessibility rules.
+ */
+
+/* Hide any synthetic metadata wrappers */
+.sc-wa-meta {
+  display: none !important;
+}
+
+/* Ensure Web Awesome custom elements render consistently pre- and post-hydration */
+wa-card,
+wa-callout,
+wa-button,
+wa-icon {
+  visibility: visible;
+}
+
+/* Accessible focus styling */
+wa-button:focus-visible,
+wa-card:focus-visible,
+wa-callout:focus-visible {
+  outline: 2px solid var(--wa-color-primary-60, #2563eb);
+  outline-offset: 2px;
+}
+
+/* Card layout enhancements */
+wa-card {
+  display: block;
+  margin: 1.5rem 0;
+  max-width: 100%;
+}
+
+wa-card [slot="header"] {
+  font-weight: 600;
+  font-size: 1.15rem;
+}
+
+wa-card [slot="media"] img,
+wa-card img[slot="media"] {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Callout spacing */
+wa-callout {
+  display: block;
+  margin: 1.25rem 0;
+}
+
+wa-callout [slot="title"] {
+  font-weight: 600;
+}
+
+/* Button spacing & inline flow */
+wa-button {
+  margin: 0.25rem 0;
+  vertical-align: middle;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  wa-card,
+  wa-callout,
+  wa-button,
+  wa-icon {
+    transition: none !important;
+    animation: none !important;
+  }
+}

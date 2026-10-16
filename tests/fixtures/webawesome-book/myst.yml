@@ -1,0 +1,10 @@
+version: 1
+project:
+  id: webawesome-fixture
+  title: Web Awesome SSR Fixture Book
+  plugins:
+    - ../../../assets/plugins/myst-webawesome.mjs
+  toc:
+    - file: index.md
+site:
+  template: book-theme

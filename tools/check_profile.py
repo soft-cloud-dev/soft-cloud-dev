@@ -50,7 +50,12 @@ require(isinstance(config, dict) and config.get("version") == 1,
         "Expected myst.yml version: 1")
 require("extends" not in config, "Configuration inheritance needs a profile extension")
 project = config.get("project", {})
-require(not project.get("plugins"), "Custom plugins need a profile extension")
+allowed_plugins = ["assets/plugins/myst-webawesome.mjs"]
+plugins = project.get("plugins") or []
+require(isinstance(plugins, list) and all(p in allowed_plugins for p in plugins),
+        "Custom plugins need a profile extension")
+for p in plugins:
+    local_file(p)
 require(not project.get("exclude"), "Project exclusions are not accepted")
 toc = project.get("toc")
 require(isinstance(toc, list) and toc, "Explicit nonempty project.toc required")

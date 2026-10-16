@@ -278,6 +278,19 @@ def stage_locale_workspace(
         if src_asset.is_file():
             shutil.copy2(src_asset, ws / single_asset)
 
+    # 3.1 Stage assets (plugins, static, python, shared) for Web Awesome SSR
+    assets_src = root / "assets"
+    if assets_src.is_dir():
+        for asset_sub in ("plugins", "static", "python", "shared"):
+            sub_src = assets_src / asset_sub
+            if sub_src.is_dir():
+                shutil.copytree(sub_src, ws / "assets" / asset_sub, dirs_exist_ok=True)
+
+    # 3.2 Stage scripts/lib so plugin imports resolve cleanly in workspace
+    scripts_lib_src = root / "scripts" / "lib"
+    if scripts_lib_src.is_dir():
+        shutil.copytree(scripts_lib_src, ws / "scripts" / "lib", dirs_exist_ok=True)
+
     # 4. Copy locale-specific audio into workspace/audio/
     locale_audio_src = root / str(
         locale_info.get("audio_dir", "audio" if locale_code == default_locale else f"audio/{locale_code}")
@@ -390,6 +403,10 @@ def run_jupyter_book_in_workspace(ws: Path, locale_code: str, locale_base_url: s
     env["BASE_URL"] = locale_base_url
     env["JB_ALLOW_NODEENV"] = "0"
     env["SOFTCLOUD_LOCALE"] = locale_code
+    staged_python = (ws / "assets" / "python").resolve()
+    if staged_python.is_dir():
+        orig_pypath = env.get("PYTHONPATH", "")
+        env["PYTHONPATH"] = f"{staged_python}:{orig_pypath}" if orig_pypath else str(staged_python)
 
     subprocess.run(
         ["jupyter", "book", "clean", "--all", "--execute", "-y"],

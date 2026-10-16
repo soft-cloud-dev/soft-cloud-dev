@@ -5,3 +5,7 @@ _build/
 __pycache__/
 .ipynb_checkpoints/
 .env
+node_modules/
+test-results/
+playwright-report/
+

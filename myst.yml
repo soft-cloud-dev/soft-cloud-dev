@@ -13,6 +13,8 @@ project:
     - Linux
     - FreeIPA
     - Systems Architecture
+  plugins:
+    - assets/plugins/myst-webawesome.mjs
   toc:
     - file: README.md
     - file: introduction.md

@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SoftCloud Web Awesome Component Schema",
+  "version": "1.0.0",
+  "allowedComponents": ["wa-card", "wa-callout", "wa-button", "wa-icon"],
+  "definitions": {
+    "wa-card": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": { "type": "string", "enum": ["1.0.0"] },
+        "component": { "type": "string", "const": "wa-card" },
+        "header": { "type": "string" },
+        "footer": { "type": "string" },
+        "image": { "type": "string" },
+        "image_alt": { "type": "string" },
+        "appearance": {
+          "type": "string",
+          "enum": ["default", "outlined", "elevated", "flat"]
+        },
+        "class": { "type": "string" }
+      }
+    },
+    "wa-callout": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": { "type": "string", "enum": ["1.0.0"] },
+        "component": { "type": "string", "const": "wa-callout" },
+        "variant": {
+          "type": "string",
+          "enum": ["neutral", "brand", "success", "warning", "danger"]
+        },
+        "appearance": {
+          "type": "string",
+          "enum": ["default", "solid", "filled", "outline", "outlined", "soft"]
+        },
+        "icon": { "type": "string" },
+        "title": { "type": "string" },
+        "class": { "type": "string" }
+      }
+    },
+    "wa-button": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": { "type": "string", "enum": ["1.0.0"] },
+        "component": { "type": "string", "const": "wa-button" },
+        "variant": {
+          "type": "string",
+          "enum": ["default", "primary", "success", "neutral", "warning", "danger", "brand"]
+        },
+        "appearance": {
+          "type": "string",
+          "enum": ["filled", "outlined", "text", "flat", "accent", "plain"]
+        },
+        "size": {
+          "type": "string",
+          "enum": ["small", "medium", "large"]
+        },
+        "href": { "type": "string" },
+        "target": {
+          "type": "string",
+          "enum": ["_blank", "_self", "_parent", "_top"]
+        },
+        "rel": { "type": "string" },
+        "disabled": { "type": "boolean" },
+        "caret": { "type": "boolean" },
+        "loading": { "type": "boolean" },
+        "outline": { "type": "boolean" },
+        "pill": { "type": "boolean" },
+        "circle": { "type": "boolean" },
+        "label": { "type": "string" },
+        "class": { "type": "string" }
+      }
+    },
+    "wa-icon": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": { "type": "string", "enum": ["1.0.0"] },
+        "component": { "type": "string", "const": "wa-icon" },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        },
+        "family": {
+          "type": "string",
+          "enum": ["classic", "sharp", "duotone"]
+        },
+        "variant": {
+          "type": "string",
+          "enum": ["solid", "regular", "light", "thin"]
+        },
+        "style": {
+          "type": "string",
+          "enum": [
+            "solid",
+            "regular",
+            "brands",
+            "light",
+            "thin",
+            "duotone",
+            "sharp-solid",
+            "sharp-regular",
+            "sharp-light",
+            "sharp-thin"
+          ]
+        },
+        "label": { "type": "string" },
+        "library": { "type": "string", "enum": ["default", "fa", "system"] },
+        "class": { "type": "string" }
+      },
+      "required": ["name"]
+    }
+  }
+}

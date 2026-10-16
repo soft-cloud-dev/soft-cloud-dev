@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "allowed_schemes": {
+    "link": ["http", "https", "mailto"],
+    "media": ["http", "https"]
+  },
+  "disallowed_schemes": ["javascript", "vbscript", "data", "file"],
+  "rules": {
+    "allow_relative": true,
+    "allow_fragment_only": true,
+    "allow_query_only": true,
+    "disallow_protocol_relative": true,
+    "disallow_backslashes": true,
+    "disallow_control_characters": true,
+    "disallow_credentials": true,
+    "require_valid_authority": true
+  }
+}

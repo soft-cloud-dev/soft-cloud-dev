@@ -39,6 +39,17 @@ jobs:
           python-version: '3.12.14'
           architecture: x64
 
+      - name: Configure Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Node dependencies
+        run: |
+          npm ci
+          node scripts/check-node-dependencies.mjs
+
       - name: Install locked environment
         run: |
           python -c 'import sys; assert sys.implementation.name == "cpython" and sys.version_info[:3] == (3, 12, 14), sys.version'
@@ -53,6 +64,12 @@ jobs:
             --sys-prefix \
             --name jb2-python \
             --display-name 'Python (JB2)'
+
+      - name: Preflight profile and security checks
+        run: |
+          . .venv/bin/activate
+          python tools/check_profile.py
+          node scripts/check-security-parity.mjs
 
       - name: Validate and build multilingual publication artifact
         env:
