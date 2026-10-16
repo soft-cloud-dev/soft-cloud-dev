@@ -23,6 +23,7 @@ project:
     - title: Computational Notebooks
       children:
         - file: notebooks/experiment.ipynb
+        - file: notebooks/webawesome-docs.ipynb
 site:
   template: book-theme
   nav:
