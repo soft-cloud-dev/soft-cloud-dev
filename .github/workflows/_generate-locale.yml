@@ -94,7 +94,20 @@ jobs:
             git checkout -b "$TARGET_BRANCH" origin/main
           fi
 
+      - name: Check API credentials
+        id: check-creds
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::warning title=Missing GEMINI_API_KEY::GEMINI_API_KEY secret is not configured in repository settings. Online reconciliation requires GEMINI_API_KEY."
+            echo "has_key=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_key=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Reconcile translations and narration
+        if: steps.check-creds.outputs.has_key == 'true'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
@@ -112,6 +125,7 @@ jobs:
           python tools/generate_audio.py --locale "$LOCALE" --plan-needed
 
       - name: Validate generated locale assets (API-free)
+        if: steps.check-creds.outputs.has_key == 'true'
         env:
           BASE_URL: ""
         run: |
@@ -136,6 +150,7 @@ jobs:
           python -m unittest discover -s tests
 
       - name: Synchronize pull request
+        if: steps.check-creds.outputs.has_key == 'true'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
         run: |
