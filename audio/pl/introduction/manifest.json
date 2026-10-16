@@ -1,0 +1,118 @@
+{
+  "chunks": [
+    {
+      "audio_file": "chunk-001-1d0394205eb6.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "96986da0a270c76dfef5b43f30534ccdab23ba1a623c15e35d221287f5472804",
+      "chunk_hash": "1d0394205eb6211b4af987d251e37efa78486a46c9538eaf645dfeeab50934df",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "duration_seconds": 11.304,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph"
+      ],
+      "locale": "pl",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "wprowadzenie",
+      "section_title": "Wprowadzenie",
+      "size_bytes": 90432,
+      "text_sha256": "4ad73d70d77257a715ac58d4e3e35c95bd8111f58c75d7c19cc21ff7d6144c2f",
+      "tts_config_hash": "b36cd8f81603ffb75a1aa828be063a2410bf6eb67eb1c7d177a098ebed58e6ff",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-002-40bd243c5c56.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "e239b63bf202c069692d498c6aea023a38dc03409a9c975d4a6cdc75d0248003",
+      "chunk_hash": "40bd243c5c56b1daac8b5e3b2afc5864825aaeb4b2c02f430669058370155f97",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "duration_seconds": 43.584,
+      "element_ids": [
+        "el-0003-heading",
+        "el-0004-paragraph",
+        "el-0005-list",
+        "el-0006-paragraph"
+      ],
+      "locale": "pl",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "wyzwanie-powtarzalnosci-obliczeniowej",
+      "section_title": "Wyzwanie powtarzalności obliczeniowej",
+      "size_bytes": 348672,
+      "text_sha256": "b8f66fa46640cdbf6704bcdb6d656f299ebcfa959f6b0c5032338441207e2b8c",
+      "tts_config_hash": "b36cd8f81603ffb75a1aa828be063a2410bf6eb67eb1c7d177a098ebed58e6ff",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-003-14887d8f1bbd.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "c38322e0cf538a15c7a9a97822b0f660a1ff2bece6466c969f23dd9d8f0838ca",
+      "chunk_hash": "14887d8f1bbd8361735965a7085f5f724674c18e39a7b3ac9a54c121bd972316",
+      "chunk_id": "chunk-003",
+      "chunk_index": 3,
+      "duration_seconds": 60.12,
+      "element_ids": [
+        "el-0007-heading",
+        "el-0008-paragraph",
+        "el-0009-list"
+      ],
+      "locale": "pl",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "zakres-operacyjny",
+      "section_title": "Zakres operacyjny",
+      "size_bytes": 480960,
+      "text_sha256": "13d4beb57afe37b34b8c6ac3e6d051f36626ec55f7f703a83091897a551357a8",
+      "tts_config_hash": "b36cd8f81603ffb75a1aa828be063a2410bf6eb67eb1c7d177a098ebed58e6ff",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-004-54713024c2ba.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "7d29c5d8ae88e50850eee113d80bcd87be8b0c469446f2d8e9778f683cbb4da2",
+      "chunk_hash": "54713024c2baeeee125b967f2074be97440b1ba81ab571674c295caa8044627a",
+      "chunk_id": "chunk-004",
+      "chunk_index": 4,
+      "duration_seconds": 12.456,
+      "element_ids": [
+        "el-0010-heading",
+        "el-0011-paragraph"
+      ],
+      "locale": "pl",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "kolejne-kroki",
+      "section_title": "Kolejne kroki",
+      "size_bytes": 99648,
+      "text_sha256": "c3950706d7eadcd91746866362aa50755e53ff62bc62844f6e748d66f2932dc1",
+      "tts_config_hash": "b36cd8f81603ffb75a1aa828be063a2410bf6eb67eb1c7d177a098ebed58e6ff",
+      "voice": "Kore"
+    }
+  ],
+  "config_hash": "6c38cb8680c415b0ead0af6596a28955c42c374278bf121abbf4dba34db918e8",
+  "locale": "pl",
+  "logical_source_path": "introduction.md",
+  "manifest_sha256": "842a91639178727c889e17c1adfe3c6dacfb2c5c48156e88b055b3ab5a9d261f",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "pl",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in Polish (język polski) matching document locale 'pl'.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "introduction",
+  "page_source_hash": "d3797f6c3eb834962fdd8f077f75739665a628eb51d90fb82bd5448837c09368",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "7fa3fdae0f67b0925e31e5fb71c7539ef1a8022b42f8b285ff55fe7956e45aaa",
+  "source_path": "i18n/pl/introduction.md",
+  "status": "complete",
+  "total_chunks": 4,
+  "total_duration_seconds": 127.464,
+  "transcript_file": "transcript.json",
+  "transcript_sha256": "91d94affb3607a2f8ad1b69732c58ba4a3b116cc01eadac95c9b24cd30a1e2be"
+}

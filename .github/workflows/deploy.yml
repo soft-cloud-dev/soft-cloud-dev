@@ -54,7 +54,7 @@ jobs:
             --name jb2-python \
             --display-name 'Python (JB2)'
 
-      - name: Validate and build publication artifact
+      - name: Validate and build multilingual publication artifact
         env:
           BASE_URL: ""
           JB_ALLOW_NODEENV: '0'
@@ -64,7 +64,7 @@ jobs:
           . .venv/bin/activate
           sh tools/build.sh
 
-      - name: Upload Pages artifact
+      - name: Upload combined multilingual Pages artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9
         with:
           path: ./_build/html

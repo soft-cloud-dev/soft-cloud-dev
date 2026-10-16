@@ -1,0 +1,279 @@
+{
+  "documents": {
+    "README.md": {
+      "code_block_count": 0,
+      "code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "localized_code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "localized_path": "i18n/de/README.md",
+      "revision_state": "approved",
+      "sections": [
+        {
+          "index": "0",
+          "source_heading": "Software Cloud",
+          "source_sha256": "2f8af3f7c63698c4f77950b47f9424403e506b4d52d21585d8404453866f3efa",
+          "translated_heading": "Software Cloud",
+          "translated_sha256": "a43e1139ecada40269000769e53674283928a88912427c4bcf222491beb711e1"
+        },
+        {
+          "index": "1",
+          "source_heading": "Key Pillars",
+          "source_sha256": "d89540515b9d8eaf006c84df0c9707a96c5ffd0d08e988befe7447dd8ea0c586",
+          "translated_heading": "Zentrale Säulen",
+          "translated_sha256": "eec8d588117c35ea3c09b79fab455871246a314a76c46ddc7f04d42ab293baac"
+        },
+        {
+          "index": "2",
+          "source_heading": "Documentation Roadmap",
+          "source_sha256": "26386d2a1bf94b2b4fd97abc53655d322dea90d54757cf6346b6443f88ae09e7",
+          "translated_heading": "Dokumentations-Roadmap",
+          "translated_sha256": "5cce4b167ebaafcc2ebbca0cea63a9e156608082fb6c34ef093879dc12466f21"
+        }
+      ],
+      "source_path": "README.md",
+      "source_sha256": "a9021a99ff77c202fd767fca52b07520ec6db4954c3ff48fef2a829e4e418986",
+      "translated_sha256": "ff20e7fb53a2457e054645dbc310de1061ce87d8f46f2bedd3fe7437e25095e0"
+    },
+    "architecture.md": {
+      "code_block_count": 11,
+      "code_fingerprint_sha256": "7665a5145535432596bc21f6e74f83336de969e8ee2173f4f564a8bbf296df50",
+      "localized_code_fingerprint_sha256": "7665a5145535432596bc21f6e74f83336de969e8ee2173f4f564a8bbf296df50",
+      "localized_path": "i18n/de/architecture.md",
+      "revision_state": "approved",
+      "sections": [
+        {
+          "index": "0",
+          "source_heading": "Architecture & Memorandum Reference",
+          "source_sha256": "4fe9ecbb07c5f302a739e9d3853e25c00ac03dbb153cc0d64e0a215d16efafad",
+          "translated_heading": "Architektur & Memorandumsreferenz",
+          "translated_sha256": "095d7c5c9c43365e2f4b81deb9cab5b92e3f9c3976ee391e1c1b4363bc857902"
+        },
+        {
+          "index": "1",
+          "source_heading": "1. Overview and Design Principles",
+          "source_sha256": "cd4e260efddc88cf4edd12269fce665aa7b499310500f9d90ce3f6408cc74ce6",
+          "translated_heading": "1. Überblick und Entwurfsprinzipien",
+          "translated_sha256": "0e0d9e436f03849e6821bdaf263f752cd21d71b32c2913ef027b821276cc31d1"
+        },
+        {
+          "index": "2",
+          "source_heading": "Core Architectural Tenants",
+          "source_sha256": "9c933407ee22978af93984d0bf5ea357faa364ed8a6377b9fe5d7430c07ca32c",
+          "translated_heading": "Zentrale Architekturprinzipien",
+          "translated_sha256": "f5d7a64270599fc4acb3e13eeec749d04ec55189f7fcc696b27810e3fdcd932c"
+        },
+        {
+          "index": "3",
+          "source_heading": "2. Repository Layout & Topology",
+          "source_sha256": "bf5d35e52b3f742f1c33fb1bc7d3f4b3a455b5b3e1268fc7bfaab86fab073d52",
+          "translated_heading": "2. Repository-Layout & Topologie",
+          "translated_sha256": "7c2eecb0036ab0ccb07d66e7a451fcf0370551c3581c21a6557519ecb99f5777"
+        },
+        {
+          "index": "4",
+          "source_heading": "3. Memorandum Scaffold Specifications",
+          "source_sha256": "9cad8f8abd38e8d1390918e4194d07cbf62fab6e9aacda0ad377b2086fcd2f84",
+          "translated_heading": "3. Gerüstspezifikationen des Memorandums",
+          "translated_sha256": "bcfd50a100c78fed61921fc8fcd39e86abc5b14c6bf6b4254694dbf61d7fdd43"
+        },
+        {
+          "index": "5",
+          "source_heading": "3.1. `LICENSE`",
+          "source_sha256": "e4ac12f8f87c4cd3f9edd537405269192072cf659686f37895bfab2fccc68197",
+          "translated_heading": "3.1. `LICENSE`",
+          "translated_sha256": "cb2de13811650af2f557b4283babc73cfba9e540b72fe78170addc4fa31bbfd8"
+        },
+        {
+          "index": "6",
+          "source_heading": "3.2. `.gitignore`",
+          "source_sha256": "13cc4d0fe017f469dec98ef7b379dc2e0b0696f273074c8dc60a7abb367266cf",
+          "translated_heading": "3.2. `.gitignore`",
+          "translated_sha256": "13b93d2ab06b64099cb5392d2bf4c77dc9b3573a4f99f6afd0c4db1d75cc3619"
+        },
+        {
+          "index": "7",
+          "source_heading": "3.3. `requirements.in`",
+          "source_sha256": "7e6f02116aeb9c55f6a258a1865665de279f950b8e11dcc7d1321694dfbf2f17",
+          "translated_heading": "3.3. `requirements.in`",
+          "translated_sha256": "e59a5ef1ab3b5b0bca645125233dfcc80c37ccbf43a4cb1a7be720720d6f5baf"
+        },
+        {
+          "index": "8",
+          "source_heading": "3.4. `myst.yml`",
+          "source_sha256": "16368b83762898fb33ca3babf45f9bb30dd2456a51058a118ca9306c4dbc9222",
+          "translated_heading": "3.4. `myst.yml`",
+          "translated_sha256": "a8e9e56c853a20da852e11b1dee1b58d21da9ebfafb32e8e25019f46768fa9dc"
+        },
+        {
+          "index": "9",
+          "source_heading": "3.5. Computational Notebook: `notebooks/experiment.ipynb`",
+          "source_sha256": "a89f68b088587bc9acf21d6346355d68303037792540cc9aad3c942b6afc371c",
+          "translated_heading": "3.5. Berechnungs-Notebook: `notebooks/experiment.ipynb`",
+          "translated_sha256": "7d2c1dd0f5fedb3695ed59261513cb4e90e175664035447e64ca0a8f2e98932b"
+        },
+        {
+          "index": "10",
+          "source_heading": "4. Build & Maintenance Toolchain",
+          "source_sha256": "61a8876388cda4f88cb63c5d6d10d60a28fd366f031b1bfe314370c811b8c9e6",
+          "translated_heading": "4. Build- & Wartungs-Toolchain",
+          "translated_sha256": "6623a3b9086de7c86001b52d28443bc7b8c4e9cff2d9c7282b4d442a6d4aef38"
+        },
+        {
+          "index": "11",
+          "source_heading": "4.1. Lockfile Generator: `tools/lock_from_wheels.py`",
+          "source_sha256": "59fb07994ca121eca51b92dfbed11baa35d41dbccbb9ccfbc3c42c14ef5240eb",
+          "translated_heading": "4.1. Lockfile-Generator: `tools/lock_from_wheels.py`",
+          "translated_sha256": "31915293f3c356a52c68bf39e0a2a7d118c92422747f111d2e89643f7a9431a7"
+        },
+        {
+          "index": "12",
+          "source_heading": "4.2. Profile Preflight Validator: `tools/check_profile.py`",
+          "source_sha256": "8090fdfccf6089257dfc7a6ad9a6fb464f3441c60edac2678b1f747a391a2315",
+          "translated_heading": "4.2. Profil-Vorab-Validator: `tools/check_profile.py`",
+          "translated_sha256": "d5c0ee3801aac7b6d5d12fd26f7a0723c744c1170681c9a4ba55986ae0a95b3b"
+        },
+        {
+          "index": "13",
+          "source_heading": "4.3. Hermetic Build Runner: `tools/build.sh`",
+          "source_sha256": "76d0f5c050d67e3c5d123ce051df14ce3d189f87716a4347c6beb1148c10c955",
+          "translated_heading": "4.3. Hermetischer Build-Runner: `tools/build.sh`",
+          "translated_sha256": "a5f60639a1775d0369aa4af4faee05507d7e6365ecaea6e2f6c1dc2f537b6536"
+        },
+        {
+          "index": "14",
+          "source_heading": "5. Continuous Deployment: `.github/workflows/deploy.yml`",
+          "source_sha256": "14cb2c6893d8bcff1cb9347db642b030b6412288f39903c7e6d433ea6bb25bd2",
+          "translated_heading": "5. Kontinuierliche Bereitstellung: `.github/workflows/deploy.yml`",
+          "translated_sha256": "d4ee674939dbe0f89d5b8f8f7494bd70a183eef9c29453feb09d1d79c25c7d15"
+        },
+        {
+          "index": "15",
+          "source_heading": "6. Deterministic Dependency Resolution",
+          "source_sha256": "03a3c06fd36831c86ac3b918062ba3f8ea5fbb8fb165afec1991bdb8a5b3d2a6",
+          "translated_heading": "6. Deterministische Abhängigkeitsauflösung",
+          "translated_sha256": "ae94d61f7c0983e95f1b1733141378b926513c07f59b34f82a4f9fc9d0b79906"
+        }
+      ],
+      "source_path": "architecture.md",
+      "source_sha256": "6d98c29d1a8379e828a6ad5251a352f7b66c4251519995eb493fe1cc0fbd7f3d",
+      "translated_sha256": "91c7e3b43e5ff1dc0430f89b5bbd480204e4fef1b54277adc6b56475e0fb6016"
+    },
+    "introduction.md": {
+      "code_block_count": 0,
+      "code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "localized_code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "localized_path": "i18n/de/introduction.md",
+      "revision_state": "approved",
+      "sections": [
+        {
+          "index": "0",
+          "source_heading": "Introduction",
+          "source_sha256": "f1ddd1a463fa2ac2b17633380a6aa100228e6441144e39f5b9895b9a4d6ebedc",
+          "translated_heading": "Einführung",
+          "translated_sha256": "5455f3beed96bd8d399ad7f8e8a3ff3806a9cca5a91d0d0e4bbc47fc0add1902"
+        },
+        {
+          "index": "1",
+          "source_heading": "The Challenge of Computational Reproducibility",
+          "source_sha256": "c7bd60b20a1e762d11a3ae649e803d439ee1b9db026c8a31de6602dfc078aa5e",
+          "translated_heading": "Die Herausforderung der rechnerischen Reproduzierbarkeit",
+          "translated_sha256": "bd68e4f5a7de0ef3d2252f57c3ce764d9ef68a464d49c9a9ccdc15a23e1c545b"
+        },
+        {
+          "index": "2",
+          "source_heading": "Operational Scope",
+          "source_sha256": "8f44539a9d8ce774252c1a6fa6537813f17849f8c7eff06cc0fde1f131ec1216",
+          "translated_heading": "Operativer Umfang",
+          "translated_sha256": "e1252bbaa8f68453024501bd8290692eb1c4a60d5031da3ceb77a7fb9b015d0b"
+        },
+        {
+          "index": "3",
+          "source_heading": "Next Steps",
+          "source_sha256": "f628e7fe00a850edd15ac1fe40afa42e08d8065cf7f3cc3d62f9a20299aeff2c",
+          "translated_heading": "Nächste Schritte",
+          "translated_sha256": "6466915cb456c007007e4f8cf87aa669d5d48aa11ae1420bf94493a40069031c"
+        }
+      ],
+      "source_path": "introduction.md",
+      "source_sha256": "d27451030aa96a3853c1cdbcf99697e64c7ecd6909c0dafdce35e7ae04320682",
+      "translated_sha256": "a61e595b9e1cafcd612097f5260e030bde96abeac2e06e2e3027bd8ee3755eb9"
+    },
+    "notebooks/experiment.ipynb": {
+      "code_block_count": 1,
+      "code_fingerprint_sha256": "fa3a16215aeedd4000b4cdf1afde9a1a37da0f4a6c0cdfe0ea8830244b8453db",
+      "localized_code_fingerprint_sha256": "fa3a16215aeedd4000b4cdf1afde9a1a37da0f4a6c0cdfe0ea8830244b8453db",
+      "localized_path": "i18n/de/notebooks/experiment.ipynb",
+      "revision_state": "approved",
+      "sections": [
+        {
+          "index": "cell-0",
+          "source_heading": "markdown-0",
+          "source_sha256": "06bc58f460c601b781536bc37c1390625738513e66a800433bcbb83ac1d53a82",
+          "translated_heading": "markdown-0",
+          "translated_sha256": "e6f4c4ebd79d62d66780e9d19e6851292ecd8dd7ea0104a2501719140a0b3bc2"
+        },
+        {
+          "index": "cell-1",
+          "source_heading": "code-1",
+          "source_sha256": "31564136ac03c149021e40936dd23675ab5c03aed2653ee35d80fbfb8f75721b",
+          "translated_heading": "code-1",
+          "translated_sha256": "31564136ac03c149021e40936dd23675ab5c03aed2653ee35d80fbfb8f75721b"
+        }
+      ],
+      "source_path": "notebooks/experiment.ipynb",
+      "source_sha256": "695ba03765e5a751a39c7b4880d504edaad4d99a8c3167c1a5bd3c9f854a7a73",
+      "translated_sha256": "acce53518768b9b0e48ccbc5e3c7862272594014ae2edb2a2ba264e9cc365143"
+    },
+    "projects/linux.md": {
+      "code_block_count": 0,
+      "code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "localized_code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "localized_path": "i18n/de/projects/linux.md",
+      "revision_state": "approved",
+      "sections": [
+        {
+          "index": "frontmatter",
+          "source_heading": "__frontmatter__",
+          "source_sha256": "3bfb769ddc9c76b356fa52ffca58fc7f41544c4314a9e427af10b2ea02cf8a85",
+          "translated_heading": "__frontmatter__",
+          "translated_sha256": "84137ab8c582648df661bd451746779fe7143d60e78f040b5edc213a6dcb47c7"
+        },
+        {
+          "index": "0",
+          "source_heading": "__preamble__",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "translated_heading": "__preamble__",
+          "translated_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "index": "1",
+          "source_heading": "SoftCloud Node Linux",
+          "source_sha256": "4cd21f6b78c40916a969968a84f89cf473b4ea35648007e21237c2373fa27a3f",
+          "translated_heading": "SoftCloud Node Linux",
+          "translated_sha256": "b443dbbd9bdb2682cfe0757b0ecc423f3ad7fb3fab59298cae72d2c8215e8dfa"
+        },
+        {
+          "index": "2",
+          "source_heading": "Start here",
+          "source_sha256": "1a8b8303c0032d88c6888185da13495936e17d542e0d71c2edc46a3c2b81c826",
+          "translated_heading": "Einstieg",
+          "translated_sha256": "fb5574692d83c452d3af6dca018ef0bcefee0a35cd43b512409b7d08465d6a88"
+        },
+        {
+          "index": "3",
+          "source_heading": "Implementation status",
+          "source_sha256": "52fc72b524e473476860a1c155fd9b6fdd3377e490cb6016cc5a0ecd0552ee97",
+          "translated_heading": "Implementierungsstatus",
+          "translated_sha256": "0943578eca6108882e88f70e9be13b82c81109f05c0cfadc747ee478adad1acf"
+        }
+      ],
+      "source_path": "projects/linux.md",
+      "source_sha256": "02803cf87db79bbb6f665dcd5e1f87f912a994fa7906997c04ab7bdbdc77a933",
+      "translated_sha256": "12aa58a33b83d1d3f458a206a3c21730eae83399d0ee9ba595456c3b211f0ec1"
+    }
+  },
+  "glossary_sha256": "49d88d6d5cc4d25bd538b6e7621497026343e7944687c1c6758b3f91848eadc4",
+  "locale": "de",
+  "provenance_sha256": "daed461f617c09b8bf86b67b0e4aa009898193f5e48a2c0921e532a51b883431",
+  "schema_version": "1.0",
+  "source_locale": "en"
+}

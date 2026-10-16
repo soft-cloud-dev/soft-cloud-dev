@@ -1,7 +1,7 @@
 {
   "chunks": [
     {
-      "chunk_hash": "d8b319df2372dd9e60a0f4655c98a7b6c4654ccc8f7180022ac3350767627f81",
+      "chunk_hash": "75909e915390af903461efabc3d57b3372235b2c38cee0893ec12048a99abc0b",
       "chunk_id": "chunk-001",
       "chunk_index": 1,
       "element_ids": [
@@ -30,7 +30,7 @@
       "text_sha256": "b1822eb53c9625daf49eaefabe8466651ae68218c3262c1d36cdab9183f776e2"
     },
     {
-      "chunk_hash": "bab06445a629bb27952e3657e50905bf1bd981c98f86194fc76e68273c8ab99d",
+      "chunk_hash": "09dc03447d62dd65f7c94baaa6fe76451c106a70ac7f6a69e503a7948f3951ff",
       "chunk_id": "chunk-002",
       "chunk_index": 2,
       "element_ids": [
@@ -75,7 +75,7 @@
       "text_sha256": "56a9d3b79e332989fb5f9721af4734042e0c736c068e295bf41c8fc80e5e50aa"
     },
     {
-      "chunk_hash": "c79672bd709805d2ad589abe72248709b7f8feea1bb53c154996e0d8b236918a",
+      "chunk_hash": "1d530ebfc60a0f01422323367b794757880d0e6356b89b48348073c5870687b8",
       "chunk_id": "chunk-003",
       "chunk_index": 3,
       "element_ids": [
@@ -112,7 +112,7 @@
       "text_sha256": "0d6d05a27b4933fc8514672153c93cbc44a3093afff08fafcabe3a0aed15204e"
     },
     {
-      "chunk_hash": "65f2f0deead23ed9f39849f5da4bd8d76f6bb0a511f7abf5299b864d26fea751",
+      "chunk_hash": "8e6f5bc07e198b1e74b1ab3d948485878c1b2b1490513b16adee631df0939260",
       "chunk_id": "chunk-004",
       "chunk_index": 4,
       "element_ids": [
@@ -142,7 +142,7 @@
     }
   ],
   "code_summary_hashes": {},
-  "config_hash": "07467a65a13dc77cd8d09906ae9ec3776534725622952b7b8aee3f1a0250b6e4",
+  "config_hash": "d5baac4fad1f9b181890c898934a905b75aa725dee29a66f520b062347b9bd18",
   "element_ids": [
     "el-0001-heading",
     "el-0002-paragraph",
@@ -250,8 +250,11 @@
       "text": "To explore the low-level technical design, repository scaffold, and toolchain implementations, proceed to the Architecture & Memorandum Reference."
     }
   ],
+  "locale": "en",
+  "logical_source_path": "introduction.md",
   "narration_config": {
     "audio_format": "mp3",
+    "locale": "en",
     "max_chunk_chars": 1800,
     "mp3_bitrate": "64k",
     "sample_rate": 24000,
@@ -263,9 +266,9 @@
     "voice_name": "Kore"
   },
   "page_id": "introduction",
-  "page_source_hash": "ed20d41ec4253d5afa1443cbcee799db301017586a76c10173eca6bae23c0cfd",
+  "page_source_hash": "6f964ba7fee30c0aad097d9f735a99a4029ccf13a96e74fd1552bf1804c7b28e",
   "schema_version": "1.0.0",
   "source_file_sha256": "d27451030aa96a3853c1cdbcf99697e64c7ecd6909c0dafdce35e7ae04320682",
   "source_path": "introduction.md",
-  "transcript_sha256": "bc4e5088523d5b1a62216cbefb14c51caeaa4777d3f06e8723c7f0bc6d0cf507"
+  "transcript_sha256": "7f8ff37f4d141bee198670bfd1d0dc48a1166209d176634381efa90af8c2fc04"
 }

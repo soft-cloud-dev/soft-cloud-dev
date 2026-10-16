@@ -128,14 +128,62 @@ for path in files:
 require(not Path("_config.yml").exists() and not Path("_toc.yml").exists(),
         "Remove legacy configuration from this profile")
 local_file("tools/generate_audio.py")
+local_file("tools/build_locales.py")
+local_file("tools/translate_sources.py")
+local_file("tools/verify_locales.py")
 local_file("widgets/voice-player.mjs")
-audio_dir = root / "audio"
-if audio_dir.is_dir():
-    for manifest_path in sorted(audio_dir.glob("*/manifest.json")):
-        manifest = json.loads(manifest_path.read_text())
-        require(manifest.get("status") == "complete", f"Incomplete audio manifest: {manifest_path}")
-        local_file(manifest.get("source_path", ""))
-        local_file(str((manifest_path.parent / manifest.get("transcript_file", "")).relative_to(root)))
-        for chunk in manifest.get("chunks", []):
-            local_file(str((manifest_path.parent / chunk.get("audio_file", "")).relative_to(root)))
-print(f"Preflight passed for {len(files)} TOC files")
+local_file("widgets/language-switcher.mjs")
+local_file("i18n/locales.yml")
+local_file("i18n/glossary.yml")
+
+locales_cfg = yaml.safe_load(Path("i18n/locales.yml").read_text())
+require(isinstance(locales_cfg, dict) and bool(locales_cfg.get("schema_version") or locales_cfg.get("version") == 1),
+        "Expected i18n/locales.yml schema_version")
+default_locale = locales_cfg.get("default_locale", "en")
+locales_map = locales_cfg.get("locales", {})
+require(isinstance(locales_map, dict) and default_locale in locales_map,
+        "Invalid locales mapping in i18n/locales.yml")
+
+for loc_code, loc_info in locales_map.items():
+    if not isinstance(loc_info, dict) or not loc_info.get("enabled", True):
+        continue
+    if loc_code != default_locale:
+        src_dir = loc_info.get("source_dir", f"i18n/{loc_code}")
+        prov_file = local_file(f"{src_dir}/provenance.json")
+        prov_data = json.loads(prov_file.read_text())
+        require(prov_data.get("locale") == loc_code, f"Provenance locale mismatch: {prov_file}")
+        for en_file in files:
+            rel_doc = en_file.relative_to(root).as_posix()
+            loc_path = local_file(f"{src_dir}/{rel_doc}")
+            if loc_path.suffix == ".ipynb":
+                notebook = json.loads(loc_path.read_text())
+                check_controls(notebook.get("metadata", {}), loc_path)
+                for cell in notebook.get("cells", []):
+                    check_controls(cell.get("metadata", {}), loc_path)
+                check_kernel(notebook.get("metadata", {}), loc_path)
+            elif loc_path.suffix == ".md":
+                text = loc_path.read_text()
+                front = re.match(r"\A---\r?\n(.*?)\r?\n---(?:\r?\n|\Z)", text, re.S)
+                metadata = yaml.safe_load(front.group(1)) or {} if front else {}
+                require(isinstance(metadata, dict), f"Invalid frontmatter: {loc_path}")
+                check_controls(metadata, loc_path)
+                if "{code-cell}" in text or "{eval}" in text:
+                    check_kernel(metadata, loc_path)
+                    require(not any(tag in text for tag in banned),
+                            f"Review executable Markdown execution controls: {loc_path}")
+
+    loc_audio_dir = root / str(loc_info.get("audio_dir", "audio" if loc_code == default_locale else f"audio/{loc_code}"))
+    if loc_audio_dir.is_dir():
+        for manifest_path in sorted(loc_audio_dir.glob("*/manifest.json")):
+            if manifest_path.parent.name in locales_map and loc_code == default_locale:
+                continue
+            manifest = json.loads(manifest_path.read_text())
+            require(manifest.get("status") == "complete", f"Incomplete audio manifest: {manifest_path}")
+            require(manifest.get("locale") == loc_code, f"Audio manifest locale mismatch in {manifest_path}")
+            local_file(manifest.get("source_path", ""))
+            local_file(str((manifest_path.parent / manifest.get("transcript_file", "")).relative_to(root)))
+            for chunk in manifest.get("chunks", []):
+                require(chunk.get("locale") == loc_code, f"Audio chunk locale mismatch in {manifest_path}")
+                local_file(str((manifest_path.parent / chunk.get("audio_file", "")).relative_to(root)))
+
+print(f"Preflight passed for {len(files)} TOC files across {len(locales_map)} locales")

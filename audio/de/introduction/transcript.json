@@ -1,0 +1,274 @@
+{
+  "chunks": [
+    {
+      "chunk_hash": "0414c6eddf03d46a0e298adc0470aeb9eb3701b3df7aef8bcabf2b0154913433",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph"
+      ],
+      "section_anchor": "einfuhrung",
+      "section_title": "Einführung",
+      "segments": [
+        {
+          "element_id": "el-0001-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "e9088a25a1ecc6596e42bd2b55d31331572f07c4df890ad96333dc8bb2745673",
+          "spoken_text": "Einführung"
+        },
+        {
+          "element_id": "el-0002-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "b3d804d3b518a55757ce8f27239c5ebcb72a628e7617a960d058ea32e3d1e1b6",
+          "spoken_text": "Software Cloud bietet ein offenes, reproduzierbares Framework für computergestützte Forschung, Architekturdokumentation und Cloud-Software-Engineering."
+        }
+      ],
+      "text": "Einführung.\n\nSoftware Cloud bietet ein offenes, reproduzierbares Framework für computergestützte Forschung, Architekturdokumentation und Cloud-Software-Engineering.",
+      "text_sha256": "7eb39754feed27948750ccc5bcaa237dd4fc8d89cf3be579c08a01bdf76b3b29"
+    },
+    {
+      "chunk_hash": "3370fd397fdfd67758f037086c1038236b2f16408d8da3d33e08c545b78b4ac0",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "element_ids": [
+        "el-0003-heading",
+        "el-0004-paragraph",
+        "el-0005-list",
+        "el-0006-paragraph"
+      ],
+      "section_anchor": "die-herausforderung-der-rechnerischen-reproduzierbarkeit",
+      "section_title": "Die Herausforderung der rechnerischen Reproduzierbarkeit",
+      "segments": [
+        {
+          "element_id": "el-0003-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "01e49980f4e8254e39a764ecfbc7537a4607b1747b7b193c2bbe9c71d80e752b",
+          "spoken_text": "Die Herausforderung der rechnerischen Reproduzierbarkeit"
+        },
+        {
+          "element_id": "el-0004-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "26794e20a07e1b70c9918d8a38f2ed9d2848811a99ee723249d760479e33fa6a",
+          "spoken_text": "Wissenschaftliche Forschung und hochzuverlässige Softwaresysteme hängen entscheidend von Reproduzierbarkeit ab. Moderne Entwicklungsabläufe leiden jedoch häufig unter subtilem Umgebungs-Nichtdeterminismus:"
+        },
+        {
+          "element_id": "el-0005-list",
+          "is_ai_summary": false,
+          "kind": "list",
+          "source_hash": "8b540a3f004ebd4edb9d1023b208caf1ccdf6d20ca81a8ed8412120ba5768395",
+          "spoken_text": "Nicht fixierte transitive Abhängigkeiten, die sich im Upstream stillschweigend ändern. Abweichende Plattform-Binärdateien zwischen macOS, Linux und Windows. Implizite Lecks von Umgebungsvariablen, die Ausführungspfade beeinflussen. Unüberwachte Laufzeit-Kernel-Versionen, die zu abweichenden Ausführungsergebnissen führen."
+        },
+        {
+          "element_id": "el-0006-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "aa3139e023854e5b0e59bea1dc665401ed00cea64ccb282ececdebc0a2a21a9c",
+          "spoken_text": "Um diese Fehlermodi zu beheben, implementiert die Plattform Software Cloud ein streng kontrolliertes Publikationsprofil."
+        }
+      ],
+      "text": "Die Herausforderung der rechnerischen Reproduzierbarkeit.\n\nWissenschaftliche Forschung und hochzuverlässige Softwaresysteme hängen entscheidend von Reproduzierbarkeit ab. Moderne Entwicklungsabläufe leiden jedoch häufig unter subtilem Umgebungs-Nichtdeterminismus:\n\nNicht fixierte transitive Abhängigkeiten, die sich im Upstream stillschweigend ändern. Abweichende Plattform-Binärdateien zwischen macOS, Linux und Windows. Implizite Lecks von Umgebungsvariablen, die Ausführungspfade beeinflussen. Unüberwachte Laufzeit-Kernel-Versionen, die zu abweichenden Ausführungsergebnissen führen.\n\nUm diese Fehlermodi zu beheben, implementiert die Plattform Software Cloud ein streng kontrolliertes Publikationsprofil.",
+      "text_sha256": "8ff702d8bc36d07a551267024abd29f897719c305e217d6366d8165979a7387b"
+    },
+    {
+      "chunk_hash": "dac09cea166758abde2bd190dd5b2406019106338c19355eff8b8d1dc5ddab81",
+      "chunk_id": "chunk-003",
+      "chunk_index": 3,
+      "element_ids": [
+        "el-0007-heading",
+        "el-0008-paragraph",
+        "el-0009-list"
+      ],
+      "section_anchor": "operativer-umfang",
+      "section_title": "Operativer Umfang",
+      "segments": [
+        {
+          "element_id": "el-0007-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "415ca847ae509cd9cb9853e61a2454ef412762f44300e1edd6a1c67d1d3737a7",
+          "spoken_text": "Operativer Umfang"
+        },
+        {
+          "element_id": "el-0008-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "34a00a375c31fb8f7f2f700e3a5edb854b727afc16b995e32a2e376695c6326a",
+          "spoken_text": "Software Cloud begegnet diesen Herausforderungen durch vier miteinander verbundene Mechanismen:"
+        },
+        {
+          "element_id": "el-0009-list",
+          "is_ai_summary": false,
+          "kind": "list",
+          "source_hash": "2634c5748299637ceec9ab92e9f646f5509b0a597dc48697a256dc98617278c1",
+          "spoken_text": "Spezifikation durch Memorandum: Kernarchitektur des Repositorys, Lizenzierung, Tooling und Pipeline-Konfigurationen sind als formale Spezifikationen kodifiziert. Deterministische Wheelhouse-Auflösung: Direkte Anforderungen sind in kryptografischen Wheel-Prüfsummen fixiert, die ausschließlich gegen Standard-Wheels für Linux/x86-64 aufgelöst werden. Automatisierte Laufzeitverifikation: Jeder Pull Request und Release-Build führt ein Vorab-Audit durch, das die Aktivierung der virtuellen Umgebung, die Herkunft des Interpreters, das Vorhandensein von Jupyter Server und die Vollständigkeit des Inhaltsverzeichnisses prüft. Live-Artefakt-Publikation: Akzeptierte Builds werden direkt als statische Websites mit hochperformanter HTTPS-Auslieferung unter my.softcloud.dev veröffentlicht."
+        }
+      ],
+      "text": "Operativer Umfang.\n\nSoftware Cloud begegnet diesen Herausforderungen durch vier miteinander verbundene Mechanismen:\n\nSpezifikation durch Memorandum: Kernarchitektur des Repositorys, Lizenzierung, Tooling und Pipeline-Konfigurationen sind als formale Spezifikationen kodifiziert. Deterministische Wheelhouse-Auflösung: Direkte Anforderungen sind in kryptografischen Wheel-Prüfsummen fixiert, die ausschließlich gegen Standard-Wheels für Linux/x86-64 aufgelöst werden. Automatisierte Laufzeitverifikation: Jeder Pull Request und Release-Build führt ein Vorab-Audit durch, das die Aktivierung der virtuellen Umgebung, die Herkunft des Interpreters, das Vorhandensein von Jupyter Server und die Vollständigkeit des Inhaltsverzeichnisses prüft. Live-Artefakt-Publikation: Akzeptierte Builds werden direkt als statische Websites mit hochperformanter HTTPS-Auslieferung unter my.softcloud.dev veröffentlicht.",
+      "text_sha256": "e6b4dc5a1935d0a6021b7bea7785bbc031342133e112f0a46bc2c14a366278ab"
+    },
+    {
+      "chunk_hash": "59f9c4114b4298ac101851c38a97b687e958cf095e9de481f1de1784764aa785",
+      "chunk_id": "chunk-004",
+      "chunk_index": 4,
+      "element_ids": [
+        "el-0010-heading",
+        "el-0011-paragraph"
+      ],
+      "section_anchor": "nachste-schritte",
+      "section_title": "Nächste Schritte",
+      "segments": [
+        {
+          "element_id": "el-0010-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "51906d652703eb35e816b55cf34c0ae1b1005b94c06d618779ae7178445cd630",
+          "spoken_text": "Nächste Schritte"
+        },
+        {
+          "element_id": "el-0011-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "56a589b9633b43d3bdcb33bc220591b6b8893966f401d232da485fd74adf9e31",
+          "spoken_text": "Um das technische Low-Level-Design, das Repository-Gerüst und die Implementierungen der Toolchain zu erkunden, fahren Sie mit der Architektur & Memorandumsreferenz fort."
+        }
+      ],
+      "text": "Nächste Schritte.\n\nUm das technische Low-Level-Design, das Repository-Gerüst und die Implementierungen der Toolchain zu erkunden, fahren Sie mit der Architektur & Memorandumsreferenz fort.",
+      "text_sha256": "cd916e0fa58b3f2b8144e883d3866f9ebbc9f4e452049c51dc5d4dc47a426dc0"
+    }
+  ],
+  "code_summary_hashes": {},
+  "config_hash": "8e764f1bbc93d18905309a7c8547a196154843383e971c32ef0e0c41b1241f8b",
+  "element_ids": [
+    "el-0001-heading",
+    "el-0002-paragraph",
+    "el-0003-heading",
+    "el-0004-paragraph",
+    "el-0005-list",
+    "el-0006-paragraph",
+    "el-0007-heading",
+    "el-0008-paragraph",
+    "el-0009-list",
+    "el-0010-heading",
+    "el-0011-paragraph"
+  ],
+  "elements": [
+    {
+      "element_id": "el-0001-heading",
+      "heading_level": 1,
+      "kind": "heading",
+      "section_anchor": "einfuhrung",
+      "section_title": "Einführung",
+      "source_hash": "e9088a25a1ecc6596e42bd2b55d31331572f07c4df890ad96333dc8bb2745673",
+      "text": "Einführung"
+    },
+    {
+      "element_id": "el-0002-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "einfuhrung",
+      "section_title": "Einführung",
+      "source_hash": "b3d804d3b518a55757ce8f27239c5ebcb72a628e7617a960d058ea32e3d1e1b6",
+      "text": "Software Cloud bietet ein offenes, reproduzierbares Framework für computergestützte Forschung, Architekturdokumentation und Cloud-Software-Engineering."
+    },
+    {
+      "element_id": "el-0003-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "die-herausforderung-der-rechnerischen-reproduzierbarkeit",
+      "section_title": "Die Herausforderung der rechnerischen Reproduzierbarkeit",
+      "source_hash": "01e49980f4e8254e39a764ecfbc7537a4607b1747b7b193c2bbe9c71d80e752b",
+      "text": "Die Herausforderung der rechnerischen Reproduzierbarkeit"
+    },
+    {
+      "element_id": "el-0004-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "die-herausforderung-der-rechnerischen-reproduzierbarkeit",
+      "section_title": "Die Herausforderung der rechnerischen Reproduzierbarkeit",
+      "source_hash": "26794e20a07e1b70c9918d8a38f2ed9d2848811a99ee723249d760479e33fa6a",
+      "text": "Wissenschaftliche Forschung und hochzuverlässige Softwaresysteme hängen entscheidend von Reproduzierbarkeit ab. Moderne Entwicklungsabläufe leiden jedoch häufig unter subtilem Umgebungs-Nichtdeterminismus:"
+    },
+    {
+      "element_id": "el-0005-list",
+      "kind": "list",
+      "section_anchor": "die-herausforderung-der-rechnerischen-reproduzierbarkeit",
+      "section_title": "Die Herausforderung der rechnerischen Reproduzierbarkeit",
+      "source_hash": "8b540a3f004ebd4edb9d1023b208caf1ccdf6d20ca81a8ed8412120ba5768395",
+      "text": "Nicht fixierte transitive Abhängigkeiten, die sich im Upstream stillschweigend ändern. Abweichende Plattform-Binärdateien zwischen macOS, Linux und Windows. Implizite Lecks von Umgebungsvariablen, die Ausführungspfade beeinflussen. Unüberwachte Laufzeit-Kernel-Versionen, die zu abweichenden Ausführungsergebnissen führen."
+    },
+    {
+      "element_id": "el-0006-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "die-herausforderung-der-rechnerischen-reproduzierbarkeit",
+      "section_title": "Die Herausforderung der rechnerischen Reproduzierbarkeit",
+      "source_hash": "aa3139e023854e5b0e59bea1dc665401ed00cea64ccb282ececdebc0a2a21a9c",
+      "text": "Um diese Fehlermodi zu beheben, implementiert die Plattform Software Cloud ein streng kontrolliertes Publikationsprofil."
+    },
+    {
+      "element_id": "el-0007-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "operativer-umfang",
+      "section_title": "Operativer Umfang",
+      "source_hash": "415ca847ae509cd9cb9853e61a2454ef412762f44300e1edd6a1c67d1d3737a7",
+      "text": "Operativer Umfang"
+    },
+    {
+      "element_id": "el-0008-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "operativer-umfang",
+      "section_title": "Operativer Umfang",
+      "source_hash": "34a00a375c31fb8f7f2f700e3a5edb854b727afc16b995e32a2e376695c6326a",
+      "text": "Software Cloud begegnet diesen Herausforderungen durch vier miteinander verbundene Mechanismen:"
+    },
+    {
+      "element_id": "el-0009-list",
+      "kind": "list",
+      "section_anchor": "operativer-umfang",
+      "section_title": "Operativer Umfang",
+      "source_hash": "2634c5748299637ceec9ab92e9f646f5509b0a597dc48697a256dc98617278c1",
+      "text": "Spezifikation durch Memorandum: Kernarchitektur des Repositorys, Lizenzierung, Tooling und Pipeline-Konfigurationen sind als formale Spezifikationen kodifiziert. Deterministische Wheelhouse-Auflösung: Direkte Anforderungen sind in kryptografischen Wheel-Prüfsummen fixiert, die ausschließlich gegen Standard-Wheels für Linux/x86-64 aufgelöst werden. Automatisierte Laufzeitverifikation: Jeder Pull Request und Release-Build führt ein Vorab-Audit durch, das die Aktivierung der virtuellen Umgebung, die Herkunft des Interpreters, das Vorhandensein von Jupyter Server und die Vollständigkeit des Inhaltsverzeichnisses prüft. Live-Artefakt-Publikation: Akzeptierte Builds werden direkt als statische Websites mit hochperformanter HTTPS-Auslieferung unter my.softcloud.dev veröffentlicht."
+    },
+    {
+      "element_id": "el-0010-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "nachste-schritte",
+      "section_title": "Nächste Schritte",
+      "source_hash": "51906d652703eb35e816b55cf34c0ae1b1005b94c06d618779ae7178445cd630",
+      "text": "Nächste Schritte"
+    },
+    {
+      "element_id": "el-0011-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "nachste-schritte",
+      "section_title": "Nächste Schritte",
+      "source_hash": "56a589b9633b43d3bdcb33bc220591b6b8893966f401d232da485fd74adf9e31",
+      "text": "Um das technische Low-Level-Design, das Repository-Gerüst und die Implementierungen der Toolchain zu erkunden, fahren Sie mit der Architektur & Memorandumsreferenz fort."
+    }
+  ],
+  "locale": "de",
+  "logical_source_path": "introduction.md",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "de",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in German (Deutsch) matching document locale 'de'.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "introduction",
+  "page_source_hash": "80caf72332d687dc761a5ac6e77d5c8344b2b8a5eeef4585bc083662a4456cdc",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "a61e595b9e1cafcd612097f5260e030bde96abeac2e06e2e3027bd8ee3755eb9",
+  "source_path": "i18n/de/introduction.md",
+  "transcript_sha256": "93a823a0f60fa7d0a141879cf43b6c868d5ed279e0b6760e1aa446cbfa422323"
+}

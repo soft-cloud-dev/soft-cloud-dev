@@ -1,0 +1,118 @@
+{
+  "chunks": [
+    {
+      "audio_file": "chunk-001-88e4c348addc.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "6bb00190c850990ac8ab1f7da02b3d261a2bfa34ecce88504b293271ea8ad190",
+      "chunk_hash": "88e4c348addce1fec046f9ee536e5715f8a29cd1d1a659cff8e84fda3abb2981",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "duration_seconds": 10.08,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph"
+      ],
+      "locale": "es",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "introduccion",
+      "section_title": "Introducción",
+      "size_bytes": 80640,
+      "text_sha256": "d2e5bd8be9c838a00a175c62e515fbc0eadf84192a4a00f9e0c70f5a231721d6",
+      "tts_config_hash": "974a0b12687b2329d30e99a3ec44775178590907d0686ee645fe6481b3e2374d",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-002-dfddb2f48566.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "48d2f393d4beb39dece7c53d91ea4c17cfe17a4e03b3fb807e3ce582cc5279db",
+      "chunk_hash": "dfddb2f48566f569e6fa6662be4ce8bda457353a85f82ac7cd6b97c8ca85ffe3",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "duration_seconds": 40.368,
+      "element_ids": [
+        "el-0003-heading",
+        "el-0004-paragraph",
+        "el-0005-list",
+        "el-0006-paragraph"
+      ],
+      "locale": "es",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "el-desafio-de-la-reproducibilidad-computacional",
+      "section_title": "El desafío de la reproducibilidad computacional",
+      "size_bytes": 322944,
+      "text_sha256": "2552b355e796b32bf7296dd96f42d852f2c085013b5cb8c8b6ffe094587227f0",
+      "tts_config_hash": "974a0b12687b2329d30e99a3ec44775178590907d0686ee645fe6481b3e2374d",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-003-241ae1c81dc9.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "264c8664f414b01b5cc877db25c8698a2d47825373e2f407d869503b95ae32f3",
+      "chunk_hash": "241ae1c81dc9fe23df5f4997035b658a5554578e663af549c617542a2973c73d",
+      "chunk_id": "chunk-003",
+      "chunk_index": 3,
+      "duration_seconds": 56.856,
+      "element_ids": [
+        "el-0007-heading",
+        "el-0008-paragraph",
+        "el-0009-list"
+      ],
+      "locale": "es",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "alcance-operativo",
+      "section_title": "Alcance operativo",
+      "size_bytes": 454848,
+      "text_sha256": "74ddfa739f5c8c7d6d2bc51064f6c746a68efa1bd8ed0778cb6464a7c3b17284",
+      "tts_config_hash": "974a0b12687b2329d30e99a3ec44775178590907d0686ee645fe6481b3e2374d",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-004-4b07a0e9dd55.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "2d25cbf7a46e67a5efb2c4de57e4251875675485d73abfb4ce26da3cd005cd5a",
+      "chunk_hash": "4b07a0e9dd555ecee17657cc4ded85f24cf513b895e9fec28240822971c497b2",
+      "chunk_id": "chunk-004",
+      "chunk_index": 4,
+      "duration_seconds": 11.184,
+      "element_ids": [
+        "el-0010-heading",
+        "el-0011-paragraph"
+      ],
+      "locale": "es",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "proximos-pasos",
+      "section_title": "Próximos pasos",
+      "size_bytes": 89472,
+      "text_sha256": "771a5ee43377588d1fbbb0dc19ac49addbf4f58ffef58546808b8a39923045dc",
+      "tts_config_hash": "974a0b12687b2329d30e99a3ec44775178590907d0686ee645fe6481b3e2374d",
+      "voice": "Kore"
+    }
+  ],
+  "config_hash": "8d36f75f176de8dde9204fb0212c8496cf77d474cd391c1e0a26ac9736eaaead",
+  "locale": "es",
+  "logical_source_path": "introduction.md",
+  "manifest_sha256": "74c7f3415828f5b63c75db54907cad4f0e12c11bc826f7898916aeb4d91e34fd",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "es",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in Spanish (español) matching document locale 'es'.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "introduction",
+  "page_source_hash": "48584ab2947454db07e8f6cb298a61cf905a3204f52f2baee19c3afdf0d3b88a",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "58399381980620132a19914aecde810845ac36de701a8bbee321fcf1ffb28de3",
+  "source_path": "i18n/es/introduction.md",
+  "status": "complete",
+  "total_chunks": 4,
+  "total_duration_seconds": 118.488,
+  "transcript_file": "transcript.json",
+  "transcript_sha256": "58d19fad1d47ddb0644b98037f06aef687045910ce5e44d71c38dd7a8b7462c5"
+}

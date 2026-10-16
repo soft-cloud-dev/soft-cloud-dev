@@ -1,0 +1,118 @@
+{
+  "chunks": [
+    {
+      "audio_file": "chunk-001-fe13523040e9.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "2dd24d0eb9861afa17efb7a4137304c0782da39a4e6472d5eb6c70a6e4402f07",
+      "chunk_hash": "fe13523040e9e26c550811fd76e18cae32275950c36971c8e95713ac536707f4",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "duration_seconds": 9.408,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph"
+      ],
+      "locale": "fr",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "introduction",
+      "section_title": "Introduction",
+      "size_bytes": 75264,
+      "text_sha256": "9f7ca38537887f29c3f3c1e98f1830a24c6f51b62bed84edf299420a3c90191b",
+      "tts_config_hash": "62e09df9138e7f7bc4f6a34d0cb23469e1ce39a4326c14c0038ac6cc06879d39",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-002-a2c033f45b69.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "10b20c72937d89c04e3c10ccf95a853eb7d9925876843295a04ba87c6a76d6ed",
+      "chunk_hash": "a2c033f45b6998a456aa50d17d64927735b4be3c1df210fb61f9a171c767dcef",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "duration_seconds": 39.552,
+      "element_ids": [
+        "el-0003-heading",
+        "el-0004-paragraph",
+        "el-0005-list",
+        "el-0006-paragraph"
+      ],
+      "locale": "fr",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "le-defi-de-la-reproductibilite-informatique",
+      "section_title": "Le défi de la reproductibilité informatique",
+      "size_bytes": 316416,
+      "text_sha256": "3b69fe062031ccc181bfc54087a4c5f322a5c397f7cf79f0decdd5cf05ed1490",
+      "tts_config_hash": "62e09df9138e7f7bc4f6a34d0cb23469e1ce39a4326c14c0038ac6cc06879d39",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-003-2f6eae7b040e.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "b33f6ee4cffecc3a80de3a01febf890c7830569447d7e1943469bd1c1cae926b",
+      "chunk_hash": "2f6eae7b040e756ddbcca8e80de29daff094060a43a71952d65356619cd63c56",
+      "chunk_id": "chunk-003",
+      "chunk_index": 3,
+      "duration_seconds": 55.992,
+      "element_ids": [
+        "el-0007-heading",
+        "el-0008-paragraph",
+        "el-0009-list"
+      ],
+      "locale": "fr",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "perimetre-operationnel",
+      "section_title": "Périmètre opérationnel",
+      "size_bytes": 447936,
+      "text_sha256": "ff213561070c04c8f7e8dd18e41fada8346c528be06e36fb14ce8994edeeaaba",
+      "tts_config_hash": "62e09df9138e7f7bc4f6a34d0cb23469e1ce39a4326c14c0038ac6cc06879d39",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-004-d1e2289c3feb.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "4d1eee902f0354246557a56542640a4931074fd391378787ae7f0ac6143dd9b2",
+      "chunk_hash": "d1e2289c3feb93090745bd855990868a6bc6da880e6414c418900eb656ab157b",
+      "chunk_id": "chunk-004",
+      "chunk_index": 4,
+      "duration_seconds": 10.92,
+      "element_ids": [
+        "el-0010-heading",
+        "el-0011-paragraph"
+      ],
+      "locale": "fr",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "prochaines-etapes",
+      "section_title": "Prochaines étapes",
+      "size_bytes": 87360,
+      "text_sha256": "f1362cb8fe01dbe7b974ec388eefb45369eb37c76f67e03c0acd4b72a533dc22",
+      "tts_config_hash": "62e09df9138e7f7bc4f6a34d0cb23469e1ce39a4326c14c0038ac6cc06879d39",
+      "voice": "Kore"
+    }
+  ],
+  "config_hash": "699663dab374726886e538e3564c70a1712d5e0736b0e01565f579a19f9afcfa",
+  "locale": "fr",
+  "logical_source_path": "introduction.md",
+  "manifest_sha256": "fa1871217dae7fb668e86b4c4c9511fe3f0bde2a3ed4d69e37f2f4f18aa49a1f",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "fr",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in French (français) matching document locale 'fr'.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "introduction",
+  "page_source_hash": "14766a92f74122d291d2f4635de6cd3139d8e4f334d8efef512c96fffdc06b08",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "a3c7deeba19f5bcaede161ae021d877651b464ee5f542b344501b22e25792841",
+  "source_path": "i18n/fr/introduction.md",
+  "status": "complete",
+  "total_chunks": 4,
+  "total_duration_seconds": 115.872,
+  "transcript_file": "transcript.json",
+  "transcript_sha256": "3e7e809c60c77530558709d5056f03fa9ba69f14a3604ce6c3752a74c48c0b29"
+}

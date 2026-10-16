@@ -8,24 +8,169 @@
 
 const SPEEDS = [0.75, 1.0, 1.25, 1.5, 1.75, 2.0];
 
-function formatDurationSeconds(seconds) {
-  if (!Number.isFinite(seconds) || seconds <= 0) return "0 min 0 sec";
+export const PLAYER_STRINGS = {
+  en: {
+    voice_overview: "Voice overview",
+    audio_narration: "Audio Narration",
+    loading_narration: "Loading narration...",
+    listen: "Listen",
+    collapse: "Collapse",
+    section_of: "SECTION {current} OF {total}",
+    section_fallback: "Section {current}",
+    previous_section: "Previous section",
+    next_section: "Next section",
+    play: "Play",
+    pause: "Pause",
+    playback_rate: "Playback rate",
+    scrubber_label: "Audio playback scrubber",
+    topics_unit: "topics",
+    min_unit: "min",
+    sec_unit: "sec",
+    narration_unavailable: "Narration assets unavailable",
+    playback_failed: "Playback failed",
+  },
+  pl: {
+    voice_overview: "Przegląd głosowy",
+    audio_narration: "Narracja audio",
+    loading_narration: "Ładowanie narracji...",
+    listen: "Słuchaj",
+    collapse: "Zwiń",
+    section_of: "SEKCJA {current} Z {total}",
+    section_fallback: "Sekcja {current}",
+    previous_section: "Poprzednia sekcja",
+    next_section: "Następna sekcja",
+    play: "Odtwórz",
+    pause: "Wstrzymaj",
+    playback_rate: "Szybkość odtwarzania",
+    scrubber_label: "Suwak postępu odtwarzania audio",
+    topics_unit: "tematy",
+    min_unit: "min",
+    sec_unit: "sek",
+    narration_unavailable: "Zasoby narracji są niedostępne",
+    playback_failed: "Błąd odtwarzania",
+  },
+  de: {
+    voice_overview: "Sprachübersicht",
+    audio_narration: "Audio-Narration",
+    loading_narration: "Narration wird geladen...",
+    listen: "Anhören",
+    collapse: "Einklappen",
+    section_of: "ABSCHNITT {current} VON {total}",
+    section_fallback: "Abschnitt {current}",
+    previous_section: "Vorheriger Abschnitt",
+    next_section: "Nächster Abschnitt",
+    play: "Abspielen",
+    pause: "Pause",
+    playback_rate: "Wiedergabegeschwindigkeit",
+    scrubber_label: "Audio-Wiedergaberegler",
+    topics_unit: "Themen",
+    min_unit: "Min",
+    sec_unit: "Sek",
+    narration_unavailable: "Narrations-Assets nicht verfügbar",
+    playback_failed: "Wiedergabe fehlgeschlagen",
+  },
+  es: {
+    voice_overview: "Resumen de voz",
+    audio_narration: "Narración de audio",
+    loading_narration: "Cargando narración...",
+    listen: "Escuchar",
+    collapse: "Contraer",
+    section_of: "SECCIÓN {current} DE {total}",
+    section_fallback: "Sección {current}",
+    previous_section: "Sección anterior",
+    next_section: "Siguiente sección",
+    play: "Reproducir",
+    pause: "Pausar",
+    playback_rate: "Velocidad de reproducción",
+    scrubber_label: "Control deslizante de reproducción de audio",
+    topics_unit: "temas",
+    min_unit: "min",
+    sec_unit: "s",
+    narration_unavailable: "Recursos de narración no disponibles",
+    playback_failed: "Error de reproducción",
+  },
+  fr: {
+    voice_overview: "Aperçu vocal",
+    audio_narration: "Narration audio",
+    loading_narration: "Chargement de la narration...",
+    listen: "Écouter",
+    collapse: "Réduire",
+    section_of: "SECTION {current} SUR {total}",
+    section_fallback: "Section {current}",
+    previous_section: "Section précédente",
+    next_section: "Section suivante",
+    play: "Lire",
+    pause: "Pause",
+    playback_rate: "Vitesse de lecture",
+    scrubber_label: "Curseur de progression audio",
+    topics_unit: "sujets",
+    min_unit: "min",
+    sec_unit: "s",
+    narration_unavailable: "Ressources de narration indisponibles",
+    playback_failed: "Échec de la lecture",
+  },
+};
+
+export function detectDocumentLocale(explicitLocale) {
+  if (explicitLocale && typeof explicitLocale === "string" && explicitLocale.trim()) {
+    return explicitLocale.trim().toLowerCase().split("-")[0];
+  }
+  if (typeof document !== "undefined") {
+    const metaLocale = document.querySelector('meta[name="sc-locale"]')?.getAttribute("content");
+    if (metaLocale && metaLocale.trim()) {
+      return metaLocale.trim().toLowerCase().split("-")[0];
+    }
+  }
+  if (typeof window !== "undefined" && window.location?.pathname) {
+    const match = window.location.pathname.match(/^\/(?:[^/]+\/)?(pl|de|es|fr)(?:\/|$)/i);
+    if (match) {
+      return match[1].toLowerCase();
+    }
+  }
+  if (typeof document !== "undefined" && document.documentElement?.lang) {
+    const htmlLang = document.documentElement.lang.trim().toLowerCase().split("-")[0];
+    if (htmlLang && PLAYER_STRINGS[htmlLang]) {
+      return htmlLang;
+    }
+  }
+  return "en";
+}
+
+function formatDurationSeconds(seconds, ui = PLAYER_STRINGS.en) {
+  const minUnit = ui.min_unit || "min";
+  const secUnit = ui.sec_unit || "sec";
+  if (!Number.isFinite(seconds) || seconds <= 0) return `0 ${minUnit} 0 ${secUnit}`;
   const total = Math.round(seconds);
   const mins = Math.floor(total / 60);
   const secs = total % 60;
-  if (mins === 0) return `${secs} sec`;
-  return `${mins} min ${secs} sec`;
+  if (mins === 0) return `${secs} ${secUnit}`;
+  return `${mins} ${minUnit} ${secs} ${secUnit}`;
 }
 
-function resolveAudioDirUrl(pageId, explicitBaseUrl) {
+export function resolveAudioDirUrls(pageId, locale = "en", explicitBaseUrl = "") {
+  const normLocale = (locale || "en").toLowerCase();
+  const encodedPage = encodeURIComponent(pageId);
+
   if (explicitBaseUrl) {
     const clean = explicitBaseUrl.replace(/\/+$/, "");
-    return `${clean}/audio/${encodeURIComponent(pageId)}`;
+    if (normLocale === "en" || clean.endsWith(`/${normLocale}`)) {
+      return [`${clean}/audio/${encodedPage}`];
+    }
+    return [
+      `${clean}/${normLocale}/audio/${encodedPage}`,
+      `${clean}/audio/${normLocale}/${encodedPage}`,
+    ];
   }
 
   if (typeof window !== "undefined" && typeof window.BASE_URL === "string" && window.BASE_URL) {
     const clean = window.BASE_URL.replace(/\/+$/, "");
-    return `${clean}/audio/${encodeURIComponent(pageId)}`;
+    if (normLocale === "en" || clean.endsWith(`/${normLocale}`)) {
+      return [`${clean}/audio/${encodedPage}`];
+    }
+    return [
+      `${clean}/${normLocale}/audio/${encodedPage}`,
+      `${clean}/audio/${normLocale}/${encodedPage}`,
+    ];
   }
 
   const pathname = (typeof window !== "undefined" && window.location?.pathname) || "/";
@@ -33,6 +178,7 @@ function resolveAudioDirUrl(pageId, explicitBaseUrl) {
   const knownSuffixes = [
     `/notebooks/${pageId.replace(/^notebooks-/, "")}`,
     "/notebooks/experiment",
+    "/projects/linux",
     `/${pageId}`,
     "/introduction",
     "/architecture",
@@ -45,7 +191,49 @@ function resolveAudioDirUrl(pageId, explicitBaseUrl) {
     }
   }
   siteBase = siteBase.replace(/\/+$/, "");
-  return `${siteBase}/audio/${encodeURIComponent(pageId)}`;
+
+  if (normLocale === "en") {
+    return [`${siteBase}/audio/${encodedPage}`];
+  }
+  if (siteBase.endsWith(`/${normLocale}`)) {
+    const rootBase = siteBase.slice(0, siteBase.length - (`/${normLocale}`).length);
+    return [
+      `${siteBase}/audio/${encodedPage}`,
+      `${rootBase}/audio/${normLocale}/${encodedPage}`,
+    ];
+  }
+  return [
+    `${siteBase}/${normLocale}/audio/${encodedPage}`,
+    `${siteBase}/audio/${normLocale}/${encodedPage}`,
+  ];
+}
+
+export function validateNarrationManifest(manifestData, expectedPageId, expectedLocale) {
+  if (!manifestData || typeof manifestData !== "object") {
+    throw new Error("Invalid manifest JSON");
+  }
+  if (manifestData.status !== "complete") {
+    throw new Error(`Incomplete manifest status: ${manifestData.status}`);
+  }
+  if (manifestData.page_id !== expectedPageId) {
+    throw new Error(`Page ID mismatch: expected '${expectedPageId}', got '${manifestData.page_id}'`);
+  }
+  const manifestLocale = (manifestData.locale || "").toLowerCase();
+  if (!manifestLocale || manifestLocale !== expectedLocale.toLowerCase()) {
+    throw new Error(`Locale mismatch: expected '${expectedLocale}', got '${manifestData.locale || "missing"}'`);
+  }
+  if (!manifestData.manifest_sha256 || typeof manifestData.manifest_sha256 !== "string") {
+    throw new Error("Missing manifest_sha256 integrity digest");
+  }
+  if (!Array.isArray(manifestData.chunks) || manifestData.chunks.length === 0) {
+    throw new Error("Manifest contains zero narration chunks");
+  }
+  for (const ch of manifestData.chunks) {
+    if (!ch.audio_file || !ch.audio_sha256 || (ch.locale && ch.locale !== expectedLocale)) {
+      throw new Error(`Invalid chunk entry in manifest: ${ch?.chunk_id || "unknown"}`);
+    }
+  }
+  return true;
 }
 
 function findHeadingElement(anchor) {
@@ -479,20 +667,28 @@ const PLAYER_STYLES = `
 
 function render({ model, el }) {
   const pageId = (model && typeof model.get === "function" && model.get("page")) || "introduction";
+  const explicitLocale = (model && typeof model.get === "function" && model.get("locale")) || "";
   const explicitBaseUrl =
     (model && typeof model.get === "function" && model.get("base_url")) || "";
+  const locale = detectDocumentLocale(explicitLocale);
+  const ui = {
+    ...PLAYER_STRINGS.en,
+    ...(PLAYER_STRINGS[locale] || {}),
+  };
   const titleOverride =
-    (model && typeof model.get === "function" && model.get("title")) || "Audio Narration";
+    (model && typeof model.get === "function" && model.get("title")) || ui.audio_narration;
 
-  const audioDirUrl = resolveAudioDirUrl(pageId, explicitBaseUrl);
+  const candidateAudioDirs = resolveAudioDirUrls(pageId, locale, explicitBaseUrl);
+  let activeAudioDirUrl = candidateAudioDirs[0];
 
   const styleEl = document.createElement("style");
   styleEl.textContent = PLAYER_STYLES;
 
   const container = document.createElement("section");
   container.className = "sc-player";
-  container.setAttribute("role", "region");
-  container.setAttribute("aria-label", `${titleOverride} Player`);
+  container.setAttribute("aria-label", titleOverride);
+  container.setAttribute("data-sc-locale", locale);
+  container.setAttribute("data-sc-page", pageId);
   container.tabIndex = 0;
 
   // Header / Collapsed Overview Row
@@ -510,6 +706,7 @@ function render({ model, el }) {
   headphonesSvg.setAttribute("stroke-width", "2");
   headphonesSvg.setAttribute("stroke-linecap", "round");
   headphonesSvg.setAttribute("stroke-linejoin", "round");
+  headphonesSvg.setAttribute("aria-hidden", "true");
   headphonesSvg.innerHTML = `
     <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
     <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
@@ -520,36 +717,38 @@ function render({ model, el }) {
 
   const overviewTitle = document.createElement("span");
   overviewTitle.className = "sc-overview-title";
-  overviewTitle.textContent = "Voice overview";
+  overviewTitle.textContent = ui.voice_overview;
 
   const overviewSubtitle = document.createElement("span");
   overviewSubtitle.className = "sc-overview-subtitle";
-  overviewSubtitle.textContent = "Loading narration...";
+  overviewSubtitle.textContent = ui.loading_narration;
 
   overviewText.append(overviewTitle, overviewSubtitle);
   overviewLeft.append(headphonesSvg, overviewText);
 
-  // Single Action Button: "Listen" when collapsed, "^ Collapse" when expanded
+  // Single Action Button: localized "Listen" when collapsed, "^ Collapse" when expanded
   const toggleBtn = document.createElement("button");
   toggleBtn.type = "button";
   toggleBtn.className = "sc-btn-listen";
+  toggleBtn.disabled = true;
 
   function renderToggleButton() {
+    toggleBtn.setAttribute("aria-expanded", String(isExpanded));
     if (isExpanded) {
       toggleBtn.className = "sc-btn-collapse";
       toggleBtn.innerHTML = `
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <polyline points="18 15 12 9 6 15"></polyline>
         </svg>
-        <span>Collapse</span>
+        <span>${ui.collapse}</span>
       `;
     } else {
       toggleBtn.className = "sc-btn-listen";
       toggleBtn.innerHTML = `
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <polygon points="6 4 20 12 6 20 6 4" fill="currentColor"></polygon>
         </svg>
-        <span>Listen</span>
+        <span>${ui.listen}</span>
       `;
     }
   }
@@ -567,24 +766,24 @@ function render({ model, el }) {
 
   const sectionIndicator = document.createElement("span");
   sectionIndicator.className = "sc-section-indicator";
-  sectionIndicator.textContent = "SECTION 1 OF 4";
+  sectionIndicator.textContent = ui.section_of.replace("{current}", "1").replace("{total}", "4");
 
   const timeDisplay = document.createElement("span");
   timeDisplay.className = "sc-time-display";
-  timeDisplay.textContent = "0s / 0s";
+  timeDisplay.textContent = `0${ui.sec_unit} / 0${ui.sec_unit}`;
 
   metaRow.append(sectionIndicator, timeDisplay);
 
   // Section Heading
   const sectionHeading = document.createElement("h3");
   sectionHeading.className = "sc-section-heading";
-  sectionHeading.textContent = "Introduction";
+  sectionHeading.textContent = "";
 
   // Modern Scrubber Bar
   const scrubberContainer = document.createElement("div");
   scrubberContainer.className = "sc-scrubber-container";
   scrubberContainer.setAttribute("role", "slider");
-  scrubberContainer.setAttribute("aria-label", "Audio playback scrubber");
+  scrubberContainer.setAttribute("aria-label", ui.scrubber_label);
   scrubberContainer.setAttribute("aria-valuemin", "0");
   scrubberContainer.setAttribute("aria-valuemax", "100");
   scrubberContainer.setAttribute("aria-valuenow", "0");
@@ -606,10 +805,11 @@ function render({ model, el }) {
   const prevBtn = document.createElement("button");
   prevBtn.type = "button";
   prevBtn.className = "sc-icon-btn";
-  prevBtn.title = "Previous section";
+  prevBtn.setAttribute("aria-label", ui.previous_section);
+  prevBtn.title = ui.previous_section;
   prevBtn.disabled = true;
   prevBtn.innerHTML = `
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <polygon points="19 20 9 12 19 4 19 20" fill="currentColor"></polygon>
       <line x1="5" y1="19" x2="5" y2="5"></line>
     </svg>
@@ -619,8 +819,9 @@ function render({ model, el }) {
   const playPill = document.createElement("button");
   playPill.type = "button";
   playPill.className = "sc-play-pill";
+  playPill.setAttribute("aria-label", ui.play);
   playPill.innerHTML = `
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <circle cx="12" cy="12" r="10"></circle>
       <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"></polygon>
     </svg>
@@ -630,10 +831,11 @@ function render({ model, el }) {
   const nextBtn = document.createElement("button");
   nextBtn.type = "button";
   nextBtn.className = "sc-icon-btn";
-  nextBtn.title = "Next section";
+  nextBtn.setAttribute("aria-label", ui.next_section);
+  nextBtn.title = ui.next_section;
   nextBtn.disabled = true;
   nextBtn.innerHTML = `
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <polygon points="5 4 15 12 5 20 5 4" fill="currentColor"></polygon>
       <line x1="19" y1="5" x2="19" y2="19"></line>
     </svg>
@@ -642,7 +844,7 @@ function render({ model, el }) {
   // Speed Dropdown
   const speedDropdown = document.createElement("select");
   speedDropdown.className = "sc-speed-dropdown";
-  speedDropdown.setAttribute("aria-label", "Playback rate");
+  speedDropdown.setAttribute("aria-label", ui.playback_rate);
   for (const s of SPEEDS) {
     const opt = document.createElement("option");
     opt.value = String(s);
@@ -655,6 +857,8 @@ function render({ model, el }) {
 
   const errorBanner = document.createElement("div");
   errorBanner.className = "sc-error";
+  errorBanner.setAttribute("role", "status");
+  errorBanner.setAttribute("aria-live", "polite");
   errorBanner.hidden = true;
 
   expandedBody.append(metaRow, sectionHeading, scrubberContainer, controlsRow);
@@ -678,6 +882,9 @@ function render({ model, el }) {
   }
 
   function setExpanded(expanded) {
+    if (expanded && !manifest) {
+      return;
+    }
     isExpanded = Boolean(expanded);
     if (isExpanded) {
       expandedBody.hidden = false;
@@ -701,7 +908,7 @@ function render({ model, el }) {
     scrubberFill.style.width = `${pct}%`;
     scrubberKnob.style.left = `${pct}%`;
     scrubberContainer.setAttribute("aria-valuenow", String(Math.round(current)));
-    timeDisplay.textContent = `${Math.floor(current)}s / ${Math.round(safeDuration)}s`;
+    timeDisplay.textContent = `${Math.floor(current)}${ui.sec_unit} / ${Math.round(safeDuration)}${ui.sec_unit}`;
   }
 
   function syncDocumentAnchor(anchor, updateHash = false) {
@@ -721,13 +928,16 @@ function render({ model, el }) {
     }
     currentIndex = index;
     const chunk = manifest.chunks[currentIndex];
-    const audioUrl = `${audioDirUrl}/${chunk.audio_file}`;
+    const audioUrl = `${activeAudioDirUrl}/${chunk.audio_file}`;
 
     audio.src = audioUrl;
     audio.playbackRate = Number(speedDropdown.value) || 1.0;
 
-    sectionIndicator.textContent = `SECTION ${currentIndex + 1} OF ${manifest.chunks.length}`;
-    sectionHeading.textContent = chunk.section_title || `Section ${currentIndex + 1}`;
+    sectionIndicator.textContent = ui.section_of
+      .replace("{current}", String(currentIndex + 1))
+      .replace("{total}", String(manifest.chunks.length));
+    sectionHeading.textContent =
+      chunk.section_title || ui.section_fallback.replace("{current}", String(currentIndex + 1));
 
     prevBtn.disabled = currentIndex <= 0;
     nextBtn.disabled = currentIndex >= manifest.chunks.length - 1;
@@ -747,15 +957,16 @@ function render({ model, el }) {
       audio.play().catch((err) => {
         isPlaying = false;
         updatePlayIcons();
-        showError(`Playback failed: ${err.message || err}`);
+        showError(`${ui.playback_failed}: ${err.message || err}`);
       });
     }
   }
 
   function updatePlayIcons() {
+    playPill.setAttribute("aria-label", isPlaying ? ui.pause : ui.play);
     if (isPlaying) {
       playPill.innerHTML = `
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="10"></circle>
           <line x1="10" y1="15" x2="10" y2="9"></line>
           <line x1="14" y1="15" x2="14" y2="9"></line>
@@ -763,7 +974,7 @@ function render({ model, el }) {
       `;
     } else {
       playPill.innerHTML = `
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="10"></circle>
           <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"></polygon>
         </svg>
@@ -773,10 +984,11 @@ function render({ model, el }) {
 
   // Toggle button: Listen -> expands & plays; ^ Collapse -> collapses & pauses
   toggleBtn.addEventListener("click", () => {
+    if (!manifest) return;
     if (!isExpanded) {
       setExpanded(true);
       if (audio.paused) {
-        audio.play().catch((err) => showError(`Playback blocked: ${err.message || err}`));
+        audio.play().catch((err) => showError(`${ui.playback_failed}: ${err.message || err}`));
       }
     } else {
       setExpanded(false);
@@ -787,8 +999,9 @@ function render({ model, el }) {
   });
 
   playPill.addEventListener("click", () => {
+    if (!manifest) return;
     if (audio.paused) {
-      audio.play().catch((err) => showError(`Playback error: ${err.message || err}`));
+      audio.play().catch((err) => showError(`${ui.playback_failed}: ${err.message || err}`));
     } else {
       audio.pause();
     }
@@ -851,12 +1064,13 @@ function render({ model, el }) {
   });
 
   audio.addEventListener("error", () => {
-    showError("Failed to load audio chunk.");
+    showError(`${ui.playback_failed}.`);
   });
 
   // Keyboard accessibility
   container.addEventListener("keydown", (e) => {
     if (e.target && e.target.tagName === "SELECT") return;
+    if (!manifest) return;
     if (e.key === " ") {
       e.preventDefault();
       if (!isExpanded) {
@@ -880,26 +1094,41 @@ function render({ model, el }) {
     }
   });
 
-  // Load manifest & transcript
+  // Load and verify localized manifest before enabling audio playback
   (async () => {
-    try {
-      const manifestResp = await fetch(`${audioDirUrl}/manifest.json`);
-      if (!manifestResp.ok) throw new Error(`HTTP ${manifestResp.status}`);
-      const manifestData = await manifestResp.json();
-      if (isDestroyed) return;
+    let loadedManifest = null;
+    let lastErr = null;
 
-      manifest = manifestData;
+    for (const dirCandidate of candidateAudioDirs) {
+      try {
+        const manifestResp = await fetch(`${dirCandidate}/manifest.json`);
+        if (!manifestResp.ok) {
+          throw new Error(`HTTP ${manifestResp.status}`);
+        }
+        const manifestData = await manifestResp.json();
+        validateNarrationManifest(manifestData, pageId, locale);
+        activeAudioDirUrl = dirCandidate;
+        loadedManifest = manifestData;
+        break;
+      } catch (err) {
+        lastErr = err;
+      }
+    }
 
-      const totalSec = manifest.total_duration_seconds || 128;
-      overviewSubtitle.textContent = `${manifest.chunks.length} topics · ${formatDurationSeconds(totalSec)}`;
+    if (isDestroyed) return;
 
+    if (loadedManifest) {
+      manifest = loadedManifest;
+      const totalSec = manifest.total_duration_seconds || 0;
+      overviewSubtitle.textContent = `${manifest.chunks.length} ${ui.topics_unit} · ${formatDurationSeconds(totalSec, ui)}`;
       toggleBtn.disabled = false;
       loadChunk(0, false, false);
-    } catch (err) {
-      if (!isDestroyed) {
-        overviewSubtitle.textContent = "4 topics · 2 min 8 sec";
-        showError(`Narration assets unavailable (${err.message || err}).`);
-      }
+    } else {
+      manifest = null;
+      toggleBtn.disabled = true;
+      setExpanded(false);
+      overviewSubtitle.textContent = ui.narration_unavailable;
+      showError(`${ui.narration_unavailable} (${lastErr?.message || "missing manifest"}).`);
     }
   })();
 
@@ -913,4 +1142,4 @@ function render({ model, el }) {
   };
 }
 
-export default { render };
+export default { render, PLAYER_STRINGS, detectDocumentLocale, resolveAudioDirUrls, validateNarrationManifest };

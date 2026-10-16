@@ -2,117 +2,241 @@
 """
 fix_seo_artifacts.py
 ---------------------
-Post-build utility for SoftCloud MyST documentation sites.
+Multilingual SEO and accessibility post-build processor for SoftCloud MyST documentation sites.
 Ensures:
-1. robots.txt declares canonical domain and Sitemap URL.
-2. sitemap.xml contains valid canonical HTTPS URLs (replacing default localhost:3000).
-3. Strips ignored tags (<changefreq>, <priority>) and verifies XML validity.
+1. robots.txt declares canonical domain and unified Sitemap URL.
+2. Every built HTML page across all locales has:
+   - Accurate `<html lang="...">` attribute matching its locale (`en`, `pl`, `de`, `es`, `fr`).
+   - Self-referencing `<link rel="canonical" href="..." />`.
+   - Reciprocal `<link rel="alternate" hreflang="..." href="..." />` for all available translations
+     plus `hreflang="x-default"` pointing to the authoritative English URL.
+3. One unified `/sitemap.xml` at the root of the combined artifact containing all localized canonical
+   URLs and reciprocal `<xhtml:link rel="alternate" hreflang="..." href="..." />` annotations per
+   Google's multilingual sitemap specification.
 """
 
-import sys
+from __future__ import annotations
+
+import json
 import os
 import re
+import sys
 import xml.etree.ElementTree as ET
+from pathlib import Path
+from typing import Any
 
-def process_site(domain: str, html_dir: str):
-    domain = domain.rstrip('/')
-    if not os.path.isdir(html_dir):
+TOOLS_DIR = Path(__file__).resolve().parent
+if str(TOOLS_DIR) not in sys.path:
+    sys.path.insert(0, str(TOOLS_DIR))
+
+from i18n_utils import (
+    atomic_write_text,
+    canonical_url_for_page,
+    get_enabled_locales,
+    load_locales_config,
+)
+
+
+def _infer_locale_and_slug(
+    rel_html_path: str,
+    enabled_locales: dict[str, dict[str, Any]],
+    default_locale: str,
+) -> tuple[str, str]:
+    """Infer (locale_code, page_slug) from a path relative to _build/html."""
+    norm = Path(rel_html_path).as_posix().lstrip("./")
+    parts = norm.split("/")
+
+    matched_locale = default_locale
+    remainder_parts = parts
+    if parts:
+        first = parts[0]
+        for code, info in enabled_locales.items():
+            if code == default_locale:
+                continue
+            prefix = str(info.get("prefix", f"/{code}")).strip("/")
+            if first == prefix:
+                matched_locale = code
+                remainder_parts = parts[1:]
+                break
+
+    rem = "/".join(remainder_parts)
+    if rem in ("", "index.html"):
+        slug = ""
+    elif rem.endswith("/index.html"):
+        slug = rem[: -len("/index.html")]
+    elif rem.endswith(".html"):
+        slug = rem[: -len(".html")]
+    else:
+        slug = rem
+    return matched_locale, slug
+
+
+def _update_html_seo_head(
+    html_text: str,
+    html_lang: str,
+    canonical_url: str,
+    alternates: list[tuple[str, str]],
+) -> str:
+    """Update <html lang="...">, self-referencing canonical, and reciprocal hreflang links."""
+    # 1. Set or update <html ... lang="...">
+    def _replace_html_tag(match: re.Match[str]) -> str:
+        attrs = match.group(1)
+        if re.search(r'\blang\s*=\s*["\'][^"\']*["\']', attrs, flags=re.IGNORECASE):
+            attrs = re.sub(
+                r'\blang\s*=\s*["\'][^"\']*["\']',
+                f'lang="{html_lang}"',
+                attrs,
+                flags=re.IGNORECASE,
+            )
+        else:
+            attrs = f'{attrs} lang="{html_lang}"'
+        return f"<html{attrs}>"
+
+    if re.search(r"<html\b[^>]*>", html_text, flags=re.IGNORECASE):
+        html_text = re.sub(r"<html\b([^>]*)>", _replace_html_tag, html_text, count=1, flags=re.IGNORECASE)
+
+    # 2. Remove existing canonical or alternate hreflang tags to avoid duplicates
+    html_text = re.sub(
+        r'\s*<link\b[^>]*\brel\s*=\s*["\']canonical["\'][^>]*>\s*',
+        "\n",
+        html_text,
+        flags=re.IGNORECASE,
+    )
+    html_text = re.sub(
+        r'\s*<link\b[^>]*\bhreflang\s*=\s*["\'][^"\']+["\'][^>]*>\s*',
+        "\n",
+        html_text,
+        flags=re.IGNORECASE,
+    )
+
+    seo_lines = [f'  <link rel="canonical" href="{canonical_url}" />']
+    for hreflang, href in alternates:
+        seo_lines.append(f'  <link rel="alternate" hreflang="{hreflang}" href="{href}" />')
+    seo_block = "\n".join(seo_lines) + "\n"
+
+    if "</head>" in html_text:
+        html_text = html_text.replace("</head>", f"{seo_block}</head>", 1)
+    return html_text
+
+
+def process_site(domain: str, html_dir: str) -> None:
+    domain = domain.rstrip("/")
+    html_root = Path(html_dir).resolve()
+    if not html_root.is_dir():
         print(f"Error: {html_dir} does not exist", file=sys.stderr)
         sys.exit(1)
 
+    repo_root = TOOLS_DIR.parent
+    locales_cfg = load_locales_config(repo_root)
+    default_locale = str(locales_cfg.get("default_locale", "en"))
+    enabled_locales = get_enabled_locales(locales_cfg)
+
     # 1. robots.txt
-    robots_path = os.path.join(html_dir, "robots.txt")
-    robots_content = f"""User-agent: *
-Allow: /
-Sitemap: {domain}/sitemap.xml
-"""
-    with open(robots_path, "w", encoding="utf-8") as f:
-        f.write(robots_content)
+    robots_path = html_root / "robots.txt"
+    robots_content = f"User-agent: *\nAllow: /\nSitemap: {domain}/sitemap.xml\n"
+    atomic_write_text(robots_path, robots_content)
     print(f"[OK] Written {robots_path} with Sitemap: {domain}/sitemap.xml")
 
-    # 2. sitemap.xml
-    sitemap_path = os.path.join(html_dir, "sitemap.xml")
-    if os.path.isfile(sitemap_path):
-        with open(sitemap_path, "r", encoding="utf-8") as f:
-            content = f.read()
+    # 2. Discover all HTML files and group available translations by page slug
+    html_files: list[tuple[Path, str, str]] = []
+    slug_to_locales: dict[str, dict[str, str]] = {}
 
-        # Replace localhost:3000 or http variant with production canonical domain
-        content = re.sub(r'https?://localhost:3000/?', f"{domain}/", content)
-        content = re.sub(rf'{domain}//', f"{domain}/", content)
+    for path in sorted(html_root.rglob("*.html")):
+        rel = path.relative_to(html_root).as_posix()
+        if path.name.startswith("404") or path.name.startswith("_") or "_locales" in path.parts:
+            continue
+        loc_code, slug = _infer_locale_and_slug(rel, enabled_locales, default_locale)
+        prefix = str(enabled_locales[loc_code].get("prefix", ""))
+        can_url = canonical_url_for_page(domain, prefix, slug)
+        html_files.append((path, loc_code, slug))
+        slug_to_locales.setdefault(slug, {})[loc_code] = can_url
 
-        # Parse XML to validate and clean up unnecessary tags
-        try:
-            # Handle potential xml-stylesheet header
-            stylesheet_match = re.search(r'<\?xml-stylesheet.*?\?>', content)
-            stylesheet_tag = stylesheet_match.group(0) if stylesheet_match else ""
-            if stylesheet_tag:
-                stylesheet_tag = re.sub(r'https?://localhost:3000/?', f"{domain}/", stylesheet_tag)
+    # 3. Update every HTML file with <html lang="...">, self-referencing canonical, and reciprocal hreflang
+    updated_pages = 0
+    for path, loc_code, slug in html_files:
+        loc_info = enabled_locales[loc_code]
+        html_lang = str(loc_info.get("html_lang", loc_code))
+        prefix = str(loc_info.get("prefix", ""))
+        self_canonical = canonical_url_for_page(domain, prefix, slug)
 
-            # Strip xml processing instructions for parsing
-            xml_body = re.sub(r'<\?xml.*?\?>', '', content).strip()
-            ET.register_namespace('', "http://www.sitemaps.org/schemas/sitemap/0.9")
-            root = ET.fromstring(xml_body)
+        available_map = slug_to_locales.get(slug, {loc_code: self_canonical})
+        alternates: list[tuple[str, str]] = []
+        for alt_code in enabled_locales:
+            if alt_code in available_map:
+                alt_hreflang = str(enabled_locales[alt_code].get("hreflang", alt_code))
+                alternates.append((alt_hreflang, available_map[alt_code]))
+        if default_locale in available_map:
+            alternates.append(("x-default", available_map[default_locale]))
 
-            # Remove changefreq and priority if present (Google ignores them)
-            ns = {'sm': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
-            for url in root.findall('sm:url', ns):
-                cf = url.find('sm:changefreq', ns)
-                if cf is not None:
-                    url.remove(cf)
-                pr = url.find('sm:priority', ns)
-                if pr is not None:
-                    url.remove(pr)
+        raw_html = path.read_text(encoding="utf-8")
+        raw_html = re.sub(r"https?://localhost:3000/?", f"{domain}/", raw_html)
+        updated_html = _update_html_seo_head(raw_html, html_lang, self_canonical, alternates)
+        atomic_write_text(path, updated_html)
+        updated_pages += 1
 
-            new_xml = ET.tostring(root, encoding='utf-8', xml_declaration=True).decode('utf-8')
-            if stylesheet_tag and stylesheet_tag not in new_xml:
-                # Re-insert stylesheet after xml declaration
-                parts = new_xml.split('\n', 1)
-                new_xml = parts[0] + '\n' + stylesheet_tag + '\n' + (parts[1] if len(parts) > 1 else '')
+    print(
+        f"[OK] Updated <html lang>, self-referencing canonical, and reciprocal hreflang tags in {updated_pages} HTML pages"
+    )
 
-            with open(sitemap_path, "w", encoding="utf-8") as f:
-                f.write(new_xml)
-            print(f"[OK] Validated and transformed {sitemap_path}")
-        except Exception as e:
-            print(f"[WARN] XML parsing error: {e}. Writing raw regex-replaced content.", file=sys.stderr)
-            with open(sitemap_path, "w", encoding="utf-8") as f:
-                f.write(content)
-    else:
-        # Fallback generator if MyST didn't produce sitemap.xml
-        print(f"[INFO] sitemap.xml not found in {html_dir}, generating from HTML routes...")
-        routes = []
-        for root_dir, _, files in os.walk(html_dir):
-            for file in files:
-                if file.endswith(".html") and not file.startswith("404") and not file.startswith("_"):
-                    rel = os.path.relpath(os.path.join(root_dir, file), html_dir)
-                    if rel == "index.html":
-                        route = f"{domain}/"
-                    elif rel.endswith("/index.html"):
-                        route = f"{domain}/{rel[:-10]}/"
-                    else:
-                        route = f"{domain}/{rel[:-5]}"
-                    routes.append(route)
+    # 4. Remove any nested per-locale sitemap.xml or robots.txt so there is a single unified root sitemap
+    for code, info in enabled_locales.items():
+        if code == default_locale:
+            continue
+        prefix = str(info.get("prefix", f"/{code}")).strip("/")
+        for extra_name in ("sitemap.xml", "robots.txt", "sitemap_style.xsl"):
+            extra_file = html_root / prefix / extra_name
+            if extra_file.is_file():
+                extra_file.unlink()
 
-        routes.sort()
-        xml_lines = [
-            '<?xml version="1.0" encoding="UTF-8"?>',
-            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
-        ]
-        for r in routes:
-            xml_lines.append(f'  <url>\n    <loc>{r}</loc>\n  </url>')
-        xml_lines.append('</urlset>')
-        with open(sitemap_path, "w", encoding="utf-8") as f:
-            f.write('\n'.join(xml_lines) + '\n')
-        print(f"[OK] Generated fallback {sitemap_path} with {len(routes)} routes")
+    # 5. Generate unified multilingual sitemap.xml at root of html_root
+    sitemap_path = html_root / "sitemap.xml"
+    xml_lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+    ]
 
-    # 3. thebe artifacts & sourcemaps
+    all_entries: list[tuple[str, list[tuple[str, str]]]] = []
+    for slug in sorted(slug_to_locales.keys()):
+        available_map = slug_to_locales[slug]
+        alternates = []
+        for alt_code in enabled_locales:
+            if alt_code in available_map:
+                alt_hreflang = str(enabled_locales[alt_code].get("hreflang", alt_code))
+                alternates.append((alt_hreflang, available_map[alt_code]))
+        if default_locale in available_map:
+            alternates.append(("x-default", available_map[default_locale]))
+
+        for loc_code in enabled_locales:
+            if loc_code in available_map:
+                all_entries.append((available_map[loc_code], alternates))
+
+    for loc_url, alternates in all_entries:
+        xml_lines.append("  <url>")
+        xml_lines.append(f"    <loc>{loc_url}</loc>")
+        for hreflang, href in alternates:
+            xml_lines.append(
+                f'    <xhtml:link rel="alternate" hreflang="{hreflang}" href="{href}" />'
+            )
+        xml_lines.append("  </url>")
+
+    xml_lines.append("</urlset>\n")
+    sitemap_xml_text = "\n".join(xml_lines)
+
+    # Validate well-formed XML via ElementTree
+    ET.fromstring(sitemap_xml_text.encode("utf-8"))
+    atomic_write_text(sitemap_path, sitemap_xml_text)
+    print(
+        f"[OK] Generated unified multilingual {sitemap_path} with {len(all_entries)} localized URLs"
+    )
+
+    # 6. Process Thebe artifacts & sourcemaps
     try:
-        tools_dir = os.path.dirname(os.path.abspath(__file__))
-        if tools_dir not in sys.path:
-            sys.path.insert(0, tools_dir)
         from fix_thebe import process_thebe
-        process_thebe(html_dir)
-    except Exception as e:
-        print(f"[INFO] Note on Thebe artifact processing: {e}", file=sys.stderr)
+
+        process_thebe(str(html_root))
+    except Exception as exc:
+        print(f"[INFO] Note on Thebe artifact processing: {exc}", file=sys.stderr)
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:

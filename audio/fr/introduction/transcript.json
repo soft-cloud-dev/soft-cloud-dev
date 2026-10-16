@@ -1,0 +1,274 @@
+{
+  "chunks": [
+    {
+      "chunk_hash": "fe13523040e9e26c550811fd76e18cae32275950c36971c8e95713ac536707f4",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph"
+      ],
+      "section_anchor": "introduction",
+      "section_title": "Introduction",
+      "segments": [
+        {
+          "element_id": "el-0001-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "085c5465ad5cf9032936e6ffbc790cec0c2645a0234afeb83fe582d01e2e98d9",
+          "spoken_text": "Introduction"
+        },
+        {
+          "element_id": "el-0002-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "cbaa476b9364089c41b83647bb78d62a80e10bab1cbd908274fcff739daef179",
+          "spoken_text": "Software Cloud fournit un cadre ouvert et reproductible pour la recherche informatique, la documentation architecturale et l'ingénierie logicielle cloud."
+        }
+      ],
+      "text": "Introduction.\n\nSoftware Cloud fournit un cadre ouvert et reproductible pour la recherche informatique, la documentation architecturale et l'ingénierie logicielle cloud.",
+      "text_sha256": "9f7ca38537887f29c3f3c1e98f1830a24c6f51b62bed84edf299420a3c90191b"
+    },
+    {
+      "chunk_hash": "a2c033f45b6998a456aa50d17d64927735b4be3c1df210fb61f9a171c767dcef",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "element_ids": [
+        "el-0003-heading",
+        "el-0004-paragraph",
+        "el-0005-list",
+        "el-0006-paragraph"
+      ],
+      "section_anchor": "le-defi-de-la-reproductibilite-informatique",
+      "section_title": "Le défi de la reproductibilité informatique",
+      "segments": [
+        {
+          "element_id": "el-0003-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "c3b84e6fef400452546840e2455623c8f416960c4ae4c3bc2734fa849ba8d43d",
+          "spoken_text": "Le défi de la reproductibilité informatique"
+        },
+        {
+          "element_id": "el-0004-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "03591b0b8b6dca3e984aee8d550017b6e7ea8310ebec4a258e1a33f46337ee31",
+          "spoken_text": "La recherche scientifique et les systèmes logiciels à haute fiabilité dépendent de manière critique de la reproductibilité. Cependant, les flux de développement modernes souffrent fréquemment d'un subtil non-déterminisme environnemental :"
+        },
+        {
+          "element_id": "el-0005-list",
+          "is_ai_summary": false,
+          "kind": "list",
+          "source_hash": "cac7ccfd3aba70e70c9818b17620e071d1370664abf6f3af0faf7a88a0c28a10",
+          "spoken_text": "Des dépendances transitives non épinglées qui changent silencieusement en amont. Des binaires de plateforme divergents entre macOS, Linux et Windows. Des fuites implicites de variables d'environnement affectant les chemins d'exécution. Des versions non surveillées du noyau d'exécution entraînant des résultats d'exécution divergents."
+        },
+        {
+          "element_id": "el-0006-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "691c1dd42838a26ac704b62550870e215befb08f40032e8c66e49f6aefcc42ec",
+          "spoken_text": "Pour résoudre ces modes de défaillance, la plateforme Software Cloud met en œuvre un profil de publication strictement gouverné."
+        }
+      ],
+      "text": "Le défi de la reproductibilité informatique.\n\nLa recherche scientifique et les systèmes logiciels à haute fiabilité dépendent de manière critique de la reproductibilité. Cependant, les flux de développement modernes souffrent fréquemment d'un subtil non-déterminisme environnemental :\n\nDes dépendances transitives non épinglées qui changent silencieusement en amont. Des binaires de plateforme divergents entre macOS, Linux et Windows. Des fuites implicites de variables d'environnement affectant les chemins d'exécution. Des versions non surveillées du noyau d'exécution entraînant des résultats d'exécution divergents.\n\nPour résoudre ces modes de défaillance, la plateforme Software Cloud met en œuvre un profil de publication strictement gouverné.",
+      "text_sha256": "3b69fe062031ccc181bfc54087a4c5f322a5c397f7cf79f0decdd5cf05ed1490"
+    },
+    {
+      "chunk_hash": "2f6eae7b040e756ddbcca8e80de29daff094060a43a71952d65356619cd63c56",
+      "chunk_id": "chunk-003",
+      "chunk_index": 3,
+      "element_ids": [
+        "el-0007-heading",
+        "el-0008-paragraph",
+        "el-0009-list"
+      ],
+      "section_anchor": "perimetre-operationnel",
+      "section_title": "Périmètre opérationnel",
+      "segments": [
+        {
+          "element_id": "el-0007-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "62d6e90c91904206d26d71cf8ae5be269ac139bbdc850489c8fbbdfa022a7dc3",
+          "spoken_text": "Périmètre opérationnel"
+        },
+        {
+          "element_id": "el-0008-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "ea04dc7c989ffbcbe1f1dea2a66dbf6091d316998ad3c69180f3e543e1ceedad",
+          "spoken_text": "Software Cloud répond à ces défis grâce à quatre mécanismes interconnectés :"
+        },
+        {
+          "element_id": "el-0009-list",
+          "is_ai_summary": false,
+          "kind": "list",
+          "source_hash": "0995558ba71ea5760d623a678fae8f2adfc0087e52615f7315d859c1249a62cb",
+          "spoken_text": "Spécification par mémorandum : L'architecture centrale du dépôt, les licences, l'outillage et les configurations de pipeline sont codifiés sous forme de spécifications formelles. Résolution déterministe du wheelhouse : Les exigences directes sont verrouillées dans des empreintes cryptographiques de paquets wheel résolues exclusivement par rapport aux paquets standard Linux/x86-64. Vérification automatisée de l'environnement d'exécution : Chaque demande de fusion et compilation de version exécute un audit préalable vérifiant l'activation de l'environnement virtuel, la provenance de l'interpréteur, la présence de Jupyter Server et l'exhaustivité de la table des matières. Publication d'artefacts en direct : Les compilations acceptées sont publiées directement sous forme de sites statiques avec une diffusion HTTPS haute performance sur my.softcloud.dev."
+        }
+      ],
+      "text": "Périmètre opérationnel.\n\nSoftware Cloud répond à ces défis grâce à quatre mécanismes interconnectés :\n\nSpécification par mémorandum : L'architecture centrale du dépôt, les licences, l'outillage et les configurations de pipeline sont codifiés sous forme de spécifications formelles. Résolution déterministe du wheelhouse : Les exigences directes sont verrouillées dans des empreintes cryptographiques de paquets wheel résolues exclusivement par rapport aux paquets standard Linux/x86-64. Vérification automatisée de l'environnement d'exécution : Chaque demande de fusion et compilation de version exécute un audit préalable vérifiant l'activation de l'environnement virtuel, la provenance de l'interpréteur, la présence de Jupyter Server et l'exhaustivité de la table des matières. Publication d'artefacts en direct : Les compilations acceptées sont publiées directement sous forme de sites statiques avec une diffusion HTTPS haute performance sur my.softcloud.dev.",
+      "text_sha256": "ff213561070c04c8f7e8dd18e41fada8346c528be06e36fb14ce8994edeeaaba"
+    },
+    {
+      "chunk_hash": "d1e2289c3feb93090745bd855990868a6bc6da880e6414c418900eb656ab157b",
+      "chunk_id": "chunk-004",
+      "chunk_index": 4,
+      "element_ids": [
+        "el-0010-heading",
+        "el-0011-paragraph"
+      ],
+      "section_anchor": "prochaines-etapes",
+      "section_title": "Prochaines étapes",
+      "segments": [
+        {
+          "element_id": "el-0010-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "4103d01e2be7aeb9943f19b31896dbd7aa01347a859677b0dcfefaaf391126e4",
+          "spoken_text": "Prochaines étapes"
+        },
+        {
+          "element_id": "el-0011-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "653891eb8c94def2749de38fd2b77bf72371246aaaf6855b8754b89d8d2eb09c",
+          "spoken_text": "Pour explorer la conception technique de bas niveau, l'échafaudage du dépôt et les implémentations de la chaîne d'outils, passez à la section Architecture et référence du mémorandum."
+        }
+      ],
+      "text": "Prochaines étapes.\n\nPour explorer la conception technique de bas niveau, l'échafaudage du dépôt et les implémentations de la chaîne d'outils, passez à la section Architecture et référence du mémorandum.",
+      "text_sha256": "f1362cb8fe01dbe7b974ec388eefb45369eb37c76f67e03c0acd4b72a533dc22"
+    }
+  ],
+  "code_summary_hashes": {},
+  "config_hash": "699663dab374726886e538e3564c70a1712d5e0736b0e01565f579a19f9afcfa",
+  "element_ids": [
+    "el-0001-heading",
+    "el-0002-paragraph",
+    "el-0003-heading",
+    "el-0004-paragraph",
+    "el-0005-list",
+    "el-0006-paragraph",
+    "el-0007-heading",
+    "el-0008-paragraph",
+    "el-0009-list",
+    "el-0010-heading",
+    "el-0011-paragraph"
+  ],
+  "elements": [
+    {
+      "element_id": "el-0001-heading",
+      "heading_level": 1,
+      "kind": "heading",
+      "section_anchor": "introduction",
+      "section_title": "Introduction",
+      "source_hash": "085c5465ad5cf9032936e6ffbc790cec0c2645a0234afeb83fe582d01e2e98d9",
+      "text": "Introduction"
+    },
+    {
+      "element_id": "el-0002-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "introduction",
+      "section_title": "Introduction",
+      "source_hash": "cbaa476b9364089c41b83647bb78d62a80e10bab1cbd908274fcff739daef179",
+      "text": "Software Cloud fournit un cadre ouvert et reproductible pour la recherche informatique, la documentation architecturale et l'ingénierie logicielle cloud."
+    },
+    {
+      "element_id": "el-0003-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "le-defi-de-la-reproductibilite-informatique",
+      "section_title": "Le défi de la reproductibilité informatique",
+      "source_hash": "c3b84e6fef400452546840e2455623c8f416960c4ae4c3bc2734fa849ba8d43d",
+      "text": "Le défi de la reproductibilité informatique"
+    },
+    {
+      "element_id": "el-0004-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "le-defi-de-la-reproductibilite-informatique",
+      "section_title": "Le défi de la reproductibilité informatique",
+      "source_hash": "03591b0b8b6dca3e984aee8d550017b6e7ea8310ebec4a258e1a33f46337ee31",
+      "text": "La recherche scientifique et les systèmes logiciels à haute fiabilité dépendent de manière critique de la reproductibilité. Cependant, les flux de développement modernes souffrent fréquemment d'un subtil non-déterminisme environnemental :"
+    },
+    {
+      "element_id": "el-0005-list",
+      "kind": "list",
+      "section_anchor": "le-defi-de-la-reproductibilite-informatique",
+      "section_title": "Le défi de la reproductibilité informatique",
+      "source_hash": "cac7ccfd3aba70e70c9818b17620e071d1370664abf6f3af0faf7a88a0c28a10",
+      "text": "Des dépendances transitives non épinglées qui changent silencieusement en amont. Des binaires de plateforme divergents entre macOS, Linux et Windows. Des fuites implicites de variables d'environnement affectant les chemins d'exécution. Des versions non surveillées du noyau d'exécution entraînant des résultats d'exécution divergents."
+    },
+    {
+      "element_id": "el-0006-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "le-defi-de-la-reproductibilite-informatique",
+      "section_title": "Le défi de la reproductibilité informatique",
+      "source_hash": "691c1dd42838a26ac704b62550870e215befb08f40032e8c66e49f6aefcc42ec",
+      "text": "Pour résoudre ces modes de défaillance, la plateforme Software Cloud met en œuvre un profil de publication strictement gouverné."
+    },
+    {
+      "element_id": "el-0007-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "perimetre-operationnel",
+      "section_title": "Périmètre opérationnel",
+      "source_hash": "62d6e90c91904206d26d71cf8ae5be269ac139bbdc850489c8fbbdfa022a7dc3",
+      "text": "Périmètre opérationnel"
+    },
+    {
+      "element_id": "el-0008-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "perimetre-operationnel",
+      "section_title": "Périmètre opérationnel",
+      "source_hash": "ea04dc7c989ffbcbe1f1dea2a66dbf6091d316998ad3c69180f3e543e1ceedad",
+      "text": "Software Cloud répond à ces défis grâce à quatre mécanismes interconnectés :"
+    },
+    {
+      "element_id": "el-0009-list",
+      "kind": "list",
+      "section_anchor": "perimetre-operationnel",
+      "section_title": "Périmètre opérationnel",
+      "source_hash": "0995558ba71ea5760d623a678fae8f2adfc0087e52615f7315d859c1249a62cb",
+      "text": "Spécification par mémorandum : L'architecture centrale du dépôt, les licences, l'outillage et les configurations de pipeline sont codifiés sous forme de spécifications formelles. Résolution déterministe du wheelhouse : Les exigences directes sont verrouillées dans des empreintes cryptographiques de paquets wheel résolues exclusivement par rapport aux paquets standard Linux/x86-64. Vérification automatisée de l'environnement d'exécution : Chaque demande de fusion et compilation de version exécute un audit préalable vérifiant l'activation de l'environnement virtuel, la provenance de l'interpréteur, la présence de Jupyter Server et l'exhaustivité de la table des matières. Publication d'artefacts en direct : Les compilations acceptées sont publiées directement sous forme de sites statiques avec une diffusion HTTPS haute performance sur my.softcloud.dev."
+    },
+    {
+      "element_id": "el-0010-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "prochaines-etapes",
+      "section_title": "Prochaines étapes",
+      "source_hash": "4103d01e2be7aeb9943f19b31896dbd7aa01347a859677b0dcfefaaf391126e4",
+      "text": "Prochaines étapes"
+    },
+    {
+      "element_id": "el-0011-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "prochaines-etapes",
+      "section_title": "Prochaines étapes",
+      "source_hash": "653891eb8c94def2749de38fd2b77bf72371246aaaf6855b8754b89d8d2eb09c",
+      "text": "Pour explorer la conception technique de bas niveau, l'échafaudage du dépôt et les implémentations de la chaîne d'outils, passez à la section Architecture et référence du mémorandum."
+    }
+  ],
+  "locale": "fr",
+  "logical_source_path": "introduction.md",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "fr",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in French (français) matching document locale 'fr'.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "introduction",
+  "page_source_hash": "14766a92f74122d291d2f4635de6cd3139d8e4f334d8efef512c96fffdc06b08",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "a3c7deeba19f5bcaede161ae021d877651b464ee5f542b344501b22e25792841",
+  "source_path": "i18n/fr/introduction.md",
+  "transcript_sha256": "3e7e809c60c77530558709d5056f03fa9ba69f14a3604ce6c3752a74c48c0b29"
+}

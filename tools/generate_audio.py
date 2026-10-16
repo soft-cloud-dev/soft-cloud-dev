@@ -23,6 +23,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import unicodedata
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -46,6 +47,7 @@ except ImportError:
 # ---------------------------------------------------------------------------
 
 SCHEMA_VERSION = "1.0.0"
+DEFAULT_LOCALE = "en"
 DEFAULT_TEXT_MODEL = "gemini-3.8-flash"
 DEFAULT_TTS_MODEL = "gemini-3.8-flash-tts"
 DEFAULT_VOICE_NAME = "Kore"
@@ -53,6 +55,14 @@ DEFAULT_SAMPLE_RATE = 24000
 DEFAULT_MP3_BITRATE = "64k"
 DEFAULT_MAX_CHUNK_CHARS = 1800
 GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1beta"
+
+LOCALE_SPOKEN_LANGUAGES: dict[str, str] = {
+    "en": "English",
+    "pl": "Polish (język polski)",
+    "de": "German (Deutsch)",
+    "es": "Spanish (español)",
+    "fr": "French (français)",
+}
 
 CODE_SUMMARY_SYSTEM_PROMPT = (
     "You are a technical documentation narrator for the Software Cloud platform. "
@@ -69,6 +79,17 @@ CODE_SUMMARY_SYSTEM_PROMPT = (
 )
 
 
+def build_code_summary_system_prompt(locale: str = DEFAULT_LOCALE) -> str:
+    norm = (locale or DEFAULT_LOCALE).strip().lower()
+    if norm == "en":
+        return CODE_SUMMARY_SYSTEM_PROMPT
+    lang_label = LOCALE_SPOKEN_LANGUAGES.get(norm, norm)
+    return (
+        f"{CODE_SUMMARY_SYSTEM_PROMPT}\n"
+        f"- Write the entire spoken explanation in {lang_label} matching document locale '{norm}'."
+    )
+
+
 class NarrationError(Exception):
     """Raised when any fail-closed narration requirement or validation fails."""
 
@@ -76,6 +97,7 @@ class NarrationError(Exception):
 @dataclass(frozen=True)
 class NarrationConfig:
     schema_version: str = SCHEMA_VERSION
+    locale: str = DEFAULT_LOCALE
     text_model: str = DEFAULT_TEXT_MODEL
     text_temperature: float = 0.0
     text_system_prompt: str = CODE_SUMMARY_SYSTEM_PROMPT
@@ -89,6 +111,7 @@ class NarrationConfig:
     def text_config_dict(self) -> dict[str, Any]:
         return {
             "schema_version": self.schema_version,
+            "locale": self.locale,
             "text_model": self.text_model,
             "text_temperature": self.text_temperature,
             "text_system_prompt": self.text_system_prompt,
@@ -97,6 +120,7 @@ class NarrationConfig:
     def tts_config_dict(self) -> dict[str, Any]:
         return {
             "schema_version": self.schema_version,
+            "locale": self.locale,
             "tts_model": self.tts_model,
             "voice_name": self.voice_name,
             "audio_format": self.audio_format,
@@ -171,12 +195,35 @@ def atomic_write_json(target: Path, obj: Any) -> None:
 
 def slugify_anchor(heading_text: str) -> str:
     cleaned = re.sub(r"[`*_~\[\]()]", "", heading_text).strip().lower()
-    slug = re.sub(r"[^a-z0-9]+", "-", cleaned).strip("-")
+    # Transliterate common Latin characters that NFKD does not decompose to ASCII
+    translit_map = str.maketrans(
+        {
+            "ł": "l",
+            "ß": "ss",
+            "œ": "oe",
+            "æ": "ae",
+            "ø": "o",
+            "đ": "d",
+        }
+    )
+    cleaned = cleaned.translate(translit_map)
+    normalized = unicodedata.normalize("NFKD", cleaned).encode("ascii", "ignore").decode("ascii")
+    slug = re.sub(r"[^a-z0-9]+", "-", normalized).strip("-")
     return slug or "section"
 
 
+def logical_rel_path(rel_path: str) -> str:
+    """Strip leading i18n/<locale>/ prefix from a localized source path."""
+    norm = Path(rel_path).as_posix().lstrip("./")
+    m = re.match(r"^i18n/[a-zA-Z0-9_-]+/(.+)$", norm)
+    if m:
+        return m.group(1)
+    return norm
+
+
 def page_id_from_path(rel_path: str) -> str:
-    p = Path(rel_path)
+    logical = logical_rel_path(rel_path)
+    p = Path(logical)
     stem_parts = list(p.parent.parts) + [p.stem]
     cleaned = [p for p in stem_parts if p and p != "."]
     return "-".join(cleaned).lower()
@@ -238,7 +285,9 @@ class ExtractedElement:
 
 @dataclass
 class ExtractedDocument:
+    locale: str
     page_id: str
+    logical_source_path: str
     source_path: str
     source_file_sha256: str
     page_source_hash: str
@@ -246,7 +295,9 @@ class ExtractedDocument:
 
     def to_dict(self) -> dict[str, Any]:
         return {
+            "locale": self.locale,
             "page_id": self.page_id,
+            "logical_source_path": self.logical_source_path,
             "source_path": self.source_path,
             "source_file_sha256": self.source_file_sha256,
             "page_source_hash": self.page_source_hash,
@@ -547,9 +598,15 @@ def extract_markdown_blocks(markdown_text: str) -> list[dict[str, Any]]:
     return raw_blocks
 
 
-def extract_document(source_path: Path, root: Path) -> ExtractedDocument:
+def extract_document(
+    source_path: Path,
+    root: Path,
+    locale: str = DEFAULT_LOCALE,
+) -> ExtractedDocument:
     """Extract a MyST Markdown or Jupyter Notebook file into an ordered ExtractedDocument."""
+    norm_locale = (locale or DEFAULT_LOCALE).strip().lower()
     rel_path = source_path.resolve().relative_to(root.resolve()).as_posix()
+    logical_path = logical_rel_path(rel_path)
     page_id = page_id_from_path(rel_path)
     raw_bytes = source_path.read_bytes()
     file_sha256 = sha256_bytes(raw_bytes)
@@ -626,6 +683,7 @@ def extract_document(source_path: Path, root: Path) -> ExtractedDocument:
 
     page_source_hash = sha256_json(
         {
+            "locale": norm_locale,
             "source_path": rel_path,
             "elements": [
                 {
@@ -644,7 +702,9 @@ def extract_document(source_path: Path, root: Path) -> ExtractedDocument:
     )
 
     return ExtractedDocument(
+        locale=norm_locale,
         page_id=page_id,
+        logical_source_path=logical_path,
         source_path=rel_path,
         source_file_sha256=file_sha256,
         page_source_hash=page_source_hash,
@@ -772,12 +832,14 @@ class GeminiClient:
         return info
 
     def generate_code_summary(self, code: str, language: str, config: NarrationConfig) -> str:
-        """Generate a concise spoken technical explanation for a code block."""
+        """Generate a concise spoken technical explanation for a code block in the target locale."""
         self.verify_model_available(config.text_model)
+        spoken_lang = LOCALE_SPOKEN_LANGUAGES.get(config.locale, config.locale)
         prompt = (
-            f"Language: {language or 'text'}\n\n"
+            f"Documentation Locale: {config.locale} ({spoken_lang})\n"
+            f"Programming Language: {language or 'text'}\n\n"
             f"Code Block:\n{code}\n\n"
-            "Provide the spoken narration explanation for this code block:"
+            f"Provide the spoken narration explanation for this code block in {spoken_lang}:"
         )
         payload: dict[str, Any] = {
             "systemInstruction": {
@@ -874,8 +936,14 @@ class GeminiClient:
 # ---------------------------------------------------------------------------
 
 
-def summary_cache_path(page_audio_dir: Path, element_source_hash: str) -> Path:
-    return page_audio_dir / "summaries" / f"{element_source_hash[:16]}.json"
+def summary_cache_path(
+    page_audio_dir: Path,
+    element_source_hash: str,
+    locale: str = DEFAULT_LOCALE,
+) -> Path:
+    norm_locale = (locale or DEFAULT_LOCALE).strip().lower()
+    cache_key = sha256_json({"locale": norm_locale, "source_hash": element_source_hash})
+    return page_audio_dir / "summaries" / f"{norm_locale}-{cache_key[:16]}.json"
 
 
 def validate_code_summary_entry(
@@ -887,6 +955,7 @@ def validate_code_summary_entry(
         return False
     required_keys = {
         "schema_version",
+        "locale",
         "source_hash",
         "model",
         "text_config_hash",
@@ -897,6 +966,8 @@ def validate_code_summary_entry(
     if not required_keys.issubset(entry.keys()):
         return False
     if entry.get("schema_version") != config.schema_version:
+        return False
+    if entry.get("locale") != config.locale:
         return False
     if entry.get("source_hash") != expected_source_hash:
         return False
@@ -926,7 +997,7 @@ def resolve_code_summaries(
     for el in doc.elements:
         if el.kind != "code_block":
             continue
-        cache_file = summary_cache_path(page_audio_dir, el.source_hash)
+        cache_file = summary_cache_path(page_audio_dir, el.source_hash, config.locale)
         if cache_file.is_file():
             try:
                 cached = json.loads(cache_file.read_text(encoding="utf-8"))
@@ -940,13 +1011,15 @@ def resolve_code_summaries(
         if client is None:
             raise NarrationError(
                 f"Code summary missing or invalid for element {el.element_id} "
-                f"(hash {el.source_hash[:12]}) in {doc.source_path}, and generation is unavailable (offline mode)."
+                f"(locale={config.locale}, hash={el.source_hash[:12]}) in {doc.source_path}, "
+                "and generation is unavailable (offline mode)."
             )
 
         summary_text = client.generate_code_summary(el.text, el.language, config)
         transcript_hash = sha256_text(summary_text)
         entry = {
             "schema_version": config.schema_version,
+            "locale": config.locale,
             "element_id": el.element_id,
             "language": el.language,
             "source_hash": el.source_hash,
@@ -1065,6 +1138,7 @@ def assemble_narration_transcript(
             text_sha256 = sha256_text(full_text)
             chunk_hash = sha256_json(
                 {
+                    "locale": config.locale,
                     "text_sha256": text_sha256,
                     "tts_config_hash": config.tts_config_hash(),
                     "element_ids": [s.element_id for s in current_segments],
@@ -1142,7 +1216,9 @@ def assemble_narration_transcript(
 
     transcript_payload = {
         "schema_version": config.schema_version,
+        "locale": config.locale,
         "page_id": doc.page_id,
+        "logical_source_path": doc.logical_source_path,
         "source_path": doc.source_path,
         "source_file_sha256": doc.source_file_sha256,
         "page_source_hash": doc.page_source_hash,
@@ -1323,10 +1399,11 @@ def validate_chunk_artifact(
     page_audio_dir: Path,
     config: NarrationConfig,
 ) -> bool:
-    """Verify a cached TTS chunk against all source, config, checksum, format, and duration rules."""
+    """Verify a cached TTS chunk against all locale, source, config, checksum, format, and duration rules."""
     if not isinstance(manifest_chunk, dict):
         return False
     required = {
+        "locale",
         "chunk_id",
         "chunk_index",
         "section_anchor",
@@ -1344,6 +1421,8 @@ def validate_chunk_artifact(
         "size_bytes",
     }
     if not required.issubset(manifest_chunk.keys()):
+        return False
+    if manifest_chunk.get("locale") != config.locale:
         return False
     if manifest_chunk.get("chunk_id") != expected_chunk["chunk_id"]:
         return False
@@ -1406,8 +1485,8 @@ def process_page(
     check_only: bool = False,
     offline_mode: bool = False,
 ) -> dict[str, Any]:
-    """Process and validate a single documentation page."""
-    doc = extract_document(source_path, root)
+    """Process and validate a single documentation page for a specific locale."""
+    doc = extract_document(source_path, root, locale=config.locale)
     page_audio_dir = audio_root / doc.page_id
     transcript_path = page_audio_dir / "transcript.json"
     manifest_path = page_audio_dir / "manifest.json"
@@ -1427,14 +1506,14 @@ def process_page(
     if valid_transcript is None:
         if check_only:
             raise NarrationError(
-                f"Transcript missing or stale for {doc.source_path} at {transcript_path}"
+                f"Transcript missing or stale for {doc.source_path} (locale={config.locale}) at {transcript_path}"
             )
         if offline_mode:
             # In offline mode, allow refreshing transcript metadata only if an existing
-            # transcript matches the exact page_source_hash and chunks
+            # transcript matches the exact locale, page_source_hash, and chunks
             if not transcript_path.is_file():
                 raise NarrationError(
-                    f"Transcript missing for {doc.source_path} at {transcript_path} in offline mode"
+                    f"Transcript missing for {doc.source_path} (locale={config.locale}) at {transcript_path} in offline mode"
                 )
             try:
                 old_t = json.loads(transcript_path.read_text(encoding="utf-8"))
@@ -1443,12 +1522,13 @@ def process_page(
                     f"Malformed transcript at {transcript_path} in offline mode"
                 ) from exc
             if (
-                old_t.get("page_source_hash") != expected_transcript["page_source_hash"]
+                old_t.get("locale") != expected_transcript["locale"]
+                or old_t.get("page_source_hash") != expected_transcript["page_source_hash"]
                 or old_t.get("config_hash") != expected_transcript["config_hash"]
                 or old_t.get("chunks") != expected_transcript["chunks"]
             ):
                 raise NarrationError(
-                    f"Source content or narration config changed for {doc.source_path}; "
+                    f"Source content or narration config changed for {doc.source_path} (locale={config.locale}); "
                     "cannot regenerate transcript in offline mode."
                 )
         atomic_write_json(transcript_path, expected_transcript)
@@ -1459,7 +1539,7 @@ def process_page(
     if manifest_path.is_file():
         try:
             old_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-            if isinstance(old_manifest, dict):
+            if isinstance(old_manifest, dict) and old_manifest.get("locale") == config.locale:
                 for ch in old_manifest.get("chunks", []):
                     if isinstance(ch, dict) and "chunk_hash" in ch:
                         existing_chunks_by_hash[ch["chunk_hash"]] = ch
@@ -1488,7 +1568,7 @@ def process_page(
         # Cache miss or invalid audio artifact
         if no_api or client is None:
             raise NarrationError(
-                f"TTS audio artifact missing or invalid for {doc.source_path} "
+                f"TTS audio artifact missing or invalid for {doc.source_path} (locale={config.locale}) "
                 f"chunk {ch['chunk_id']} ({expected_filename}), and synthesis is unavailable."
             )
 
@@ -1504,6 +1584,7 @@ def process_page(
         audio_sha = sha256_file(audio_path)
 
         new_entry = {
+            "locale": config.locale,
             "chunk_id": ch["chunk_id"],
             "chunk_index": ch["chunk_index"],
             "section_anchor": ch["section_anchor"],
@@ -1531,7 +1612,9 @@ def process_page(
     expected_manifest: dict[str, Any] = {
         "schema_version": config.schema_version,
         "status": "complete",
+        "locale": config.locale,
         "page_id": doc.page_id,
+        "logical_source_path": doc.logical_source_path,
         "source_path": doc.source_path,
         "source_file_sha256": doc.source_file_sha256,
         "page_source_hash": doc.page_source_hash,
@@ -1557,7 +1640,7 @@ def process_page(
     if not manifest_matches:
         if check_only:
             raise NarrationError(
-                f"Manifest missing, stale, or mismatched for {doc.source_path} at {manifest_path}"
+                f"Manifest missing, stale, or mismatched for {doc.source_path} (locale={config.locale}) at {manifest_path}"
             )
         atomic_write_json(manifest_path, expected_manifest)
 
@@ -1570,18 +1653,44 @@ def process_page(
     return expected_manifest
 
 
+def resolve_locale_page_path(root: Path, page_rel: str, locale: str = DEFAULT_LOCALE) -> Path:
+    """Resolve a page path for the requested locale (e.g. 'introduction.md' + 'pl' -> 'i18n/pl/introduction.md')."""
+    norm_locale = (locale or DEFAULT_LOCALE).strip().lower()
+    direct = (root / page_rel).resolve()
+    if norm_locale == DEFAULT_LOCALE:
+        return direct
+    if page_rel.startswith(f"i18n/{norm_locale}/"):
+        return direct
+    localized = (root / "i18n" / norm_locale / page_rel).resolve()
+    return localized
+
+
+def default_audio_root_for_locale(root: Path, audio_dir_arg: str, locale: str = DEFAULT_LOCALE) -> Path:
+    """Resolve the audio root directory for a locale ('audio' for en, 'audio/<locale>' for non-en)."""
+    norm_locale = (locale or DEFAULT_LOCALE).strip().lower()
+    base = (root / audio_dir_arg).resolve()
+    if norm_locale == DEFAULT_LOCALE:
+        return base
+    # If the user already passed e.g. --audio-dir audio/pl, do not double-append
+    if base.name.lower() == norm_locale:
+        return base
+    return (base / norm_locale).resolve()
+
+
 def discover_enabled_pages(
     root: Path,
     requested_pages: list[str] | None = None,
     include_notebooks: bool = False,
+    locale: str = DEFAULT_LOCALE,
 ) -> list[Path]:
-    """Discover enabled documentation pages from myst.yml or explicit CLI arguments."""
+    """Discover enabled documentation pages from myst.yml or explicit CLI arguments for a given locale."""
+    norm_locale = (locale or DEFAULT_LOCALE).strip().lower()
     if requested_pages:
         pages: list[Path] = []
         for p_str in requested_pages:
-            p = (root / p_str).resolve()
+            p = resolve_locale_page_path(root, p_str, norm_locale)
             if not p.is_file():
-                raise NarrationError(f"Requested page does not exist: {p_str}")
+                raise NarrationError(f"Requested page does not exist for locale '{norm_locale}': {p_str} ({p})")
             pages.append(p)
         return pages
 
@@ -1596,8 +1705,10 @@ def discover_enabled_pages(
         for entry in entries:
             if isinstance(entry, dict):
                 if "file" in entry:
-                    fpath = (root / entry["file"]).resolve()
-                    if fpath.suffix == ".md" or (include_notebooks and fpath.suffix == ".ipynb"):
+                    fpath = resolve_locale_page_path(root, entry["file"], norm_locale)
+                    if fpath.is_file() and (
+                        fpath.suffix == ".md" or (include_notebooks and fpath.suffix == ".ipynb")
+                    ):
                         discovered.append(fpath)
                 if "children" in entry and isinstance(entry["children"], list):
                     walk(entry["children"])
@@ -1625,55 +1736,90 @@ def load_api_key_from_env_or_dotenv(root: Path) -> str | None:
     return None
 
 
+def _sync_and_verify_target_dir(
+    src_dir: Path,
+    dst_dir: Path,
+    manifest: dict[str, Any],
+) -> None:
+    dst_dir.mkdir(parents=True, exist_ok=True)
+    required_files = ["manifest.json", manifest["transcript_file"]] + [
+        ch["audio_file"] for ch in manifest["chunks"]
+    ]
+    for fname in required_files:
+        src_file = src_dir / fname
+        dst_file = dst_dir / fname
+        if not src_file.is_file():
+            raise NarrationError(f"Missing source audio artifact before publish: {src_file}")
+        if not dst_file.is_file() or sha256_file(dst_file) != sha256_file(src_file):
+            atomic_write_bytes(dst_file, src_file.read_bytes())
+
+    pub_manifest_path = dst_dir / "manifest.json"
+    pub_transcript_path = dst_dir / manifest["transcript_file"]
+    if not pub_manifest_path.is_file() or not pub_transcript_path.is_file():
+        raise NarrationError(f"Published manifest or transcript missing in {dst_dir}")
+
+    pub_manifest = json.loads(pub_manifest_path.read_text(encoding="utf-8"))
+    if pub_manifest != manifest:
+        raise NarrationError(f"Published manifest mismatch in {pub_manifest_path}")
+    if pub_manifest.get("locale") != manifest.get("locale"):
+        raise NarrationError(f"Published manifest locale mismatch in {pub_manifest_path}")
+    if sha256_file(pub_transcript_path) != manifest["transcript_sha256"] and (
+        json.loads(pub_transcript_path.read_text(encoding="utf-8")).get("transcript_sha256")
+        != manifest["transcript_sha256"]
+    ):
+        raise NarrationError(f"Published transcript checksum mismatch in {pub_transcript_path}")
+
+    for ch in manifest["chunks"]:
+        pub_mp3 = dst_dir / ch["audio_file"]
+        if not pub_mp3.is_file():
+            raise NarrationError(f"Published audio chunk missing: {pub_mp3}")
+        if sha256_file(pub_mp3) != ch["audio_sha256"]:
+            raise NarrationError(f"Published audio chunk SHA-256 mismatch: {pub_mp3}")
+
+
 def publish_and_verify_build_assets(
     build_html_dir: Path,
     audio_root: Path,
     manifests: list[dict[str, Any]],
     config: NarrationConfig,
 ) -> None:
-    """Ensure all validated audio assets, manifests, and transcripts exist in _build/html/audio/."""
+    """Ensure all validated audio assets, manifests, and transcripts exist in the built HTML directory."""
     if not build_html_dir.is_dir():
         raise NarrationError(f"Built HTML directory does not exist: {build_html_dir}")
 
     for manifest in manifests:
         page_id = manifest["page_id"]
+        locale = manifest.get("locale", config.locale)
         src_dir = audio_root / page_id
-        dst_dir = build_html_dir / "audio" / page_id
-        dst_dir.mkdir(parents=True, exist_ok=True)
 
-        # Copy manifest.json, transcript.json, and all chunk MP3 files if not already copied
-        required_files = ["manifest.json", manifest["transcript_file"]] + [
-            ch["audio_file"] for ch in manifest["chunks"]
-        ]
-        for fname in required_files:
-            src_file = src_dir / fname
-            dst_file = dst_dir / fname
-            if not src_file.is_file():
-                raise NarrationError(f"Missing source audio artifact before publish: {src_file}")
-            if not dst_file.is_file() or sha256_file(dst_file) != sha256_file(src_file):
-                atomic_write_bytes(dst_file, src_file.read_bytes())
+        if locale == DEFAULT_LOCALE or build_html_dir.name.lower() == locale:
+            target_dirs = [build_html_dir / "audio" / page_id]
+        else:
+            # Combined root _build/html: publish to both _build/html/<locale>/audio/<page_id>
+            # and _build/html/audio/<locale>/<page_id> so both route prefixes resolve identically
+            target_dirs = [
+                build_html_dir / locale / "audio" / page_id,
+                build_html_dir / "audio" / locale / page_id,
+            ]
 
-        # Verify published manifest and audio chunk integrity inside _build/html/audio/<page_id>
-        pub_manifest_path = dst_dir / "manifest.json"
-        pub_transcript_path = dst_dir / manifest["transcript_file"]
-        if not pub_manifest_path.is_file() or not pub_transcript_path.is_file():
-            raise NarrationError(f"Published manifest or transcript missing in {dst_dir}")
+        for dst_dir in target_dirs:
+            _sync_and_verify_target_dir(src_dir, dst_dir, manifest)
 
-        pub_manifest = json.loads(pub_manifest_path.read_text(encoding="utf-8"))
-        if pub_manifest != manifest:
-            raise NarrationError(f"Published manifest mismatch in {pub_manifest_path}")
-        if sha256_file(pub_transcript_path) != manifest["transcript_sha256"] and (
-            json.loads(pub_transcript_path.read_text(encoding="utf-8")).get("transcript_sha256")
-            != manifest["transcript_sha256"]
-        ):
-            raise NarrationError(f"Published transcript checksum mismatch in {pub_transcript_path}")
 
-        for ch in manifest["chunks"]:
-            pub_mp3 = dst_dir / ch["audio_file"]
-            if not pub_mp3.is_file():
-                raise NarrationError(f"Published audio chunk missing: {pub_mp3}")
-            if sha256_file(pub_mp3) != ch["audio_sha256"]:
-                raise NarrationError(f"Published audio chunk SHA-256 mismatch: {pub_mp3}")
+def _discover_enabled_locale_codes(root: Path) -> list[str]:
+    locales_yml = root / "i18n" / "locales.yml"
+    if not locales_yml.is_file():
+        return [DEFAULT_LOCALE]
+    try:
+        tools_dir = str((root / "tools").resolve())
+        if tools_dir not in sys.path:
+            sys.path.insert(0, tools_dir)
+        from i18n_utils import get_enabled_locales, load_locales_config
+
+        cfg = load_locales_config(root)
+        return list(get_enabled_locales(cfg).keys())
+    except Exception:
+        return [DEFAULT_LOCALE]
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -1685,6 +1831,16 @@ def main(argv: list[str] | None = None) -> int:
         action="append",
         dest="pages",
         help="Relative path to a documentation page to process (may be specified multiple times).",
+    )
+    parser.add_argument(
+        "--locale",
+        default=os.environ.get("SOFTCLOUD_LOCALE", DEFAULT_LOCALE),
+        help=f"Documentation locale code to process (default: {DEFAULT_LOCALE}).",
+    )
+    parser.add_argument(
+        "--all-locales",
+        action="store_true",
+        help="Process all enabled locales defined in i18n/locales.yml.",
     )
     parser.add_argument(
         "--include-notebooks",
@@ -1729,13 +1885,6 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     root = Path.cwd().resolve()
-    audio_root = (root / args.audio_dir).resolve()
-
-    config = NarrationConfig(
-        text_model=args.text_model,
-        tts_model=args.tts_model,
-        voice_name=args.voice,
-    )
 
     offline_env = os.environ.get("SOFTCLOUD_AUDIO_OFFLINE", "")
     if offline_env and offline_env not in ("0", "1"):
@@ -1746,59 +1895,76 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     is_offline = args.offline or (offline_env == "1")
 
-    try:
-        pages = discover_enabled_pages(
-            root=root,
-            requested_pages=args.pages,
-            include_notebooks=args.include_notebooks,
-        )
-        if not pages:
-            raise NarrationError("No enabled documentation pages found to process.")
+    target_locales = (
+        _discover_enabled_locale_codes(root)
+        if args.all_locales
+        else [args.locale.strip().lower()]
+    )
 
+    try:
         client: GeminiClient | None = None
         if not args.check_only and not is_offline:
             raw_key = load_api_key_from_env_or_dotenv(root)
-            api_key = GeminiClient.validate_api_key_format(raw_key)
-            client = GeminiClient(api_key=api_key)
-            # Section 7.6: Before generation, verify that the configured TTS model is available
-            client.verify_model_available(config.tts_model)
+            if raw_key:
+                api_key = GeminiClient.validate_api_key_format(raw_key)
+                client = GeminiClient(api_key=api_key)
 
-        manifests: list[dict[str, Any]] = []
-        for page_path in pages:
-            rel = page_path.relative_to(root).as_posix()
-            manifest = process_page(
-                source_path=page_path,
+        for loc in target_locales:
+            audio_root = default_audio_root_for_locale(root, args.audio_dir, loc)
+            config = NarrationConfig(
+                locale=loc,
+                text_model=args.text_model,
+                text_system_prompt=build_code_summary_system_prompt(loc),
+                tts_model=args.tts_model,
+                voice_name=args.voice,
+            )
+
+            pages = discover_enabled_pages(
                 root=root,
-                audio_root=audio_root,
-                config=config,
-                client=client,
-                check_only=args.check_only,
-                offline_mode=is_offline,
+                requested_pages=args.pages,
+                include_notebooks=args.include_notebooks,
+                locale=loc,
             )
-            manifests.append(manifest)
-            mode_label = (
-                "Verified"
-                if (args.check_only or is_offline)
-                else "Generated/Validated"
-            )
-            print(
-                f"{mode_label} narration for {rel} -> "
-                f"audio/{manifest['page_id']}/ "
-                f"({manifest['total_chunks']} chunks, {manifest['total_duration_seconds']:.2f}s)"
-            )
+            if not pages:
+                raise NarrationError(f"No enabled documentation pages found to process for locale '{loc}'.")
 
-        if args.verify_build_dir:
-            build_dir = (root / args.verify_build_dir).resolve()
-            publish_and_verify_build_assets(
-                build_html_dir=build_dir,
-                audio_root=audio_root,
-                manifests=manifests,
-                config=config,
-            )
-            print(
-                f"Verified published static audio assets in {build_dir.relative_to(root)}/audio/ "
-                f"for {len(manifests)} page(s)"
-            )
+            manifests: list[dict[str, Any]] = []
+            for page_path in pages:
+                rel = page_path.relative_to(root).as_posix()
+                manifest = process_page(
+                    source_path=page_path,
+                    root=root,
+                    audio_root=audio_root,
+                    config=config,
+                    client=client,
+                    check_only=args.check_only,
+                    offline_mode=is_offline,
+                )
+                manifests.append(manifest)
+                mode_label = (
+                    "Verified"
+                    if (args.check_only or is_offline)
+                    else "Generated/Validated"
+                )
+                audio_rel_dir = audio_root.relative_to(root).as_posix()
+                print(
+                    f"{mode_label} narration [{loc}] for {rel} -> "
+                    f"{audio_rel_dir}/{manifest['page_id']}/ "
+                    f"({manifest['total_chunks']} chunks, {manifest['total_duration_seconds']:.2f}s)"
+                )
+
+            if args.verify_build_dir:
+                build_dir = (root / args.verify_build_dir).resolve()
+                publish_and_verify_build_assets(
+                    build_html_dir=build_dir,
+                    audio_root=audio_root,
+                    manifests=manifests,
+                    config=config,
+                )
+                print(
+                    f"Verified published static audio assets [{loc}] in {build_dir.relative_to(root)} "
+                    f"for {len(manifests)} page(s)"
+                )
 
     except NarrationError as exc:
         print(f"[NARRATION FAILURE] {exc}", file=sys.stderr)
