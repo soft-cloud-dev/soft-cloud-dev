@@ -1,6 +1,7 @@
 /**
  * assets/static/softcloud.css
- * SoftCloud Web Awesome SSR styling, theme integration, and accessibility rules.
+ * SoftCloud Web Awesome SSR styling, theme integration, contrast compliance,
+ * responsive containment, and print pagination rules (SC-WA-RENDER-001).
  */
 
 /* Hide any synthetic metadata wrappers */
@@ -20,15 +21,19 @@ wa-icon {
 wa-button:focus-visible,
 wa-card:focus-visible,
 wa-callout:focus-visible {
-  outline: 2px solid var(--wa-color-primary-60, #2563eb);
+  outline: 2px solid var(--wa-color-brand-60, #2563eb);
   outline-offset: 2px;
 }
 
-/* Card layout enhancements */
+/* Card layout enhancements & legacy elevation mapping (WA-003, WA-004) */
 wa-card {
   display: block;
   margin: 1.5rem 0;
   max-width: 100%;
+}
+
+wa-card.sc-elevation {
+  box-shadow: var(--wa-shadow-m, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1));
 }
 
 wa-card [slot="header"] {
@@ -44,20 +49,151 @@ wa-card img[slot="media"] {
   object-fit: cover;
 }
 
-/* Callout spacing */
+/* Callout spacing, content container & title styling (WA-002) */
 wa-callout {
   display: block;
   margin: 1.25rem 0;
 }
 
-wa-callout [slot="title"] {
-  font-weight: 600;
+.sc-wa-callout-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: 100%;
 }
 
-/* Button spacing & inline flow */
+.sc-wa-callout-title {
+  font-weight: 600;
+  font-size: 1.05rem;
+  display: block;
+}
+
+/* Button spacing, inline flow & circle class (WA-003) */
 wa-button {
   margin: 0.25rem 0;
   vertical-align: middle;
+}
+
+wa-button.sc-button-circle::part(button) {
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+}
+
+/* Icon alignment & display */
+wa-icon {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Telemetry & surface contrast compliance (WA-006 - WCAG AA >= 4.5:1) */
+.sc-wa-telemetry {
+  background: var(--wa-color-surface-lowered, #f1f5f9);
+  color: var(--wa-color-text-normal, #0f172a);
+  padding: 0.75rem;
+  border-radius: var(--wa-border-radius-m, 0.5rem);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  border: 1px solid var(--wa-color-border-subtle, #e2e8f0);
+  margin-top: 0.5rem;
+  overflow-x: auto;
+}
+
+.sc-wa-telemetry-status {
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  display: inline-block;
+}
+
+.sc-wa-telemetry-status.online {
+  background: #dcfce7;
+  color: #14532d;
+}
+
+/* Dark mode theme synchronization overrides (WA-005, WA-006) */
+:root.wa-dark,
+:root.dark,
+:root[data-theme="dark"] {
+  --wa-color-surface-card: #1e293b;
+  --wa-color-text-normal: #f8fafc;
+  --wa-color-text-quiet: #94a3b8;
+}
+
+:root.wa-dark .sc-wa-telemetry,
+:root.dark .sc-wa-telemetry,
+:root[data-theme="dark"] .sc-wa-telemetry {
+  background: #0f172a;
+  color: #f8fafc;
+  border-color: #334155;
+}
+
+:root.wa-dark .sc-wa-telemetry-status.online,
+:root.dark .sc-wa-telemetry-status.online,
+:root[data-theme="dark"] .sc-wa-telemetry-status.online {
+  background: #14532d;
+  color: #dcfce7;
+}
+
+/* Responsive layout and horizontal overflow containment (WA-009) */
+table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.article-table,
+.myst-table-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+pre,
+code {
+  max-width: 100%;
+}
+
+pre {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Print and PDF export pagination (WA-010) */
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .myst-top-nav,
+  .myst-primary-sidebar,
+  .myst-secondary-sidebar,
+  [data-sc-lang-switcher],
+  #softcloud-lang-switcher-root,
+  .myst-theme-button {
+    display: none !important;
+  }
+
+  wa-card,
+  wa-callout {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    box-shadow: none !important;
+    border: 1px solid #cbd5e1 !important;
+  }
+
+  pre,
+  table {
+    overflow: visible !important;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+  }
 }
 
 /* Reduced motion preference */

@@ -21,13 +21,16 @@ test('Transforms wa-card placeholder preserving light DOM and slots', () => {
   assert.ok(html.includes('<wa-card'));
   assert.ok(!html.includes('sc-wa-host'));
   assert.ok(!html.includes('sc-wa-meta'));
-  assert.ok(html.includes('appearance="elevated"'));
+  assert.ok(html.includes('appearance="filled-outlined"'));
+  assert.ok(html.includes('with-header'));
+  assert.ok(html.includes('with-media'));
   assert.ok(html.includes('<img slot="media" src="/images/logo.png" alt="Logo">'));
   assert.ok(html.includes('<div slot="header">Card Title</div>'));
   assert.ok(html.includes('<p>First paragraph with <b>bold text</b>.</p>'));
   assert.ok(html.includes('<!-- comment inside card -->'));
   assert.ok(html.includes('<ul><li>Item 1</li></ul>'));
-  assert.ok(html.includes('class="my-card-class"'));
+  assert.ok(html.includes('sc-elevation'));
+  assert.ok(html.includes('my-card-class'));
 });
 
 test('Transforms wa-callout placeholder with slots and variant', () => {
@@ -41,9 +44,11 @@ test('Transforms wa-callout placeholder with slots and variant', () => {
   assert.equal(transformedCount, 1);
   assert.ok(html.includes('<wa-callout'));
   assert.ok(html.includes('variant="brand"'));
-  assert.ok(html.includes('appearance="soft"'));
-  assert.ok(html.includes('icon="info"'));
-  assert.ok(html.includes('<span slot="title">Notice</span>'));
+  assert.ok(html.includes('appearance="filled-outlined"'));
+  assert.ok(!html.includes('icon="info"'));
+  assert.ok(html.includes('<wa-icon slot="icon" name="circle-info"'));
+  assert.ok(html.includes('<div class="sc-wa-callout-content">'));
+  assert.ok(html.includes('<strong class="sc-wa-callout-title">Notice</strong>'));
   assert.ok(html.includes('<p>Callout description text.</p>'));
 });
 
@@ -57,7 +62,7 @@ test('Transforms wa-button placeholder with link attributes', () => {
   const { html, transformedCount } = transformPlaceholders(input, { isFragment: true });
   assert.equal(transformedCount, 1);
   assert.ok(html.includes('<wa-button'));
-  assert.ok(html.includes('variant="primary"'));
+  assert.ok(html.includes('variant="brand"'));
   assert.ok(html.includes('href="https://my.softcloud.dev/docs"'));
   assert.ok(html.includes('target="_blank"'));
   assert.ok(html.includes('rel="noopener noreferrer"'));
@@ -70,7 +75,8 @@ test('Transforms inline wa-icon placeholder', () => {
 
   const { html, transformedCount } = transformPlaceholders(input, { isFragment: true });
   assert.equal(transformedCount, 1);
-  assert.ok(html.includes('<wa-icon name="rocket" family="classic" style="solid"></wa-icon>'));
+  assert.ok(html.includes('<wa-icon name="rocket" family="classic" variant="solid" aria-hidden="true"></wa-icon>'));
+  assert.ok(!html.includes('style="solid"'));
   assert.ok(html.includes('Prefix '));
   assert.ok(html.includes(' suffix.'));
 });

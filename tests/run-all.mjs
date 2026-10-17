@@ -27,7 +27,10 @@ try {
   runStep('Node Dependency Checks', `node "${resolve(rootDir, 'scripts/check-node-dependencies.mjs')}"`);
   runStep('Security Parity Checks', `node "${resolve(rootDir, 'scripts/check-security-parity.mjs')}"`);
   runStep('Python Unit & Parity Tests', `"${resolve(venvBin, 'python')}" -m unittest discover tests`);
-  runStep('Node Unit Tests', `node --test "${resolve(rootDir, 'tests/**/*.mjs')}"`);
+  runStep(
+    'Node Unit Tests',
+    `node --test "${resolve(rootDir, 'tests/myst/test-*.mjs')}" "${resolve(rootDir, 'tests/transform/test-*.mjs')}" "${resolve(rootDir, 'tests/ssr/test-*.mjs')}" "${resolve(rootDir, 'tests/security/test-*.mjs')}" "${resolve(rootDir, 'tests/assets/test-*.mjs')}"`
+  );
   runStep('Fixture Build & Lit SSR', `node "${resolve(rootDir, 'tests/run-fixture-build.mjs')}"`);
   runStep('Playwright Browser Tests', `npx playwright test`);
 

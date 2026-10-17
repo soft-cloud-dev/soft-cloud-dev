@@ -57,8 +57,34 @@ export function transformAndRenderSSR(html, baseUrl = '') {
       continue;
     }
 
+    // Detect light-DOM slots for wa-card to ensure DSD includes header/footer/media wrappers (WA-004)
+    if (tagName === 'wa-card') {
+      const childSlots = new Set();
+      for (const child of host.childNodes || []) {
+        if (child.attrs) {
+          const slotAttr = child.attrs.find((a) => a.name === 'slot');
+          if (slotAttr) childSlots.add(slotAttr.value);
+        }
+      }
+      if (childSlots.has('header') && !attrs.some((a) => a.name === 'with-header')) {
+        setAttr(host, 'with-header', '');
+      }
+      if (childSlots.has('footer') && !attrs.some((a) => a.name === 'with-footer')) {
+        setAttr(host, 'with-footer', '');
+      }
+      if (childSlots.has('media') && !attrs.some((a) => a.name === 'with-media')) {
+        setAttr(host, 'with-media', '');
+      }
+      if (childSlots.has('header-actions') && !attrs.some((a) => a.name === 'with-header-actions')) {
+        setAttr(host, 'with-header-actions', '');
+      }
+      if (childSlots.has('footer-actions') && !attrs.some((a) => a.name === 'with-footer-actions')) {
+        setAttr(host, 'with-footer-actions', '');
+      }
+    }
+
     // Step 3: Render through Lit SSR to extract DSD template
-    const { dsdTemplateNode, hostAttrs } = renderComponentDSD(tagName, attrs);
+    const { dsdTemplateNode, hostAttrs } = renderComponentDSD(tagName, host.attrs || attrs);
 
     // Step 4: Prepend DSD template to host childNodes (before light DOM)
     host.childNodes = host.childNodes || [];

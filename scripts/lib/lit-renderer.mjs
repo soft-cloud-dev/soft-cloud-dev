@@ -30,11 +30,10 @@ export function buildLitTemplate(tagName, attrMap) {
         target,
         rel,
         disabled,
+        'with-caret': withCaret,
         caret,
         loading,
-        outline,
         pill,
-        circle,
       } = attrMap;
 
       const sizeMap = { small: 's', medium: 'm', large: 'l' };
@@ -42,11 +41,9 @@ export function buildLitTemplate(tagName, attrMap) {
 
       return html`<wa-button
         ?disabled=${disabled !== undefined}
-        ?caret=${caret !== undefined}
+        ?with-caret=${withCaret !== undefined || caret !== undefined}
         ?loading=${loading !== undefined}
-        ?outline=${outline !== undefined}
         ?pill=${pill !== undefined}
-        ?circle=${circle !== undefined}
         variant=${variant || nothing}
         appearance=${appearance || nothing}
         size=${normalizedSize || nothing}
@@ -57,28 +54,41 @@ export function buildLitTemplate(tagName, attrMap) {
     }
 
     case 'wa-card': {
-      const { appearance } = attrMap;
-      return html`<wa-card appearance=${appearance || nothing}></wa-card>`;
+      const {
+        appearance,
+        'with-header': withHeader,
+        'with-footer': withFooter,
+        'with-media': withMedia,
+        'with-header-actions': withHeaderActions,
+        'with-footer-actions': withFooterActions,
+      } = attrMap;
+
+      return html`<wa-card
+        appearance=${appearance || nothing}
+        ?with-header=${withHeader !== undefined}
+        ?with-footer=${withFooter !== undefined}
+        ?with-media=${withMedia !== undefined}
+        ?with-header-actions=${withHeaderActions !== undefined}
+        ?with-footer-actions=${withFooterActions !== undefined}
+      ></wa-card>`;
     }
 
     case 'wa-callout': {
-      const { variant, appearance, icon } = attrMap;
+      const { variant, appearance, size } = attrMap;
       return html`<wa-callout
         variant=${variant || nothing}
         appearance=${appearance || nothing}
-        icon=${icon || nothing}
+        size=${size || nothing}
       ></wa-callout>`;
     }
 
     case 'wa-icon': {
-      const { name, family, variant, style, label, library } = attrMap;
+      const { name, family, variant, label } = attrMap;
       return html`<wa-icon
         name=${name || nothing}
         family=${family || nothing}
         variant=${variant || nothing}
-        style=${style || nothing}
         label=${label || nothing}
-        library=${library || nothing}
       ></wa-icon>`;
     }
 

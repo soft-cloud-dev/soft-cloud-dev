@@ -6,21 +6,24 @@ test.describe('No-JavaScript SSR Readability', () => {
   test('renders readable content inside Web Awesome components when JS is disabled', async ({ page }) => {
     await page.goto('/');
 
-    // 1. Verify callout is readable
+    // 1. Verify callout is readable and retains did-ssr
     const callout = page.locator('wa-callout');
     await expect(callout).toBeVisible();
+    await expect(callout).toHaveAttribute('did-ssr', '');
     await expect(callout).toContainText('Important Overview');
     await expect(callout).toContainText('informational callout');
 
-    // 2. Verify card content is readable
+    // 2. Verify card content is readable and retains did-ssr
     const card = page.locator('wa-card');
     await expect(card).toBeVisible();
+    await expect(card).toHaveAttribute('did-ssr', '');
     await expect(card.locator('h2')).toContainText('Nested Heading in Card');
     await expect(card.locator('li').first()).toContainText('First item');
 
-    // 3. Verify button content and link are readable and interactive via HTML
+    // 3. Verify button content and link are readable, interactive, and retain did-ssr
     const button = page.locator('wa-button');
     await expect(button).toBeVisible();
+    await expect(button).toHaveAttribute('did-ssr', '');
     await expect(button).toContainText('Launch Console');
     await expect(button).toHaveAttribute('href', 'https://my.softcloud.dev/get-started');
 

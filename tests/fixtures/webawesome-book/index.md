@@ -15,6 +15,7 @@ This is an informational callout with a [documentation link](https://my.softclou
 :appearance: elevated
 :image: /images/logo.svg
 :image_alt: SoftCloud Logo
+:footer: System Operational
 
 ### Nested Heading in Card
 
@@ -31,8 +32,32 @@ Card body containing a list:
 :size: m
 :href: https://my.softcloud.dev/get-started
 :target: _blank
+:with-caret: true
 
 Launch Console {fa}`brands github`
 ```
 
-Inline icon test: Here is a rocket {icon}`classic solid rocket` and a terminal icon {fa}`solid terminal`.
+Inline icon test: Here is a rocket {icon}`classic solid rocket`, terminal icon {fa}`solid terminal`, brand icon {fa}`brands github`, and check icon {fa}`regular circle-check`.
+
+<div class="sc-wa-telemetry">
+  <span class="sc-wa-telemetry-label">Telemetry Status:</span>
+  <span class="sc-wa-telemetry-status online">Operational</span>
+</div>
+
+### Responsive Section
+
+| Metric Identifier | Target Specification | Current Measurement | Cluster Status | Compliance Threshold |
+| :--- | :--- | :--- | :--- | :--- |
+| Core Lit SSR TTFB | < 120 ms | 42 ms | Optimal | Passed |
+| Declarative Shadow DOM Time | < 50 ms | 18 ms | Optimal | Passed |
+| WCAG Contrast Ratio | >= 4.5:1 (AA) | 7.2:1 | Conforming | Passed |
+
+```json
+{
+  "system_telemetry": {
+    "cluster_name": "softcloud-primary-production-east-01",
+    "datacenter_region": "us-east-1-compute-zone-alpha",
+    "active_instances": 48
+  }
+}
+```

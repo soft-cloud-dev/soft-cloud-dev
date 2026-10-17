@@ -37,8 +37,9 @@ class SoftcloudUITests(unittest.TestCase):
         self.assertIn("sc-wa-icon", html_str)
         meta = self._extract_meta(html_str)
         self.assertEqual(meta["component"], "wa-icon")
+        self.assertEqual(meta["schema_version"], "2.0.0")
         self.assertEqual(meta["name"], "rocket")
-        self.assertEqual(meta["style"], "solid")
+        self.assertEqual(meta["variant"], "solid")
         self.assertEqual(meta["family"], "classic")
 
     def test_button(self):
@@ -54,7 +55,8 @@ class SoftcloudUITests(unittest.TestCase):
         self.assertIn("Click Me", html_str)
         meta = self._extract_meta(html_str)
         self.assertEqual(meta["component"], "wa-button")
-        self.assertEqual(meta["variant"], "primary")
+        self.assertEqual(meta["schema_version"], "2.0.0")
+        self.assertEqual(meta["variant"], "brand")
         self.assertEqual(meta["href"], "https://my.softcloud.dev/docs")
         self.assertEqual(meta["target"], "_blank")
         self.assertEqual(meta["rel"], "noopener noreferrer")
@@ -71,7 +73,9 @@ class SoftcloudUITests(unittest.TestCase):
         self.assertNotIn("<script>", html_str)
         meta = self._extract_meta(html_str)
         self.assertEqual(meta["header"], "Header Title")
-        self.assertEqual(meta["appearance"], "elevated")
+        self.assertEqual(meta["schema_version"], "2.0.0")
+        self.assertEqual(meta["appearance"], "filled-outlined")
+        self.assertIn("sc-elevation", meta["class"])
 
     def test_card_trusted_html_requires_trusted_html(self):
         with self.assertRaises(TypeError):

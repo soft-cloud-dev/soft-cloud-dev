@@ -124,66 +124,6 @@ def strip_thebe_sourcemap(js_code: str) -> tuple[str, int]:
     return new_code, (n1 + n2)
 
 
-def patch_react_hydration(js_code: str) -> tuple[str, int]:
-    """
-    Suppresses uncaught React 18 recoverable hydration mismatch errors (e.g. error #418/423)
-    in client hydration bundles by providing onRecoverableError to hydrateRoot.
-    """
-    target = "hydrateRoot)(document,"
-    pos = js_code.find(target)
-    if pos == -1:
-        return js_code, 0
-
-    if "onRecoverableError" in js_code[pos : pos + 500]:
-        return js_code, 0
-
-    call_start = pos + len(target)
-    depth = 1
-    i = call_start
-    in_quote = None
-    escape = False
-    brace_stack = []
-
-    while i < len(js_code) and depth > 0:
-        ch = js_code[i]
-        if escape:
-            escape = False
-        elif ch == "\\":
-            escape = True
-        elif in_quote == "`":
-            if ch == "`":
-                in_quote = None
-            elif ch == "$" and i + 1 < len(js_code) and js_code[i + 1] == "{":
-                brace_stack.append("}")
-                i += 1
-        elif in_quote in ('"', "'"):
-            if ch == in_quote:
-                in_quote = None
-        else:
-            if ch in ('"', "'", "`"):
-                in_quote = ch
-            elif ch == "(":
-                depth += 1
-            elif ch == ")":
-                depth -= 1
-            elif ch == "{" and brace_stack:
-                brace_stack.append("}")
-            elif ch == "}" and brace_stack:
-                brace_stack.pop()
-        i += 1
-
-    if depth != 0:
-        return js_code, 0
-
-    call_end = i - 1
-    patched_code = (
-        js_code[:call_end]
-        + ",{onRecoverableError:(e)=>{if(e&&(e.message||'').match(/418|423|hydration/i))return;console.error(e);}}"
-        + js_code[call_end:]
-    )
-    return patched_code, 1
-
-
 def process_thebe(html_dir: str) -> bool:
     """Processes built HTML directory to sanitize thebe debug logs and sourcemap errors."""
     if not os.path.isdir(html_dir):
@@ -223,14 +163,13 @@ def process_thebe(html_dir: str) -> bool:
 
                     mod_content, dbg_count = strip_thebe_console_debug(content)
                     mod_content, map_count = strip_thebe_sourcemap(mod_content)
-                    mod_content, hydr_count = patch_react_hydration(mod_content)
 
-                    if dbg_count > 0 or map_count > 0 or hydr_count > 0:
+                    if dbg_count > 0 or map_count > 0:
                         with open(fpath, "w", encoding="utf-8") as f:
                             f.write(mod_content)
                         js_patched += 1
                         rel = os.path.relpath(fpath, html_dir)
-                        print(f"[OK] Patched {rel} (stripped {dbg_count} debug call(s), {map_count} sourcemap directive(s), {hydr_count} hydration fix(es))")
+                        print(f"[OK] Patched {rel} (stripped {dbg_count} debug call(s), {map_count} sourcemap directive(s))")
 
                 except Exception as e:
                     print(f"[WARN] Error processing JS {fpath}: {e}", file=sys.stderr)
