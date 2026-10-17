@@ -6,7 +6,7 @@ Presents virtualizable sortable tabular records.
 
 **Category:** [Data Visualization](../index.md) · **Availability:** Pro · **Maturity:** Experimental.
 
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/feat/webawesome-component-catalog-20261017/components/data-viz/data-grid.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/data-grid/).
+**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/data-viz/data-grid.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/data-grid/).
 
 :::{warning} Integration status
 

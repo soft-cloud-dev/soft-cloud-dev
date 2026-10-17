@@ -6,7 +6,7 @@ Offers a visible interactive calendar.
 
 **Category:** [Forms](../index.md) · **Availability:** Pro · **Maturity:** Experimental.
 
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/feat/webawesome-component-catalog-20261017/components/forms/date-picker.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/date-picker/).
+**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/forms/date-picker.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/date-picker/).
 
 :::{warning} Integration status
 

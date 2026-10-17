@@ -6,7 +6,7 @@ Plots two variables with a third encoded by point size.
 
 **Category:** [Data Visualization](../index.md) · **Availability:** Pro · **Maturity:** Stable.
 
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/feat/webawesome-component-catalog-20261017/components/data-viz/bubble-chart.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/bubble-chart/).
+**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/data-viz/bubble-chart.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/bubble-chart/).
 
 :::{warning} Integration status
 
