@@ -6,7 +6,7 @@ Uses radial segments to compare several magnitudes.
 
 **Category:** [Data Visualization](../index.md) · **Availability:** Pro · **Maturity:** Stable.
 
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/feat/webawesome-component-catalog-20261017/components/data-viz/polar-area-chart.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/polar-area-chart/).
+**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/data-viz/polar-area-chart.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/polar-area-chart/).
 
 :::{warning} Integration status
 

@@ -6,7 +6,7 @@ Shows an inline miniature trend.
 
 **Category:** [Data Visualization](../index.md) · **Availability:** Pro · **Maturity:** Stable.
 
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/feat/webawesome-component-catalog-20261017/components/data-viz/sparkline.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/sparkline/).
+**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/data-viz/sparkline.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/sparkline/).
 
 :::{warning} Integration status
 
