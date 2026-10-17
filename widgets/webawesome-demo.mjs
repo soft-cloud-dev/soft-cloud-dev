@@ -17,6 +17,14 @@ const permittedAttrs = new Set([
 const validUrl = /^(?:https:\/\/|\/(?!\/)|#)/i;
 const moduleImports = new Map();
 
+// Retain the documented /static/showcase paths but resolve them relative to
+// the deployed Web Awesome bundle, including a custom BASE_URL prefix.
+function localShowcaseUrl(raw) {
+  if (!/^\/static\/showcase\/[a-z0-9][a-z0-9._-]*$/i.test(raw)) return raw;
+  const root = runtimeRoot();
+  return root ? new URL('../../' + raw.slice(1), root).href : raw;
+}
+
 function createNode(data) {
   if (typeof data === 'string') return document.createTextNode(data);
   if (!data || typeof data !== 'object' || typeof data.tag !== 'string') {
@@ -30,7 +38,9 @@ function createNode(data) {
   for (const [attr, value] of Object.entries(data.attrs || {})) {
     if (!permittedAttrs.has(attr) || attr.toLowerCase().startsWith('on')) continue;
     if (['href', 'src', 'image', 'poster'].includes(attr) && !validUrl.test(String(value))) continue;
-    node.setAttribute(attr, String(value));
+    const safeValue = ['src', 'image', 'poster'].includes(attr)
+      ? localShowcaseUrl(String(value)) : String(value);
+    node.setAttribute(attr, safeValue);
   }
   for (const child of data.children || []) node.append(createNode(child));
   return node;
