@@ -467,7 +467,8 @@ def build_route_manifest(
     pages_meta: dict[str, Any] = {}
     for rel_file in toc_files:
         raw_slug = page_slug_from_rel_path(rel_file)
-        flat_slug = Path(raw_slug).name if raw_slug else ""
+        flat_name = Path(raw_slug).name if raw_slug else ""
+        flat_slug = "index-1" if flat_name.lower() in ("index", "readme") else flat_name
         active_slug = raw_slug
         if (
             output_html_dir is not None
@@ -641,15 +642,16 @@ def assemble_combined_html(
         target_subdir = output_html_dir / prefix
         shutil.copytree(html_src, target_subdir, dirs_exist_ok=True)
 
-    # 3. Ensure widgets (language-switcher.mjs and voice-player.mjs) are present at root and per-locale
-    widgets_src = root / "widgets"
-    if widgets_src.is_dir():
-        shutil.copytree(widgets_src, output_html_dir / "widgets", dirs_exist_ok=True)
-        for code, info in enabled_locales.items():
-            if code == default_locale:
-                continue
-            prefix = str(info.get("prefix", f"/{code}")).strip("/")
-            shutil.copytree(widgets_src, output_html_dir / prefix / "widgets", dirs_exist_ok=True)
+    # 3. Ensure widgets and static images are present at root and per-locale
+    for asset_dir_name in ("widgets", "images"):
+        asset_src = root / asset_dir_name
+        if asset_src.is_dir():
+            shutil.copytree(asset_src, output_html_dir / asset_dir_name, dirs_exist_ok=True)
+            for code, info in enabled_locales.items():
+                if code == default_locale:
+                    continue
+                prefix = str(info.get("prefix", f"/{code}")).strip("/")
+                shutil.copytree(asset_src, output_html_dir / prefix / asset_dir_name, dirs_exist_ok=True)
 
     # 4. Copy top-level CNAME and thebe sourcemap if present
     if (root / "CNAME").is_file():

@@ -100,3 +100,10 @@ test('Transforms nested components (button inside card)', () => {
   assert.ok(html.includes('</wa-button>'));
   assert.ok(!html.includes('sc-wa-host'));
 });
+
+test('Maps button caret metadata to the Web Awesome 3.14 attribute', () => {
+  const input = '<div class="sc-wa-host sc-wa-button"><span class="sc-wa-meta">{"schema_version":"1.0.0","component":"wa-button","caret":true}</span>Menu</div>';
+  const { html } = transformPlaceholders(input, { isFragment: true });
+  assert.ok(html.includes('<wa-button with-caret="">'));
+  assert.ok(!html.includes(' caret='));
+});

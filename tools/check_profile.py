@@ -159,6 +159,11 @@ for loc_code, loc_info in locales_map.items():
         require(prov_data.get("locale") == loc_code, f"Provenance locale mismatch: {prov_file}")
         for en_file in files:
             rel_doc = en_file.relative_to(root).as_posix()
+            # Untranslated component catalog files publish progressively. Existing
+            # core documentation remains subject to strict locale validation.
+            candidate = root / src_dir / rel_doc
+            if rel_doc.startswith("components/") and not candidate.is_file():
+                continue
             loc_path = local_file(f"{src_dir}/{rel_doc}")
             if loc_path.suffix == ".ipynb":
                 notebook = json.loads(loc_path.read_text())

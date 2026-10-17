@@ -43,6 +43,9 @@ class DummyGeminiClient:
 
     def synthesize_speech(self, text: str, config: ga.NarrationConfig) -> tuple[bytes, str]:
         self.synthesize_calls.append(text)
+        if shutil.which("ffmpeg") is None:
+            fixture_mp3 = next((ROOT / "audio" / "introduction").glob("chunk-*.mp3"))
+            return fixture_mp3.read_bytes(), "audio/mp3"
         # Synthetic 16-bit PCM: 24000 samples/sec * 0.2 sec = 4800 samples = 9600 bytes
         pcm_bytes = b"\x00\x00" * 4800
         return pcm_bytes, "audio/L16;rate=24000"

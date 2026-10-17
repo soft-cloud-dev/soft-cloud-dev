@@ -1,0 +1,880 @@
+{
+  "schema_version": "1.0.0",
+  "pinned_version": "3.14.0",
+  "count": 90,
+  "components": [
+    {
+      "category": "actions",
+      "slug": "button",
+      "tag": "wa-button",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "actions",
+      "slug": "button-group",
+      "tag": "wa-button-group",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "button"
+      ]
+    },
+    {
+      "category": "actions",
+      "slug": "copy-button",
+      "tag": "wa-copy-button",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "actions",
+      "slug": "dropdown",
+      "tag": "wa-dropdown",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "button",
+        "dropdown-item"
+      ]
+    },
+    {
+      "category": "actions",
+      "slug": "dropdown-item",
+      "tag": "wa-dropdown-item",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "dropdown",
+        "button"
+      ]
+    },
+    {
+      "category": "forms",
+      "slug": "checkbox",
+      "tag": "wa-checkbox",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "forms",
+      "slug": "checkbox-group",
+      "tag": "wa-checkbox-group",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "checkbox"
+      ]
+    },
+    {
+      "category": "forms",
+      "slug": "color-picker",
+      "tag": "wa-color-picker",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "forms",
+      "slug": "combobox",
+      "tag": "wa-combobox",
+      "pro": true,
+      "sourceOnly": false,
+      "live": false,
+      "deps": [
+        "option"
+      ]
+    },
+    {
+      "category": "forms",
+      "slug": "date-input",
+      "tag": "wa-date-input",
+      "pro": true,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "forms",
+      "slug": "date-picker",
+      "tag": "wa-date-picker",
+      "pro": true,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "forms",
+      "slug": "file-input",
+      "tag": "wa-file-input",
+      "pro": true,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "forms",
+      "slug": "input",
+      "tag": "wa-input",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "forms",
+      "slug": "known-date",
+      "tag": "wa-known-date",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "forms",
+      "slug": "number-input",
+      "tag": "wa-number-input",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "forms",
+      "slug": "otp-input",
+      "tag": "wa-otp-input",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "forms",
+      "slug": "radio-group",
+      "tag": "wa-radio-group",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "radio"
+      ]
+    },
+    {
+      "category": "forms",
+      "slug": "radio",
+      "tag": "wa-radio",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "radio-group"
+      ]
+    },
+    {
+      "category": "forms",
+      "slug": "rating",
+      "tag": "wa-rating",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "forms",
+      "slug": "select",
+      "tag": "wa-select",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "option"
+      ]
+    },
+    {
+      "category": "forms",
+      "slug": "option",
+      "tag": "wa-option",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "select"
+      ]
+    },
+    {
+      "category": "forms",
+      "slug": "slider",
+      "tag": "wa-slider",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "forms",
+      "slug": "switch",
+      "tag": "wa-switch",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "forms",
+      "slug": "tag-input",
+      "tag": "wa-tag-input",
+      "pro": false,
+      "sourceOnly": true,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "forms",
+      "slug": "textarea",
+      "tag": "wa-textarea",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "forms",
+      "slug": "time-input",
+      "tag": "wa-time-input",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "layout",
+      "slug": "accordion",
+      "tag": "wa-accordion",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "accordion-item"
+      ]
+    },
+    {
+      "category": "layout",
+      "slug": "accordion-item",
+      "tag": "wa-accordion-item",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "accordion"
+      ]
+    },
+    {
+      "category": "layout",
+      "slug": "card",
+      "tag": "wa-card",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "layout",
+      "slug": "details",
+      "tag": "wa-details",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "layout",
+      "slug": "dialog",
+      "tag": "wa-dialog",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "button"
+      ]
+    },
+    {
+      "category": "layout",
+      "slug": "divider",
+      "tag": "wa-divider",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "layout",
+      "slug": "drawer",
+      "tag": "wa-drawer",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "button"
+      ]
+    },
+    {
+      "category": "layout",
+      "slug": "page",
+      "tag": "wa-page",
+      "pro": false,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "layout",
+      "slug": "scroller",
+      "tag": "wa-scroller",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "layout",
+      "slug": "split-panel",
+      "tag": "wa-split-panel",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "navigation",
+      "slug": "breadcrumb",
+      "tag": "wa-breadcrumb",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "breadcrumb-item"
+      ]
+    },
+    {
+      "category": "navigation",
+      "slug": "breadcrumb-item",
+      "tag": "wa-breadcrumb-item",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "breadcrumb"
+      ]
+    },
+    {
+      "category": "navigation",
+      "slug": "pagination",
+      "tag": "wa-pagination",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "navigation",
+      "slug": "stepper",
+      "tag": "wa-stepper",
+      "pro": false,
+      "sourceOnly": true,
+      "live": false,
+      "deps": [
+        "step"
+      ]
+    },
+    {
+      "category": "navigation",
+      "slug": "step",
+      "tag": "wa-step",
+      "pro": false,
+      "sourceOnly": true,
+      "live": false,
+      "deps": [
+        "stepper"
+      ]
+    },
+    {
+      "category": "navigation",
+      "slug": "tab-group",
+      "tag": "wa-tab-group",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "tab",
+        "tab-panel"
+      ]
+    },
+    {
+      "category": "navigation",
+      "slug": "tab",
+      "tag": "wa-tab",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "tab-group",
+        "tab-panel"
+      ]
+    },
+    {
+      "category": "navigation",
+      "slug": "tab-panel",
+      "tag": "wa-tab-panel",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "tab-group",
+        "tab"
+      ]
+    },
+    {
+      "category": "navigation",
+      "slug": "tree",
+      "tag": "wa-tree",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "tree-item"
+      ]
+    },
+    {
+      "category": "navigation",
+      "slug": "tree-item",
+      "tag": "wa-tree-item",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "tree"
+      ]
+    },
+    {
+      "category": "feedback",
+      "slug": "badge",
+      "tag": "wa-badge",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "feedback",
+      "slug": "callout",
+      "tag": "wa-callout",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "feedback",
+      "slug": "progress-bar",
+      "tag": "wa-progress-bar",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "feedback",
+      "slug": "progress-ring",
+      "tag": "wa-progress-ring",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "feedback",
+      "slug": "skeleton",
+      "tag": "wa-skeleton",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "feedback",
+      "slug": "spinner",
+      "tag": "wa-spinner",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "feedback",
+      "slug": "tag",
+      "tag": "wa-tag",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "feedback",
+      "slug": "toast",
+      "tag": "wa-toast",
+      "pro": false,
+      "sourceOnly": false,
+      "live": false,
+      "deps": [
+        "toast-item"
+      ]
+    },
+    {
+      "category": "feedback",
+      "slug": "toast-item",
+      "tag": "wa-toast-item",
+      "pro": false,
+      "sourceOnly": false,
+      "live": false,
+      "deps": [
+        "toast"
+      ]
+    },
+    {
+      "category": "feedback",
+      "slug": "tooltip",
+      "tag": "wa-tooltip",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "button"
+      ]
+    },
+    {
+      "category": "media",
+      "slug": "animated-image",
+      "tag": "wa-animated-image",
+      "pro": false,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "media",
+      "slug": "avatar",
+      "tag": "wa-avatar",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "media",
+      "slug": "carousel",
+      "tag": "wa-carousel",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "carousel-item"
+      ]
+    },
+    {
+      "category": "media",
+      "slug": "carousel-item",
+      "tag": "wa-carousel-item",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": [
+        "carousel"
+      ]
+    },
+    {
+      "category": "media",
+      "slug": "comparison",
+      "tag": "wa-comparison",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "media",
+      "slug": "icon",
+      "tag": "wa-icon",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "media",
+      "slug": "markdown",
+      "tag": "wa-markdown",
+      "pro": false,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "media",
+      "slug": "qr-code",
+      "tag": "wa-qr-code",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "media",
+      "slug": "video",
+      "tag": "wa-video",
+      "pro": true,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "media",
+      "slug": "video-playlist",
+      "tag": "wa-video-playlist",
+      "pro": true,
+      "sourceOnly": false,
+      "live": false,
+      "deps": [
+        "video"
+      ]
+    },
+    {
+      "category": "media",
+      "slug": "zoomable-frame",
+      "tag": "wa-zoomable-frame",
+      "pro": false,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "data-viz",
+      "slug": "bar-chart",
+      "tag": "wa-bar-chart",
+      "pro": true,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "data-viz",
+      "slug": "bubble-chart",
+      "tag": "wa-bubble-chart",
+      "pro": true,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "data-viz",
+      "slug": "chart",
+      "tag": "wa-chart",
+      "pro": true,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "data-viz",
+      "slug": "data-grid",
+      "tag": "wa-data-grid",
+      "pro": true,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "data-viz",
+      "slug": "doughnut-chart",
+      "tag": "wa-doughnut-chart",
+      "pro": true,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "data-viz",
+      "slug": "line-chart",
+      "tag": "wa-line-chart",
+      "pro": true,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "data-viz",
+      "slug": "pie-chart",
+      "tag": "wa-pie-chart",
+      "pro": true,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "data-viz",
+      "slug": "polar-area-chart",
+      "tag": "wa-polar-area-chart",
+      "pro": true,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "data-viz",
+      "slug": "radar-chart",
+      "tag": "wa-radar-chart",
+      "pro": true,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "data-viz",
+      "slug": "scatter-chart",
+      "tag": "wa-scatter-chart",
+      "pro": true,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "data-viz",
+      "slug": "sparkline",
+      "tag": "wa-sparkline",
+      "pro": true,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "helpers",
+      "slug": "animation",
+      "tag": "wa-animation",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "helpers",
+      "slug": "format-bytes",
+      "tag": "wa-format-bytes",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "helpers",
+      "slug": "format-date",
+      "tag": "wa-format-date",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "helpers",
+      "slug": "format-number",
+      "tag": "wa-format-number",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "helpers",
+      "slug": "include",
+      "tag": "wa-include",
+      "pro": false,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "helpers",
+      "slug": "intersection-observer",
+      "tag": "wa-intersection-observer",
+      "pro": false,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "helpers",
+      "slug": "mutation-observer",
+      "tag": "wa-mutation-observer",
+      "pro": false,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "helpers",
+      "slug": "popover",
+      "tag": "wa-popover",
+      "pro": false,
+      "sourceOnly": false,
+      "live": false,
+      "deps": [
+        "button"
+      ]
+    },
+    {
+      "category": "helpers",
+      "slug": "popup",
+      "tag": "wa-popup",
+      "pro": false,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    },
+    {
+      "category": "helpers",
+      "slug": "random-content",
+      "tag": "wa-random-content",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "helpers",
+      "slug": "relative-time",
+      "tag": "wa-relative-time",
+      "pro": false,
+      "sourceOnly": false,
+      "live": true,
+      "deps": []
+    },
+    {
+      "category": "helpers",
+      "slug": "resize-observer",
+      "tag": "wa-resize-observer",
+      "pro": false,
+      "sourceOnly": false,
+      "live": false,
+      "deps": []
+    }
+  ]
+}

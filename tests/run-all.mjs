@@ -29,7 +29,7 @@ try {
   runStep('Python Unit & Parity Tests', `"${resolve(venvBin, 'python')}" -m unittest discover tests`);
   runStep(
     'Node Unit Tests',
-    `node --test "${resolve(rootDir, 'tests/myst/test-*.mjs')}" "${resolve(rootDir, 'tests/transform/test-*.mjs')}" "${resolve(rootDir, 'tests/ssr/test-*.mjs')}" "${resolve(rootDir, 'tests/security/test-*.mjs')}" "${resolve(rootDir, 'tests/assets/test-*.mjs')}"`
+    `node --test "${resolve(rootDir, 'tests/myst/test-*.mjs')}" "${resolve(rootDir, 'tests/transform/test-*.mjs')}" "${resolve(rootDir, 'tests/ssr/test-*.mjs')}" "${resolve(rootDir, 'tests/security/test-*.mjs')}" "${resolve(rootDir, 'tests/assets/test-*.mjs')}" "${resolve(rootDir, 'tests/catalog/test-*.mjs')}"`
   );
   runStep('Fixture Build & Lit SSR', `node "${resolve(rootDir, 'tests/run-fixture-build.mjs')}"`);
   runStep('Playwright Browser Tests', `npx playwright test`);
