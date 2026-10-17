@@ -6,6 +6,7 @@
 
 :::{admonition} Current implementation
 :class: note
+
 The repository pins Web Awesome 3.14.0 and Jupyter Book 2.1.7. The 90-page catalog has client-side live previews for Core components that can be loaded safely, Pro references without unlicensed executables, and four legacy typed directives/roles with genuine Lit SSR/DSD. Do not conflate client-only anywidget previews with server-rendered output.
 :::
 
