@@ -25,7 +25,7 @@ test('authoring and catalog routes are separate navigation groups', () => {
 test('typed SSR and browser widget responsibilities are documented', () => {
   const guide = read('components/authoring-guide.md');
   const button = read('components/actions/button.md');
-  assert.match(guide, /Use the existing typed Web Awesome directives/);
-  assert.match(guide, /Use \x60\{anywidget\}\x60 for client-side previews/);
+  assert.match(guide, /existing typed SSR directives for `wa-button`, `wa-card`, `wa-callout`, and `wa-icon`/);
+  assert.match(guide, /`\{anywidget\}` for interactive demonstrations or components without a typed directive/);
   assert.match(button, /genuine Lit SSR\/DSD/);
 });
