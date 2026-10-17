@@ -27,7 +27,6 @@ project:
     - title: Web Awesome Components
       children:
         - file: components/index.md
-        - file: components/authoring-guide.md
         - file: components/practical-patterns.md
         - file: components/showcase-media.md
         - title: Actions
@@ -137,6 +136,9 @@ project:
             - file: components/helpers/relative-time.md
             - file: components/helpers/resize-observer.md
 
+    - title: Contributor Guide
+      children:
+        - file: components/authoring-guide.md
 site:
   template: book-theme
   nav:
