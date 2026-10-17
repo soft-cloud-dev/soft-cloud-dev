@@ -10,8 +10,8 @@
   // 1. Theme Synchronization (WA-005, WA-THEME-001)
   let isUpdating = false;
 
-  function syncTheme() {
-    if (isUpdating) return;
+  function syncTheme(force = false) {
+    if (isUpdating && force !== true) return;
     isUpdating = true;
     try {
       const root = document.documentElement;
@@ -337,7 +337,7 @@
         } catch (e) {}
         root.classList.add('dark');
         root.classList.remove('light', 'wa-light');
-        syncTheme();
+        syncTheme(true);
       } else if (theme === 'light') {
         try {
           localStorage.setItem('softcloud-theme', 'light');
@@ -345,7 +345,7 @@
         } catch (e) {}
         root.classList.add('light');
         root.classList.remove('dark', 'wa-dark');
-        syncTheme();
+        syncTheme(true);
       } else if (theme === 'auto') {
         try {
           localStorage.setItem('softcloud-theme', 'auto');
@@ -353,7 +353,7 @@
         } catch (e) {}
         root.classList.remove('dark', 'light', 'wa-dark', 'wa-light');
         root.removeAttribute('data-theme');
-        syncTheme();
+        syncTheme(true);
       }
     },
     syncTheme: syncTheme,
