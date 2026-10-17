@@ -31,15 +31,16 @@ Each component page should include: a descriptive heading with the actual tag, o
 
 ## Portable MyST layout first
 
-::::{grid} 1 1 2 2
+:::::{grid} 1 1 2 2
 :::{card} Native documentation card
 No JavaScript or additional plugin API is needed for this card.
 :::
-:::{card} Native documentation warning
-:::{warning} The example data is not a live service status.
-:::
+::::{card} Native documentation warning
+:::{warning}
+The example data is not a live service status.
 :::
 ::::
+:::::
 
 Use native MyST documentation tabs for explanations and snippets. Do not replace these with `<wa-tab-group>` just to style source code:
 
