@@ -58,9 +58,10 @@ test('wa-card produces valid wrapper, metadata span, and body', () => {
   assert.ok(metaSpan, 'Expected exactly one sc-wa-meta child');
   const meta = JSON.parse(metaSpan.children[0].value);
   assert.equal(meta.component, 'wa-card');
-  assert.equal(meta.schema_version, '1.0.0');
+  assert.equal(meta.schema_version, '2.0.0');
   assert.equal(meta.header, 'My Card Header');
-  assert.equal(meta.appearance, 'elevated');
+  assert.equal(meta.appearance, 'filled-outlined');
+  assert.ok(meta.class.includes('sc-elevation'));
   assert.equal(meta.image, '/images/card.png');
 
   // Verify body is preserved
@@ -88,7 +89,9 @@ test('wa-callout produces valid wrapper and metadata', () => {
   const metaSpan = host.children.find((c) => c.class === 'sc-wa-meta');
   const meta = JSON.parse(metaSpan.children[0].value);
   assert.equal(meta.component, 'wa-callout');
+  assert.equal(meta.schema_version, '2.0.0');
   assert.equal(meta.variant, 'warning');
+  assert.equal(meta.appearance, 'filled-outlined');
   assert.equal(meta.title, 'Warning Note');
 });
 
@@ -113,7 +116,8 @@ test('wa-button produces valid wrapper and link metadata', () => {
   const metaSpan = host.children.find((c) => c.class === 'sc-wa-meta');
   const meta = JSON.parse(metaSpan.children[0].value);
   assert.equal(meta.component, 'wa-button');
-  assert.equal(meta.variant, 'primary');
+  assert.equal(meta.schema_version, '2.0.0');
+  assert.equal(meta.variant, 'brand');
   assert.equal(meta.href, 'https://my.softcloud.dev/docs');
 });
 
@@ -130,9 +134,11 @@ test('icon role produces inline span with metadata', () => {
   const metaSpan = host.children[0];
   const meta = JSON.parse(metaSpan.children[0].value);
   assert.equal(meta.component, 'wa-icon');
+  assert.equal(meta.schema_version, '2.0.0');
   assert.equal(meta.name, 'rocket');
   assert.equal(meta.family, 'classic');
-  assert.equal(meta.style, 'solid');
+  assert.equal(meta.variant, 'solid');
+  assert.equal(meta.style, undefined);
 });
 
 test('fa role produces inline span with Font Awesome metadata', () => {
@@ -148,9 +154,11 @@ test('fa role produces inline span with Font Awesome metadata', () => {
   const metaSpan = host.children[0];
   const meta = JSON.parse(metaSpan.children[0].value);
   assert.equal(meta.component, 'wa-icon');
-  assert.equal(meta.library, 'fa');
+  assert.equal(meta.schema_version, '2.0.0');
   assert.equal(meta.name, 'github');
-  assert.equal(meta.style, 'brands');
+  assert.equal(meta.family, 'brands');
+  assert.equal(meta.library, undefined);
+  assert.equal(meta.style, undefined);
 });
 
 test('Plugin rejects invalid options or unsafe URLs', () => {

@@ -11,7 +11,7 @@ import {
   replaceChild,
   walkPostOrder,
 } from './parse5-tree.mjs';
-import { validateComponentMetadata } from './schema.mjs';
+import { validateComponentMetadata, normalizeComponentMetadata } from './schema.mjs';
 import { buildCustomElementNode } from './component-render-model.mjs';
 
 const MARKER_TO_COMPONENT = {
@@ -94,6 +94,9 @@ export function transformPlaceholders(html, options = {}) {
         `Component mismatch: marker class is '${componentType}' but metadata specifies '${meta.component}'`
       );
     }
+
+    // Explicit migration/normalization of 1.0.0 metadata to 2.0.0 (WA-COMP-001, WA-COMP-004)
+    meta = normalizeComponentMetadata(meta, { context: componentType });
 
     // Validate metadata against schema and security rules
     const validation = validateComponentMetadata(meta);

@@ -61,7 +61,7 @@ class NotebookExecutionTests(unittest.TestCase):
                 self.assertIsNotNone(meta_span, f"Missing sc-wa-meta in output: {html_str}")
 
                 meta_data = json.loads(meta_span.get_text())
-                self.assertEqual(meta_data.get("schema_version"), "1.0.0")
+                self.assertEqual(meta_data.get("schema_version"), "2.0.0")
                 self.assertIn(meta_data.get("component"), ["wa-card", "wa-callout", "wa-button", "wa-icon"])
         finally:
             if tmp_path.exists():

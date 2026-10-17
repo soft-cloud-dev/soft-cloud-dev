@@ -13,7 +13,7 @@ const SCHEMA = JSON.parse(fs.readFileSync(schemaPath, 'utf8'));
 
 // Import validators
 import { validateUrl } from '../../scripts/lib/url-policy.mjs';
-import { validateComponentMetadata } from '../../scripts/lib/schema.mjs';
+import { validateComponentMetadata, normalizeComponentMetadata } from '../../scripts/lib/schema.mjs';
 
 function createMetaNode(meta) {
   return {
@@ -55,7 +55,7 @@ const waCardDirective = {
     footer: { type: String, doc: 'Card footer text' },
     image: { type: String, doc: 'Card media URL' },
     image_alt: { type: String, doc: 'Card media alt text' },
-    appearance: { type: String, doc: 'Appearance: default, outlined, elevated, flat' },
+    appearance: { type: String, doc: 'Appearance: accent, filled, outlined, filled-outlined, plain (or legacy elevated, default, flat)' },
     class: { type: String, doc: 'Custom CSS classes' },
   },
   body: {
@@ -68,12 +68,13 @@ const waCardDirective = {
       opts.header = data.arg.trim();
     }
 
-    const meta = {
-      schema_version: '1.0.0',
+    let meta = {
+      schema_version: '2.0.0',
       component: 'wa-card',
       ...opts,
     };
 
+    meta = normalizeComponentMetadata(meta, { context: 'wa-card' });
     const validation = validateComponentMetadata(meta);
     if (!validation.valid) {
       throw new Error(`[wa-card error] ${validation.errors.join('; ')}`);
@@ -107,7 +108,7 @@ const waCalloutDirective = {
   },
   options: {
     variant: { type: String, doc: 'Variant: neutral, brand, success, warning, danger' },
-    appearance: { type: String, doc: 'Appearance: default, solid, filled, outline, outlined, soft' },
+    appearance: { type: String, doc: 'Appearance: accent, filled, outlined, filled-outlined, plain (or legacy soft, solid, outline, default)' },
     icon: { type: String, doc: 'Icon name' },
     title: { type: String, doc: 'Callout title' },
     class: { type: String, doc: 'Custom CSS classes' },
@@ -122,12 +123,13 @@ const waCalloutDirective = {
       opts.title = data.arg.trim();
     }
 
-    const meta = {
-      schema_version: '1.0.0',
+    let meta = {
+      schema_version: '2.0.0',
       component: 'wa-callout',
       ...opts,
     };
 
+    meta = normalizeComponentMetadata(meta, { context: 'wa-callout' });
     const validation = validateComponentMetadata(meta);
     if (!validation.valid) {
       throw new Error(`[wa-callout error] ${validation.errors.join('; ')}`);
@@ -160,16 +162,17 @@ const waButtonDirective = {
     required: false,
   },
   options: {
-    variant: { type: String, doc: 'Variant: default, primary, success, neutral, warning, danger, brand' },
-    appearance: { type: String, doc: 'Appearance: filled, outlined, text, flat, accent, plain' },
-    size: { type: String, doc: 'Size: small, medium, large' },
+    variant: { type: String, doc: 'Variant: brand, neutral, success, warning, danger' },
+    appearance: { type: String, doc: 'Appearance: accent, filled, outlined, filled-outlined, plain' },
+    size: { type: String, doc: 'Size: xs, s, m, l, xl' },
     href: { type: String, doc: 'Link URL' },
     target: { type: String, doc: 'Link target' },
     rel: { type: String, doc: 'Link rel' },
     disabled: { type: Boolean, doc: 'Disabled boolean' },
-    caret: { type: Boolean, doc: 'Show caret' },
+    caret: { type: Boolean, doc: 'Show caret (legacy)' },
+    'with-caret': { type: Boolean, doc: 'Show caret' },
     loading: { type: Boolean, doc: 'Loading state' },
-    outline: { type: Boolean, doc: 'Outline style' },
+    outline: { type: Boolean, doc: 'Outline style (legacy)' },
     pill: { type: Boolean, doc: 'Pill shape' },
     circle: { type: Boolean, doc: 'Circle shape' },
     label: { type: String, doc: 'Accessible label' },
@@ -181,22 +184,19 @@ const waButtonDirective = {
   },
   run(data, vfile, ctx) {
     const opts = { ...data.options };
-    if (opts.size) {
-      const sizeMap = { small: 's', medium: 'm', large: 'l' };
-      opts.size = sizeMap[String(opts.size).toLowerCase()] || opts.size;
-    }
     if (!opts.href && data.arg && (data.arg.startsWith('http') || data.arg.startsWith('/') || data.arg.startsWith('#'))) {
       opts.href = data.arg.trim();
     } else if (!opts.label && data.arg && !data.body) {
       opts.label = data.arg.trim();
     }
 
-    const meta = {
-      schema_version: '1.0.0',
+    let meta = {
+      schema_version: '2.0.0',
       component: 'wa-button',
       ...opts,
     };
 
+    meta = normalizeComponentMetadata(meta, { context: 'wa-button' });
     const validation = validateComponentMetadata(meta);
     if (!validation.valid) {
       throw new Error(`[wa-button error] ${validation.errors.join('; ')}`);
@@ -209,7 +209,6 @@ const waButtonDirective = {
 
     let bodyChildren = parseMarkdownBody(data.body, ctx);
     if (bodyChildren.length === 0 && data.arg && opts.href) {
-      // If arg was href and body is empty, use label or href as text
       const buttonText = meta.label || opts.href;
       bodyChildren = [{ type: 'text', value: buttonText }];
     } else if (bodyChildren.length === 0 && meta.label) {
@@ -229,30 +228,31 @@ const waButtonDirective = {
 };
 
 function parseIconRoleContent(content) {
-  // Parses contents like "rocket", "solid rocket", "classic solid rocket", or "name=rocket style=solid"
   const parts = content.trim().split(/\s+/);
-  const meta = {
-    schema_version: '1.0.0',
+  const rawMeta = {
+    schema_version: '2.0.0',
     component: 'wa-icon',
   };
 
-  const allowedFamilies = new Set(['classic', 'sharp', 'duotone']);
-  const allowedStyles = new Set(['solid', 'regular', 'brands', 'light', 'thin', 'duotone', 'sharp-solid', 'sharp-regular', 'sharp-light', 'sharp-thin']);
+  const allowedFamilies = new Set(['classic', 'sharp', 'duotone', 'brands']);
+  const allowedVariants = new Set(['solid', 'regular', 'light', 'thin']);
 
   for (const part of parts) {
     if (part.includes('=')) {
       const [k, v] = part.split('=', 2);
-      meta[k] = v.replace(/^["']|["']$/g, '');
+      rawMeta[k] = v.replace(/^["']|["']$/g, '');
     } else if (allowedFamilies.has(part)) {
-      meta.family = part;
-    } else if (allowedStyles.has(part)) {
-      meta.style = part;
+      rawMeta.family = part;
+    } else if (allowedVariants.has(part)) {
+      rawMeta.variant = part;
+    } else if (part === 'brands') {
+      rawMeta.family = 'brands';
     } else {
-      meta.name = part;
+      rawMeta.name = part;
     }
   }
 
-  return meta;
+  return normalizeComponentMetadata(rawMeta, { context: 'icon' });
 }
 
 const iconRole = {
@@ -266,7 +266,6 @@ const iconRole = {
   run(data) {
     const raw = data.body || data.arg || '';
     const meta = parseIconRoleContent(raw);
-    meta.library = meta.library || 'default';
 
     const validation = validateComponentMetadata(meta);
     if (!validation.valid) {
@@ -295,25 +294,43 @@ const faRole = {
   run(data) {
     const raw = data.body || data.arg || '';
     const parts = raw.trim().split(/\s+/);
-    let style = 'solid';
+    let family = 'classic';
+    let variant = 'solid';
     let name = '';
 
     if (parts.length === 1) {
-      // e.g. {fa}`github` -> check if brands or solid
       name = parts[0];
+      // Check if known brand icon
+      if (['github', 'linux', 'python', 'docker', 'rust', 'freebsd', 'git-alt', 'markdown', 'twitter', 'facebook', 'google'].includes(name)) {
+        family = 'brands';
+        variant = undefined;
+      }
     } else if (parts.length >= 2) {
-      style = parts[0];
+      const prefix = parts[0];
       name = parts[1];
+      if (prefix === 'brands' || prefix === 'fab') {
+        family = 'brands';
+        variant = undefined;
+      } else if (prefix === 'regular' || prefix === 'far') {
+        family = 'classic';
+        variant = 'regular';
+      } else {
+        family = 'classic';
+        variant = 'solid';
+      }
     }
 
-    const meta = {
-      schema_version: '1.0.0',
+    const rawMeta = {
+      schema_version: '2.0.0',
       component: 'wa-icon',
       name,
-      style,
-      library: 'fa',
+      family,
     };
+    if (variant) {
+      rawMeta.variant = variant;
+    }
 
+    const meta = normalizeComponentMetadata(rawMeta, { context: 'fa' });
     const validation = validateComponentMetadata(meta);
     if (!validation.valid) {
       throw new Error(`[fa error] ${validation.errors.join('; ')}`);

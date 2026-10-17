@@ -30,7 +30,7 @@ test('URL policy validates entire corpus as expected', () => {
 test('Schema validator rejects unknown components', () => {
   const res = validateComponentMetadata({
     component: 'wa-unknown',
-    schema_version: '1.0.0',
+    schema_version: '2.0.0',
   });
   assert.equal(res.valid, false);
   assert.match(res.errors[0], /Unknown or unsupported component/);
@@ -39,7 +39,7 @@ test('Schema validator rejects unknown components', () => {
 test('Schema validator rejects unsupported schema versions', () => {
   const res = validateComponentMetadata({
     component: 'wa-button',
-    schema_version: '2.0.0',
+    schema_version: '3.0.0',
   });
   assert.equal(res.valid, false);
   assert.match(res.errors[0], /Unsupported schema version/);
@@ -48,7 +48,7 @@ test('Schema validator rejects unsupported schema versions', () => {
 test('Schema validator rejects unknown options / additional properties', () => {
   const res = validateComponentMetadata({
     component: 'wa-button',
-    schema_version: '1.0.0',
+    schema_version: '2.0.0',
     malicious_prop: '<script>alert(1)</script>',
   });
   assert.equal(res.valid, false);
@@ -58,7 +58,7 @@ test('Schema validator rejects unknown options / additional properties', () => {
 test('Schema validator rejects event handlers', () => {
   const res = validateComponentMetadata({
     component: 'wa-button',
-    schema_version: '1.0.0',
+    schema_version: '2.0.0',
     onclick: 'alert(1)',
   });
   assert.equal(res.valid, false);
@@ -67,7 +67,7 @@ test('Schema validator rejects event handlers', () => {
 test('Schema validator rejects invalid button variants', () => {
   const res = validateComponentMetadata({
     component: 'wa-button',
-    schema_version: '1.0.0',
+    schema_version: '2.0.0',
     variant: 'danger-zone',
   });
   assert.equal(res.valid, false);
@@ -77,7 +77,7 @@ test('Schema validator rejects invalid button variants', () => {
 test('Schema validator rejects button with unsafe javascript href', () => {
   const res = validateComponentMetadata({
     component: 'wa-button',
-    schema_version: '1.0.0',
+    schema_version: '2.0.0',
     href: 'javascript:alert(1)',
   });
   assert.equal(res.valid, false);
@@ -87,7 +87,7 @@ test('Schema validator rejects button with unsafe javascript href', () => {
 test('Schema validator rejects card with mailto media image', () => {
   const res = validateComponentMetadata({
     component: 'wa-card',
-    schema_version: '1.0.0',
+    schema_version: '2.0.0',
     image: 'mailto:attacker@evil.com',
   });
   assert.equal(res.valid, false);
@@ -98,10 +98,10 @@ test('Schema validator accepts valid button, card, callout, icon', () => {
   assert.equal(
     validateComponentMetadata({
       component: 'wa-button',
-      schema_version: '1.0.0',
-      variant: 'primary',
+      schema_version: '2.0.0',
+      variant: 'brand',
       appearance: 'filled',
-      size: 'medium',
+      size: 'm',
       href: 'https://my.softcloud.dev/docs',
       target: '_blank',
     }).valid,
@@ -111,11 +111,11 @@ test('Schema validator accepts valid button, card, callout, icon', () => {
   assert.equal(
     validateComponentMetadata({
       component: 'wa-card',
-      schema_version: '1.0.0',
+      schema_version: '2.0.0',
       header: 'Card Title',
       image: '/images/pic.png',
       image_alt: 'A description',
-      appearance: 'elevated',
+      appearance: 'filled-outlined',
     }).valid,
     true
   );
@@ -123,10 +123,10 @@ test('Schema validator accepts valid button, card, callout, icon', () => {
   assert.equal(
     validateComponentMetadata({
       component: 'wa-callout',
-      schema_version: '1.0.0',
+      schema_version: '2.0.0',
       variant: 'brand',
-      appearance: 'soft',
-      icon: 'info',
+      appearance: 'filled-outlined',
+      icon: 'circle-info',
     }).valid,
     true
   );
@@ -134,9 +134,9 @@ test('Schema validator accepts valid button, card, callout, icon', () => {
   assert.equal(
     validateComponentMetadata({
       component: 'wa-icon',
-      schema_version: '1.0.0',
+      schema_version: '2.0.0',
       name: 'rocket',
-      style: 'solid',
+      variant: 'solid',
       family: 'classic',
     }).valid,
     true

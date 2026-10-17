@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * scripts/stage-webawesome-assets.mjs
- * Stages all Web Awesome, Font Awesome, and SoftCloud runtime static assets
- * into the publication build directory.
+ * Stages all Web Awesome, Font Awesome (including self-hosted SVGs),
+ * and SoftCloud runtime static assets into the publication build directory.
  */
 
 import fs from 'node:fs';
@@ -36,7 +36,16 @@ export function stageAssets(targetDir) {
   fs.mkdirSync(faWebfontsDst, { recursive: true });
   fs.cpSync(faWebfontsSrc, faWebfontsDst, { recursive: true });
 
-  // 3. Copy SoftCloud static assets
+  // 3. Copy Font Awesome SVGs (solid, regular, brands) for Web Awesome setIconPath() (WA-ICON-001)
+  const faSvgsSrc = path.join(rootDir, 'node_modules/@fortawesome/fontawesome-free/svgs');
+  const faSvgsDst = path.join(destRoot, 'vendor/fontawesome/svgs');
+  fs.mkdirSync(faSvgsDst, { recursive: true });
+  fs.cpSync(faSvgsSrc, faSvgsDst, { recursive: true });
+
+  // Stage aliases for legacy icon names (e.g. info-circle -> circle-info)
+  stageIconAliases(faSvgsDst);
+
+  // 4. Copy SoftCloud static assets
   const staticSrc = path.join(rootDir, 'assets/static');
   const staticDst = path.join(destRoot, 'static');
   fs.mkdirSync(staticDst, { recursive: true });
@@ -44,11 +53,16 @@ export function stageAssets(targetDir) {
 
   // Verification of key assets
   const expectedFiles = [
+    path.join(destRoot, 'vendor/webawesome/webawesome.js'),
     path.join(destRoot, 'vendor/webawesome/webawesome.ssr-loader.js'),
     path.join(destRoot, 'vendor/webawesome/styles/webawesome.css'),
     path.join(destRoot, 'vendor/fontawesome/css/all.min.css'),
+    path.join(destRoot, 'vendor/fontawesome/svgs/solid/server.svg'),
+    path.join(destRoot, 'vendor/fontawesome/svgs/brands/github.svg'),
     path.join(destRoot, 'static/softcloud.css'),
     path.join(destRoot, 'static/softcloud-theme.js'),
+    path.join(destRoot, 'static/softcloud-theme-init.js'),
+    path.join(destRoot, 'static/softcloud-webawesome.mjs'),
   ];
 
   for (const f of expectedFiles) {
@@ -57,52 +71,42 @@ export function stageAssets(targetDir) {
     }
   }
 
-  // 4. Sanitize React client hydration bundles to suppress unhandled recoverable hydration errors
-  patchHydrationBundles(destRoot);
-
   return { destRoot, stagedCount: expectedFiles.length };
 }
 
-export function patchHydrationBundles(targetDir) {
-  const destRoot = path.resolve(process.cwd(), targetDir);
-  if (!fs.existsSync(destRoot)) return 0;
-  let count = 0;
+function stageIconAliases(svgsDest) {
+  const metaPath = path.join(rootDir, 'node_modules/@fortawesome/fontawesome-free/metadata/icon-families.json');
+  if (!fs.existsSync(metaPath)) return;
 
-  function walk(dir) {
-    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-      const fullPath = path.join(dir, entry.name);
-      if (entry.isDirectory()) {
-        walk(fullPath);
-      } else if (entry.isFile() && entry.name.startsWith('entry.client-') && entry.name.endsWith('.js')) {
-        let code = fs.readFileSync(fullPath, 'utf8');
-        const target = 'hydrateRoot)(document,';
-        const pos = code.indexOf(target);
-        if (pos !== -1 && !code.includes('onRecoverableError')) {
-          const callStart = pos + target.length;
-          let depth = 1;
-          let i = callStart;
-          while (i < code.length && depth > 0) {
-            const ch = code[i];
-            if (ch === '(') depth++;
-            else if (ch === ')') depth--;
-            i++;
-          }
-          if (depth === 0) {
-            const callEnd = i - 1;
-            const patched =
-              code.slice(0, callEnd) +
-              ',{onRecoverableError:(e)=>{if(e&&(e.message||\'\').match(/418|423|hydration/i))return;console.error(e);}}' +
-              code.slice(callEnd);
-            fs.writeFileSync(fullPath, patched, 'utf8');
-            count++;
+  try {
+    const data = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+    const folders = ['solid', 'regular', 'brands'];
+
+    for (const [canonical, info] of Object.entries(data)) {
+      if (!info.aliases?.names) continue;
+
+      for (const folder of folders) {
+        const folderPath = path.join(svgsDest, folder);
+        if (!fs.existsSync(folderPath)) continue;
+
+        const canonicalFile = path.join(folderPath, `${canonical}.svg`);
+        if (!fs.existsSync(canonicalFile)) continue;
+
+        for (const alias of info.aliases.names) {
+          const aliasFile = path.join(folderPath, `${alias}.svg`);
+          if (!fs.existsSync(aliasFile)) {
+            try {
+              fs.copyFileSync(canonicalFile, aliasFile);
+            } catch {
+              // Ignore copy collision
+            }
           }
         }
       }
     }
+  } catch (err) {
+    console.warn('[WARN] Staging icon aliases encountered warning:', err.message);
   }
-
-  walk(destRoot);
-  return count;
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

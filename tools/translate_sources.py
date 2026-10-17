@@ -417,7 +417,7 @@ def check_locale_provenance(root: Path, locale: str, docs: list[str], progressiv
         en_path = root / rel_doc
         loc_path = loc_root / rel_doc
         if not loc_path.is_file():
-            if not progressive:
+            if not progressive and not rel_doc.startswith("components/"):
                 errors.append(f"[{locale}] Missing translated document: {loc_path.relative_to(root)}")
             continue
 

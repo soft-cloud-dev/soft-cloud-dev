@@ -2,14 +2,21 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Web Awesome SSR Rendering & DSD', () => {
   test('renders all Web Awesome components with Declarative Shadow DOM', async ({ page }) => {
-    await page.goto('/');
+    const response = await page.goto('/');
+    const serverHtml = (await response?.text()) || '';
+
+    // Verify did-ssr attributes and DSD templates exist in server-rendered HTML
+    expect(serverHtml).toMatch(/<wa-callout[^>]*\bdid-ssr\b/);
+    expect(serverHtml).toMatch(/<wa-card[^>]*\bdid-ssr\b/);
+    expect(serverHtml).toMatch(/<wa-button[^>]*\bdid-ssr\b/);
+    expect(serverHtml).toMatch(/<wa-icon[^>]*\bdid-ssr\b/);
+    expect(serverHtml).toMatch(/<template[^>]*\b(shadowrootmode|shadowroot)="open"/);
 
     // 1. Verify Callout component
     const callout = page.locator('wa-callout');
     await expect(callout).toBeVisible();
-    await expect(callout).toHaveAttribute('did-ssr', '');
     await expect(callout).toHaveAttribute('variant', 'brand');
-    await expect(callout).toHaveAttribute('appearance', 'soft');
+    await expect(callout).toHaveAttribute('appearance', 'filled-outlined');
 
     // Verify shadow root on wa-callout
     const hasCalloutShadowRoot = await callout.evaluate((el) => !!el.shadowRoot);
@@ -22,8 +29,8 @@ test.describe('Web Awesome SSR Rendering & DSD', () => {
     // 2. Verify Card component
     const card = page.locator('wa-card');
     await expect(card).toBeVisible();
-    await expect(card).toHaveAttribute('did-ssr', '');
-    await expect(card).toHaveAttribute('appearance', 'elevated');
+    await expect(card).toHaveAttribute('appearance', 'filled-outlined');
+    await expect(card).toHaveClass(/sc-elevation/);
 
     const hasCardShadowRoot = await card.evaluate((el) => !!el.shadowRoot);
     expect(hasCardShadowRoot).toBe(true);
@@ -35,8 +42,7 @@ test.describe('Web Awesome SSR Rendering & DSD', () => {
     // 3. Verify Button component
     const button = page.locator('wa-button');
     await expect(button).toBeVisible();
-    await expect(button).toHaveAttribute('did-ssr', '');
-    await expect(button).toHaveAttribute('variant', 'primary');
+    await expect(button).toHaveAttribute('variant', 'brand');
     await expect(button).toHaveAttribute('href', 'https://my.softcloud.dev/get-started');
 
     const hasButtonShadowRoot = await button.evaluate((el) => !!el.shadowRoot);
@@ -50,7 +56,6 @@ test.describe('Web Awesome SSR Rendering & DSD', () => {
 
     for (let i = 0; i < iconCount; i++) {
       const icon = icons.nth(i);
-      await expect(icon).toHaveAttribute('did-ssr', '');
       const hasIconShadowRoot = await icon.evaluate((el) => !!el.shadowRoot);
       expect(hasIconShadowRoot).toBe(true);
     }

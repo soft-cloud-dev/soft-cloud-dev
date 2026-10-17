@@ -29,7 +29,7 @@ node scripts/check-security-parity.mjs
 
 echo "=== [5/8] Running Python and Node unit test suites ==="
 python -m unittest discover tests
-node --test tests/**/*.mjs
+node --test tests/myst/test-*.mjs tests/transform/test-*.mjs tests/ssr/test-*.mjs tests/security/test-*.mjs tests/assets/test-*.mjs tests/catalog/test-*.mjs
 
 echo "=== [6/8] Building Jupyter Book fixture and verifying Lit SSR ==="
 node tests/run-fixture-build.mjs

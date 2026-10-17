@@ -1,5 +1,5 @@
 """assets/python/softcloud_ui.py
-Python API for Jupyter Notebooks producing Web Awesome SSR placeholder HTML.
+Python API for Jupyter Notebooks producing Web Awesome SSR placeholder HTML conforming to schema 2.0.0.
 """
 
 from __future__ import annotations
@@ -96,18 +96,32 @@ class UI:
         if not isinstance(name, str) or not name.strip():
             raise ValueError("Icon name must be a non-empty string")
 
+        clean_name = name.strip()
+        # Canonical 2.0.0 icon normalization
+        if clean_name == "info-circle":
+            clean_name = "circle-info"
+
+        canonical_family = family or "classic"
+        canonical_variant = variant or "solid"
+
+        if style == "brands" or family == "brands":
+            canonical_family = "brands"
+            canonical_variant = None
+        elif style == "regular" or variant == "regular":
+            canonical_family = family or "classic"
+            canonical_variant = "regular"
+        elif style == "solid":
+            canonical_family = family or "classic"
+            canonical_variant = "solid"
+
         meta: dict[str, Any] = {
-            "schema_version": "1.0.0",
+            "schema_version": "2.0.0",
             "component": "wa-icon",
-            "name": name.strip(),
-            "library": library,
+            "name": clean_name,
+            "family": canonical_family,
         }
-        if family:
-            meta["family"] = family
-        if variant:
-            meta["variant"] = variant
-        if style:
-            meta["style"] = style
+        if canonical_variant:
+            meta["variant"] = canonical_variant
         if label:
             meta["label"] = label
         if class_name:
@@ -120,12 +134,13 @@ class UI:
         cls,
         label: str,
         href: Optional[str] = None,
-        variant: str = "default",
+        variant: str = "neutral",
         appearance: Optional[str] = None,
         size: Optional[str] = None,
         target: Optional[str] = None,
         rel: Optional[str] = None,
         disabled: bool = False,
+        with_caret: bool = False,
         caret: bool = False,
         loading: bool = False,
         outline: bool = False,
@@ -136,13 +151,32 @@ class UI:
         if not isinstance(label, str):
             raise TypeError("Button label must be a string")
 
+        canonical_variant = variant
+        if canonical_variant == "primary":
+            canonical_variant = "brand"
+        elif canonical_variant == "default":
+            canonical_variant = "neutral"
+
+        canonical_appearance = appearance
+        if canonical_appearance in ("text", "flat"):
+            canonical_appearance = "plain"
+        if outline:
+            canonical_appearance = "outlined"
+
+        final_classes = []
+        if class_name:
+            final_classes.append(class_name)
+        if circle:
+            final_classes.append("sc-button-circle")
+        combined_class = " ".join(final_classes) if final_classes else None
+
         meta: dict[str, Any] = {
-            "schema_version": "1.0.0",
+            "schema_version": "2.0.0",
             "component": "wa-button",
-            "variant": variant,
+            "variant": canonical_variant,
         }
-        if appearance:
-            meta["appearance"] = appearance
+        if canonical_appearance:
+            meta["appearance"] = canonical_appearance
         if size:
             size_map = {"small": "s", "medium": "m", "large": "l"}
             meta["size"] = size_map.get(size.strip().lower(), size.strip().lower())
@@ -153,18 +187,14 @@ class UI:
             meta["rel"] = rel
         if disabled:
             meta["disabled"] = True
-        if caret:
-            meta["caret"] = True
+        if with_caret or caret:
+            meta["with-caret"] = True
         if loading:
             meta["loading"] = True
-        if outline:
-            meta["outline"] = True
         if pill:
             meta["pill"] = True
-        if circle:
-            meta["circle"] = True
-        if class_name:
-            meta["class"] = class_name
+        if combined_class:
+            meta["class"] = combined_class
 
         if href is not None:
             is_valid, reason = validate_url(href, context="link")
@@ -178,7 +208,7 @@ class UI:
             "sc-wa-button",
             meta,
             body_html=escaped_label,
-            extra_class=class_name,
+            extra_class=combined_class,
         )
 
     @classmethod
@@ -189,7 +219,7 @@ class UI:
         footer: Optional[str] = None,
         image: Optional[str] = None,
         image_alt: Optional[str] = None,
-        appearance: str = "default",
+        appearance: str = "outlined",
         class_name: Optional[str] = None,
     ) -> HTMLOutput:
         if not isinstance(text, str):
@@ -205,7 +235,7 @@ class UI:
         footer: Optional[str] = None,
         image: Optional[str] = None,
         image_alt: Optional[str] = None,
-        appearance: str = "default",
+        appearance: str = "outlined",
         class_name: Optional[str] = None,
     ) -> HTMLOutput:
         if not isinstance(html_obj, TrustedHTML):
@@ -220,13 +250,28 @@ class UI:
         footer: Optional[str] = None,
         image: Optional[str] = None,
         image_alt: Optional[str] = None,
-        appearance: str = "default",
+        appearance: str = "outlined",
         class_name: Optional[str] = None,
     ) -> HTMLOutput:
+        canonical_appearance = appearance
+        final_classes = []
+        if class_name:
+            final_classes.append(class_name)
+
+        if canonical_appearance == "elevated":
+            canonical_appearance = "filled-outlined"
+            final_classes.append("sc-elevation")
+        elif canonical_appearance == "flat":
+            canonical_appearance = "plain"
+        elif canonical_appearance == "default":
+            canonical_appearance = "outlined"
+
+        combined_class = " ".join(final_classes) if final_classes else None
+
         meta: dict[str, Any] = {
-            "schema_version": "1.0.0",
+            "schema_version": "2.0.0",
             "component": "wa-card",
-            "appearance": appearance,
+            "appearance": canonical_appearance,
         }
         if header:
             meta["header"] = header
@@ -239,15 +284,15 @@ class UI:
             meta["image"] = image
         if image_alt:
             meta["image_alt"] = image_alt
-        if class_name:
-            meta["class"] = class_name
+        if combined_class:
+            meta["class"] = combined_class
 
         return cls._create_placeholder(
             "div",
             "sc-wa-card",
             meta,
             body_html=body_html,
-            extra_class=class_name,
+            extra_class=combined_class,
         )
 
     @classmethod
@@ -255,8 +300,8 @@ class UI:
         cls,
         text: str,
         title: Optional[str] = None,
-        variant: str = "neutral",
-        appearance: str = "default",
+        variant: str = "brand",
+        appearance: str = "outlined",
         icon: Optional[str] = None,
         class_name: Optional[str] = None,
     ) -> HTMLOutput:
@@ -270,8 +315,8 @@ class UI:
         cls,
         html_obj: TrustedHTML,
         title: Optional[str] = None,
-        variant: str = "neutral",
-        appearance: str = "default",
+        variant: str = "brand",
+        appearance: str = "outlined",
         icon: Optional[str] = None,
         class_name: Optional[str] = None,
     ) -> HTMLOutput:
@@ -284,16 +329,26 @@ class UI:
         cls,
         body_html: str,
         title: Optional[str] = None,
-        variant: str = "neutral",
-        appearance: str = "default",
+        variant: str = "brand",
+        appearance: str = "outlined",
         icon: Optional[str] = None,
         class_name: Optional[str] = None,
     ) -> HTMLOutput:
+        canonical_appearance = appearance
+        if canonical_appearance == "soft":
+            canonical_appearance = "filled-outlined"
+        elif canonical_appearance == "solid":
+            canonical_appearance = "filled"
+        elif canonical_appearance == "outline":
+            canonical_appearance = "outlined"
+        elif canonical_appearance == "default":
+            canonical_appearance = "outlined"
+
         meta: dict[str, Any] = {
-            "schema_version": "1.0.0",
+            "schema_version": "2.0.0",
             "component": "wa-callout",
             "variant": variant,
-            "appearance": appearance,
+            "appearance": canonical_appearance,
         }
         if title:
             meta["title"] = title

@@ -6,7 +6,7 @@
 const native = new Set(['a', 'code', 'div', 'h3', 'img', 'li', 'p', 'span', 'strong', 'ul']);
 const permittedAttrs = new Set([
   'active', 'alt', 'anchor', 'appearance', 'aria-label', 'checked', 'class',
-  'content', 'controls', 'caret', 'date', 'duration', 'effect', 'expanded',
+  'content', 'controls', 'caret', 'date', 'day', 'duration', 'effect', 'expanded',
   'for', 'href', 'id', 'initials', 'label', 'length', 'max', 'min', 'month',
   'name', 'navigation', 'open', 'page', 'pages', 'panel', 'pagination',
   'pill', 'placeholder', 'play', 'position', 'rows', 'size', 'slot', 'src',
@@ -53,7 +53,11 @@ function componentNames(data) {
 
 function runtimeRoot() {
   const loader = document.querySelector('script[src*="/vendor/webawesome/webawesome.ssr-loader.js"]');
-  return loader ? new URL('.', loader.src) : null;
+  if (loader) return new URL('.', loader.src);
+  const bootstrap = document.querySelector('script[src*="/static/softcloud-webawesome.mjs"]');
+  if (bootstrap) return new URL('../vendor/webawesome/', bootstrap.src);
+  const sheet = document.querySelector('link[href*="/vendor/webawesome/styles/webawesome.css"]');
+  return sheet ? new URL('../', sheet.href) : null;
 }
 
 async function loadComponents(names) {

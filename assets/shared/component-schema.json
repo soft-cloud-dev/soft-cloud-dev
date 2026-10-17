@@ -1,14 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "SoftCloud Web Awesome Component Schema",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "allowedComponents": ["wa-card", "wa-callout", "wa-button", "wa-icon"],
   "definitions": {
     "wa-card": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "schema_version": { "type": "string", "enum": ["1.0.0"] },
+        "schema_version": { "type": "string", "enum": ["2.0.0"] },
         "component": { "type": "string", "const": "wa-card" },
         "header": { "type": "string" },
         "footer": { "type": "string" },
@@ -16,7 +16,7 @@
         "image_alt": { "type": "string" },
         "appearance": {
           "type": "string",
-          "enum": ["default", "outlined", "elevated", "flat"]
+          "enum": ["accent", "filled", "outlined", "filled-outlined", "plain"]
         },
         "class": { "type": "string" }
       }
@@ -25,7 +25,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "schema_version": { "type": "string", "enum": ["1.0.0"] },
+        "schema_version": { "type": "string", "enum": ["2.0.0"] },
         "component": { "type": "string", "const": "wa-callout" },
         "variant": {
           "type": "string",
@@ -33,7 +33,7 @@
         },
         "appearance": {
           "type": "string",
-          "enum": ["default", "solid", "filled", "outline", "outlined", "soft"]
+          "enum": ["accent", "filled", "outlined", "filled-outlined", "plain"]
         },
         "icon": { "type": "string" },
         "title": { "type": "string" },
@@ -44,19 +44,19 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "schema_version": { "type": "string", "enum": ["1.0.0"] },
+        "schema_version": { "type": "string", "enum": ["2.0.0"] },
         "component": { "type": "string", "const": "wa-button" },
         "variant": {
           "type": "string",
-          "enum": ["default", "primary", "success", "neutral", "warning", "danger", "brand"]
+          "enum": ["neutral", "brand", "success", "warning", "danger"]
         },
         "appearance": {
           "type": "string",
-          "enum": ["filled", "outlined", "text", "flat", "accent", "plain"]
+          "enum": ["accent", "filled", "outlined", "filled-outlined", "plain"]
         },
         "size": {
           "type": "string",
-          "enum": ["s", "m", "l", "small", "medium", "large"]
+          "enum": ["xs", "s", "m", "l", "xl"]
         },
         "href": { "type": "string" },
         "target": {
@@ -65,11 +65,9 @@
         },
         "rel": { "type": "string" },
         "disabled": { "type": "boolean" },
-        "caret": { "type": "boolean" },
+        "with-caret": { "type": "boolean" },
         "loading": { "type": "boolean" },
-        "outline": { "type": "boolean" },
         "pill": { "type": "boolean" },
-        "circle": { "type": "boolean" },
         "label": { "type": "string" },
         "class": { "type": "string" }
       }
@@ -78,7 +76,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "schema_version": { "type": "string", "enum": ["1.0.0"] },
+        "schema_version": { "type": "string", "enum": ["2.0.0"] },
         "component": { "type": "string", "const": "wa-icon" },
         "name": {
           "type": "string",
@@ -86,29 +84,13 @@
         },
         "family": {
           "type": "string",
-          "enum": ["classic", "sharp", "duotone"]
+          "enum": ["classic", "brands"]
         },
         "variant": {
           "type": "string",
-          "enum": ["solid", "regular", "light", "thin"]
-        },
-        "style": {
-          "type": "string",
-          "enum": [
-            "solid",
-            "regular",
-            "brands",
-            "light",
-            "thin",
-            "duotone",
-            "sharp-solid",
-            "sharp-regular",
-            "sharp-light",
-            "sharp-thin"
-          ]
+          "enum": ["solid", "regular"]
         },
         "label": { "type": "string" },
-        "library": { "type": "string", "enum": ["default", "fa", "system"] },
         "class": { "type": "string" }
       },
       "required": ["name"]

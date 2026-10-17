@@ -37,16 +37,16 @@ test.describe('Keyboard & Screen Reader Accessibility', () => {
 
     for (let i = 0; i < count; i++) {
       const icon = icons.nth(i);
-      const ariaHidden = await icon.getAttribute('aria-hidden');
-      const label = await icon.getAttribute('label');
+      const ariaHidden = await icon.evaluate((el) => el.getAttribute('aria-hidden'));
+      const label = await icon.evaluate((el) => el.getAttribute('label'));
       // Either aria-hidden="true" or has a descriptive label
-      const isAccessible = ariaHidden === 'true' || (label !== null && label.length > 0) || true;
+      const isAccessible = ariaHidden === 'true' || (label !== null && label.length > 0);
       expect(isAccessible).toBe(true);
     }
 
     // Callout has clear structure
     const callout = page.locator('wa-callout');
     await expect(callout).toBeVisible();
-    await expect(callout.locator('[slot="title"], [slot="header"]')).toContainText('Important Overview');
+    await expect(callout.locator('.sc-wa-callout-title')).toContainText('Important Overview');
   });
 });

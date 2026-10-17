@@ -192,7 +192,8 @@ def verify_built_html_artifact(root: Path, build_dir: Path) -> list[str]:
     expected_sitemap_locs: set[str] = set()
     for rel_doc in docs:
         raw_slug = page_slug_from_rel_path(rel_doc)
-        flat_slug = Path(raw_slug).name if raw_slug else ""
+        flat_name = Path(raw_slug).name if raw_slug else ""
+        flat_slug = "index-1" if flat_name.lower() in ("index", "readme") else flat_name
 
         # Detect which slug form (nested vs flat) the build produced in the default locale
         active_slug = raw_slug
@@ -303,9 +304,9 @@ def verify_built_html_artifact(root: Path, build_dir: Path) -> list[str]:
             else:
                 try:
                     embedded_rm = json.loads(manifest_match.group(1))
-                    rm_pages = embedded_rm.get("pages", {})
+                    embedded_pages = embedded_rm.get("pages", {})
                     slug_key = active_slug if active_slug else "index"
-                    page_rec = rm_pages.get(slug_key) or rm_pages.get(raw_slug if raw_slug else "index")
+                    page_rec = embedded_pages.get(slug_key) or embedded_pages.get(raw_slug if raw_slug else "index")
                     if not isinstance(page_rec, dict):
                         errors.append(
                             f"[{code}] Embedded manifest missing page entry for '{slug_key}' in {found_html.relative_to(build_dir)}"

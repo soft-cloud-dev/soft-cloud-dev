@@ -23,11 +23,13 @@ test('Injects assets exactly once with root base URL', () => {
 
   const res1 = injectRuntimeAssets(ast, '');
   assert.equal(res1.injectedStylesheets.length, 3);
-  assert.equal(res1.injectedScripts.length, 2);
+  assert.equal(res1.injectedScripts.length, 3);
 
   const html1 = serialize(ast);
   assert.ok(html1.includes('href="/vendor/webawesome/styles/webawesome.css"'));
-  assert.ok(html1.includes('src="/vendor/webawesome/webawesome.ssr-loader.js"'));
+  assert.ok(html1.includes('src="/static/softcloud-theme-init.js"'));
+  assert.ok(html1.includes('src="/static/softcloud-theme.js"'));
+  assert.ok(html1.includes('src="/static/softcloud-webawesome.mjs"'));
 
   // Second injection pass on the same AST should inject 0 new assets (exactly-once)
   const res2 = injectRuntimeAssets(ast, '');
@@ -48,17 +50,18 @@ test('Injects assets correctly with /docs prefix', () => {
   assert.ok(html.includes('href="/docs/vendor/webawesome/styles/webawesome.css"'));
   assert.ok(html.includes('href="/docs/vendor/fontawesome/css/all.min.css"'));
   assert.ok(html.includes('href="/docs/static/softcloud.css"'));
-  assert.ok(html.includes('src="/docs/vendor/webawesome/webawesome.ssr-loader.js"'));
+  assert.ok(html.includes('src="/docs/static/softcloud-theme-init.js"'));
   assert.ok(html.includes('src="/docs/static/softcloud-theme.js"'));
+  assert.ok(html.includes('src="/docs/static/softcloud-webawesome.mjs"'));
 });
 
-test('Prevents loading both standard and SSR autoloaders', () => {
+test('Prevents loading both standard and SSR autoloaders in favor of bootstrap', () => {
   const docWithStandard = `<!DOCTYPE html><html><head><script src="/vendor/webawesome/webawesome.loader.js"></script></head><body></body></html>`;
   const ast = parse(docWithStandard);
 
   injectRuntimeAssets(ast, '');
   const html = serialize(ast);
 
-  assert.ok(html.includes('webawesome.ssr-loader.js'));
+  assert.ok(html.includes('softcloud-webawesome.mjs'));
   assert.ok(!html.includes('webawesome.loader.js'), 'Standard autoloader must be removed');
 });

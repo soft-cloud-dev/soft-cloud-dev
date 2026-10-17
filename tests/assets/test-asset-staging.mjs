@@ -21,15 +21,20 @@ test('Stages Web Awesome dist-cdn, Font Awesome, and SoftCloud assets', () => {
 
   const { destRoot, stagedCount } = stageAssets(tmpStageDir);
   assert.equal(destRoot, tmpStageDir);
-  assert.equal(stagedCount, 5);
+  assert.equal(stagedCount, 10);
 
   const filesToCheck = [
     'vendor/webawesome/webawesome.ssr-loader.js',
     'vendor/webawesome/styles/webawesome.css',
     'vendor/fontawesome/css/all.min.css',
     'vendor/fontawesome/webfonts/fa-solid-900.woff2',
+    'vendor/fontawesome/svgs/solid/rocket.svg',
+    'vendor/fontawesome/svgs/brands/github.svg',
+    'vendor/fontawesome/svgs/regular/circle-check.svg',
     'static/softcloud.css',
     'static/softcloud-theme.js',
+    'static/softcloud-theme-init.js',
+    'static/softcloud-webawesome.mjs',
   ];
 
   for (const rel of filesToCheck) {
