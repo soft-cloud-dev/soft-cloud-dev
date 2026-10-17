@@ -124,7 +124,7 @@ For standalone HTML, substitute a file shipped with the consuming application ra
 
 ## Native documentation media and provenance
 
-Use real self-hosted images with descriptive `alt` text, source credit and explicit licensing; prefer the shared [Showcase media](showcase-media.md) assets over text placeholders and externally hosted stock imagery. The actual sample photographs are reproducible inputs to screenshots and visual regression tests. The GIF and MP4 examples are documented external exceptions. Never present Pro components as executable without an installed Pro runtime.
+Use real self-hosted images with descriptive `alt` text, source credit and explicit licensing; prefer the shared [Showcase media](showcase-media.md) assets over text placeholders and externally hosted stock imagery. The actual sample photographs are reproducible inputs to screenshots and visual regression tests. The only allowlisted remote showcase media are `https://shoelace.style/assets/images/walk.gif` (animated-image example) and `https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4` (native video example). CI must reject other remote media dependencies unless reviewed and added to this allowlist. Never present Pro components as executable without an installed Pro runtime.
 
 ## Build and SSR boundaries
 
@@ -151,7 +151,7 @@ Source-of-truth versions: `package.json` for Web Awesome, `requirements.lock` fo
 | P0 | Implemented; rendered regression pending | Bundle and credit real media, with live anywidget examples. | Every local media URL resolves in a built site; the manifest records credit/license for every file; rendered examples contain real images. |
 | P1 | Implemented; regression pending | Use MyST native notes, tabs, cards and grids for documentation prose. | Catalog status blocks use native directives, no duplicate layout API, no escaped example fences in output. |
 | P2 | In progress | Generate version-matched API sections from the installed Web Awesome Custom Elements Manifest (CEM), with explicit Core/Pro/source-only boundaries. | Every supported Core tag has a CEM-matched attributes/events/slots/CSS-parts section or a documented manifest gap; generated sections are checked for drift in CI. |
-| P3 | Partial | Strict locale builds, accessibility, link checking, browser, visual, and no-JS checks. | All enabled locales pass `jupyter book build --html --strict`; axe reports zero serious/critical violations on tested routes; link checks have zero broken required links; asset and no-JS tests pass. |
+| P3 | Partial | Strict locale builds, accessibility, link checking, browser, visual, and no-JS checks. | All enabled locales pass `jupyter book build --html --strict`; axe reports zero serious/critical violations on tested routes; link checks have zero broken required links; asset and no-JS tests pass; remote media requests are restricted to the documented GIF and MDN MP4 allowlist. |
 
 ### No-JavaScript requirements
 
