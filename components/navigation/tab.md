@@ -26,25 +26,57 @@ Reuse: [Tab Group](../navigation/tab-group.md), [Tab Panel](../navigation/tab-pa
   "tree": {
     "tag": "wa-tab-group",
     "attrs": {
-      "active": "network"
+      "active": "portrait"
     },
     "children": [
       {
         "tag": "wa-tab",
         "attrs": {
-          "panel": "network"
+          "panel": "portrait"
         },
         "children": [
-          "Network"
+          "Portrait"
+        ]
+      },
+      {
+        "tag": "wa-tab",
+        "attrs": {
+          "panel": "launch"
+        },
+        "children": [
+          "Launch"
         ]
       },
       {
         "tag": "wa-tab-panel",
         "attrs": {
-          "name": "network"
+          "name": "portrait"
         },
         "children": [
-          "Network settings"
+          {
+            "tag": "img",
+            "attrs": {
+              "src": "/static/showcase/astronaut.png",
+              "alt": "NASA portrait of Eileen Collins"
+            },
+            "children": []
+          }
+        ]
+      },
+      {
+        "tag": "wa-tab-panel",
+        "attrs": {
+          "name": "launch"
+        },
+        "children": [
+          {
+            "tag": "img",
+            "attrs": {
+              "src": "/static/showcase/rocket.jpg",
+              "alt": "Falcon 9 launch"
+            },
+            "children": []
+          }
         ]
       }
     ]
@@ -55,10 +87,16 @@ Reuse: [Tab Group](../navigation/tab-group.md), [Tab Panel](../navigation/tab-pa
 ## Markdown code snippet
 
 ```html
-<wa-tab-group active="network">
-  <wa-tab panel="network">Network</wa-tab>
-  <wa-tab-panel name="network">Network settings</wa-tab-panel>
+<wa-tab-group active="portrait">
+  <wa-tab panel="portrait">Portrait</wa-tab>
+  <wa-tab panel="launch">Launch</wa-tab>
+  <wa-tab-panel name="portrait"><img src="/static/showcase/astronaut.png" alt="NASA portrait of Eileen Collins"></wa-tab-panel>
+  <wa-tab-panel name="launch"><img src="/static/showcase/rocket.jpg" alt="Falcon 9 launch"></wa-tab-panel>
 </wa-tab-group>
 ```
 
-For direct MyST integration, place this trusted markup in a Markdown HTML block or use the corresponding built-in MyST directive/role when supported. 
+## Usage and API notes
+
+A tab is an atomic child of `wa-tab-group`. It refers to a panel using `panel`. This nested demo uses real image content so tab activation visibly changes the selected pane.
+
+Media sources: [Showcase media](../showcase-media.md).

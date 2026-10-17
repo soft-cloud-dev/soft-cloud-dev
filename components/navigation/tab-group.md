@@ -26,43 +26,71 @@ Reuse: [Tab](../navigation/tab.md), [Tab Panel](../navigation/tab-panel.md). The
   "tree": {
     "tag": "wa-tab-group",
     "attrs": {
-      "active": "overview"
+      "active": "launch"
     },
     "children": [
       {
         "tag": "wa-tab",
         "attrs": {
-          "panel": "overview"
+          "panel": "launch"
         },
         "children": [
-          "Overview"
+          "Launch"
         ]
       },
       {
         "tag": "wa-tab",
         "attrs": {
-          "panel": "metrics"
+          "panel": "galaxies"
         },
         "children": [
-          "Metrics"
+          "Galaxies"
         ]
       },
       {
         "tag": "wa-tab-panel",
         "attrs": {
-          "name": "overview"
+          "name": "launch"
         },
         "children": [
-          "System overview"
+          {
+            "tag": "img",
+            "attrs": {
+              "src": "/static/showcase/rocket.jpg",
+              "alt": "Falcon 9 launch"
+            },
+            "children": []
+          },
+          {
+            "tag": "p",
+            "attrs": {},
+            "children": [
+              "Falcon 9 carrying the DSCOVR spacecraft."
+            ]
+          }
         ]
       },
       {
         "tag": "wa-tab-panel",
         "attrs": {
-          "name": "metrics"
+          "name": "galaxies"
         },
         "children": [
-          "CPU and memory"
+          {
+            "tag": "img",
+            "attrs": {
+              "src": "/static/showcase/hubble-deep-field.jpg",
+              "alt": "Hubble eXtreme Deep Field"
+            },
+            "children": []
+          },
+          {
+            "tag": "p",
+            "attrs": {},
+            "children": [
+              "Distant galaxies captured by Hubble."
+            ]
+          }
         ]
       }
     ]
@@ -73,12 +101,22 @@ Reuse: [Tab](../navigation/tab.md), [Tab Panel](../navigation/tab-panel.md). The
 ## Markdown code snippet
 
 ```html
-<wa-tab-group active="overview">
-  <wa-tab panel="overview">Overview</wa-tab>
-  <wa-tab panel="metrics">Metrics</wa-tab>
-  <wa-tab-panel name="overview">System overview</wa-tab-panel>
-  <wa-tab-panel name="metrics">CPU and memory</wa-tab-panel>
+<wa-tab-group active="launch">
+  <wa-tab panel="launch">Launch</wa-tab>
+  <wa-tab panel="galaxies">Galaxies</wa-tab>
+  <wa-tab-panel name="launch">
+    <img src="/static/showcase/rocket.jpg" alt="Falcon 9 launch">
+    <p>Falcon 9 carrying the DSCOVR spacecraft.</p>
+  </wa-tab-panel>
+  <wa-tab-panel name="galaxies">
+    <img src="/static/showcase/hubble-deep-field.jpg" alt="Hubble eXtreme Deep Field">
+    <p>Distant galaxies captured by Hubble.</p>
+  </wa-tab-panel>
 </wa-tab-group>
 ```
 
-For direct MyST integration, place this trusted markup in a Markdown HTML block or use the corresponding built-in MyST directive/role when supported. 
+## Usage and API notes
+
+Each `wa-tab[panel]` targets a unique `wa-tab-panel[name]`. `wa-tab-group[active]` chooses the initial panel. Actual photographs make switching panels observable. Use the MyST `{tab-set}` and `{tab-item}` directives when the task is organizing prose or alternative code listings, and Web Awesome only for application-like tabs.
+
+Media sources: [Showcase media](../showcase-media.md).

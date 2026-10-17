@@ -19,37 +19,96 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 
 ```{anywidget} ../../widgets/webawesome-demo.mjs
 {
-  "tree": {
-    "tag": "wa-card",
-    "attrs": {
-      "appearance": "outlined"
-    },
-    "children": [
-      {
-        "tag": "strong",
-        "attrs": {
-          "slot": "header"
+  "tree": [
+    {
+      "tag": "wa-card",
+      "attrs": {
+        "appearance": "outlined"
+      },
+      "children": [
+        {
+          "tag": "img",
+          "attrs": {
+            "src": "/static/showcase/coffee.png",
+            "alt": "A white cup of coffee on a wooden table",
+            "slot": "media",
+            "loading": "lazy"
+          },
+          "children": []
         },
-        "children": [
-          "Service status"
-        ]
+        {
+          "tag": "strong",
+          "attrs": {
+            "slot": "header"
+          },
+          "children": [
+            "Coffee sample"
+          ]
+        },
+        {
+          "tag": "p",
+          "attrs": {},
+          "children": [
+            "A real bundled, CC0 photograph."
+          ]
+        },
+        {
+          "tag": "wa-button",
+          "attrs": {
+            "slot": "footer-actions",
+            "appearance": "plain",
+            "href": "/components/showcase-media"
+          },
+          "children": [
+            "Media credits"
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "wa-card",
+      "attrs": {
+        "appearance": "outlined"
       },
-      {
-        "tag": "p",
-        "attrs": {},
-        "children": [
-          "All probes healthy."
-        ]
-      },
-      {
-        "tag": "wa-button",
-        "attrs": {},
-        "children": [
-          "View details"
-        ]
-      }
-    ]
-  }
+      "children": [
+        {
+          "tag": "video",
+          "attrs": {
+            "slot": "media",
+            "controls": "",
+            "preload": "metadata",
+            "aria-label": "Short CC0 video of a flower"
+          },
+          "children": [
+            {
+              "tag": "source",
+              "attrs": {
+                "src": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+                "type": "video/mp4"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "tag": "strong",
+          "attrs": {
+            "slot": "header"
+          },
+          "children": [
+            "Motion media"
+          ]
+        },
+        {
+          "tag": "p",
+          "attrs": {},
+          "children": [
+            "A CC0 video with browser-native playback controls."
+          ]
+        }
+      ]
+    }
+  ]
 }
 ```
 
@@ -57,10 +116,23 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 
 ```html
 <wa-card appearance="outlined">
-  <strong slot="header">Service status</strong>
-  <p>All probes healthy.</p>
-  <wa-button>View details</wa-button>
+  <img slot="media" src="/static/showcase/coffee.png" alt="White cup of coffee on wood" loading="lazy">
+  <strong slot="header">Coffee sample</strong>
+  <p>A real bundled, CC0 photograph.</p>
+  <wa-button slot="footer-actions" appearance="plain" href="/components/showcase-media">Media credits</wa-button>
+</wa-card>
+
+<wa-card appearance="outlined">
+  <video slot="media" controls preload="metadata" aria-label="Short CC0 video of a flower">
+    <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+  </video>
+  <strong slot="header">Motion media</strong>
+  <p>A CC0 video with browser-native playback controls.</p>
 </wa-card>
 ```
 
-For direct MyST integration, place this trusted markup in a Markdown HTML block or use the corresponding built-in MyST directive/role when supported. 
+## Usage and API notes
+
+The photo is bundled locally; the short CC0 video is streamed from MDN and needs a network connection. `<wa-card>` supports media, headers, and action slots. Prefer the portable MyST `{card}` directive for ordinary documentation content; choose `<wa-card>` when Web Awesome slot semantics are needed. No Pro runtime is required for native HTML video.
+
+Media sources: [Showcase media](../showcase-media.md).
