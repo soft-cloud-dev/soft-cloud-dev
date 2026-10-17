@@ -24,7 +24,7 @@ Document architecture, publish computational evidence, and maintain multilingual
 
 ![Falcon 9 carrying the DSCOVR spacecraft into flight](../assets/static/showcase/rocket.jpg)
 
-A genuine public-domain launch photograph from the [local media set](showcase-media.md), not a decorative placeholder.
+**Credit:** SpaceX / DSCOVR launch photograph (distributed through scikit-image). **License:** public-domain designation recorded in the [media manifest](../assets/static/showcase/README.md); original rights confirmation remains pending.
 :::
 ::::
 
@@ -120,13 +120,13 @@ Media is part of a realistic component recipe, not a text-only placeholder.
 
 ![Hubble eXtreme Deep Field showing distant galaxies](../assets/static/showcase/hubble-deep-field.jpg)
 
-Use native MyST cards and images for editorial content.
+**Credit:** NASA / Hubble eXtreme Deep Field. **License:** public domain ([media manifest](../assets/static/showcase/README.md)). Use native MyST cards and images for editorial content.
 :::
 :::{card} Coffee and texture
 
 ![White porcelain coffee cup photographed on a wooden table](../assets/static/showcase/coffee.png)
 
-Use image captions and alternate text even in promotional layouts.
+**Credit:** Rachel Michetti / Pikolo Espresso Bar. **License:** CC0 ([media manifest](../assets/static/showcase/README.md)). Use image captions and alternate text even in promotional layouts.
 :::
 ::::
 

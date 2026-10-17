@@ -96,7 +96,8 @@ test('media documentation uses actual, attributable sources and safe anywidget t
         if (value.startsWith('/static/showcase/')) {
           const relative = 'assets' + value;
           assert.ok(existsSync(rootFile(relative)), file + ' references missing file ' + relative);
-          assert.ok(html.includes(value), file + ' source and rendered snippet differ: ' + value);
+          const portable = './images/' + value.slice('/static/showcase/'.length);
+          assert.ok(html.includes(value) || html.includes(portable), file + ' source and rendered snippet differ: ' + value);
           localCount++;
           pageMediaCount++;
         } else if (value.startsWith('https://')) {

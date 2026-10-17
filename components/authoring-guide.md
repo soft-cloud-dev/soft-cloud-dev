@@ -1,13 +1,29 @@
+---
+description: Guidelines for authoring accessible, portable MyST documentation with Web Awesome interactive examples and Lit SSR primitives.
+keywords:
+  - MyST
+  - Web Awesome
+  - web components
+  - authoring
+  - progressive enhancement
+tags:
+  - contributing
+  - documentation
+  - web-components
+edit_url: https://github.com/soft-cloud-dev/soft-cloud-dev/edit/main/components/authoring-guide.md
+source_url: https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/authoring-guide.md
+---
+
 # Web Awesome + MyST Documentation Authoring Guide
 
 ## Design rule
 
-**Keep Web Awesome for interactive component behavior using the existing `{anywidget}` integration; keep MyST built-ins for documentation layout and portable content.** Avoid new MyST component directives, new SSR shims, and duplicate card/tab/alert implementations.
+**Use MyST built-ins for documentation layout. Use the existing typed Web Awesome directives for server-rendered button/card/callout/icon primitives. Use `{anywidget}` for client-side previews and stateful interaction that the typed SSR path does not cover.** A component demo may compose these primitives; do not add duplicate component frameworks or claim that a client-only widget has Lit SSR.
 
 :::{admonition} Current implementation
 :class: note
 
-The repository pins Web Awesome 3.14.0 and Jupyter Book 2.1.7. The 90-page catalog has client-side live previews for Core components that can be loaded safely, Pro references without unlicensed executables, and four legacy typed directives/roles with genuine Lit SSR/DSD. Do not conflate client-only anywidget previews with server-rendered output.
+Versions come from the checked-in `package.json`, `package-lock.json`, and `requirements.lock`; the component inventory comes from `components/catalog.json`. Four typed primitives (`{wa-button}`, `{wa-card}`, `{wa-callout}`, and `{icon}` / `{fa}` for `wa-icon`) use genuine Lit SSR/Declarative Shadow DOM. Other licensed Core previews use the existing `{anywidget}` client runtime. Pro references do not load an unlicensed runtime.
 :::
 
 ## Component selection policy
@@ -20,7 +36,8 @@ The repository pins Web Awesome 3.14.0 and Jupyter Book 2.1.7. The 90-page catal
 | Alternative explanations or code samples | MyST `{tab-set}` / `{tab-item}` | Tabs are application controls with state and custom events. |
 | Image/caption | MyST Markdown image or `{figure}` | Zoom, comparison, carousel, or motion controls are needed. |
 | Links/paragraph/code tables | Native Markdown, roles, code fences | No Web Awesome replacement. |
-| Forms, inputs, menus, dialogs, toast, sliders | Web Awesome in `{anywidget}` | These require live browser interaction. |
+| Static Web Awesome buttons, cards, callouts and icons | Typed `{wa-button}`, `{wa-card}`, `{wa-callout}` directives, `{icon}`/`{fa}` roles | Use the existing Lit SSR/DSD path instead of a widget for an ordinary static instance. |
+| Interactive forms, menus, dialogs, toasts, sliders or bound state | Web Awesome in `{anywidget}` | Use the browser-hosted demo when a typed directive is unavailable or event/state handling is necessary. |
 | Reused explanatory fragments | MyST `{include}` or `{embed}` | Reuse custom element atoms *inside* an interactive preview. |
 | Executable research outputs | Jupyter notebook + MyST cross-references | Output must have a custom control. |
 
@@ -28,7 +45,7 @@ The repository pins Web Awesome 3.14.0 and Jupyter Book 2.1.7. The 90-page catal
 
 Follow the upstream [Tab Group](https://webawesome.com/docs/components/tab-group/) example: name, tag, version/availability, concise description, working example, usage variants, API (imports, slots, attributes/properties, events, CSS properties and parts, dependencies, SSR), accessibility, and source references. Distinguish **confirmed** APIs from planned enhancements; missing sections must not be invented. Individual atomic pages such as [`wa-tab`](navigation/tab.md) link to their parent group without duplicating the entire parent API.
 
-Each component page should include: a descriptive heading with the actual tag, official documentation and GitHub source links (with MyST's transformer), an appropriately attributed Wikipedia context quotation where present, a Core/Pro availability marker, a live preview if licensed, a full copyable HTML snippet, a short MyST alternative where applicable, real example media with provenance, and inter-component dependencies.
+Each component page should include: a descriptive heading with the actual tag, official documentation and GitHub source links (with MyST's transformer), an optional relevant background citation (not a mandatory generic Wikipedia definition), a Core/Pro availability marker, a live preview if licensed, a full copyable HTML snippet, a short MyST alternative where applicable, real example media with provenance, and inter-component dependencies.
 
 ## Portable MyST layout first
 
@@ -43,29 +60,40 @@ The example data is not a live service status.
 ::::
 :::::
 
-Use native MyST documentation tabs for explanations and snippets. Do not replace these with `<wa-tab-group>` just to style source code:
+Use native MyST tabs for editorial explanations and snippet alternatives. The inner directive below is *example source*, shielded by a four-backtick code fence; the outer directives have distinct 5/4-colon delimiters.
 
-::::{tab-set}
-:::{tab-item} MyST note
-```myst
+:::::{tab-set}
+::::{tab-item} MyST note
+````myst
 :::{note}
 Use this for publication notes.
 :::
-```
-:::
-:::{tab-item} Interactive app control
+````
+::::
+::::{tab-item} Interactive app control
 ```html
 <wa-tab-group active="media">
   <wa-tab panel="media">Media</wa-tab>
   <wa-tab-panel name="media">Interactive content</wa-tab-panel>
 </wa-tab-group>
 ```
-:::
 ::::
+:::::
 
-## Anywidget is the only catalog preview host
+Typed SSR/DSD and browser widgets have separate roles. Prefer this supported typed primitive for a server-rendered call to action:
 
-The existing `widgets/webawesome-demo.mjs` consumes structured JSON and creates allowlisted DOM elements using `document.createElement` and `document.createTextNode`. The model is **data**, never raw or trusted HTML; it must reject event-handler attributes and non-HTTPS/dangerous URL schemes. Runtime assets and component modules are self-hosted, and the loader must not be duplicated.
+````myst
+:::{wa-button}
+:variant: brand
+:href: https://my.softcloud.dev/
+Open SoftCloud
+:::
+````
+
+Use a widget for an interactive form or a live demonstration requiring browser-side state. The rendered documentation must remain legible when the preview cannot execute.
+## Browser-only component preview host: `{anywidget}`
+
+The existing `widgets/webawesome-demo.mjs` consumes structured JSON and creates allowlisted DOM elements using `document.createElement` and `document.createTextNode`. The model is **data**, never raw or trusted HTML; it must reject event-handler attributes and non-HTTPS/dangerous URL schemes. Runtime assets and component modules are self-hosted, and the loader must not be duplicated. **The `/static/showcase/...` URL in the executable model below is a site-specific runtime asset, not a portable Markdown or HTML snippet.** For published images use MyST relative image references; in reusable HTML examples use an application-supplied relative asset URL.
 
 Example reusable atomic composition:
 
@@ -86,9 +114,17 @@ Example reusable atomic composition:
 }
 ```
 
+## Copyable media markup and provenance
+
+For standalone HTML, substitute a file shipped with the consuming application rather than copying the SoftCloud-only `/static/showcase/` asset URL:
+
+```html
+<img src="./images/rocket.jpg" alt="Falcon 9 rocket launch">
+```
+
 ## Native documentation media and provenance
 
-Use real self-hosted images with descriptive `alt` text, source credit and explicit licensing; prefer the shared [Showcase media](showcase-media.md) assets over text placeholders and externally hosted stock imagery. The actual sample photographs are reproducible inputs to screenshots and visual regression tests. The GIF and MP4 examples are documented external exceptions. Never present Pro components as executable without an installed Pro runtime.
+Use real self-hosted images with descriptive `alt` text, source credit and explicit licensing; prefer the shared [Showcase media](showcase-media.md) assets over text placeholders and externally hosted stock imagery. The actual sample photographs are reproducible inputs to screenshots and visual regression tests. The only allowlisted remote showcase media are `https://shoelace.style/assets/images/walk.gif` (animated-image example) and `https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4` (native video example). CI must reject other remote media dependencies unless reviewed and added to this allowlist. Never present Pro components as executable without an installed Pro runtime.
 
 ## Build and SSR boundaries
 
@@ -103,17 +139,22 @@ Use real self-hosted images with descriptive `alt` text, source credit and expli
 The [practical pattern library](practical-patterns.md) adapts the **marketing, application UI, and ecommerce categories** shown in Tailwind Plus into original MyST-first patterns. It does not copy proprietary Tailwind Plus component source and does not add a CSS framework; its examples deliberately combine real credited media, native editorial layouts, and the existing Web Awesome anywidget primitives.
 
 :::{note} Native authoring progress
-The **90 catalog integration-status notices** have been migrated to MyST `{note}`/`{warning}` and the catalog index now uses `{note}`. The existing typed Web Awesome directives/roles still exist for opt-in functional use; this content migration does not remove their implementation. Upstream-grade API tables beyond the Tab Group exemplar remain phased work.
+The **component-catalog integration-status notices** have been migrated to MyST `{note}`/`{warning}` and the catalog index now uses `{note}`. The existing typed Web Awesome directives/roles still exist for opt-in functional use; this content migration does not remove their implementation. Upstream-grade API tables beyond the Tab Group exemplar remain phased work.
 :::
 
 ## Migration and acceptance plan
 
-| Phase | Deliverable | Acceptance |
-| --- | --- | --- |
-| P0 | Add real locally bundled photos and correct anywidget media support. | Carousel, cards, comparison, avatar, scroller, tabs and zoomable gallery render actual media; media files are present and credited. |
-| P1 | Replace catalog-only status boxes with MyST native notes/warnings; use native tabs, cards and grids for editorial layout. | No new custom directive API, builds remain portable. |
-| P2 | Expand individual 90 component pages with version-matched API tables from the installed 3.14.0 source and examples with real behavior, dependency links, slots, events, CSS parts/properties and SSR availability. | Every API claim is checked against upstream tag; Core/Pro boundaries are explicit. |
-| P3 | Add browser, accessibility, visual regression, multilingual and media-asset checks to CI. | 5 locale builds pass, media previews are stable, no missing assets or unexpected remote dependencies. |
+Source-of-truth versions: `package.json` for Web Awesome, `requirements.lock` for MyST/Jupyter Book, and `components/catalog.json` for component counts. This avoids stale numbers in prose. Status indicates implementation observed in source, not a claim that the deployed site has passed all gates.
 
+| Phase | Status | Deliverable | Measurable acceptance |
+| --- | --- | --- | --- |
+| P0 | Implemented; rendered regression pending | Bundle and credit real media, with live anywidget examples. | Every local media URL resolves in a built site; the manifest records credit/license for every file; rendered examples contain real images. |
+| P1 | Implemented; regression pending | Use MyST native notes, tabs, cards and grids for documentation prose. | Catalog status blocks use native directives, no duplicate layout API, no escaped example fences in output. |
+| P2 | In progress | Generate version-matched API sections from the installed Web Awesome Custom Elements Manifest (CEM), with explicit Core/Pro/source-only boundaries. | Every supported Core tag has a CEM-matched attributes/events/slots/CSS-parts section or a documented manifest gap; generated sections are checked for drift in CI. |
+| P3 | Partial | Strict locale builds, accessibility, link checking, browser, visual, and no-JS checks. | All enabled locales pass `jupyter book build --html --strict`; axe reports zero serious/critical violations on tested routes; link checks have zero broken required links; asset and no-JS tests pass; remote media requests are restricted to the documented GIF and MDN MP4 allowlist. |
+
+### No-JavaScript requirements
+
+Client-only `{anywidget}` previews may not render without JavaScript. Every preview page must preserve readable text and a copyable source example outside the widget, plus a static semantic fallback where essential content would otherwise be unavailable. The existing typed SSR primitives retain their own tested DSD/no-JS path.
 ### Not in scope
 No copying proprietary Web Awesome Pro code, not turning Markdown paragraphs into custom elements, no new client framework, no fake SSR for anywidget, no dynamic download of media during deterministic build.

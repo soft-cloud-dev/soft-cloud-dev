@@ -1,6 +1,16 @@
+---
+slug: components
+description: Web Awesome component catalog with live examples, source references, and MyST alternatives.
+keywords:
+  - Web Awesome
+  - web components
+  - MyST
+  - component catalog
+---
+
 # Web Awesome — Component Catalog
 
-The complete **90-component** catalog is split into one self-contained MyST Markdown file per component. It covers **87 components listed in the official public directory** plus three source-only experimental components (`wa-stepper`, `wa-step`, `wa-tag-input`). The project currently pins Web Awesome **3.14.0**.
+The complete component catalog is split into one self-contained MyST Markdown file per component. It covers **87 components listed in the official public directory** plus three source-only experimental components (`wa-stepper`, `wa-step`, `wa-tag-input`). The installed Web Awesome version is pinned in `package.json`; the inventory is maintained in `components/catalog.json`.
 
 :::{note} Rendering strategy
 
@@ -13,7 +23,7 @@ The existing four typed MyST Web Awesome integrations (`wa-button`, `wa-card`, `
 - [Practical UI patterns](practical-patterns.md) — original Tailwind-inspired marketing and application-UI recipes using native MyST grids/cards/tabs with Web Awesome interactive atoms.
 - [Real media showcase](showcase-media.md) — bundled public-domain/CC0 photographs, photographic carousel, comparison, avatar, photo tabs, zoomable frame, and native video.
 
-For this catalog, an interactive preview is **client-rendered by anywidget**; it must not be mistaken for the genuine Lit SSR path used by four existing typed primitives. Core media examples reuse local `/static/showcase/` assets whenever available. Pro components remain unlicensed references.
+For this catalog, an interactive preview is **client-rendered by anywidget**; it must not be mistaken for the genuine Lit SSR path used by four existing typed primitives. Core media previews use site-local `/static/showcase/` runtime assets. Standalone HTML snippets should instead use host-provided relative media URLs. Pro components remain unlicensed references.
 
 ## Component categories
 
