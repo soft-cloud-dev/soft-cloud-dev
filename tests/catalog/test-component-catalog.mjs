@@ -16,7 +16,9 @@ test('90 unique component pages contain wiki quotes, GitHub source and HTML exam
     seen.add(path);
     const markdown = read(path);
     assert.match(markdown, /wiki:/);
-    assert.match(markdown, /github.com/);
+    const sourceMatch = markdown.match(/^\*\*Source:\*\* \[[^\]]+\]\((https:\/\/[^)\s]+)\)/m);
+    assert.ok(sourceMatch, path);
+    assert.equal(new URL(sourceMatch[1]).hostname, 'github.com');
     assert.match(markdown, /## Markdown code snippet/);
     assert.ok(markdown.includes('<' + comp.tag), path);
     assert.match(markdown, /:::\{wa-callout\}/);
