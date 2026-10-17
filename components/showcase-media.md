@@ -11,19 +11,19 @@ Jupyter Book and MyST render this page as normal publication content. The **comp
 ::::{grid} 1 1 2 2
 :::{card} SpaceX launch
 ![Falcon 9 carrying DSCOVR lifts off](../assets/static/showcase/rocket.jpg)
-Public-domain launch photograph (SpaceX).
+**Source:** SpaceX Falcon 9 DSCOVR launch photograph, distributed via scikit-image. **License:** public domain. See the [media provenance manifest](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/assets/static/showcase/README.md).
 :::
 :::{card} Coffee cup
 ![White cup of coffee on a wooden table](../assets/static/showcase/coffee.png)
-Rachel Michetti / Pikolo Espresso Bar (CC0).
+**Credit:** Rachel Michetti / Pikolo Espresso Bar. **License:** CC0. See the [media provenance manifest](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/assets/static/showcase/README.md).
 :::
 :::{card} Deep field
 ![Hubble eXtreme Deep Field](../assets/static/showcase/hubble-deep-field.jpg)
-NASA public-domain image.
+**Credit:** NASA / Hubble eXtreme Deep Field. **License:** public domain. See the [media provenance manifest](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/assets/static/showcase/README.md).
 :::
 :::{card} Astronaut portrait
 ![NASA portrait of Eileen Collins](../assets/static/showcase/astronaut.png)
-NASA public-domain photograph.
+**Credit:** NASA / Eileen Collins portrait. **License:** public domain. See the [media provenance manifest](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/assets/static/showcase/README.md).
 :::
 ::::
 
