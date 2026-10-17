@@ -568,7 +568,7 @@
       "tag": "wa-animated-image",
       "pro": false,
       "sourceOnly": false,
-      "live": false,
+      "live": true,
       "deps": []
     },
     {
@@ -664,7 +664,7 @@
       "tag": "wa-zoomable-frame",
       "pro": false,
       "sourceOnly": false,
-      "live": false,
+      "live": true,
       "deps": []
     },
     {

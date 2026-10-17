@@ -8,9 +8,7 @@ Provides a bounded scroll area with overflow hints.
 
 **Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/v3.14.0/packages/webawesome/src/components/scroller/scroller.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/scroller/).
 
-:::{wa-callout} Integration status
-:variant: brand
-:appearance: filled
+:::{note} Integration status
 
 Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 :::
@@ -26,37 +24,44 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
       {
         "tag": "div",
         "attrs": {
-          "class": "wa-cluster"
+          "class": "sc-demo-thumb-row"
         },
         "children": [
-          "First item",
           {
-            "tag": "wa-button",
-            "attrs": {},
-            "children": [
-              "One"
-            ]
+            "tag": "img",
+            "attrs": {
+              "src": "/static/showcase/rocket.jpg",
+              "alt": "Rocket launch thumbnail",
+              "loading": "lazy"
+            },
+            "children": []
           },
           {
-            "tag": "wa-button",
-            "attrs": {},
-            "children": [
-              "Two"
-            ]
+            "tag": "img",
+            "attrs": {
+              "src": "/static/showcase/coffee.png",
+              "alt": "Coffee cup thumbnail",
+              "loading": "lazy"
+            },
+            "children": []
           },
           {
-            "tag": "wa-button",
-            "attrs": {},
-            "children": [
-              "Three"
-            ]
+            "tag": "img",
+            "attrs": {
+              "src": "/static/showcase/hubble-deep-field.jpg",
+              "alt": "Hubble deep field thumbnail",
+              "loading": "lazy"
+            },
+            "children": []
           },
           {
-            "tag": "wa-button",
-            "attrs": {},
-            "children": [
-              "Four"
-            ]
+            "tag": "img",
+            "attrs": {
+              "src": "/static/showcase/astronaut.png",
+              "alt": "Astronaut Eileen Collins thumbnail",
+              "loading": "lazy"
+            },
+            "children": []
           }
         ]
       }
@@ -69,14 +74,21 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 
 ```html
 <wa-scroller>
-  <div class="wa-cluster">
-    First item
-    <wa-button>One</wa-button>
-    <wa-button>Two</wa-button>
-    <wa-button>Three</wa-button>
-    <wa-button>Four</wa-button>
+  <div class="sc-demo-thumb-row">
+    <img src="/static/showcase/rocket.jpg" alt="Rocket launch thumbnail">
+    <img src="/static/showcase/coffee.png" alt="Cup of coffee thumbnail">
+    <img src="/static/showcase/hubble-deep-field.jpg" alt="Hubble deep field thumbnail">
+    <img src="/static/showcase/astronaut.png" alt="Astronaut Eileen Collins thumbnail">
   </div>
 </wa-scroller>
+<style>
+  .sc-demo-thumb-row { display:flex; gap:0.75rem; width:max-content; }
+  .sc-demo-thumb-row img { width:180px; aspect-ratio:16/9; object-fit:cover; }
+</style>
 ```
 
-For direct MyST integration, place this trusted markup in a Markdown HTML block or use the corresponding built-in MyST directive/role when supported. 
+## Usage and API notes
+
+This is a real photo thumbnail strip illustrating scroll overflow. The images use the same bundled assets as the carousel and comparison. Prefer MyST `{grid}` for static columns rather than recreating a non-interactive grid as a widget.
+
+Media sources: [Showcase media](../showcase-media.md).

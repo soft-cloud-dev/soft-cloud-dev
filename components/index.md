@@ -2,12 +2,18 @@
 
 The complete **90-component** catalog is split into one self-contained MyST Markdown file per component. It covers **87 components listed in the official public directory** plus three source-only experimental components (`wa-stepper`, `wa-step`, `wa-tag-input`). The project currently pins Web Awesome **3.14.0**.
 
-:::{wa-callout} Rendering strategy
-:variant: brand
-:appearance: filled
+:::{note} Rendering strategy
 
 The existing four typed MyST Web Awesome integrations (`wa-button`, `wa-card`, `wa-callout`, `wa-icon`) retain genuine Lit SSR and Declarative Shadow DOM. Other available Core components use the existing MyST `{anywidget}` integration to load self-hosted Web Awesome modules. The 17 Pro components are reference-only.
 :::
+
+## Documentation and real-media examples
+
+- [Authoring and migration guide](authoring-guide.md) — choose MyST built-ins for prose and layout, retain anywidget for interactive Web Awesome components, and follow the phased API documentation plan.
+- [Practical UI patterns](practical-patterns.md) — original Tailwind-inspired marketing and application-UI recipes using native MyST grids/cards/tabs with Web Awesome interactive atoms.
+- [Real media showcase](showcase-media.md) — bundled public-domain/CC0 photographs, photographic carousel, comparison, avatar, photo tabs, zoomable frame, and native video.
+
+For this catalog, an interactive preview is **client-rendered by anywidget**; it must not be mistaken for the genuine Lit SSR path used by four existing typed primitives. Core media examples reuse local `/static/showcase/` assets whenever available. Pro components remain unlicensed references.
 
 ## Component categories
 

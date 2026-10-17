@@ -10,7 +10,7 @@
     "test:transform": "node --test tests/transform/test-placeholder-transform.mjs tests/transform/test-transform-security.mjs tests/transform/test-transform-idempotence.mjs",
     "test:ssr": "node --test tests/ssr/test-lit-renderer.mjs tests/ssr/test-dsd-structure.mjs tests/ssr/test-nested-components.mjs",
     "test:assets": "node --test tests/assets/test-asset-staging.mjs tests/assets/test-base-paths.mjs",
-    "test:catalog": "node --test tests/catalog/test-component-catalog.mjs",
+    "test:catalog": "node --test tests/catalog/test-*.mjs",
     "test:browser": "playwright test",
     "test": "node --test tests/myst/test-*.mjs tests/transform/test-*.mjs tests/ssr/test-*.mjs tests/security/test-*.mjs tests/assets/test-*.mjs tests/catalog/test-*.mjs",
     "test:all": "node tests/run-all.mjs",

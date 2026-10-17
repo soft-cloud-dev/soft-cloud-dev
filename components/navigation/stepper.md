@@ -8,9 +8,7 @@ Coordinates experimental multi-step workflows.
 
 **Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/v3.14.0/packages/webawesome/src/components/stepper/stepper.ts#L1-L24) (MyST GitHub transformer); [official component directory](https://webawesome.com/docs/components) (not listed).
 
-:::{wa-callout} Integration status
-:variant: warning
-:appearance: filled
+:::{warning} Integration status
 
 Source-only experimental component: not currently listed in the public 3.14 directory; API and runtime availability are unverified.
 :::
@@ -33,4 +31,4 @@ Live preview intentionally unavailable: the component is not documented in the p
 </wa-stepper>
 ```
 
-For direct MyST integration, place this trusted markup in a Markdown HTML block or use the corresponding built-in MyST directive/role when supported. 
+Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. 

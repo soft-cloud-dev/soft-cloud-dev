@@ -21,11 +21,12 @@ test('90 unique component pages contain wiki quotes, GitHub source and HTML exam
     assert.equal(new URL(sourceMatch[1]).hostname, 'github.com');
     assert.match(markdown, /## Markdown code snippet/);
     assert.ok(markdown.includes('<' + comp.tag), path);
-    assert.match(markdown, /:::\{wa-callout\}/);
+    assert.match(markdown, /:::\{(?:note|warning)\} Integration status/);
+    assert.ok(!markdown.includes(':::{wa-callout} Integration status'), path);
     if (comp.live) {
-      assert.ok(markdown.includes('{anywidget} ../../widgets/webawesome-demo.mjs'), path);
+      assert.ok(markdown.includes('```{anywidget} ../../widgets/webawesome-demo.mjs'), path);
     } else {
-      assert.ok(!markdown.includes('{anywidget}'), path);
+      assert.ok(!markdown.includes('```{anywidget}'), path);
     }
     for (const dep of comp.deps) {
       assert.ok(markdown.includes('/' + dep + '.md)'), path + ' missing atom ' + dep);
