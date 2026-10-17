@@ -98,16 +98,18 @@ Reuse: [Tab](../navigation/tab.md), [Tab Panel](../navigation/tab-panel.md). The
 
 ## Markdown code snippet
 
+Copyable HTML below assumes the consuming application provides the referenced `./images/` files. The live widget above intentionally uses SoftCloud-specific `/static/showcase/` assets.
+
 ```html
 <wa-tab-group active="launch">
   <wa-tab panel="launch">Launch</wa-tab>
   <wa-tab panel="galaxies">Galaxies</wa-tab>
   <wa-tab-panel name="launch">
-    <img src="/static/showcase/rocket.jpg" alt="Falcon 9 launch">
+    <img src="./images/rocket.jpg" alt="Falcon 9 launch">
     <p>Falcon 9 carrying the DSCOVR spacecraft.</p>
   </wa-tab-panel>
   <wa-tab-panel name="galaxies">
-    <img src="/static/showcase/hubble-deep-field.jpg" alt="Hubble eXtreme Deep Field">
+    <img src="./images/hubble-deep-field.jpg" alt="Hubble eXtreme Deep Field">
     <p>Distant galaxies captured by Hubble.</p>
   </wa-tab-panel>
 </wa-tab-group>
@@ -117,7 +119,7 @@ Reuse: [Tab](../navigation/tab.md), [Tab Panel](../navigation/tab-panel.md). The
 
 Each `wa-tab[panel]` targets a unique `wa-tab-panel[name]`. `wa-tab-group[active]` chooses the initial panel. Actual photographs make switching panels observable. Use the MyST `{tab-set}` and `{tab-item}` directives when the task is organizing prose or alternative code listings, and Web Awesome only for application-like tabs.
 
-Media sources: [Showcase media](../showcase-media.md).
+**Image credits:** SpaceX / DSCOVR launch photograph (public-domain claim recorded in the [media manifest](../../assets/static/showcase/README.md), independent verification pending); NASA / Hubble eXtreme Deep Field (public domain). [Showcase media](../showcase-media.md).
 
 
 ## Examples: placement and keyboard activation
@@ -130,10 +132,10 @@ Use the `placement` attribute to choose `top` (default), `bottom`, `start`, or `
   <wa-tab panel="gallery">Gallery</wa-tab>
   <wa-tab panel="unavailable" disabled>Unavailable</wa-tab>
   <wa-tab-panel name="launch">
-    <img src="/static/showcase/rocket.jpg" alt="Falcon 9 launch">
+    <img src="./images/rocket.jpg" alt="Falcon 9 launch">
   </wa-tab-panel>
   <wa-tab-panel name="gallery">
-    <img src="/static/showcase/hubble-deep-field.jpg" alt="Hubble deep field">
+    <img src="./images/hubble-deep-field.jpg" alt="Hubble deep field">
   </wa-tab-panel>
   <wa-tab-panel name="unavailable">This panel is disabled.</wa-tab-panel>
 </wa-tab-group>
