@@ -1,26 +1,27 @@
-# Bar Chart `<wa-bar-chart>`
+# Bar Chart: MyST alternative
 
-Visualizes magnitude comparisons as bars.
+**Category:** [data-viz](../index.md) · **Implementation:** MyST-first · **Former reference:** Web Awesome Pro `<wa-bar-chart>`.
 
-> “the practice of designing and creating graphic or visual representations” — [Wikipedia: Information visualization](wiki:Information_visualization). This quote supplies general domain context, not an API definition.
+MyST is a publication format, not a drop-in interactive form or charting runtime. These examples provide accessible, portable documentation alternatives without shipping Web Awesome Pro.
 
-**Category:** [Data Visualization](../index.md) · **Availability:** Pro · **Maturity:** Stable.
+## Portable example
 
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/data-viz/bar-chart.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/bar-chart/).
+Use a MyST table as the canonical accessible representation of quantitative values. For a static chart, generate an image in the publication build and include it with the MyST `{figure}` directive, including alt text and a source table. The MyST specification does not supply an interactive equivalent of this chart type.
 
-:::{warning} Integration status
+| Period | Requests |
+| --- | ---: |
+| Week 1 | 42 |
+| Week 2 | 57 |
+| Week 3 | 51 |
 
-Web Awesome Pro only: not installed in the existing Core runtime. No interactive preview or licensed code is distributed.
+````myst
+:::{figure} ./figures/bar-chart.svg
+:alt: Bar Chart visualizing weekly request counts
+
+Bar Chart based on the table above. Generate this file during the build before enabling the figure.
 :::
+````
 
-## Live preview
+## Accessibility and compatibility
 
-Live preview intentionally unavailable: the Pro runtime is not licensed for this deployment.
-
-## Markdown code snippet
-
-```html
-<wa-bar-chart label="Capacity"></wa-bar-chart>
-```
-
-Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. Chart/grid data and configuration must additionally be supplied through documented Pro JavaScript properties.
+Preserve labels, units, descriptions, and a readable non-JavaScript representation. This page intentionally contains no Pro custom elements, Pro imports, or Pro API claims. See the [MyST specification](https://mystmd.org/spec) for supported markup and AST nodes.
