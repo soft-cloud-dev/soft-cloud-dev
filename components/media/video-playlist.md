@@ -27,9 +27,11 @@ Live preview intentionally unavailable: the Pro runtime is not licensed for this
 
 ```html
 <wa-video-playlist>
-  <wa-video src="/media/part-one.mp4"></wa-video>
-  <wa-video src="/media/part-two.mp4"></wa-video>
+  <wa-video src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"></wa-video>
+  <wa-video src="https://uploads.webawesome.com/dog-with-glasses.mp4"></wa-video>
 </wa-video-playlist>
 ```
+
+These are **real media source URLs** (MDN CC0 flower clip and a Web Awesome-hosted dog clip). The playlist is intentionally *reference-only* because Pro is not installed. Sources must be reachable before examples can play in a licensed environment.
 
 For direct MyST integration, place this trusted markup in a Markdown HTML block or use the corresponding built-in MyST directive/role when supported. Chart/grid data and configuration must additionally be supplied through documented Pro JavaScript properties.
