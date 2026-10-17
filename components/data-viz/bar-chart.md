@@ -1,27 +1,50 @@
-# Bar Chart: MyST alternative
+---
+description: "Static SVG bar chart with a MyST figure and accessible weekly request table."
+keywords:
+  - MyST
+  - data visualization
+  - Bar Chart
+tags:
+  - portable-alternative
+  - data-viz
+  - accessible-documentation
+---
 
-**Category:** [data-viz](../index.md) · **Implementation:** MyST-first · **Former reference:** Web Awesome Pro `<wa-bar-chart>`.
+# Bar Chart: portable MyST alternative
 
-MyST is a publication format, not a drop-in interactive form or charting runtime. These examples provide accessible, portable documentation alternatives without shipping Web Awesome Pro.
+:::{admonition} Portable Alternative (Non-Core)
+:class: note
+
+Web Awesome Pro components require a commercial license and are not bundled in this catalog. This page demonstrates portable, accessible alternatives using standard MyST markup and HTML5 semantics.
+:::
+
+**Former upstream Pro component:** `<wa-bar-chart>`. **Category:** [Portable Alternatives](../portable-alternatives.md) · **Implementation:** MyST/SVG.
+
+Use this documentation recipe without importing Web Awesome Pro code. The former component is named for compatibility and discovery only; the alternative is not API-equivalent.
 
 ## Portable example
 
-Use a MyST table as the canonical accessible representation of quantitative values. For a static chart, generate an image in the publication build and include it with the MyST `{figure}` directive, including alt text and a source table. The MyST specification does not supply an interactive equivalent of this chart type.
+Use a checked-in static SVG image and a MyST table. The figure requires no custom chart runtime; interactive filtering, tooltips and live recalculation are not provided.
+
+:::{figure} ../../images/portable-charts/bar-chart.svg
+:alt: Bars for weekly requests: Week 1 42, Week 2 57, Week 3 51.
+:label: fig-portable-bar-chart
+
+Static SVG example. The table below is the accessible source of the same illustrative data.
+:::
+
+:::{table} Bar Chart source data
+:label: tbl-portable-bar-chart
 
 | Period | Requests |
 | --- | ---: |
 | Week 1 | 42 |
 | Week 2 | 57 |
 | Week 3 | 51 |
-
-````myst
-:::{figure} ./figures/bar-chart.svg
-:alt: Bar Chart visualizing weekly request counts
-
-Bar Chart based on the table above. Generate this file during the build before enabling the figure.
 :::
-````
 
 ## Accessibility and compatibility
 
-Preserve labels, units, descriptions, and a readable non-JavaScript representation. This page intentionally contains no Pro custom elements, Pro imports, or Pro API claims. See the [MyST specification](https://mystmd.org/spec) for supported markup and AST nodes.
+The SVG has an accessible title and description, but the table contains the precise underlying values and remains usable in text and non-HTML exports. The example data are illustrative, not live operational measurements. No Web Awesome Pro elements, Pro imports or client-side chart libraries are used.
+
+**References:** [MyST specification](https://mystmd.org/spec), [MyST figures](https://mystmd.org/guide/figures), [MyST tables](https://mystmd.org/guide/tables), [Web Awesome upstream reference](https://webawesome.com/docs/components/bar-chart/).

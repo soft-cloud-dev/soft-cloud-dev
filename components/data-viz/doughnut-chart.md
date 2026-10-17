@@ -1,26 +1,50 @@
-# Doughnut Chart `<wa-doughnut-chart>`
+---
+description: "Static SVG doughnut chart with labeled proportions and a MyST source table."
+keywords:
+  - MyST
+  - data visualization
+  - Doughnut Chart
+tags:
+  - portable-alternative
+  - data-viz
+  - accessible-documentation
+---
 
-Visualizes proportions as ring segments.
+# Doughnut Chart: portable MyST alternative
 
-> “the practice of designing and creating graphic or visual representations” — [Wikipedia: Information visualization](wiki:Information_visualization). This quote supplies general domain context, not an API definition.
+:::{admonition} Portable Alternative (Non-Core)
+:class: note
 
-**Category:** [Data Visualization](../index.md) · **Availability:** Pro · **Maturity:** Stable.
-
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/data-viz/doughnut-chart.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/doughnut-chart/).
-
-:::{warning} Integration status
-
-Web Awesome Pro only: not installed in the existing Core runtime. No interactive preview or licensed code is distributed.
+Web Awesome Pro components require a commercial license and are not bundled in this catalog. This page demonstrates portable, accessible alternatives using standard MyST markup and HTML5 semantics.
 :::
 
-## Live preview
+**Former upstream Pro component:** `<wa-doughnut-chart>`. **Category:** [Portable Alternatives](../portable-alternatives.md) · **Implementation:** MyST/SVG.
 
-Live preview intentionally unavailable: the Pro runtime is not licensed for this deployment.
+Use this documentation recipe without importing Web Awesome Pro code. The former component is named for compatibility and discovery only; the alternative is not API-equivalent.
 
-## Markdown code snippet
+## Portable example
 
-```html
-<wa-doughnut-chart label="Storage"></wa-doughnut-chart>
-```
+Use a checked-in static SVG image and a MyST table. The figure requires no custom chart runtime; interactive filtering, tooltips and live recalculation are not provided.
 
-Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. Chart/grid data and configuration must additionally be supplied through documented Pro JavaScript properties.
+:::{figure} ../../images/portable-charts/doughnut-chart.svg
+:alt: Doughnut chart: Compute 50 percent, Storage 30 percent, Network 20 percent.
+:label: fig-portable-doughnut-chart
+
+Static SVG example. The table below is the accessible source of the same illustrative data.
+:::
+
+:::{table} Doughnut Chart source data
+:label: tbl-portable-doughnut-chart
+
+| Service | Share (%) |
+| --- | ---: |
+| Compute | 50 |
+| Storage | 30 |
+| Network | 20 |
+:::
+
+## Accessibility and compatibility
+
+The SVG has an accessible title and description, but the table contains the precise underlying values and remains usable in text and non-HTML exports. The example data are illustrative, not live operational measurements. No Web Awesome Pro elements, Pro imports or client-side chart libraries are used.
+
+**References:** [MyST specification](https://mystmd.org/spec), [MyST figures](https://mystmd.org/guide/figures), [MyST tables](https://mystmd.org/guide/tables), [Web Awesome upstream reference](https://webawesome.com/docs/components/doughnut-chart/).

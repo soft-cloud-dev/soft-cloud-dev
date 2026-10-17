@@ -1,26 +1,43 @@
-# Data Grid `<wa-data-grid>`
+---
+description: "Accessible sortable-data-grid alternative presented as a static MyST table."
+keywords:
+  - MyST
+  - data visualization
+  - Data Grid
+tags:
+  - portable-alternative
+  - data-viz
+  - accessible-documentation
+---
 
-Presents virtualizable sortable tabular records.
+# Data Grid: portable MyST alternative
 
-> “the practice of designing and creating graphic or visual representations” — [Wikipedia: Information visualization](wiki:Information_visualization). This quote supplies general domain context, not an API definition.
+:::{admonition} Portable Alternative (Non-Core)
+:class: note
 
-**Category:** [Data Visualization](../index.md) · **Availability:** Pro · **Maturity:** Experimental.
-
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/data-viz/data-grid.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/data-grid/).
-
-:::{warning} Integration status
-
-Web Awesome Pro only: not installed in the existing Core runtime. No interactive preview or licensed code is distributed.
+Web Awesome Pro components require a commercial license and are not bundled in this catalog. This page demonstrates portable, accessible alternatives using standard MyST markup and HTML5 semantics.
 :::
 
-## Live preview
+**Former upstream Pro component:** `<wa-data-grid>`. **Category:** [Portable Alternatives](../portable-alternatives.md) · **Implementation:** MyST/SVG.
 
-Live preview intentionally unavailable: the Pro runtime is not licensed for this deployment.
+Use this documentation recipe without importing Web Awesome Pro code. The former component is named for compatibility and discovery only; the alternative is not API-equivalent.
 
-## Markdown code snippet
+## Portable example
 
-```html
-<wa-data-grid label="Nodes"></wa-data-grid>
-```
+A MyST table provides a readable, printable data grid without JavaScript. Virtualization, editing, sorting and filtering require a separate interactive application.
 
-Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. Chart/grid data and configuration must additionally be supplied through documented Pro JavaScript properties.
+:::{table} Data Grid source data
+:label: tbl-portable-data-grid
+
+| Region | Requests | Status |
+| --- | ---: | --- |
+| Europe | 120 | Healthy |
+| North America | 95 | Healthy |
+| Asia | 82 | Monitoring |
+:::
+
+## Accessibility and compatibility
+
+Use explicit column headers, stable row order and textual status. The example data are illustrative, not live operational measurements. No Web Awesome Pro elements, Pro imports or client-side chart libraries are used.
+
+**References:** [MyST specification](https://mystmd.org/spec), [MyST figures](https://mystmd.org/guide/figures), [MyST tables](https://mystmd.org/guide/tables), [Web Awesome upstream reference](https://webawesome.com/docs/components/data-grid/).
