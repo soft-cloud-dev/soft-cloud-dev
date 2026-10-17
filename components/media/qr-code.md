@@ -8,9 +8,7 @@ Generates a QR code for a string or URL.
 
 **Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/v3.14.0/packages/webawesome/src/components/qr-code/qr-code.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/qr-code/).
 
-:::{wa-callout} Integration status
-:variant: brand
-:appearance: filled
+:::{note} Integration status
 
 Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 :::
@@ -37,4 +35,4 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 <wa-qr-code value="https://my.softcloud.dev/" size="160" label="SoftCloud"></wa-qr-code>
 ```
 
-For direct MyST integration, place this trusted markup in a Markdown HTML block or use the corresponding built-in MyST directive/role when supported. 
+Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. 
