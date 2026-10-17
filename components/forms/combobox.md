@@ -1,33 +1,17 @@
-# Combobox `<wa-combobox>`
+# Combobox: MyST alternative
 
-Provides searchable choices with free-form input.
+**Category:** [forms](../index.md) · **Implementation:** MyST-first · **Former reference:** Web Awesome Pro `<wa-combobox>`.
 
-> “allows a user to enter data that is sent to a server for processing” — [Wikipedia: HTML form](wiki:HTML_form). This quote supplies general domain context, not an API definition.
+MyST is a publication format, not a drop-in interactive form or charting runtime. These examples provide accessible, portable documentation alternatives without shipping Web Awesome Pro.
 
-**Category:** [Forms](../index.md) · **Availability:** Pro · **Maturity:** Stable.
+## Portable example
 
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/forms/combobox.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/combobox/).
+Use a native Markdown list for a fixed set of choices. For an actual searchable selection control, use an independently implemented, accessible form component.
 
-:::{warning} Integration status
+- Development
+- Staging
+- Production
 
-Web Awesome Pro only: not installed in the existing Core runtime. No interactive preview or licensed code is distributed.
-:::
+## Accessibility and compatibility
 
-## Atomic composition
-
-Reuse: [Option](../forms/option.md). The full nested markup below remains independently usable.
-
-## Live preview
-
-Live preview intentionally unavailable: the Pro runtime is not licensed for this deployment.
-
-## Markdown code snippet
-
-```html
-<wa-combobox label="Region">
-  <wa-option value="eu">Europe</wa-option>
-  <wa-option value="us">United States</wa-option>
-</wa-combobox>
-```
-
-Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. Chart/grid data and configuration must additionally be supplied through documented Pro JavaScript properties.
+Preserve labels, units, descriptions, and a readable non-JavaScript representation. This page intentionally contains no Pro custom elements, Pro imports, or Pro API claims. See the [MyST specification](https://mystmd.org/spec) for supported markup and AST nodes.
