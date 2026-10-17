@@ -16,10 +16,10 @@ test('90 component pages meet Core or portable-alternative contracts', () => {
     seen.add(path);
     const markdown = read(path);
     if (comp.pro) {
-      assert.match(markdown, /Portable Alternative \\(Non-Core\\)/, path);
+      assert.match(markdown, /Portable Alternative \(Non-Core\)/, path);
       assert.match(markdown, /description:/, path);
       assert.match(markdown, /tags:/, path);
-      assert.doesNotMatch(markdown, /<wa-[a-z-]+\\s/, path);
+      assert.doesNotMatch(markdown, /<wa-[a-z-]+\s/, path);
       assert.ok(!markdown.includes('\\`\\`\\`{anywidget}'), path);
       assert.ok(read('myst.yml').includes('file: ' + path), path + ' missing portable TOC');
       continue;
