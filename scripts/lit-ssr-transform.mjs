@@ -116,8 +116,11 @@ export function transformAndRenderSSR(html, baseUrl = '') {
     throw new Error(`Document DSD validation failed: ${docValidation.errors.join('; ')}`);
   }
 
-  // Step 7: Inject runtime assets if components are present
-  if (hosts.length > 0 || docValidation.totalHosts > 0) {
+  // Step 7: MyST anywidget demos need Web Awesome styles and the self-hosted loader
+  // even when no typed SSR component exists on the page. Text detection is only
+  // an asset-injection hint; all HTML mutations still use the parse5 tree.
+  const hasCatalogWidget = html.includes('webawesome-demo.mjs');
+  if (hosts.length > 0 || docValidation.totalHosts > 0 || hasCatalogWidget) {
     injectRuntimeAssets(ast, baseUrl);
   }
 
