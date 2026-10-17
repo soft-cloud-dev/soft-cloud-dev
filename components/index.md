@@ -9,6 +9,13 @@ The complete **90-component** catalog is split into one self-contained MyST Mark
 The existing four typed MyST Web Awesome integrations (`wa-button`, `wa-card`, `wa-callout`, `wa-icon`) retain genuine Lit SSR and Declarative Shadow DOM. Other available Core components use the existing MyST `{anywidget}` integration to load self-hosted Web Awesome modules. The 17 Pro components are reference-only.
 :::
 
+## Documentation and real-media examples
+
+- [Authoring and migration guide](authoring-guide.md) — choose MyST built-ins for prose and layout, retain anywidget for interactive Web Awesome components, and follow the phased API documentation plan.
+- [Real media showcase](showcase-media.md) — bundled public-domain/CC0 photographs, photographic carousel, comparison, avatar, photo tabs, zoomable frame, and native video.
+
+For this catalog, an interactive preview is **client-rendered by anywidget**; it must not be mistaken for the genuine Lit SSR path used by four existing typed primitives. Core media examples reuse local `/static/showcase/` assets whenever available. Pro components remain unlicensed references.
+
 ## Component categories
 
 ### Actions

@@ -27,6 +27,8 @@ project:
     - title: Web Awesome Components
       children:
         - file: components/index.md
+        - file: components/authoring-guide.md
+        - file: components/showcase-media.md
         - title: Actions
           children:
             - file: components/actions/button.md
