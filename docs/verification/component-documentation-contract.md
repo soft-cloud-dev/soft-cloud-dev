@@ -12,7 +12,7 @@ This document is the pre-migration contract for all 90 catalog entries. PR 1 fix
 | MyST | tools/build.sh | Real Jupyter Book 2 strict build, zero errors and parsed code fences |
 | Accessibility | tests/doc-browser | axe-core serious/critical count zero on representative routes |
 | Keyboard | tests/doc-browser | Playwright Tab/Enter/Space/Arrow keys for applicable interactive components |
-| Visual | screenshots captured in CI | Compare committed baselines at initial <=0.1% changed pixels; calibrate noise before making a hard gate |
+| No-JS mock | deterministic server HTML fixture and Playwright with JavaScript disabled | Verify semantic fallback text, media URLs, copyable code, typed SSR hosts and DSD without screenshots or pixel thresholds; separately simulate widget initialization failure with JavaScript enabled |
 | Links | assembled _build/html | Internal href/src resolve for root and prefixed locales; zero broken internal links |
 | Remote media | assets/static/showcase/README.md | Only shoelace.style/assets/images/walk.gif and interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4 |
 | Coverage | manifest and CI reports | One finding-to-regression mapping for all 15 findings; never claim unverified completion |
@@ -21,4 +21,4 @@ This document is the pre-migration contract for all 90 catalog entries. PR 1 fix
 
 **Build provenance:** English sources are copied into isolated _build/locales/en/workspace and translations into locale workspaces before Jupyter Book renders them. Edit URLs must point to original GitHub paths. Existing asset staging copies assets/static/showcase to static/showcase; anywidget resolves showcase: tokens from the module URL.
 
-**Rollout:** PR 1 fixes nested fences, edit links, media URLs and static fallback; PR 2 adds schema, API, accessibility, keyboard, links, visual checks and inventory gates; PR 3 improves metadata, navigation and attribution.
+**Rollout:** PR 1 fixes nested fences, edit links, media URLs and static fallback; PR 2 adds schema, API, accessibility, keyboard, links, No-JS mock checks and inventory gates; PR 3 improves metadata, navigation and attribution.
