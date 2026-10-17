@@ -15,12 +15,18 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 
 ## Live preview
 
+### Static reference (works without JavaScript)
+
+![Falcon 9 launch photograph](../../assets/static/showcase/rocket.jpg)
+
+The image and copyable HTML example below remain available if the interactive widget fails to initialize. The widget adds component behavior; it does not provide the only readable content.
+
 ```{anywidget} ../../widgets/webawesome-demo.mjs
 {
   "tree": {
     "tag": "wa-zoomable-frame",
     "attrs": {
-      "src": "/static/showcase/gallery.html",
+      "src": "showcase:gallery.html",
       "label": "SoftCloud photo gallery",
       "zoom": "0.75"
     },
@@ -32,7 +38,7 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 ## Markdown code snippet
 
 ```html
-<wa-zoomable-frame src="/static/showcase/gallery.html" label="SoftCloud photo gallery" zoom="0.75"></wa-zoomable-frame>
+<wa-zoomable-frame src="./images/gallery.html" label="SoftCloud photo gallery" zoom="0.75"></wa-zoomable-frame>
 ```
 
 ## Usage and API notes

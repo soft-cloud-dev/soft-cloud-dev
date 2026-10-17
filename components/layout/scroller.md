@@ -15,6 +15,12 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 
 ## Live preview
 
+### Static reference (works without JavaScript)
+
+![Falcon 9 launch photograph](../../assets/static/showcase/rocket.jpg)
+
+The image and copyable HTML example below remain available if the interactive widget fails to initialize. The widget adds component behavior; it does not provide the only readable content.
+
 ```{anywidget} ../../widgets/webawesome-demo.mjs
 {
   "tree": {
@@ -30,7 +36,7 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
           {
             "tag": "img",
             "attrs": {
-              "src": "/static/showcase/rocket.jpg",
+              "src": "showcase:rocket.jpg",
               "alt": "Rocket launch thumbnail",
               "loading": "lazy"
             },
@@ -39,7 +45,7 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
           {
             "tag": "img",
             "attrs": {
-              "src": "/static/showcase/coffee.png",
+              "src": "showcase:coffee.png",
               "alt": "Coffee cup thumbnail",
               "loading": "lazy"
             },
@@ -48,7 +54,7 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
           {
             "tag": "img",
             "attrs": {
-              "src": "/static/showcase/hubble-deep-field.jpg",
+              "src": "showcase:hubble-deep-field.jpg",
               "alt": "Hubble deep field thumbnail",
               "loading": "lazy"
             },
@@ -57,7 +63,7 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
           {
             "tag": "img",
             "attrs": {
-              "src": "/static/showcase/astronaut.png",
+              "src": "showcase:astronaut.png",
               "alt": "Astronaut Eileen Collins thumbnail",
               "loading": "lazy"
             },
@@ -75,10 +81,10 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 ```html
 <wa-scroller>
   <div class="sc-demo-thumb-row">
-    <img src="/static/showcase/rocket.jpg" alt="Rocket launch thumbnail">
-    <img src="/static/showcase/coffee.png" alt="Cup of coffee thumbnail">
-    <img src="/static/showcase/hubble-deep-field.jpg" alt="Hubble deep field thumbnail">
-    <img src="/static/showcase/astronaut.png" alt="Astronaut Eileen Collins thumbnail">
+    <img src="./images/rocket.jpg" alt="Rocket launch thumbnail">
+    <img src="./images/coffee.png" alt="Cup of coffee thumbnail">
+    <img src="./images/hubble-deep-field.jpg" alt="Hubble deep field thumbnail">
+    <img src="./images/astronaut.png" alt="Astronaut Eileen Collins thumbnail">
   </div>
 </wa-scroller>
 <style>

@@ -18,12 +18,17 @@ const validUrl = /^(?:https:\/\/|\/(?!\/)|#)/i;
 const moduleImports = new Map();
 const allowedComponents = new Set(["button","button-group","copy-button","dropdown","dropdown-item","checkbox","checkbox-group","color-picker","input","known-date","number-input","otp-input","radio-group","radio","rating","select","option","slider","switch","textarea","time-input","accordion","accordion-item","card","details","dialog","divider","drawer","scroller","split-panel","breadcrumb","breadcrumb-item","pagination","tab-group","tab","tab-panel","tree","tree-item","badge","callout","progress-bar","progress-ring","skeleton","spinner","tag","tooltip","animated-image","avatar","carousel","carousel-item","comparison","icon","qr-code","zoomable-frame","animation","format-bytes","format-date","format-number","random-content","relative-time"]);
 
-// Retain the documented /static/showcase paths but resolve them relative to
-// the deployed Web Awesome bundle, including a custom BASE_URL prefix.
+// Demo-only media token. The module URL is stable across root, nested and file deployments.
+// No page source needs to embed a deployment-specific /static URL.
+export function resolveShowcaseMedia(raw, moduleUrl = import.meta.url) {
+  const match = /^showcase:([a-z0-9][a-z0-9._-]*)$/i.exec(raw);
+  if (!match) return raw;
+  const root = new URL('../vendor/webawesome/', moduleUrl);
+  return new URL('../../static/showcase/' + match[1], root).href;
+}
+
 function localShowcaseUrl(raw) {
-  if (!/^\/static\/showcase\/[a-z0-9][a-z0-9._-]*$/i.test(raw)) return raw;
-  const root = runtimeRoot();
-  return root ? new URL('../../' + raw.slice(1), root).href : raw;
+  return resolveShowcaseMedia(raw);
 }
 
 function createNode(data) {
@@ -38,9 +43,12 @@ function createNode(data) {
   const node = document.createElement(tag);
   for (const [attr, value] of Object.entries(data.attrs || {})) {
     if (!permittedAttrs.has(attr) || attr.toLowerCase().startsWith('on')) continue;
-    if (['href', 'src', 'image', 'poster'].includes(attr) && !validUrl.test(String(value))) continue;
-    const safeValue = ['src', 'image', 'poster'].includes(attr)
-      ? localShowcaseUrl(String(value)) : String(value);
+    const isMedia = ['src', 'image', 'poster'].includes(attr);
+    const rawValue = String(value);
+    const isShowcase = isMedia && /^showcase:[a-z0-9][a-z0-9._-]*$/i.test(rawValue);
+    const safeValue = isMedia ? localShowcaseUrl(rawValue) : rawValue;
+    if (['href', 'src', 'image', 'poster'].includes(attr) &&
+        !validUrl.test(safeValue) && !(isShowcase && safeValue.startsWith('file://'))) continue;
     node.setAttribute(attr, safeValue);
   }
   for (const child of data.children || []) node.append(createNode(child));

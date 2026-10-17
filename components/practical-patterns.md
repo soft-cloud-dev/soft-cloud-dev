@@ -62,7 +62,7 @@ Images, comparisons, and carousels use real, credited media. Ordinary figures re
 A dashboard can combine a native explanatory card with a Web Awesome action, without converting the entire documentation page to web components.
 
 :::{card} Diagnostics reference
-This example is a demonstration, **not a live infrastructure status**. The button copies a reproducible diagnostic command.
+This example is a demonstration, **not a live infrastructure status**. The button copies a reproducible diagnostic command. **Static fallback:** [Open SoftCloud](https://my.softcloud.dev/) and the copyable command `kubectl get nodes -o wide` remain available if component imports fail.
 :::
 
 ```{anywidget} ../widgets/webawesome-demo.mjs
@@ -98,7 +98,7 @@ Use native MyST tabs for alternative explanations and code listings.
 
 ::::{tab-set}
 :::{tab-item} Shell
-```sh
+```bash
 kubectl get nodes -o wide
 ```
 :::

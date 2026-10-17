@@ -18,6 +18,18 @@ test('preview resolves vendor assets for root, prefixed, and file deployments', 
   }
 });
 
+test('showcase media tokens resolve across root and prefixed deployments', async () => {
+  const { resolveShowcaseMedia } = await import('../../widgets/webawesome-demo.mjs');
+  for (const [moduleUrl, expected] of [
+    ['https://domain.org/build/preview.js', 'https://domain.org/static/showcase/rocket.jpg'],
+    ['https://domain.org/docs/build/preview.js', 'https://domain.org/docs/static/showcase/rocket.jpg'],
+    ['file:///workspace/project/build/preview.js', 'file:///workspace/project/static/showcase/rocket.jpg']
+  ]) {
+    assert.equal(resolveShowcaseMedia('showcase:rocket.jpg', moduleUrl), expected);
+  }
+  assert.equal(resolveShowcaseMedia('showcase:../../escape.jpg'), 'showcase:../../escape.jpg');
+});
+
 test('preview does not depend on loader elements or currentScript', () => {
   const runtimeRoot = source.match(/function runtimeRoot\(\) \{([\s\S]*?)\n\}/)?.[1];
   assert.ok(runtimeRoot, 'runtimeRoot must exist');
