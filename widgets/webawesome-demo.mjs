@@ -16,6 +16,7 @@ const permittedAttrs = new Set([
 ]);
 const validUrl = /^(?:https:\/\/|\/(?!\/)|#)/i;
 const moduleImports = new Map();
+const allowedComponents = new Set(["button","button-group","copy-button","dropdown","dropdown-item","checkbox","checkbox-group","color-picker","input","known-date","number-input","otp-input","radio-group","radio","rating","select","option","slider","switch","textarea","time-input","accordion","accordion-item","card","details","dialog","divider","drawer","scroller","split-panel","breadcrumb","breadcrumb-item","pagination","tab-group","tab","tab-panel","tree","tree-item","badge","callout","progress-bar","progress-ring","skeleton","spinner","tag","tooltip","animated-image","avatar","carousel","carousel-item","comparison","icon","qr-code","zoomable-frame","animation","format-bytes","format-date","format-number","random-content","relative-time"]);
 
 // Retain the documented /static/showcase paths but resolve them relative to
 // the deployed Web Awesome bundle, including a custom BASE_URL prefix.
@@ -62,22 +63,22 @@ function componentNames(data) {
 }
 
 function runtimeRoot() {
-  const loader = document.querySelector('script[src*="/vendor/webawesome/webawesome.ssr-loader.js"]');
-  if (loader) return new URL('.', loader.src);
-  const bootstrap = document.querySelector('script[src*="/static/softcloud-webawesome.mjs"]');
-  if (bootstrap) return new URL('../vendor/webawesome/', bootstrap.src);
-  const sheet = document.querySelector('link[href*="/vendor/webawesome/styles/webawesome.css"]');
-  return sheet ? new URL('../', sheet.href) : null;
+  return new URL('../vendor/webawesome/', import.meta.url);
 }
 
 async function loadComponents(names) {
   const root = runtimeRoot();
-  if (!root) throw new Error('Self-hosted Web Awesome loader not found.');
+  for (const name of names) {
+    if (!allowedComponents.has(name)) throw new Error('Unsupported Web Awesome component: ' + name);
+  }
   await Promise.all(Array.from(names, name => {
     if (customElements.get('wa-' + name)) return Promise.resolve();
     if (!moduleImports.has(name)) {
       const path = 'components/' + name + '/' + name + '.js';
-      moduleImports.set(name, import(new URL(path, root).href));
+      moduleImports.set(name, import(new URL(path, root).href).catch(error => {
+        moduleImports.delete(name);
+        throw new Error('Failed to import Web Awesome component ' + name + ': ' + (error?.message || String(error)), { cause: error });
+      }));
     }
     return moduleImports.get(name);
   }));
