@@ -102,6 +102,10 @@ Use real self-hosted images with descriptive `alt` text, source credit and expli
 
 The [practical pattern library](practical-patterns.md) adapts the **marketing, application UI, and ecommerce categories** shown in Tailwind Plus into original MyST-first patterns. It does not copy proprietary Tailwind Plus component source and does not add a CSS framework; its examples deliberately combine real credited media, native editorial layouts, and the existing Web Awesome anywidget primitives.
 
+:::{note} Native authoring progress
+The **90 catalog integration-status notices** have been migrated to MyST `{note}`/`{warning}` and the catalog index now uses `{note}`. The existing typed Web Awesome directives/roles still exist for opt-in functional use; this content migration does not remove their implementation. Upstream-grade API tables beyond the Tab Group exemplar remain phased work.
+:::
+
 ## Migration and acceptance plan
 
 | Phase | Deliverable | Acceptance |
