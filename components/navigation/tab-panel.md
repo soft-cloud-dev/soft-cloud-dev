@@ -19,6 +19,12 @@ Reuse: [Tab Group](../navigation/tab-group.md), [Tab](../navigation/tab.md). The
 
 ## Live preview
 
+### Static reference (works without JavaScript)
+
+![NASA astronaut portrait](../../assets/static/showcase/astronaut.png)
+
+The image and copyable HTML example below remain available if the interactive widget fails to initialize. The widget adds component behavior; it does not provide the only readable content.
+
 ```{anywidget} ../../widgets/webawesome-demo.mjs
 {
   "tree": {
@@ -54,7 +60,7 @@ Reuse: [Tab Group](../navigation/tab-group.md), [Tab](../navigation/tab.md). The
           {
             "tag": "img",
             "attrs": {
-              "src": "/static/showcase/astronaut.png",
+              "src": "showcase:astronaut.png",
               "alt": "NASA portrait of Eileen Collins"
             },
             "children": []
@@ -70,7 +76,7 @@ Reuse: [Tab Group](../navigation/tab-group.md), [Tab](../navigation/tab.md). The
           {
             "tag": "img",
             "attrs": {
-              "src": "/static/showcase/rocket.jpg",
+              "src": "showcase:rocket.jpg",
               "alt": "Falcon 9 launch"
             },
             "children": []
@@ -88,8 +94,8 @@ Reuse: [Tab Group](../navigation/tab-group.md), [Tab](../navigation/tab.md). The
 <wa-tab-group active="portrait">
   <wa-tab panel="portrait">Portrait</wa-tab>
   <wa-tab panel="launch">Launch</wa-tab>
-  <wa-tab-panel name="portrait"><img src="/static/showcase/astronaut.png" alt="NASA portrait of Eileen Collins"></wa-tab-panel>
-  <wa-tab-panel name="launch"><img src="/static/showcase/rocket.jpg" alt="Falcon 9 launch"></wa-tab-panel>
+  <wa-tab-panel name="portrait"><img src="./images/astronaut.png" alt="NASA portrait of Eileen Collins"></wa-tab-panel>
+  <wa-tab-panel name="launch"><img src="./images/rocket.jpg" alt="Falcon 9 launch"></wa-tab-panel>
 </wa-tab-group>
 ```
 

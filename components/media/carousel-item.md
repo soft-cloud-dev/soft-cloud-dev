@@ -19,6 +19,12 @@ Reuse: [Carousel](../media/carousel.md). The full nested markup below remains in
 
 ## Live preview
 
+### Static reference (works without JavaScript)
+
+![Falcon 9 launch photograph](../../assets/static/showcase/rocket.jpg)
+
+The image and copyable HTML example below remain available if the interactive widget fails to initialize. The widget adds component behavior; it does not provide the only readable content.
+
 ```{anywidget} ../../widgets/webawesome-demo.mjs
 {
   "tree": {
@@ -37,7 +43,7 @@ Reuse: [Carousel](../media/carousel.md). The full nested markup below remains in
           {
             "tag": "img",
             "attrs": {
-              "src": "/static/showcase/rocket.jpg",
+              "src": "showcase:rocket.jpg",
               "alt": "Falcon 9 carrying DSCOVR launching from Cape Canaveral"
             },
             "children": []
@@ -51,7 +57,7 @@ Reuse: [Carousel](../media/carousel.md). The full nested markup below remains in
           {
             "tag": "img",
             "attrs": {
-              "src": "/static/showcase/coffee.png",
+              "src": "showcase:coffee.png",
               "alt": "White cup of coffee on a wooden table",
               "loading": "lazy"
             },
@@ -66,7 +72,7 @@ Reuse: [Carousel](../media/carousel.md). The full nested markup below remains in
           {
             "tag": "img",
             "attrs": {
-              "src": "/static/showcase/hubble-deep-field.jpg",
+              "src": "showcase:hubble-deep-field.jpg",
               "alt": "Hubble eXtreme Deep Field containing thousands of galaxies",
               "loading": "lazy"
             },
@@ -83,9 +89,9 @@ Reuse: [Carousel](../media/carousel.md). The full nested markup below remains in
 
 ```html
 <wa-carousel pagination navigation>
-  <wa-carousel-item><img src="/static/showcase/rocket.jpg" alt="Falcon 9 rocket launch"></wa-carousel-item>
-  <wa-carousel-item><img src="/static/showcase/coffee.png" alt="Cup of coffee"></wa-carousel-item>
-  <wa-carousel-item><img src="/static/showcase/hubble-deep-field.jpg" alt="Hubble deep field"></wa-carousel-item>
+  <wa-carousel-item><img src="./images/rocket.jpg" alt="Falcon 9 rocket launch"></wa-carousel-item>
+  <wa-carousel-item><img src="./images/coffee.png" alt="Cup of coffee"></wa-carousel-item>
+  <wa-carousel-item><img src="./images/hubble-deep-field.jpg" alt="Hubble deep field"></wa-carousel-item>
 </wa-carousel>
 ```
 

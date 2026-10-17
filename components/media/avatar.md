@@ -15,12 +15,18 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 
 ## Live preview
 
+### Static reference (works without JavaScript)
+
+![NASA astronaut portrait](../../assets/static/showcase/astronaut.png)
+
+The image and copyable HTML example below remain available if the interactive widget fails to initialize. The widget adds component behavior; it does not provide the only readable content.
+
 ```{anywidget} ../../widgets/webawesome-demo.mjs
 {
   "tree": {
     "tag": "wa-avatar",
     "attrs": {
-      "image": "/static/showcase/astronaut.png",
+      "image": "showcase:astronaut.png",
       "label": "NASA portrait of astronaut Eileen Collins",
       "shape": "circle",
       "loading": "lazy"
@@ -33,7 +39,7 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 ## Markdown code snippet
 
 ```html
-<wa-avatar image="/static/showcase/astronaut.png" label="NASA portrait of astronaut Eileen Collins" shape="circle" loading="lazy"></wa-avatar>
+<wa-avatar image="./images/astronaut.png" label="NASA portrait of astronaut Eileen Collins" shape="circle" loading="lazy"></wa-avatar>
 ```
 
 ## Usage and API notes

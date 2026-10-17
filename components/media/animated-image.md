@@ -15,6 +15,12 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 
 ## Live preview
 
+### Static reference (works without JavaScript)
+
+![Animated shoe demonstration](https://shoelace.style/assets/images/walk.gif)
+
+The image and copyable HTML example below remain available if the interactive widget fails to initialize. The widget adds component behavior; it does not provide the only readable content.
+
 ```{anywidget} ../../widgets/webawesome-demo.mjs
 {
   "tree": {

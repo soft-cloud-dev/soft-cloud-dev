@@ -18,7 +18,7 @@ source_url: https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/component
 
 ## Design rule
 
-**Use MyST built-ins for documentation layout. Use the existing typed Web Awesome directives for server-rendered button/card/callout/icon primitives. Use `{anywidget}` for client-side previews and stateful interaction that the typed SSR path does not cover.** A component demo may compose these primitives; do not add duplicate component frameworks or claim that a client-only widget has Lit SSR.
+**Component selection hierarchy:** (1) MyST built-ins for portable document structures; (2) existing typed SSR directives for `wa-button`, `wa-card`, `wa-callout`, and `wa-icon` (via `{icon}`/`{fa}`); (3) `{anywidget}` for interactive demonstrations or components without a typed directive; (4) reuse existing atomic components for composite patterns. A component demo may compose these primitives; do not add duplicate component frameworks or claim that a client-only widget has Lit SSR.
 
 :::{admonition} Current implementation
 :class: note
@@ -64,7 +64,7 @@ Use native MyST tabs for editorial explanations and snippet alternatives. The in
 
 :::::{tab-set}
 ::::{tab-item} MyST note
-````myst
+````markdown
 :::{note}
 Use this for publication notes.
 :::
@@ -82,7 +82,7 @@ Use this for publication notes.
 
 Typed SSR/DSD and browser widgets have separate roles. Prefer this supported typed primitive for a server-rendered call to action:
 
-````myst
+````markdown
 :::{wa-button}
 :variant: brand
 :href: https://my.softcloud.dev/
@@ -90,10 +90,12 @@ Open SoftCloud
 :::
 ````
 
-Use a widget for an interactive form or a live demonstration requiring browser-side state. The rendered documentation must remain legible when the preview cannot execute.
+Use a widget for an interactive form or a live demonstration requiring browser-side state. **Every widget preview must also publish static, semantic content and a complete source example outside the widget.** This remains available when JavaScript is disabled **or** when scripts load but component initialization fails. A `<noscript>` message is not sufficient.
 ## Browser-only component preview host: `{anywidget}`
 
-The existing `widgets/webawesome-demo.mjs` consumes structured JSON and creates allowlisted DOM elements using `document.createElement` and `document.createTextNode`. The model is **data**, never raw or trusted HTML; it must reject event-handler attributes and non-HTTPS/dangerous URL schemes. Runtime assets and component modules are self-hosted, and the loader must not be duplicated. **The `/static/showcase/...` URL in the executable model below is a site-specific runtime asset, not a portable Markdown or HTML snippet.** For published images use MyST relative image references; in reusable HTML examples use an application-supplied relative asset URL.
+The existing `widgets/webawesome-demo.mjs` consumes structured JSON and creates allowlisted DOM elements using `document.createElement` and `document.createTextNode`. The model is **data**, never raw or trusted HTML; it must reject event-handler attributes and non-HTTPS/dangerous URL schemes. Runtime assets and component modules are self-hosted, and the loader must not be duplicated. **The `showcase:filename.ext` token below is demo-only data, not an HTML URL.** The existing widget resolves it relative to its module URL to the self-hosted `static/showcase` assets for both root and prefixed deployments. In reusable HTML snippets, use `./images/filename.ext` and replace it with the consuming application's path. For published images use MyST relative image references; in reusable HTML examples use an application-supplied relative asset URL.
+
+Static fallback: ![Falcon 9 launch photograph](../assets/static/showcase/rocket.jpg). This image remains a normal MyST publication asset even if the widget import fails.
 
 Example reusable atomic composition:
 
@@ -106,7 +108,7 @@ Example reusable atomic composition:
       { "tag": "wa-tab", "attrs": { "panel": "sample" }, "children": ["Photo"] },
       { "tag": "wa-tab-panel", "attrs": { "name": "sample" },
         "children": [
-          { "tag": "img", "attrs": { "src": "/static/showcase/rocket.jpg", "alt": "Falcon 9 rocket launch" } }
+          { "tag": "img", "attrs": { "src": "showcase:rocket.jpg", "alt": "Falcon 9 rocket launch" } }
         ]
       }
     ]
@@ -116,7 +118,7 @@ Example reusable atomic composition:
 
 ## Copyable media markup and provenance
 
-For standalone HTML, substitute a file shipped with the consuming application rather than copying the SoftCloud-only `/static/showcase/` asset URL:
+For standalone HTML, substitute a file shipped with the consuming application; `./images/rocket.jpg` is a documented placeholder path, not a promise that the file exists in every deployment:
 
 ```html
 <img src="./images/rocket.jpg" alt="Falcon 9 rocket launch">
@@ -124,12 +126,12 @@ For standalone HTML, substitute a file shipped with the consuming application ra
 
 ## Native documentation media and provenance
 
-Use real self-hosted images with descriptive `alt` text, source credit and explicit licensing; prefer the shared [Showcase media](showcase-media.md) assets over text placeholders and externally hosted stock imagery. The actual sample photographs are reproducible inputs to screenshots and visual regression tests. The only allowlisted remote showcase media are `https://shoelace.style/assets/images/walk.gif` (animated-image example) and `https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4` (native video example). CI must reject other remote media dependencies unless reviewed and added to this allowlist. Never present Pro components as executable without an installed Pro runtime.
+Use real self-hosted images with descriptive `alt` text, source credit and explicit licensing; prefer the shared [Showcase media](showcase-media.md) assets over text placeholders and externally hosted stock imagery. The actual sample photographs are reproducible inputs to screenshots and visual regression tests. The only allowlisted remote showcase media are `https://shoelace.style/assets/images/walk.gif` (animated-image example) and `https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4` (native video example). CI must reject other remote media dependencies unless reviewed and added to this allowlist. The static reference and the copyable HTML example must remain readable independently of the widget's lifecycle. Never present Pro components as executable without an installed Pro runtime.
 
 ## Build and SSR boundaries
 
 1. MyST parses Markdown, grids, cards, tabs, notes, and anywidget directives in locale-specific builds.
-2. Existing staging copies `assets/static/showcase` to `static/showcase` under the assembled HTML output. Anywidget resolves local component modules from the self-hosted Web Awesome distribution.
+2. Existing staging copies `assets/static/showcase` to `static/showcase` under the assembled HTML output; the widget resolves `showcase:` tokens without using domain-root URLs. Anywidget resolves local component modules from the self-hosted Web Awesome distribution.
 3. The existing Lit/parse5 post-processing pass handles the four typed Web Awesome SSR primitives; keep this contract stable and do not add SSR to all 90 catalog components.
 4. Translation sources stay English-first; translations and narration must be regenerated through the existing per-locale workflows without translating JSON keys or HTML attribute names.
 5. Verify the generated HTML for valid MyST layouts, loaded media, tab and carousel keyboard navigation, nonempty `alt` text, expected local asset paths, and no console/network failures.
@@ -155,6 +157,6 @@ Source-of-truth versions: `package.json` for Web Awesome, `requirements.lock` fo
 
 ### No-JavaScript requirements
 
-Client-only `{anywidget}` previews may not render without JavaScript. Every preview page must preserve readable text and a copyable source example outside the widget, plus a static semantic fallback where essential content would otherwise be unavailable. The existing typed SSR primitives retain their own tested DSD/no-JS path.
+Client-only `{anywidget}` previews may not render without JavaScript. Every preview page must preserve readable text and a copyable source example outside the widget, plus a static semantic fallback where essential content would otherwise be unavailable. The existing typed SSR primitives retain their own tested DSD/no-JS path. The rendered HTML, not just Markdown source, must be checked for code fence leakage and for static alternatives when widget imports fail.
 ### Not in scope
 No copying proprietary Web Awesome Pro code, not turning Markdown paragraphs into custom elements, no new client framework, no fake SSR for anywidget, no dynamic download of media during deterministic build.

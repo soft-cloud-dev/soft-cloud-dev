@@ -15,6 +15,12 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 
 ## Live preview
 
+### Static reference (works without JavaScript)
+
+![Coffee cup photograph](../../assets/static/showcase/coffee.png)
+
+The image and copyable HTML example below remain available if the interactive widget fails to initialize. The widget adds component behavior; it does not provide the only readable content.
+
 ```{anywidget} ../../widgets/webawesome-demo.mjs
 {
   "tree": [
@@ -27,7 +33,7 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
         {
           "tag": "img",
           "attrs": {
-            "src": "/static/showcase/coffee.png",
+            "src": "showcase:coffee.png",
             "alt": "A white cup of coffee on a wooden table",
             "slot": "media",
             "loading": "lazy"
@@ -114,7 +120,7 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 
 ```html
 <wa-card appearance="outlined">
-  <img slot="media" src="/static/showcase/coffee.png" alt="White cup of coffee on wood" loading="lazy">
+  <img slot="media" src="./images/coffee.png" alt="White cup of coffee on wood" loading="lazy">
   <strong slot="header">Coffee sample</strong>
   <p>A real bundled, CC0 photograph.</p>
   <wa-button slot="footer-actions" appearance="plain" href="/components/showcase-media">Media credits</wa-button>

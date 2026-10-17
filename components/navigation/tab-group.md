@@ -19,6 +19,12 @@ Reuse: [Tab](../navigation/tab.md), [Tab Panel](../navigation/tab-panel.md). The
 
 ## Live preview
 
+### Static reference (works without JavaScript)
+
+![Falcon 9 launch photograph](../../assets/static/showcase/rocket.jpg)
+
+The image and copyable HTML example below remain available if the interactive widget fails to initialize. The widget adds component behavior; it does not provide the only readable content.
+
 ```{anywidget} ../../widgets/webawesome-demo.mjs
 {
   "tree": {
@@ -54,7 +60,7 @@ Reuse: [Tab](../navigation/tab.md), [Tab Panel](../navigation/tab-panel.md). The
           {
             "tag": "img",
             "attrs": {
-              "src": "/static/showcase/rocket.jpg",
+              "src": "showcase:rocket.jpg",
               "alt": "Falcon 9 launch"
             },
             "children": []
@@ -77,7 +83,7 @@ Reuse: [Tab](../navigation/tab.md), [Tab Panel](../navigation/tab-panel.md). The
           {
             "tag": "img",
             "attrs": {
-              "src": "/static/showcase/hubble-deep-field.jpg",
+              "src": "showcase:hubble-deep-field.jpg",
               "alt": "Hubble eXtreme Deep Field"
             },
             "children": []
@@ -172,12 +178,12 @@ When tabs only separate documentation snippets or language-specific explanations
 
 ::::{tab-set}
 :::{tab-item} List pods
-```sh
+```bash
 kubectl get pods -A
 ```
 :::
 :::{tab-item} List nodes
-```sh
+```bash
 kubectl get nodes -o wide
 ```
 :::
