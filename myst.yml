@@ -102,8 +102,6 @@ project:
             - file: components/media/markdown.md
             - file: components/media/qr-code.md
             - file: components/media/zoomable-frame.md
-        - title: Data Visualization
-          children:
         - title: Portable Alternatives (Non-Core)
           children:
             - file: components/portable-alternatives.md
