@@ -1,35 +1,16 @@
-# Video Playlist `<wa-video-playlist>`
+# Video Playlist: MyST alternative
 
-Coordinates several video elements.
+**Category:** [media](../index.md) · **Implementation:** MyST-first · **Former reference:** Web Awesome Pro `<wa-video-playlist>`.
 
-> “Multimedia is a form of communication that uses a combination of different content forms.” — [Wikipedia: Multimedia](wiki:Multimedia). This quote supplies general domain context, not an API definition.
+MyST is a publication format, not a drop-in interactive form or charting runtime. These examples provide accessible, portable documentation alternatives without shipping Web Awesome Pro.
 
-**Category:** [Media](../index.md) · **Availability:** Pro · **Maturity:** Experimental.
+## Portable example
 
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/media/video-playlist.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/video-playlist/).
+For a playlist, publish a semantic ordered list of videos and corresponding transcripts. Automatic playlist playback requires a separate browser-side implementation.
 
-:::{warning} Integration status
+1. [Flower time-lapse](https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4) — A flower opens over time.
+2. Add a second licensed recording and transcript when available.
 
-Web Awesome Pro only: not installed in the existing Core runtime. No interactive preview or licensed code is distributed.
-:::
+## Accessibility and compatibility
 
-## Atomic composition
-
-Reuse: [Video](../media/video.md). The full nested markup below remains independently usable.
-
-## Live preview
-
-Live preview intentionally unavailable: the Pro runtime is not licensed for this deployment.
-
-## Markdown code snippet
-
-```html
-<wa-video-playlist>
-  <wa-video src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"></wa-video>
-  <wa-video src="https://uploads.webawesome.com/dog-with-glasses.mp4"></wa-video>
-</wa-video-playlist>
-```
-
-These are **real media source URLs** (MDN CC0 flower clip and a Web Awesome-hosted dog clip). The playlist is intentionally *reference-only* because Pro is not installed. Sources must be reachable before examples can play in a licensed environment.
-
-Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. Chart/grid data and configuration must additionally be supplied through documented Pro JavaScript properties.
+Preserve labels, units, descriptions, and a readable non-JavaScript representation. This page intentionally contains no Pro custom elements, Pro imports, or Pro API claims. See the [MyST specification](https://mystmd.org/spec) for supported markup and AST nodes.
