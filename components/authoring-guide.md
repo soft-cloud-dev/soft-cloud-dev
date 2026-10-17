@@ -98,6 +98,10 @@ Use real self-hosted images with descriptive `alt` text, source credit and expli
 4. Translation sources stay English-first; translations and narration must be regenerated through the existing per-locale workflows without translating JSON keys or HTML attribute names.
 5. Verify the generated HTML for valid MyST layouts, loaded media, tab and carousel keyboard navigation, nonempty `alt` text, expected local asset paths, and no console/network failures.
 
+## Practical composition recipes
+
+The [practical pattern library](practical-patterns.md) adapts the **marketing, application UI, and ecommerce categories** shown in Tailwind Plus into original MyST-first patterns. It does not copy proprietary Tailwind Plus component source and does not add a CSS framework; its examples deliberately combine real credited media, native editorial layouts, and the existing Web Awesome anywidget primitives.
+
 ## Migration and acceptance plan
 
 | Phase | Deliverable | Acceptance |
