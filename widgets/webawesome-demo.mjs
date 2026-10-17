@@ -6,13 +6,13 @@
 const native = new Set(['a', 'code', 'div', 'h3', 'img', 'li', 'p', 'span', 'strong', 'ul']);
 const permittedAttrs = new Set([
   'active', 'alt', 'anchor', 'appearance', 'aria-label', 'checked', 'class',
-  'content', 'controls', 'caret', 'date', 'day', 'duration', 'effect', 'expanded',
-  'for', 'href', 'id', 'initials', 'label', 'length', 'max', 'min', 'month',
+  'content', 'controls', 'caret', 'date', 'day', 'decoding', 'duration', 'effect', 'expanded',
+  'for', 'href', 'id', 'image', 'initials', 'label', 'length', 'loading', 'max', 'min', 'month',
   'name', 'navigation', 'open', 'page', 'pages', 'panel', 'pagination',
-  'pill', 'placeholder', 'play', 'position', 'rows', 'size', 'slot', 'src',
+  'pill', 'placeholder', 'play', 'position', 'referrerpolicy', 'rows', 'shape', 'size', 'slot', 'src',
   'status', 'step', 'summary', 'target', 'title', 'type', 'value', 'variant',
   'with-caret', 'page-size', 'total', 'copy-label',
-  'year', 'data-demo-action', 'data-demo-target'
+  'year', 'zoom', 'data-demo-action', 'data-demo-target'
 ]);
 const validUrl = /^(?:https:\/\/|\/(?!\/)|#)/i;
 const moduleImports = new Map();
@@ -29,7 +29,7 @@ function createNode(data) {
   const node = document.createElement(tag);
   for (const [attr, value] of Object.entries(data.attrs || {})) {
     if (!permittedAttrs.has(attr) || attr.toLowerCase().startsWith('on')) continue;
-    if ((attr === 'href' || attr === 'src') && !validUrl.test(String(value))) continue;
+    if (['href', 'src', 'image'].includes(attr) && !validUrl.test(String(value))) continue;
     node.setAttribute(attr, String(value));
   }
   for (const child of data.children || []) node.append(createNode(child));
@@ -85,6 +85,12 @@ export default {
       '.sc-wa-showcase > wa-accordion, .sc-wa-showcase > wa-card,',
       '.sc-wa-showcase > wa-carousel, .sc-wa-showcase > wa-split-panel,',
       '.sc-wa-showcase > wa-tab-group, .sc-wa-showcase > wa-tree { width:100%; max-width:100%; }',
+      '.sc-wa-showcase img { display:block; max-width:100%; height:auto; }',
+      '.sc-wa-showcase > wa-card { max-width: min(100%, 360px); }',
+      '.sc-wa-showcase > wa-comparison, .sc-wa-showcase > wa-zoomable-frame { width:100%; }',
+      '.sc-wa-showcase wa-carousel-item img { width:100%; aspect-ratio:16/9; object-fit:cover; }',
+      '.sc-wa-showcase wa-comparison img { width:100%; height:100%; object-fit:cover; }',
+      '.sc-wa-showcase > wa-animated-image { max-width: min(100%, 360px); }',
       '.sc-wa-catalog-status { font-size:0.82rem; opacity:0.85; }'
     ].join(' ');
     const message = document.createElement('p');
