@@ -301,7 +301,7 @@ class UI:
         text: str,
         title: Optional[str] = None,
         variant: str = "brand",
-        appearance: str = "outlined",
+        appearance: str = "filled-outlined",
         icon: Optional[str] = None,
         class_name: Optional[str] = None,
     ) -> HTMLOutput:
@@ -316,7 +316,7 @@ class UI:
         html_obj: TrustedHTML,
         title: Optional[str] = None,
         variant: str = "brand",
-        appearance: str = "outlined",
+        appearance: str = "filled-outlined",
         icon: Optional[str] = None,
         class_name: Optional[str] = None,
     ) -> HTMLOutput:
@@ -330,7 +330,7 @@ class UI:
         body_html: str,
         title: Optional[str] = None,
         variant: str = "brand",
-        appearance: str = "outlined",
+        appearance: str = "filled-outlined",
         icon: Optional[str] = None,
         class_name: Optional[str] = None,
     ) -> HTMLOutput:
@@ -364,3 +364,39 @@ class UI:
             body_html=body_html,
             extra_class=class_name,
         )
+
+    @classmethod
+    def icon_grid(
+        cls,
+        items: list[tuple[str, str]],
+        family: str = "classic",
+        variant: Optional[str] = "solid",
+        class_name: Optional[str] = None,
+    ) -> HTMLOutput:
+        """Renders a responsive showcase grid of icons with visible names and descriptions."""
+        if not isinstance(items, (list, tuple)):
+            raise TypeError("Icon grid items must be a list or tuple of (name, description) pairs")
+
+        cards_html: list[str] = []
+        for item in items:
+            if not isinstance(item, (list, tuple)) or len(item) < 2:
+                raise ValueError("Each icon item must be a (name, description) tuple")
+            name, desc = item[0], item[1]
+            icon_obj = cls.icon(name, family=family, variant=variant, label=desc)
+            icon_placeholder = icon_obj._repr_html_()
+            escaped_name = html.escape(str(name), quote=True)
+            escaped_desc = html.escape(str(desc), quote=True)
+            card = (
+                f'<div class="sc-icon-card">\n'
+                f'  <div class="sc-icon-preview">{icon_placeholder}</div>\n'
+                f'  <div class="sc-icon-info">\n'
+                f'    <code class="sc-icon-name">{escaped_name}</code>\n'
+                f'    <span class="sc-icon-desc">{escaped_desc}</span>\n'
+                f'  </div>\n'
+                f'</div>'
+            )
+            cards_html.append(card)
+
+        grid_class = f"sc-icon-grid {class_name}".strip() if class_name else "sc-icon-grid"
+        full_html = f'<div class="{grid_class}">\n' + "\n".join(cards_html) + "\n</div>"
+        return HTMLOutput(full_html)

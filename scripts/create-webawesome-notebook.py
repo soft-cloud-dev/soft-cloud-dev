@@ -66,10 +66,10 @@ notebook = {
                 "\n",
                 "| Component | Python Notebook API | MyST Markdown Syntax |\n",
                 "|---|---|---|\n",
-                "| **Callout** | `UI.callout_text(text, title=..., variant=...)` | ````{wa-callout} Title\\n:variant: brand\\nContent\\n```` |\n",
-                "| **Button** | `UI.button(label, href=..., variant=..., size=...)` | ````{wa-button} https://link\\n:variant: brand\\nButton Label\\n```` |\n",
-                "| **Card** | `UI.card_text(text, header=..., appearance=...)` | ````{wa-card} Card Header\\n:appearance: filled-outlined\\nContent\\n```` |\n",
-                "| **Icon** | `UI.icon(name, family=\"classic\", variant=\"solid\")` | `{fa}` `solid server` or `{icon}` `rocket` |\n",
+                "| **Callout** | `UI.callout_text(text,`<br/>`&nbsp;&nbsp;title=..., variant=...)` | ````{wa-callout} Title`<br/>`:variant: brand`<br/>`Content...`<br/>```` |\n",
+                "| **Button** | `UI.button(label,`<br/>`&nbsp;&nbsp;href=..., variant=...)` | ````{wa-button} https://link`<br/>`:variant: brand`<br/>`Button Label`<br/>```` |\n",
+                "| **Card** | `UI.card_text(text,`<br/>`&nbsp;&nbsp;header=..., appearance=...)` | ````{wa-card} Card Header`<br/>`:appearance: filled-outlined`<br/>`Content...`<br/>```` |\n",
+                "| **Icon** | `UI.icon(name,`<br/>`&nbsp;&nbsp;family=..., variant=...)` | `{fa}` `solid server` or<br/>`{icon}` `rocket` |\n",
                 "\n",
                 "```{wa-callout} Component Selection Quick Start\n",
                 ":variant: brand\n",
@@ -89,7 +89,8 @@ notebook = {
                 "    \"All Web Awesome components in this notebook are transformed with authentic Lit Declarative \"\n",
                 "    \"Shadow DOM (DSD). They render immediately before client JavaScript executes, ensuring minimal layout shift (Component CLS <= 0.01).\",\n",
                 "    title=\"SSR Architecture Active\",\n",
-                "    variant=\"brand\"\n",
+                "    variant=\"brand\",\n",
+                "    appearance=\"filled-outlined\"\n",
                 "))"
             ]
         },
@@ -177,27 +178,32 @@ notebook = {
                 "display(UI.callout_text(\n",
                 "    \"Production clusters use immutable OS images booted over ZFS root pools.\",\n",
                 "    title=\"Architecture Notice\",\n",
-                "    variant=\"brand\"\n",
+                "    variant=\"brand\",\n",
+                "    appearance=\"filled-outlined\"\n",
                 "))\n",
                 "display(UI.callout_text(\n",
                 "    \"All unit, integration, and security test suites completed with 100% pass rate.\",\n",
                 "    title=\"Verification Passed\",\n",
-                "    variant=\"success\"\n",
+                "    variant=\"success\",\n",
+                "    appearance=\"filled-outlined\"\n",
                 "))\n",
                 "display(UI.callout_text(\n",
                 "    \"Rolling node restart requires migrating active KVM guests before draining.\",\n",
                 "    title=\"Maintenance Prerequisite\",\n",
-                "    variant=\"warning\"\n",
+                "    variant=\"warning\",\n",
+                "    appearance=\"filled-outlined\"\n",
                 "))\n",
                 "display(UI.callout_text(\n",
                 "    \"Authentication failure: kerberos ticket expired. Renew credentials via kinit.\",\n",
                 "    title=\"Security Alert\",\n",
-                "    variant=\"danger\"\n",
+                "    variant=\"danger\",\n",
+                "    appearance=\"filled-outlined\"\n",
                 "))\n",
                 "display(UI.callout_text(\n",
                 "    \"Configuration parameters can be tuned in /etc/softcloud/cluster.conf.\",\n",
                 "    title=\"Operational Tip\",\n",
-                "    variant=\"neutral\"\n",
+                "    variant=\"neutral\",\n",
+                "    appearance=\"filled-outlined\"\n",
                 "))"
             ]
         },
@@ -280,7 +286,7 @@ notebook = {
                 "Icons can be embedded in MyST Markdown or invoked via Python:\n",
                 "- **MyST Font Awesome Role**: `{fa}` `solid server` or `{fa}` `brands github`\n",
                 "- **MyST Web Awesome Icon Role**: `{icon}` `rocket`\n",
-                "- **Python UI Helper**: `UI.icon(\"server\", family=\"classic\", variant=\"solid\", label=\"Compute Server\")`\n",
+                "- **Python UI Helper**: `UI.icon(\"server\", family=\"classic\", variant=\"solid\", label=\"Compute Server\")` or `UI.icon_grid(items)`\n",
                 "\n",
                 "Inline examples in Markdown:\n",
                 "- Server: {fa}`solid server`\n",
@@ -308,8 +314,7 @@ notebook = {
                 "]\n",
                 "\n",
                 "print(\"Cloud & Infrastructure Icons (Font Awesome Free 6.5.2 Solid):\")\n",
-                "for name, desc in cloud_icons:\n",
-                "    display(UI.icon(name, family=\"classic\", variant=\"solid\", label=desc))\n"
+                "display(UI.icon_grid(cloud_icons, family=\"classic\", variant=\"solid\"))\n"
             ]
         },
         {
@@ -331,8 +336,7 @@ notebook = {
                 "]\n",
                 "\n",
                 "print(\"DevOps & Developer Tooling Icons:\")\n",
-                "for name, desc in devops_icons:\n",
-                "    display(UI.icon(name, family=\"classic\", variant=\"solid\", label=desc))\n"
+                "display(UI.icon_grid(devops_icons, family=\"classic\", variant=\"solid\"))\n"
             ]
         },
         {
@@ -354,8 +358,7 @@ notebook = {
                 "]\n",
                 "\n",
                 "print(\"Security, Identity & Status Indicators:\")\n",
-                "for name, desc in sec_icons:\n",
-                "    display(UI.icon(name, family=\"classic\", variant=\"solid\", label=desc))\n"
+                "display(UI.icon_grid(sec_icons, family=\"classic\", variant=\"solid\"))\n"
             ]
         },
         {
@@ -377,8 +380,7 @@ notebook = {
                 "]\n",
                 "\n",
                 "print(\"Open Source Ecosystem Brands:\")\n",
-                "for name, desc in brand_icons:\n",
-                "    display(UI.icon(name, family=\"brands\", label=desc))\n"
+                "display(UI.icon_grid(brand_icons, family=\"brands\"))\n"
             ]
         },
         {
@@ -477,12 +479,13 @@ notebook = {
             "metadata": {},
             "outputs": [],
             "source": [
-                "UI.callout_text(\n",
+                "display(UI.callout_text(\n",
                 "    \"Theme synchronization operates synchronously via softcloud-theme.js. \"\n",
                 "    \"Toggling between light and dark mode updates both MyST CSS variables and Web Awesome design tokens simultaneously.\",\n",
                 "    title=\"Theme Synchronization Operational\",\n",
-                "    variant=\"brand\"\n",
-                ")"
+                "    variant=\"brand\",\n",
+                "    appearance=\"filled-outlined\"\n",
+                "))"
             ]
         },
         {
@@ -572,7 +575,8 @@ notebook = {
                 "    \"Scheduled kernel live-patching will commence at 02:00 UTC. \"\n",
                 "    \"Workloads on node-prod-04 will be live-migrated to standby capacity automatically.\",\n",
                 "    title=\"Scheduled Infrastructure Maintenance\",\n",
-                "    variant=\"warning\"\n",
+                "    variant=\"warning\",\n",
+                "    appearance=\"filled-outlined\"\n",
                 "))\n",
                 "display(UI.button(\"View Live Migration Runbook\", href=\"https://my.softcloud.dev/\", variant=\"brand\", size=\"m\"))"
             ]

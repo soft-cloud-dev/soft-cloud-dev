@@ -42,7 +42,7 @@ jobs:
         run: |
           npm ci
           node scripts/check-node-dependencies.mjs
-          npx playwright install --with-deps chromium
+          npx playwright install --with-deps chromium webkit
 
       - name: Install locked environment
         run: |

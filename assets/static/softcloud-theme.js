@@ -335,6 +335,7 @@
           localStorage.setItem('softcloud-theme', 'dark');
           localStorage.setItem('myst:theme', 'dark');
         } catch (e) {}
+        root.setAttribute('data-theme', 'dark');
         root.classList.add('dark');
         root.classList.remove('light', 'wa-light');
         syncTheme(true);
@@ -343,6 +344,7 @@
           localStorage.setItem('softcloud-theme', 'light');
           localStorage.setItem('myst:theme', 'light');
         } catch (e) {}
+        root.setAttribute('data-theme', 'light');
         root.classList.add('light');
         root.classList.remove('dark', 'wa-dark');
         syncTheme(true);

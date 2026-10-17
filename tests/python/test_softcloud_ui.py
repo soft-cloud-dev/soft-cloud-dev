@@ -93,10 +93,22 @@ class SoftcloudUITests(unittest.TestCase):
         meta = self._extract_meta(html_str)
         self.assertEqual(meta["title"], "Callout Title")
         self.assertEqual(meta["variant"], "warning")
+        self.assertEqual(meta["appearance"], "filled-outlined")
 
         th = TrustedHTML("<div>Rich callout content</div>")
         res_th = UI.callout_trusted_html(th, title="Rich", variant="brand")
         self.assertIn("<div>Rich callout content</div>", res_th._repr_html_())
+
+    def test_icon_grid(self):
+        icons = [("server", "Compute Server"), ("database", "SQL Cluster")]
+        res = UI.icon_grid(icons, family="classic", variant="solid")
+        html_str = res._repr_html_()
+        self.assertIn("sc-icon-grid", html_str)
+        self.assertIn("sc-icon-card", html_str)
+        self.assertIn("Compute Server", html_str)
+        self.assertIn("SQL Cluster", html_str)
+        self.assertIn('<code class="sc-icon-name">server</code>', html_str)
+        self.assertIn('<code class="sc-icon-name">database</code>', html_str)
 
 
 if __name__ == "__main__":

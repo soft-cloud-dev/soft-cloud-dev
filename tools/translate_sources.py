@@ -268,6 +268,7 @@ def build_provenance_manifest(
     record_docs: set[str] | None = None,
     old_manifest: dict[str, Any] | None = None,
     extra_by_doc: dict[str, dict[str, Any]] | None = None,
+    progressive: bool = False,
 ) -> dict[str, Any]:
     """Build deterministic provenance.json structure for a target locale.
 
@@ -305,6 +306,11 @@ def build_provenance_manifest(
         if not en_path.is_file():
             raise FileNotFoundError(f"Missing authoritative source document: {en_path}")
         if not loc_path.is_file():
+            if progressive or rel_doc.startswith("components/"):
+                old_entry = old_docs.get(rel_doc)
+                if isinstance(old_entry, dict):
+                    documents_meta[rel_doc] = old_entry
+                continue
             raise FileNotFoundError(f"Missing localized document for '{locale}': {loc_path}")
 
         preservation_errors = verify_document_preservation(en_path, loc_path, locale)
@@ -1089,7 +1095,13 @@ def main(argv: list[str] | None = None) -> int:
                 root / str(enabled_locales[locale].get("source_dir", f"i18n/{locale}")) / "provenance.json"
             )
             manifest = build_provenance_manifest(
-                root, locale, docs, revision_state=args.revision_state, old_manifest=old
+                root,
+                locale,
+                docs,
+                revision_state=args.revision_state,
+                record_docs=only_docs,
+                old_manifest=old,
+                progressive=args.progressive,
             )
             loc_dir = root / str(enabled_locales[locale].get("source_dir", f"i18n/{locale}"))
             prov_path = loc_dir / "provenance.json"

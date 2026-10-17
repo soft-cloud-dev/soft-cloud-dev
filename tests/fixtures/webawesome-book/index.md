@@ -61,3 +61,23 @@ Inline icon test: Here is a rocket {icon}`classic solid rocket`, terminal icon {
   }
 }
 ```
+
+### Icon Gallery Grid
+
+<div class="sc-icon-grid">
+  <div class="sc-icon-card">
+    <div class="sc-icon-preview">💻</div>
+    <div class="sc-icon-info">
+      <span class="sc-icon-name"><code>server</code></span>
+      <span class="sc-icon-desc">Compute Server</span>
+    </div>
+  </div>
+  <div class="sc-icon-card">
+    <div class="sc-icon-preview">⌨</div>
+    <div class="sc-icon-info">
+      <span class="sc-icon-name"><code>terminal</code></span>
+      <span class="sc-icon-desc">Command Line</span>
+    </div>
+  </div>
+</div>
+
