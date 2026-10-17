@@ -1,3 +1,12 @@
+---
+description: Web Awesome button component for navigation, actions, and accessible calls to action.
+keywords:
+  - Web Awesome
+  - button
+  - wa-button
+  - actions
+---
+
 # Button `<wa-button>`
 
 Triggers a command, submits a choice, or navigates to another page.
@@ -10,7 +19,7 @@ Triggers a command, submits a choice, or navigates to another page.
 
 :::{note} Integration status
 
-Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
+The catalog's interactive demonstration uses anywidget. For a static server-rendered button, use the existing typed `{wa-button}` directive with genuine Lit SSR/DSD; do not require anywidget for this case.
 :::
 
 ## Live preview
