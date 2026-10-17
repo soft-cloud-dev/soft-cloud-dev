@@ -3,16 +3,16 @@
  * Runs inside the already installed MyST anywidget Shadow DOM renderer.
  * Model JSON is treated as structured data, never HTML.
  */
-const native = new Set(['a', 'code', 'div', 'h3', 'img', 'li', 'p', 'span', 'strong', 'ul']);
+const native = new Set(['a', 'code', 'div', 'figcaption', 'figure', 'h3', 'img', 'li', 'p', 'small', 'source', 'span', 'strong', 'ul', 'video']);
 const permittedAttrs = new Set([
   'active', 'alt', 'anchor', 'appearance', 'aria-label', 'checked', 'class',
   'content', 'controls', 'caret', 'date', 'day', 'decoding', 'duration', 'effect', 'expanded',
-  'for', 'href', 'id', 'image', 'initials', 'label', 'length', 'loading', 'max', 'min', 'month',
+  'for', 'href', 'id', 'image', 'initials', 'label', 'length', 'loading', 'loop', 'max', 'min', 'month', 'mouse-dragging', 'muted',
   'name', 'navigation', 'open', 'page', 'pages', 'panel', 'pagination',
-  'pill', 'placeholder', 'play', 'position', 'referrerpolicy', 'rows', 'shape', 'size', 'slot', 'src',
+  'pill', 'placeholder', 'play', 'playsinline', 'position', 'poster', 'preload', 'referrerpolicy', 'rows', 'shape', 'size', 'slot', 'src',
   'status', 'step', 'summary', 'target', 'title', 'type', 'value', 'variant',
   'with-caret', 'page-size', 'total', 'copy-label',
-  'year', 'zoom', 'data-demo-action', 'data-demo-target'
+  'width', 'year', 'zoom', 'height', 'data-demo-action', 'data-demo-target'
 ]);
 const validUrl = /^(?:https:\/\/|\/(?!\/)|#)/i;
 const moduleImports = new Map();
@@ -29,7 +29,7 @@ function createNode(data) {
   const node = document.createElement(tag);
   for (const [attr, value] of Object.entries(data.attrs || {})) {
     if (!permittedAttrs.has(attr) || attr.toLowerCase().startsWith('on')) continue;
-    if (['href', 'src', 'image'].includes(attr) && !validUrl.test(String(value))) continue;
+    if (['href', 'src', 'image', 'poster'].includes(attr) && !validUrl.test(String(value))) continue;
     node.setAttribute(attr, String(value));
   }
   for (const child of data.children || []) node.append(createNode(child));
@@ -90,6 +90,12 @@ export default {
       '.sc-wa-showcase > wa-comparison, .sc-wa-showcase > wa-zoomable-frame { width:100%; }',
       '.sc-wa-showcase wa-carousel-item img { width:100%; aspect-ratio:16/9; object-fit:cover; }',
       '.sc-wa-showcase wa-comparison img { width:100%; height:100%; object-fit:cover; }',
+      '.sc-wa-showcase .sc-demo-grayscale { filter: grayscale(1); }',
+      '.sc-wa-showcase > wa-scroller { width:100%; }',
+      '.sc-wa-showcase .sc-demo-thumb-row { display:flex; gap:0.75rem; width:max-content; }',
+      '.sc-wa-showcase .sc-demo-thumb-row img { width:180px; aspect-ratio:16/9; object-fit:cover; }',
+      '.sc-wa-showcase wa-tab-panel img { width:100%; max-height:320px; aspect-ratio:16/9; object-fit:cover; }',
+      '.sc-wa-showcase wa-card video { width:100%; aspect-ratio:16/9; object-fit:cover; }',
       '.sc-wa-showcase > wa-animated-image { max-width: min(100%, 360px); }',
       '.sc-wa-catalog-status { font-size:0.82rem; opacity:0.85; }'
     ].join(' ');
