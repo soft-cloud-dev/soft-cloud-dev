@@ -22,7 +22,9 @@ Live preview intentionally unavailable: the Pro runtime is not licensed for this
 ## Markdown code snippet
 
 ```html
-<wa-video src="/media/example.mp4" controls=""></wa-video>
+<wa-video src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" controls></wa-video>
 ```
+
+This is an **actual MDN CC0 video source**, but the Web Awesome Pro player is not installed and the snippet remains reference-only. For a live player on this site, use the browser-native `<video>` shown in the [media showcase](../showcase-media.md).
 
 For direct MyST integration, place this trusted markup in a Markdown HTML block or use the corresponding built-in MyST directive/role when supported. Chart/grid data and configuration must additionally be supplied through documented Pro JavaScript properties.
