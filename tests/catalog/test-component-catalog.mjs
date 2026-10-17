@@ -47,6 +47,7 @@ test('widget uses only self-hosted modules and DOM constructors', () => {
   const code = read('widgets/webawesome-demo.mjs');
   assert.ok(code.includes('document.createElement'));
   assert.ok(code.includes('document.createTextNode'));
-  assert.ok(code.includes('webawesome.ssr-loader.js'));
+  assert.match(code, /new URL\('\.\.\/vendor\/webawesome\/', import\.meta\.url\)/);
+  assert.doesNotMatch(code, /document\.querySelector\(['"]script\[src/);
   assert.ok(!code.includes('innerHTML'));
 });
