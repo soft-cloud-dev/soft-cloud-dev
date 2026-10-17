@@ -1,26 +1,18 @@
-# Date Input `<wa-date-input>`
+# Date Input: MyST alternative
 
-Accepts a date through a segmented locale-aware field.
+**Category:** [forms](../index.md) · **Implementation:** MyST-first · **Former reference:** Web Awesome Pro `<wa-date-input>`.
 
-> “allows a user to enter data that is sent to a server for processing” — [Wikipedia: HTML form](wiki:HTML_form). This quote supplies general domain context, not an API definition.
+MyST is a publication format, not a drop-in interactive form or charting runtime. These examples provide accessible, portable documentation alternatives without shipping Web Awesome Pro.
 
-**Category:** [Forms](../index.md) · **Availability:** Pro · **Maturity:** Experimental.
+## Portable example
 
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/forms/date-input.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/date-input/).
+Use a MyST table for reference dates and constraints. An actual date-entry or date-picker interaction requires an application form.
 
-:::{warning} Integration status
+| Field | Example | Constraint |
+| --- | --- | --- |
+| Start date | 2026-10-17 | ISO 8601 date |
+| End date | 2026-10-31 | Not earlier than start date |
 
-Web Awesome Pro only: not installed in the existing Core runtime. No interactive preview or licensed code is distributed.
-:::
+## Accessibility and compatibility
 
-## Live preview
-
-Live preview intentionally unavailable: the Pro runtime is not licensed for this deployment.
-
-## Markdown code snippet
-
-```html
-<wa-date-input label="Planned date" value="2026-10-17"></wa-date-input>
-```
-
-Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. Chart/grid data and configuration must additionally be supplied through documented Pro JavaScript properties.
+Preserve labels, units, descriptions, and a readable non-JavaScript representation. This page intentionally contains no Pro custom elements, Pro imports, or Pro API claims. See the [MyST specification](https://mystmd.org/spec) for supported markup and AST nodes.
