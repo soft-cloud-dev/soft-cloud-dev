@@ -8,8 +8,10 @@ test('authoring guide has unambiguous nested MyST example fences', () => {
   const guide = read('components/authoring-guide.md');
   assert.match(guide, /:::::\{tab-set\}/);
   assert.match(guide, /::::\{tab-item\} MyST note/);
-  assert.match(guide, /````myst\n:::\{note\}\nUse this for publication notes\.\n:::\n````/);
+  assert.match(guide, /````markdown\n:::\{note\}\nUse this for publication notes\.\n:::\n````/);
   assert.match(guide, /\| Phase \| Status \| Deliverable \|/);
+  assert.match(guide, /Component selection hierarchy/);
+  assert.match(guide, /A `<noscript>` message is not sufficient/);
 });
 
 test('authoring and catalog routes are separate navigation groups', () => {

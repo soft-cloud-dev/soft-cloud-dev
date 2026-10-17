@@ -71,6 +71,7 @@ test('media documentation uses actual, attributable sources and safe anywidget t
   for (const file of pages) {
     const md = text(file);
     const tree = parseLiveTree(md, file);
+    assert.match(md, /### Static reference \(works without JavaScript\)/, file + ' missing static reference');
     const html = md.slice(md.indexOf('## Markdown code snippet'));
     let pageMediaCount = 0;
     visit(tree, node => {
@@ -93,11 +94,11 @@ test('media documentation uses actual, attributable sources and safe anywidget t
       for (const key of ['src', 'image']) {
         const value = attrs[key];
         if (typeof value !== 'string') continue;
-        if (value.startsWith('/static/showcase/')) {
-          const relative = 'assets' + value;
+        if (value.startsWith('showcase:')) {
+          const relative = 'assets/static/showcase/' + value.slice('showcase:'.length);
           assert.ok(existsSync(rootFile(relative)), file + ' references missing file ' + relative);
-          const portable = './images/' + value.slice('/static/showcase/'.length);
-          assert.ok(html.includes(value) || html.includes(portable), file + ' source and rendered snippet differ: ' + value);
+          const portable = './images/' + value.slice('showcase:'.length);
+          assert.ok(html.includes(portable), file + ' portable snippet missing: ' + portable);
           localCount++;
           pageMediaCount++;
         } else if (value.startsWith('https://')) {
