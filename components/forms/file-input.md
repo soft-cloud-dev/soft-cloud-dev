@@ -1,26 +1,54 @@
-# File Input `<wa-file-input>`
+---
+description: "Describe a browser-native file upload input using HTML5 semantics and a MyST requirements note."
+keywords:
+  - MyST
+  - forms
+  - File Input
+tags:
+  - portable-alternative
+  - forms
+  - accessible-documentation
+---
 
-Selects files from the user device.
+# File Input: portable MyST alternative
 
-> “allows a user to enter data that is sent to a server for processing” — [Wikipedia: HTML form](wiki:HTML_form). This quote supplies general domain context, not an API definition.
+:::{admonition} Portable Alternative (Non-Core)
+:class: note
 
-**Category:** [Forms](../index.md) · **Availability:** Pro · **Maturity:** Stable.
-
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/forms/file-input.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/file-input/).
-
-:::{warning} Integration status
-
-Web Awesome Pro only: not installed in the existing Core runtime. No interactive preview or licensed code is distributed.
+Web Awesome Pro components require a commercial license and are not bundled in this catalog. This page demonstrates portable, accessible alternatives using standard MyST markup and HTML5 semantics.
 :::
 
-## Live preview
+**Former upstream Pro component:** `<wa-file-input>`. **Category:** [Portable Alternatives](../portable-alternatives.md) · **Implementation:** MyST + HTML5.
 
-Live preview intentionally unavailable: the Pro runtime is not licensed for this deployment.
+Use this documentation recipe without importing Web Awesome Pro code. The former component is named for compatibility and discovery only; the alternative is not API-equivalent.
 
-## Markdown code snippet
+## Portable example
+
+The HTML5 file input selects files without JavaScript. Upload handling requires a receiving service and is not supplied by MyST; the example does not submit or retain files.
+
+:::{table} File Input example values
+:label: tbl-portable-file-input
+
+| Accepted type | Suggested maximum | Application obligation |
+| --- | ---: | --- |
+| PDF | 5 MB | Validate content, MIME type and size |
+| PNG | 5 MB | Validate content, MIME type and size |
+:::
+
+## Copyable HTML5 pattern
 
 ```html
-<wa-file-input label="Configuration file"></wa-file-input>
+<label for="supporting-document">Supporting document</label>
+<p id="file-rules">Choose a PDF or PNG; maximum allowed size: 5 MB.</p>
+<input id="supporting-document" name="supporting-document" type="file"
+       accept=".pdf,.png,application/pdf,image/png"
+       aria-describedby="file-rules">
 ```
 
-Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. Chart/grid data and configuration must additionally be supplied through documented Pro JavaScript properties.
+The HTML markup above is a code sample, not an active MyST form or a configured application endpoint.
+
+## Accessibility and compatibility
+
+`accept` is a chooser hint, not security enforcement. Server-side validation, scanning and upload storage are outside the MyST publishing runtime.
+
+**References:** [MyST specification](https://mystmd.org/spec), [MyST tables](https://mystmd.org/guide/tables), [Web Awesome upstream reference](https://webawesome.com/docs/components/file-input/).

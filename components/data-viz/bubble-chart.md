@@ -1,26 +1,50 @@
-# Bubble Chart `<wa-bubble-chart>`
+---
+description: "Static SVG bubble chart with throughput, latency and host-count data table."
+keywords:
+  - MyST
+  - data visualization
+  - Bubble Chart
+tags:
+  - portable-alternative
+  - data-viz
+  - accessible-documentation
+---
 
-Plots two variables with a third encoded by point size.
+# Bubble Chart: portable MyST alternative
 
-> “the practice of designing and creating graphic or visual representations” — [Wikipedia: Information visualization](wiki:Information_visualization). This quote supplies general domain context, not an API definition.
+:::{admonition} Portable Alternative (Non-Core)
+:class: note
 
-**Category:** [Data Visualization](../index.md) · **Availability:** Pro · **Maturity:** Stable.
-
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/data-viz/bubble-chart.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/bubble-chart/).
-
-:::{warning} Integration status
-
-Web Awesome Pro only: not installed in the existing Core runtime. No interactive preview or licensed code is distributed.
+Web Awesome Pro components require a commercial license and are not bundled in this catalog. This page demonstrates portable, accessible alternatives using standard MyST markup and HTML5 semantics.
 :::
 
-## Live preview
+**Former upstream Pro component:** `<wa-bubble-chart>`. **Category:** [Portable Alternatives](../portable-alternatives.md) · **Implementation:** MyST/SVG.
 
-Live preview intentionally unavailable: the Pro runtime is not licensed for this deployment.
+Use this documentation recipe without importing Web Awesome Pro code. The former component is named for compatibility and discovery only; the alternative is not API-equivalent.
 
-## Markdown code snippet
+## Portable example
 
-```html
-<wa-bubble-chart label="Latency"></wa-bubble-chart>
-```
+Use a checked-in static SVG image and a MyST table. The figure requires no custom chart runtime; interactive filtering, tooltips and live recalculation are not provided.
 
-Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. Chart/grid data and configuration must additionally be supplied through documented Pro JavaScript properties.
+:::{figure} ../../images/portable-charts/bubble-chart.svg
+:alt: Three bubbles for Edge, API, and Batch; size indicates host count, horizontal axis throughput, vertical axis latency.
+:label: fig-portable-bubble-chart
+
+Static SVG example. The table below is the accessible source of the same illustrative data.
+:::
+
+:::{table} Bubble Chart source data
+:label: tbl-portable-bubble-chart
+
+| Service | Throughput (req/s) | Latency (ms) | Hosts (bubble size) |
+| --- | ---: | ---: | ---: |
+| Edge | 40 | 100 | 3 |
+| API | 60 | 85 | 5 |
+| Batch | 80 | 110 | 8 |
+:::
+
+## Accessibility and compatibility
+
+The SVG has an accessible title and description, but the table contains the precise underlying values and remains usable in text and non-HTML exports. The example data are illustrative, not live operational measurements. No Web Awesome Pro elements, Pro imports or client-side chart libraries are used.
+
+**References:** [MyST specification](https://mystmd.org/spec), [MyST figures](https://mystmd.org/guide/figures), [MyST tables](https://mystmd.org/guide/tables), [Web Awesome upstream reference](https://webawesome.com/docs/components/bubble-chart/).

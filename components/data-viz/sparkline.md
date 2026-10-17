@@ -1,26 +1,54 @@
-# Sparkline `<wa-sparkline>`
+---
+description: "Compact static SVG sparkline with source values in a MyST table."
+keywords:
+  - MyST
+  - data visualization
+  - Sparkline
+tags:
+  - portable-alternative
+  - data-viz
+  - accessible-documentation
+---
 
-Shows an inline miniature trend.
+# Sparkline: portable MyST alternative
 
-> “the practice of designing and creating graphic or visual representations” — [Wikipedia: Information visualization](wiki:Information_visualization). This quote supplies general domain context, not an API definition.
+:::{admonition} Portable Alternative (Non-Core)
+:class: note
 
-**Category:** [Data Visualization](../index.md) · **Availability:** Pro · **Maturity:** Stable.
-
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/data-viz/sparkline.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/sparkline/).
-
-:::{warning} Integration status
-
-Web Awesome Pro only: not installed in the existing Core runtime. No interactive preview or licensed code is distributed.
+Web Awesome Pro components require a commercial license and are not bundled in this catalog. This page demonstrates portable, accessible alternatives using standard MyST markup and HTML5 semantics.
 :::
 
-## Live preview
+**Former upstream Pro component:** `<wa-sparkline>`. **Category:** [Portable Alternatives](../portable-alternatives.md) · **Implementation:** MyST/SVG.
 
-Live preview intentionally unavailable: the Pro runtime is not licensed for this deployment.
+Use this documentation recipe without importing Web Awesome Pro code. The former component is named for compatibility and discovery only; the alternative is not API-equivalent.
 
-## Markdown code snippet
+## Portable example
 
-```html
-<wa-sparkline label="Request rate"></wa-sparkline>
-```
+Use a checked-in static SVG image and a MyST table. The figure requires no custom chart runtime; interactive filtering, tooltips and live recalculation are not provided.
 
-Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. Chart/grid data and configuration must additionally be supplied through documented Pro JavaScript properties.
+:::{figure} ../../images/portable-charts/sparkline.svg
+:alt: Seven-point trend: 8, 12, 10, 14, 16, 13 and 18 requests.
+:label: fig-portable-sparkline
+
+Static SVG example. The table below is the accessible source of the same illustrative data.
+:::
+
+:::{table} Sparkline source data
+:label: tbl-portable-sparkline
+
+| Sample | Requests |
+| --- | ---: |
+| 1 | 8 |
+| 2 | 12 |
+| 3 | 10 |
+| 4 | 14 |
+| 5 | 16 |
+| 6 | 13 |
+| 7 | 18 |
+:::
+
+## Accessibility and compatibility
+
+The SVG has an accessible title and description, but the table contains the precise underlying values and remains usable in text and non-HTML exports. The example data are illustrative, not live operational measurements. No Web Awesome Pro elements, Pro imports or client-side chart libraries are used.
+
+**References:** [MyST specification](https://mystmd.org/spec), [MyST figures](https://mystmd.org/guide/figures), [MyST tables](https://mystmd.org/guide/tables), [Web Awesome upstream reference](https://webawesome.com/docs/components/sparkline/).

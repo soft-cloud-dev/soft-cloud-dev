@@ -1,35 +1,53 @@
-# Video Playlist `<wa-video-playlist>`
+---
+description: "Replace a proprietary video playlist with a MyST ordered list and native HTML5 video controls."
+keywords:
+  - MyST
+  - media
+  - Video Playlist
+tags:
+  - portable-alternative
+  - media
+  - accessible-documentation
+---
 
-Coordinates several video elements.
+# Video Playlist: portable MyST alternative
 
-> “Multimedia is a form of communication that uses a combination of different content forms.” — [Wikipedia: Multimedia](wiki:Multimedia). This quote supplies general domain context, not an API definition.
+:::{admonition} Portable Alternative (Non-Core)
+:class: note
 
-**Category:** [Media](../index.md) · **Availability:** Pro · **Maturity:** Experimental.
-
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/media/video-playlist.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/video-playlist/).
-
-:::{warning} Integration status
-
-Web Awesome Pro only: not installed in the existing Core runtime. No interactive preview or licensed code is distributed.
+Web Awesome Pro components require a commercial license and are not bundled in this catalog. This page demonstrates portable, accessible alternatives using standard MyST markup and HTML5 semantics.
 :::
 
-## Atomic composition
+**Former upstream Pro component:** `<wa-video-playlist>`. **Category:** [Portable Alternatives](../portable-alternatives.md) · **Implementation:** MyST + HTML5.
 
-Reuse: [Video](../media/video.md). The full nested markup below remains independently usable.
+Use this documentation recipe without importing Web Awesome Pro code. The former component is named for compatibility and discovery only; the alternative is not API-equivalent.
 
-## Live preview
+## Portable example
 
-Live preview intentionally unavailable: the Pro runtime is not licensed for this deployment.
+A portable playlist is a semantic ordered list of recordings with descriptions and transcripts. Playback sequencing, persistence and synchronized playlist controls require additional application logic.
 
-## Markdown code snippet
+## Copyable HTML5 pattern
 
 ```html
-<wa-video-playlist>
-  <wa-video src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"></wa-video>
-  <wa-video src="https://uploads.webawesome.com/dog-with-glasses.mp4"></wa-video>
-</wa-video-playlist>
+<ol aria-label="Recorded demonstrations">
+  <li>
+    <h3>Flower time-lapse</h3>
+    <video controls preload="metadata" aria-label="Flower time-lapse">
+      <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+              type="video/mp4">
+      <track kind="captions" src="CAPTIONS_URL" srclang="en" label="English">
+      Your browser does not support HTML5 video.
+    </video>
+  </li>
+</ol>
 ```
 
-These are **real media source URLs** (MDN CC0 flower clip and a Web Awesome-hosted dog clip). The playlist is intentionally *reference-only* because Pro is not installed. Sources must be reachable before examples can play in a licensed environment.
+1. [Flower time-lapse, CC0 example (MP4)](https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4) — A flower opens over time.
 
-Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. Chart/grid data and configuration must additionally be supplied through documented Pro JavaScript properties.
+**Caption asset contract:** replace `CAPTIONS_URL` with a real application-hosted WebVTT file before using the HTML snippet. Do not claim this static list automatically changes videos or controls autoplay.
+
+## Accessibility and compatibility
+
+Provide a title and written context for each recording. Keep each video's controls independent and include captions and transcripts where needed. The example does not perform JavaScript playlist playback.
+
+**References:** [MyST specification](https://mystmd.org/spec), [MyST videos](https://mystmd.org/guide/figures), [Web Awesome upstream reference](https://webawesome.com/docs/components/video-playlist/).

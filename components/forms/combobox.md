@@ -1,33 +1,59 @@
-# Combobox `<wa-combobox>`
+---
+description: "Accessible text suggestions using an HTML5 datalist, with MyST documentation and validation guidance."
+keywords:
+  - MyST
+  - forms
+  - Combobox
+tags:
+  - portable-alternative
+  - forms
+  - accessible-documentation
+---
 
-Provides searchable choices with free-form input.
+# Combobox: portable MyST alternative
 
-> “allows a user to enter data that is sent to a server for processing” — [Wikipedia: HTML form](wiki:HTML_form). This quote supplies general domain context, not an API definition.
+:::{admonition} Portable Alternative (Non-Core)
+:class: note
 
-**Category:** [Forms](../index.md) · **Availability:** Pro · **Maturity:** Stable.
-
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/forms/combobox.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/combobox/).
-
-:::{warning} Integration status
-
-Web Awesome Pro only: not installed in the existing Core runtime. No interactive preview or licensed code is distributed.
+Web Awesome Pro components require a commercial license and are not bundled in this catalog. This page demonstrates portable, accessible alternatives using standard MyST markup and HTML5 semantics.
 :::
 
-## Atomic composition
+**Former upstream Pro component:** `<wa-combobox>`. **Category:** [Portable Alternatives](../portable-alternatives.md) · **Implementation:** MyST + HTML5.
 
-Reuse: [Option](../forms/option.md). The full nested markup below remains independently usable.
+Use this documentation recipe without importing Web Awesome Pro code. The former component is named for compatibility and discovery only; the alternative is not API-equivalent.
 
-## Live preview
+## Portable example
 
-Live preview intentionally unavailable: the Pro runtime is not licensed for this deployment.
+The HTML5 `datalist` element supplies browser-managed suggestions without JavaScript. It is not a feature-equivalent replacement for a searchable Web Awesome Pro combobox: free-text input remains possible and screen-reader support varies.
 
-## Markdown code snippet
+:::{table} Combobox example values
+:label: tbl-portable-combobox
+
+| Suggested value | Meaning |
+| --- | --- |
+| Development | Local integration |
+| Staging | Preproduction validation |
+| Production | Live workloads |
+:::
+
+## Copyable HTML5 pattern
 
 ```html
-<wa-combobox label="Region">
-  <wa-option value="eu">Europe</wa-option>
-  <wa-option value="us">United States</wa-option>
-</wa-combobox>
+<label for="environment">Deployment environment</label>
+<p id="environment-help">Choose a suggestion or enter another environment.</p>
+<input id="environment" name="environment" list="environments"
+       aria-describedby="environment-help" autocomplete="off">
+<datalist id="environments">
+  <option value="Development"></option>
+  <option value="Staging"></option>
+  <option value="Production"></option>
+</datalist>
 ```
 
-Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. Chart/grid data and configuration must additionally be supplied through documented Pro JavaScript properties.
+The HTML markup above is a code sample, not an active MyST form or a configured application endpoint.
+
+## Accessibility and compatibility
+
+Validate allowed values at the receiving application; `<datalist>` does not restrict input to listed choices. For richer keyboard, filtering, and announcement behavior, select a separate accessible client-side control.
+
+**References:** [MyST specification](https://mystmd.org/spec), [MyST tables](https://mystmd.org/guide/tables), [Web Awesome upstream reference](https://webawesome.com/docs/components/combobox/).

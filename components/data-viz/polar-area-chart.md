@@ -1,26 +1,51 @@
-# Polar Area Chart `<wa-polar-area-chart>`
+---
+description: "Static SVG polar-area diagram with a table of comparable service magnitudes."
+keywords:
+  - MyST
+  - data visualization
+  - Polar Area Chart
+tags:
+  - portable-alternative
+  - data-viz
+  - accessible-documentation
+---
 
-Uses radial segments to compare several magnitudes.
+# Polar Area Chart: portable MyST alternative
 
-> “the practice of designing and creating graphic or visual representations” — [Wikipedia: Information visualization](wiki:Information_visualization). This quote supplies general domain context, not an API definition.
+:::{admonition} Portable Alternative (Non-Core)
+:class: note
 
-**Category:** [Data Visualization](../index.md) · **Availability:** Pro · **Maturity:** Stable.
-
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/data-viz/polar-area-chart.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/polar-area-chart/).
-
-:::{warning} Integration status
-
-Web Awesome Pro only: not installed in the existing Core runtime. No interactive preview or licensed code is distributed.
+Web Awesome Pro components require a commercial license and are not bundled in this catalog. This page demonstrates portable, accessible alternatives using standard MyST markup and HTML5 semantics.
 :::
 
-## Live preview
+**Former upstream Pro component:** `<wa-polar-area-chart>`. **Category:** [Portable Alternatives](../portable-alternatives.md) · **Implementation:** MyST/SVG.
 
-Live preview intentionally unavailable: the Pro runtime is not licensed for this deployment.
+Use this documentation recipe without importing Web Awesome Pro code. The former component is named for compatibility and discovery only; the alternative is not API-equivalent.
 
-## Markdown code snippet
+## Portable example
 
-```html
-<wa-polar-area-chart label="Services"></wa-polar-area-chart>
-```
+Use a checked-in static SVG image and a MyST table. The figure requires no custom chart runtime; interactive filtering, tooltips and live recalculation are not provided.
 
-Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. Chart/grid data and configuration must additionally be supplied through documented Pro JavaScript properties.
+:::{figure} ../../images/portable-charts/polar-area-chart.svg
+:alt: Four radial sectors show CPU 30, Disk 60, Network 45, and Memory 80 percent.
+:label: fig-portable-polar-area-chart
+
+Static SVG example. The table below is the accessible source of the same illustrative data.
+:::
+
+:::{table} Polar Area Chart source data
+:label: tbl-portable-polar-area-chart
+
+| Resource | Usage (%) |
+| --- | ---: |
+| CPU | 30 |
+| Disk | 60 |
+| Network | 45 |
+| Memory | 80 |
+:::
+
+## Accessibility and compatibility
+
+The SVG has an accessible title and description, but the table contains the precise underlying values and remains usable in text and non-HTML exports. The example data are illustrative, not live operational measurements. No Web Awesome Pro elements, Pro imports or client-side chart libraries are used.
+
+**References:** [MyST specification](https://mystmd.org/spec), [MyST figures](https://mystmd.org/guide/figures), [MyST tables](https://mystmd.org/guide/tables), [Web Awesome upstream reference](https://webawesome.com/docs/components/polar-area-chart/).

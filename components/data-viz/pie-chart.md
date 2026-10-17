@@ -1,26 +1,50 @@
-# Pie Chart `<wa-pie-chart>`
+---
+description: "Static SVG pie chart and an accessible table of service proportions."
+keywords:
+  - MyST
+  - data visualization
+  - Pie Chart
+tags:
+  - portable-alternative
+  - data-viz
+  - accessible-documentation
+---
 
-Shows part-to-whole proportions as circle sectors.
+# Pie Chart: portable MyST alternative
 
-> “the practice of designing and creating graphic or visual representations” — [Wikipedia: Information visualization](wiki:Information_visualization). This quote supplies general domain context, not an API definition.
+:::{admonition} Portable Alternative (Non-Core)
+:class: note
 
-**Category:** [Data Visualization](../index.md) · **Availability:** Pro · **Maturity:** Stable.
-
-**Source:** [SoftCloud documentation Markdown](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/components/data-viz/pie-chart.md#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/pie-chart/).
-
-:::{warning} Integration status
-
-Web Awesome Pro only: not installed in the existing Core runtime. No interactive preview or licensed code is distributed.
+Web Awesome Pro components require a commercial license and are not bundled in this catalog. This page demonstrates portable, accessible alternatives using standard MyST markup and HTML5 semantics.
 :::
 
-## Live preview
+**Former upstream Pro component:** `<wa-pie-chart>`. **Category:** [Portable Alternatives](../portable-alternatives.md) · **Implementation:** MyST/SVG.
 
-Live preview intentionally unavailable: the Pro runtime is not licensed for this deployment.
+Use this documentation recipe without importing Web Awesome Pro code. The former component is named for compatibility and discovery only; the alternative is not API-equivalent.
 
-## Markdown code snippet
+## Portable example
 
-```html
-<wa-pie-chart label="Distribution"></wa-pie-chart>
-```
+Use a checked-in static SVG image and a MyST table. The figure requires no custom chart runtime; interactive filtering, tooltips and live recalculation are not provided.
 
-Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. Chart/grid data and configuration must additionally be supplied through documented Pro JavaScript properties.
+:::{figure} ../../images/portable-charts/pie-chart.svg
+:alt: Pie sectors showing Compute 50 percent, Storage 30 percent, Network 20 percent.
+:label: fig-portable-pie-chart
+
+Static SVG example. The table below is the accessible source of the same illustrative data.
+:::
+
+:::{table} Pie Chart source data
+:label: tbl-portable-pie-chart
+
+| Service | Share (%) |
+| --- | ---: |
+| Compute | 50 |
+| Storage | 30 |
+| Network | 20 |
+:::
+
+## Accessibility and compatibility
+
+The SVG has an accessible title and description, but the table contains the precise underlying values and remains usable in text and non-HTML exports. The example data are illustrative, not live operational measurements. No Web Awesome Pro elements, Pro imports or client-side chart libraries are used.
+
+**References:** [MyST specification](https://mystmd.org/spec), [MyST figures](https://mystmd.org/guide/figures), [MyST tables](https://mystmd.org/guide/tables), [Web Awesome upstream reference](https://webawesome.com/docs/components/pie-chart/).

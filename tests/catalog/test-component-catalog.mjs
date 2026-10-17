@@ -7,7 +7,7 @@ const root = process.cwd();
 const read = p => readFileSync(join(root,p), 'utf8');
 const catalog = JSON.parse(read('components/catalog.json'));
 
-test('90 unique component pages contain wiki quotes, GitHub source and HTML examples', () => {
+test('90 component pages meet Core or portable-alternative contracts', () => {
   assert.equal(catalog.components.length, 90);
   const seen = new Set();
   for (const comp of catalog.components) {
@@ -15,6 +15,15 @@ test('90 unique component pages contain wiki quotes, GitHub source and HTML exam
     assert.ok(!seen.has(path), path);
     seen.add(path);
     const markdown = read(path);
+    if (comp.pro) {
+      assert.match(markdown, /Portable Alternative \(Non-Core\)/, path);
+      assert.match(markdown, /description:/, path);
+      assert.match(markdown, /tags:/, path);
+      assert.doesNotMatch(markdown, /<wa-[a-z-]+\s/, path);
+      assert.ok(!markdown.includes('\\`\\`\\`{anywidget}'), path);
+      assert.ok(read('myst.yml').includes('file: ' + path), path + ' missing portable TOC');
+      continue;
+    }
     assert.match(markdown, /wiki:/);
     const sourceMatch = markdown.match(/^\*\*Source:\*\* \[[^\]]+\]\((https:\/\/[^)\s]+)\)/m);
     assert.ok(sourceMatch, path);

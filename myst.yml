@@ -41,10 +41,6 @@ project:
             - file: components/forms/checkbox.md
             - file: components/forms/checkbox-group.md
             - file: components/forms/color-picker.md
-            - file: components/forms/combobox.md
-            - file: components/forms/date-input.md
-            - file: components/forms/date-picker.md
-            - file: components/forms/file-input.md
             - file: components/forms/input.md
             - file: components/forms/known-date.md
             - file: components/forms/number-input.md
@@ -105,11 +101,16 @@ project:
             - file: components/media/icon.md
             - file: components/media/markdown.md
             - file: components/media/qr-code.md
+            - file: components/media/zoomable-frame.md
+        - title: Portable Alternatives (Non-Core)
+          children:
+            - file: components/portable-alternatives.md
+            - file: components/forms/combobox.md
+            - file: components/forms/date-input.md
+            - file: components/forms/date-picker.md
+            - file: components/forms/file-input.md
             - file: components/media/video.md
             - file: components/media/video-playlist.md
-            - file: components/media/zoomable-frame.md
-        - title: Data Visualization
-          children:
             - file: components/data-viz/bar-chart.md
             - file: components/data-viz/bubble-chart.md
             - file: components/data-viz/chart.md
