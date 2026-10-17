@@ -27,7 +27,9 @@ Reuse: [Carousel](../media/carousel.md). The full nested markup below remains in
     "tag": "wa-carousel",
     "attrs": {
       "pagination": "",
-      "navigation": ""
+      "navigation": "",
+      "loop": "",
+      "mouse-dragging": ""
     },
     "children": [
       {
@@ -35,11 +37,12 @@ Reuse: [Carousel](../media/carousel.md). The full nested markup below remains in
         "attrs": {},
         "children": [
           {
-            "tag": "p",
-            "attrs": {},
-            "children": [
-              "First slide"
-            ]
+            "tag": "img",
+            "attrs": {
+              "src": "/static/showcase/rocket.jpg",
+              "alt": "Falcon 9 carrying DSCOVR launching from Cape Canaveral"
+            },
+            "children": []
           }
         ]
       },
@@ -48,11 +51,28 @@ Reuse: [Carousel](../media/carousel.md). The full nested markup below remains in
         "attrs": {},
         "children": [
           {
-            "tag": "p",
-            "attrs": {},
-            "children": [
-              "Second slide"
-            ]
+            "tag": "img",
+            "attrs": {
+              "src": "/static/showcase/coffee.png",
+              "alt": "White cup of coffee on a wooden table",
+              "loading": "lazy"
+            },
+            "children": []
+          }
+        ]
+      },
+      {
+        "tag": "wa-carousel-item",
+        "attrs": {},
+        "children": [
+          {
+            "tag": "img",
+            "attrs": {
+              "src": "/static/showcase/hubble-deep-field.jpg",
+              "alt": "Hubble eXtreme Deep Field containing thousands of galaxies",
+              "loading": "lazy"
+            },
+            "children": []
           }
         ]
       }
@@ -64,14 +84,15 @@ Reuse: [Carousel](../media/carousel.md). The full nested markup below remains in
 ## Markdown code snippet
 
 ```html
-<wa-carousel pagination="" navigation="">
-  <wa-carousel-item>
-    <p>First slide</p>
-  </wa-carousel-item>
-  <wa-carousel-item>
-    <p>Second slide</p>
-  </wa-carousel-item>
+<wa-carousel pagination navigation>
+  <wa-carousel-item><img src="/static/showcase/rocket.jpg" alt="Falcon 9 rocket launch"></wa-carousel-item>
+  <wa-carousel-item><img src="/static/showcase/coffee.png" alt="Cup of coffee"></wa-carousel-item>
+  <wa-carousel-item><img src="/static/showcase/hubble-deep-field.jpg" alt="Hubble deep field"></wa-carousel-item>
 </wa-carousel>
 ```
 
-For direct MyST integration, place this trusted markup in a Markdown HTML block or use the corresponding built-in MyST directive/role when supported. 
+## Usage and API notes
+
+This atomic element must be nested in `<wa-carousel>`. Use meaningful, descriptive media in each slide. The parent handles pagination, transitions, and navigation.
+
+Media licenses and canonical sources: [Showcase media](../showcase-media.md).

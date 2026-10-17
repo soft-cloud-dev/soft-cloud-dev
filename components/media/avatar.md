@@ -22,8 +22,10 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
   "tree": {
     "tag": "wa-avatar",
     "attrs": {
-      "initials": "SC",
-      "label": "SoftCloud"
+      "image": "/static/showcase/astronaut.png",
+      "label": "NASA portrait of astronaut Eileen Collins",
+      "shape": "circle",
+      "loading": "lazy"
     },
     "children": []
   }
@@ -33,7 +35,11 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 ## Markdown code snippet
 
 ```html
-<wa-avatar initials="SC" label="SoftCloud"></wa-avatar>
+<wa-avatar image="/static/showcase/astronaut.png" label="NASA portrait of astronaut Eileen Collins" shape="circle" loading="lazy"></wa-avatar>
 ```
 
-For direct MyST integration, place this trusted markup in a Markdown HTML block or use the corresponding built-in MyST directive/role when supported. 
+## Usage and API notes
+
+The image is an actual NASA public-domain portrait, not initials. Use `image` and a meaningful accessible `label`. `shape` accepts `circle`, `rounded`, or `square`.
+
+Media licenses and canonical sources: [Showcase media](../showcase-media.md).

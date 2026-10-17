@@ -21,23 +21,26 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 {
   "tree": {
     "tag": "wa-comparison",
-    "attrs": {},
+    "attrs": {
+      "position": "50"
+    },
     "children": [
       {
         "tag": "img",
         "attrs": {
+          "src": "/static/showcase/rocket.jpg",
+          "alt": "Grayscale Falcon 9 rocket launch",
           "slot": "before",
-          "src": "/images/logo.svg",
-          "alt": "Light logo"
+          "class": "sc-demo-grayscale"
         },
         "children": []
       },
       {
         "tag": "img",
         "attrs": {
-          "slot": "after",
-          "src": "/images/logo-dark.svg",
-          "alt": "Dark logo"
+          "src": "/static/showcase/rocket.jpg",
+          "alt": "Color Falcon 9 rocket launch",
+          "slot": "after"
         },
         "children": []
       }
@@ -49,10 +52,17 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 ## Markdown code snippet
 
 ```html
-<wa-comparison>
-  <img slot="before" src="/images/logo.svg" alt="Light logo"></img>
-  <img slot="after" src="/images/logo-dark.svg" alt="Dark logo"></img>
+<wa-comparison position="50">
+  <img slot="before" class="sc-demo-grayscale" src="/static/showcase/rocket.jpg" alt="Grayscale Falcon 9 launch">
+  <img slot="after" src="/static/showcase/rocket.jpg" alt="Color Falcon 9 launch">
 </wa-comparison>
+<style>
+  .sc-demo-grayscale { filter: grayscale(1); }
+</style>
 ```
 
-For direct MyST integration, place this trusted markup in a Markdown HTML block or use the corresponding built-in MyST directive/role when supported. 
+## Usage and API notes
+
+The views use the exact **same local photograph**; a CSS grayscale filter guarantees aligned before/after content. The comparison handle is keyboard accessible. `position` sets the initial split, from 0 through 100.
+
+Media licenses and canonical sources: [Showcase media](../showcase-media.md).
