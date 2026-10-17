@@ -8,9 +8,7 @@ Displays a contextual warning, note, or operational status.
 
 **Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/v3.14.0/packages/webawesome/src/components/callout/callout.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/callout/).
 
-:::{wa-callout} Integration status
-:variant: brand
-:appearance: filled
+:::{note} Integration status
 
 Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 :::
@@ -63,4 +61,4 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 </wa-callout>
 ```
 
-For direct MyST integration, place this trusted markup in a Markdown HTML block or use the corresponding built-in MyST directive/role when supported. 
+Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. 

@@ -8,9 +8,7 @@ Coordinates tab buttons and their corresponding panels.
 
 **Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/v3.14.0/packages/webawesome/src/components/tab-group/tab-group.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/tab-group/).
 
-:::{wa-callout} Integration status
-:variant: brand
-:appearance: filled
+:::{note} Integration status
 
 Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 :::
