@@ -8,9 +8,7 @@ Formats timestamps using locale-aware date conventions.
 
 **Source:** [Web Awesome component source](https://github.com/shoelace-style/webawesome/blob/v3.14.0/packages/webawesome/src/components/format-date/format-date.ts#L1-L24) (MyST GitHub transformer); [official component documentation](https://webawesome.com/docs/components/format-date/).
 
-:::{wa-callout} Integration status
-:variant: brand
-:appearance: filled
+:::{note} Integration status
 
 Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 :::
@@ -38,4 +36,4 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 <wa-format-date date="2026-10-17T12:00:00Z" month="long" day="numeric" year="numeric"></wa-format-date>
 ```
 
-For direct MyST integration, place this trusted markup in a Markdown HTML block or use the corresponding built-in MyST directive/role when supported. 
+Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. 
