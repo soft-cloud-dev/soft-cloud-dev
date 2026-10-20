@@ -415,12 +415,12 @@ pre {
   font: var(--wa-font-weight-semibold, 600) var(--wa-font-size-l, 1.25rem)
     var(--wa-font-family-body, system-ui, sans-serif);
 }
-.sc-tokens__swatch figcaption {
+.sc-tokens__caption {
   margin-top: var(--wa-space-xs, .5rem);
   font-size: var(--wa-font-size-s, .875rem);
   color: var(--wa-color-text-normal, #334155);
 }
-.sc-tokens__swatch figcaption code {
+.sc-tokens__caption code {
   display: block;
   margin-top: var(--wa-space-3xs, .15rem);
   overflow-wrap: anywhere;
