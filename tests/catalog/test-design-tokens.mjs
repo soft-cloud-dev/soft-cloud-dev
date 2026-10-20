@@ -36,11 +36,12 @@ test('Design Tokens page is discoverable and covers all eight token groups', () 
   assert.match(toc, /- file: components\/design-tokens\.md/);
   assert.match(index, /\[Design tokens\]\(design-tokens\.md\)/);
   for (const title of families) {
-    const slug = title.toLowerCase().replaceAll(' ', '-');
+    const slug = 'design-tokens-' + title.toLowerCase().replaceAll(' ', '-');
     assert.ok(page.includes('\n## ' + title + '\n'), 'Missing family: ' + title);
     assert.ok(page.includes('](#' + slug + ')'), 'Missing jump link: ' + title);
+    assert.ok(page.includes('(' + slug + ')=\n\n## ' + title), 'Missing explicit MyST target: ' + title);
     assert.ok(
-      page.includes('https://webawesome.com/docs/tokens/' + slug + '/'),
+      page.includes('https://webawesome.com/docs/tokens/' + slug.replace('design-tokens-', '') + '/'),
       'Missing upstream source: ' + title
     );
   }
@@ -80,11 +81,13 @@ test('Space scale uses actual Web Awesome variables and is mobile-safe', () => {
 test('Document remains readable without JavaScript or external demo media', () => {
   assert.match(page, /type="text"\s+placeholder="Tab to focus this field"/);
   assert.match(page, /<fieldset class="sc-tokens__native-form">/);
-  assert.match(page, /<figure class="sc-tokens__swatch/);
+  assert.match(page, /<div class="sc-tokens__swatch/);
+  assert.doesNotMatch(page, /<fig(?:ure|caption)\b/i);
+  assert.match(css, /\.sc-tokens__caption \{/);
   assert.match(page, /```css\n\.feature-panel/);
   assert.match(page, /```\{anywidget\} \.\.\/widgets\/webawesome-demo\.mjs/);
   assert.doesNotMatch(page, /(?:src|href)="\/static\//);
-  assert.doesNotMatch(page, /<script[\s>]/);
+  assert.doesNotMatch(page, /<script[\s>]/i);
 });
 
 test('Focus and motion preserve keyboard use and reduced-motion preference', () => {
