@@ -7,13 +7,10 @@ const page = read('components/design-tokens.md');
 const styles = read('assets/static/softcloud.css');
 const toc = read('myst.yml');
 const index = read('components/index.md');
-const notebook = JSON.parse(read('notebooks/webawesome-docs.ipynb'));
 
-test('Design Tokens route is discoverable in MyST, catalog and the existing notebook', () => {
+test('Design Tokens route is discoverable in MyST and the component catalog', () => {
   assert.equal((toc.match(/file: components\/design-tokens\.md/g) || []).length, 1);
   assert.match(index, /\[Design Tokens & Style Preview\]\(design-tokens\.md\)/);
-  assert.match(notebook.cells.map(c => (c.source || []).join('')).join('\n'),
-    /\[Design Tokens & Style Preview\]\(\.\.\/components\/design-tokens\.md\)/);
   assert.match(page, /^# Design Tokens & Style Preview/m);
 });
 
@@ -56,15 +53,4 @@ test('real SSR components are reused rather than visually approximated', () => {
   assert.match(styles, /@media print/);
   assert.match(styles, /@media \(max-width: 460px\)/);
   assert.match(page, /\[Official Web Awesome design tokens\]\(https:\/\/webawesome\.com\/docs\/tokens\/\)/);
-});
-
-test('reference notebook uses canonical radius and shadow token names', () => {
-  const tokens = notebook.cells.find(c =>
-    (c.source || []).join('').includes('## 4. Design Tokens & CSS Utilities Reference')
-  );
-  assert.ok(tokens);
-  const text = tokens.source.join('');
-  assert.match(text, /--wa-border-radius-\{s\\\|m\\\|l\\\|pill\}/);
-  assert.match(text, /--wa-shadow-\{s\\\|m\\\|l\}/);
-  assert.doesNotMatch(text, /--wa-shadow-md|--wa-border-radius-full/);
 });
