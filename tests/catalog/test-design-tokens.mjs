@@ -27,6 +27,11 @@ const palette = [
 const variants = ['brand', 'neutral', 'success', 'warning', 'danger'];
 const sizes = ['3xs', '2xs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl', '4xl', '5xl'];
 
+test('Frontmatter remains parseable by the strict MyST profile', () => {
+  assert.match(page, /^---\ndescription: >-\n  Live reference for Web Awesome design tokens in SoftCloud:/);
+  assert.match(page, /\n---\n\n# Design Tokens\n/);
+});
+
 test('Design Tokens page is discoverable and covers all eight token groups', () => {
   assert.match(toc, /- file: components\/design-tokens\.md/);
   assert.match(index, /\[Design tokens\]\(design-tokens\.md\)/);
