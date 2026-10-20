@@ -1,5 +1,6 @@
 ---
-description: Live reference for Web Awesome design tokens in SoftCloud: colors, type, space, borders, shadows, focus, motion, and component groups.
+description: >-
+  Live reference for Web Awesome design tokens in SoftCloud: colors, type, space, borders, shadows, focus, motion, and component groups.
 keywords:
   - Web Awesome
   - design tokens
