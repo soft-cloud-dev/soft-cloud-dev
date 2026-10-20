@@ -29,6 +29,7 @@ node scripts/lit-ssr-transform.mjs _build/html "$BASE_URL"
 python tools/generate_audio.py --all-locales --narrated-only --check-only --verify-build-dir _build/html
 python tools/verify_locales.py --verify-build-dir _build/html --progressive
 python scripts/validate-build.py --verify-dir _build/html
+python scripts/verify-design-token-preview.py _build/html
 test -s _build/html/index.html
 test -s _build/html/pl/index.html
 test -s _build/html/de/index.html
