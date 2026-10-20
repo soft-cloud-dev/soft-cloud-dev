@@ -218,5 +218,5 @@ The following is **standalone example markup**. It uses Web Awesome's public CSS
 - The essential samples are static HTML and CSS; they remain readable with JavaScript disabled and in printed or exported text form.
 - Never rely on color alone for state; pair each variant with a name or other visible text. Use `--wa-color-{variant}-on` for foreground text on the corresponding core fill rather than guessing a contrasting hex value.
 - Theme previews use local `wa-light`/`wa-dark` scopes; they must not update the `<html>` element or write browser storage.
-- The project pins the Web Awesome version in [package.json](../package.json). Styles are supplied through the existing self-hosted build pipeline, including prefixed locale routes.
+- The project pins the Web Awesome version in [package.json](https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/package.json). Styles are supplied through the existing self-hosted build pipeline, including prefixed locale routes.
 - For canonical definitions, see Web Awesome's [colors](https://webawesome.com/docs/tokens/color/), [typography](https://webawesome.com/docs/tokens/typography/), [space](https://webawesome.com/docs/tokens/space/), [borders](https://webawesome.com/docs/tokens/borders/), and [shadows](https://webawesome.com/docs/tokens/shadows/) references.
