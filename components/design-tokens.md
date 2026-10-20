@@ -20,31 +20,33 @@ The samples resolve actual `--wa-*` variables from the active Web Awesome theme;
 :::
 
 ::::{grid} 1 1 2 4
-:::{card} [Color](#color)
+:::{card} [Color](#design-tokens-color)
 Palettes, variants, themed surfaces, and foregrounds.
 :::
-:::{card} [Typography](#typography)
+:::{card} [Typography](#design-tokens-typography)
 Font families, type scale, weights, and line height.
 :::
-:::{card} [Space](#space)
+:::{card} [Space](#design-tokens-space)
 Consistent spacing from 3xs to 5xl.
 :::
-:::{card} [Borders](#borders)
+:::{card} [Borders](#design-tokens-borders)
 Border strokes, radii, and shape.
 :::
-:::{card} [Shadows](#shadows)
+:::{card} [Shadows](#design-tokens-shadows)
 Elevation, offsets, blur, and spread.
 :::
-:::{card} [Focus](#focus)
+:::{card} [Focus](#design-tokens-focus)
 Keyboard focus outlines and offset.
 :::
-:::{card} [Transitions](#transitions)
+:::{card} [Transitions](#design-tokens-transitions)
 Durations, easing, and reduced-motion support.
 :::
-:::{card} [Component Groups](#component-groups)
+:::{card} [Component Groups](#design-tokens-component-groups)
 Shared form, button, panel, and tooltip styling.
 :::
 ::::
+
+(design-tokens-color)=
 
 ## Color
 
@@ -53,26 +55,26 @@ Web Awesome separates its 10-hue palette, five semantic variants, and role-based
 ### Core palette colors
 
 <div class="sc-tokens__swatches" role="group" aria-label="Web Awesome core color hues">
-<figure class="sc-tokens__swatch sc-tokens__swatch--red"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><figcaption>Red<code>--wa-color-red</code></figcaption></figure>
-<figure class="sc-tokens__swatch sc-tokens__swatch--orange"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><figcaption>Orange<code>--wa-color-orange</code></figcaption></figure>
-<figure class="sc-tokens__swatch sc-tokens__swatch--yellow"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><figcaption>Yellow<code>--wa-color-yellow</code></figcaption></figure>
-<figure class="sc-tokens__swatch sc-tokens__swatch--green"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><figcaption>Green<code>--wa-color-green</code></figcaption></figure>
-<figure class="sc-tokens__swatch sc-tokens__swatch--cyan"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><figcaption>Cyan<code>--wa-color-cyan</code></figcaption></figure>
-<figure class="sc-tokens__swatch sc-tokens__swatch--blue"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><figcaption>Blue<code>--wa-color-blue</code></figcaption></figure>
-<figure class="sc-tokens__swatch sc-tokens__swatch--indigo"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><figcaption>Indigo<code>--wa-color-indigo</code></figcaption></figure>
-<figure class="sc-tokens__swatch sc-tokens__swatch--purple"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><figcaption>Purple<code>--wa-color-purple</code></figcaption></figure>
-<figure class="sc-tokens__swatch sc-tokens__swatch--pink"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><figcaption>Pink<code>--wa-color-pink</code></figcaption></figure>
-<figure class="sc-tokens__swatch sc-tokens__swatch--gray"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><figcaption>Gray<code>--wa-color-gray</code></figcaption></figure>
+<div class="sc-tokens__swatch sc-tokens__swatch--red"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><div class="sc-tokens__caption"><span class="sc-tokens__label">Red</span><code>--wa-color-red</code></div></div>
+<div class="sc-tokens__swatch sc-tokens__swatch--orange"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><div class="sc-tokens__caption"><span class="sc-tokens__label">Orange</span><code>--wa-color-orange</code></div></div>
+<div class="sc-tokens__swatch sc-tokens__swatch--yellow"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><div class="sc-tokens__caption"><span class="sc-tokens__label">Yellow</span><code>--wa-color-yellow</code></div></div>
+<div class="sc-tokens__swatch sc-tokens__swatch--green"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><div class="sc-tokens__caption"><span class="sc-tokens__label">Green</span><code>--wa-color-green</code></div></div>
+<div class="sc-tokens__swatch sc-tokens__swatch--cyan"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><div class="sc-tokens__caption"><span class="sc-tokens__label">Cyan</span><code>--wa-color-cyan</code></div></div>
+<div class="sc-tokens__swatch sc-tokens__swatch--blue"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><div class="sc-tokens__caption"><span class="sc-tokens__label">Blue</span><code>--wa-color-blue</code></div></div>
+<div class="sc-tokens__swatch sc-tokens__swatch--indigo"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><div class="sc-tokens__caption"><span class="sc-tokens__label">Indigo</span><code>--wa-color-indigo</code></div></div>
+<div class="sc-tokens__swatch sc-tokens__swatch--purple"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><div class="sc-tokens__caption"><span class="sc-tokens__label">Purple</span><code>--wa-color-purple</code></div></div>
+<div class="sc-tokens__swatch sc-tokens__swatch--pink"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><div class="sc-tokens__caption"><span class="sc-tokens__label">Pink</span><code>--wa-color-pink</code></div></div>
+<div class="sc-tokens__swatch sc-tokens__swatch--gray"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><div class="sc-tokens__caption"><span class="sc-tokens__label">Gray</span><code>--wa-color-gray</code></div></div>
 </div>
 
 ### Semantic variants
 
 <div class="sc-tokens__swatches" role="group" aria-label="Web Awesome semantic colors">
-<figure class="sc-tokens__swatch sc-tokens__swatch--brand"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><figcaption>Brand<code>--wa-color-brand</code></figcaption></figure>
-<figure class="sc-tokens__swatch sc-tokens__swatch--neutral"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><figcaption>Neutral<code>--wa-color-neutral</code></figcaption></figure>
-<figure class="sc-tokens__swatch sc-tokens__swatch--success"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><figcaption>Success<code>--wa-color-success</code></figcaption></figure>
-<figure class="sc-tokens__swatch sc-tokens__swatch--warning"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><figcaption>Warning<code>--wa-color-warning</code></figcaption></figure>
-<figure class="sc-tokens__swatch sc-tokens__swatch--danger"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><figcaption>Danger<code>--wa-color-danger</code></figcaption></figure>
+<div class="sc-tokens__swatch sc-tokens__swatch--brand"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><div class="sc-tokens__caption"><span class="sc-tokens__label">Brand</span><code>--wa-color-brand</code></div></div>
+<div class="sc-tokens__swatch sc-tokens__swatch--neutral"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><div class="sc-tokens__caption"><span class="sc-tokens__label">Neutral</span><code>--wa-color-neutral</code></div></div>
+<div class="sc-tokens__swatch sc-tokens__swatch--success"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><div class="sc-tokens__caption"><span class="sc-tokens__label">Success</span><code>--wa-color-success</code></div></div>
+<div class="sc-tokens__swatch sc-tokens__swatch--warning"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><div class="sc-tokens__caption"><span class="sc-tokens__label">Warning</span><code>--wa-color-warning</code></div></div>
+<div class="sc-tokens__swatch sc-tokens__swatch--danger"><div class="sc-tokens__patch" aria-hidden="true">Aa</div><div class="sc-tokens__caption"><span class="sc-tokens__label">Danger</span><code>--wa-color-danger</code></div></div>
 </div>
 
 ### Color token reference
@@ -103,6 +105,8 @@ The `wa-brand-{hue}` and related `wa-{variant}-{hue}` classes on the document ro
 ```
 
 **Upstream:** [Color token reference](https://webawesome.com/docs/tokens/color/).
+
+(design-tokens-typography)=
 
 ## Typography
 
@@ -136,6 +140,8 @@ For long-form text, choose an appropriate font family and `--wa-line-height-norm
 
 **Upstream:** [Typography token reference](https://webawesome.com/docs/tokens/typography/).
 
+(design-tokens-space)=
+
 ## Space
 
 The space scale uses `rem` units and the multiplier `--wa-space-scale`. Bars below take their lengths from the active tokens; the smallest tokens may render as narrow marks on dense displays.
@@ -166,6 +172,8 @@ The space scale uses `rem` units and the multiplier `--wa-space-scale`. Bars bel
 
 **Upstream:** [Space token reference](https://webawesome.com/docs/tokens/space/).
 
+(design-tokens-borders)=
+
 ## Borders
 
 Borders use scale-controlled stroke widths and radii, plus fixed shape aliases for pills, circles, and squares. These examples use the token values directly.
@@ -190,6 +198,8 @@ Borders use scale-controlled stroke widths and radii, plus fixed shape aliases f
 
 **Upstream:** [Borders token reference](https://webawesome.com/docs/tokens/borders/).
 
+(design-tokens-shadows)=
+
 ## Shadows
 
 Three ready-to-use shadows are composed from smaller offset, blur, and spread variables plus `--wa-color-shadow`. Use shadow tokens for elevation; do not invent a separate page-specific shadow scale.
@@ -212,6 +222,8 @@ Three ready-to-use shadows are composed from smaller offset, blur, and spread va
 The shadow shorthand can be inset: `box-shadow: inset var(--wa-shadow-s);`. Larger effects may be less appropriate in dense documentation layouts.
 
 **Upstream:** [Shadows token reference](https://webawesome.com/docs/tokens/shadows/).
+
+(design-tokens-focus)=
 
 ## Focus
 
@@ -242,6 +254,8 @@ Do not remove a focus outline without providing an equivalent high-contrast alte
 
 **Upstream:** [Focus token reference](https://webawesome.com/docs/tokens/focus/).
 
+(design-tokens-transitions)=
+
 ## Transitions
 
 Transition duration tokens are `--wa-transition-fast`, `--wa-transition-normal`, and `--wa-transition-slow`. `--wa-transition-easing` specifies the shared timing function. Hover **or keyboard-focus** each button to compare its response; when reduced motion is requested, the animation is disabled.
@@ -263,6 +277,8 @@ Transition duration tokens are `--wa-transition-fast`, `--wa-transition-normal`,
 ```
 
 **Upstream:** [Transitions token reference](https://webawesome.com/docs/tokens/transitions/).
+
+(design-tokens-component-groups)=
 
 ## Component Groups
 
