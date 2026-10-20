@@ -51,7 +51,7 @@ test('real SSR components are reused rather than visually approximated', () => {
   assert.match(page, /:::*\{wa-card\}/);
   assert.match(page, /:::*\{wa-callout\}/);
   assert.equal((page.match(/:::*\{wa-button\}/g) || []).length, 2);
-  assert.match(styles, /\/* Standalone Design Tokens & Style Preview/);
+  assert.ok(styles.includes('/* Standalone Design Tokens & Style Preview'));
   assert.match(styles, /\.sc-token-preview-grid/);
   assert.match(styles, /@media print/);
   assert.match(styles, /@media \(max-width: 460px\)/);
