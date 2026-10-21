@@ -23,8 +23,7 @@ const allowedComponents = new Set(["button","button-group","copy-button","dropdo
 export function resolveShowcaseMedia(raw, moduleUrl = import.meta.url) {
   const match = /^showcase:([a-z0-9][a-z0-9._-]*)$/i.exec(raw);
   if (!match) return raw;
-  const root = new URL('../vendor/webawesome/', moduleUrl);
-  return new URL('../../static/showcase/' + match[1], root).href;
+  return new URL('../static/showcase/' + match[1], moduleUrl).href;
 }
 
 function localShowcaseUrl(raw) {

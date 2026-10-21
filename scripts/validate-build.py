@@ -16,6 +16,7 @@ Validates:
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 import sys
@@ -23,7 +24,9 @@ from pathlib import Path
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 
-SUPPORTED_COMPONENTS = {"wa-card", "wa-callout", "wa-button", "wa-icon"}
+_SCHEMA_PATH = Path(__file__).resolve().parent.parent / "assets" / "shared" / "component-schema.json"
+_SCHEMA = json.loads(_SCHEMA_PATH.read_text(encoding="utf-8"))
+SUPPORTED_COMPONENTS = set(_SCHEMA.get("allowedComponents", ["wa-card", "wa-callout", "wa-button", "wa-icon"]))
 
 
 def check_html_file(

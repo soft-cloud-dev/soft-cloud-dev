@@ -189,7 +189,13 @@ export function lookupPageTranslation(routeManifest, localeCode, pageSlug) {
   // Primary schema produced by tools/build_locales.py::build_route_manifest()
   if (routeManifest.pages && typeof routeManifest.pages === "object") {
     const pages = routeManifest.pages;
-    let pageEntry = pages[slugKey] ?? pages[normSlug];
+    const aliases =
+      routeManifest.aliases && typeof routeManifest.aliases === "object"
+        ? routeManifest.aliases
+        : {};
+    const aliasTarget = aliases[slugKey] ?? aliases[normSlug];
+    let pageEntry =
+      pages[slugKey] ?? pages[normSlug] ?? (aliasTarget ? pages[aliasTarget] : undefined);
 
     if (!pageEntry) {
       for (const candidate of Object.values(pages)) {

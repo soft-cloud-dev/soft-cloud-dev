@@ -4,16 +4,21 @@ Security policies and URL/attribute validation with exact JS parity.
 
 from __future__ import annotations
 
+import json
 import re
+from pathlib import Path
 from typing import Tuple
 from urllib.parse import urlsplit
+
+_POLICY_PATH = Path(__file__).resolve().parent.parent / "shared" / "url-policy.json"
+_URL_POLICY = json.loads(_POLICY_PATH.read_text(encoding="utf-8"))
 
 CONTROL_CHARS_REGEX = re.compile(r"[\x00-\x1f\x7f]")
 HTML_CHARS_REGEX = re.compile(r"[<>\"']")
 BACKSLASH_REGEX = re.compile(r"\\")
 
-ALLOWED_SCHEMES_LINK = {"http", "https", "mailto"}
-ALLOWED_SCHEMES_MEDIA = {"http", "https"}
+ALLOWED_SCHEMES_LINK = set(_URL_POLICY.get("allowed_schemes", {}).get("link", ["http", "https", "mailto"]))
+ALLOWED_SCHEMES_MEDIA = set(_URL_POLICY.get("allowed_schemes", {}).get("media", ["http", "https"]))
 
 
 def validate_url(url: str, context: str = "link") -> Tuple[bool, str]:

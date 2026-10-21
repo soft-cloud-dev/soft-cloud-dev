@@ -16,7 +16,7 @@ const tmpStageDir = path.resolve(__dirname, '../../_build/test-staging');
 
 test('Stages Web Awesome dist-cdn, Font Awesome, and SoftCloud assets', () => {
   if (fs.existsSync(tmpStageDir)) {
-    fs.rmSync(tmpStageDir, { recursive: true, force: true });
+    fs.rmSync(tmpStageDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 });
   }
 
   const { destRoot, stagedCount } = stageAssets(tmpStageDir);
@@ -44,5 +44,5 @@ test('Stages Web Awesome dist-cdn, Font Awesome, and SoftCloud assets', () => {
   }
 
   // Cleanup
-  fs.rmSync(tmpStageDir, { recursive: true, force: true });
+  fs.rmSync(tmpStageDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 });
 });

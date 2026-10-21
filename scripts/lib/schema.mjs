@@ -13,6 +13,8 @@ import { validateIcon } from './icon-validator.mjs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const schemaPath = path.resolve(__dirname, '../../assets/shared/component-schema.json');
 export const SCHEMA = JSON.parse(fs.readFileSync(schemaPath, 'utf8'));
+export const SUPPORTED_COMPONENTS = new Set(SCHEMA.allowedComponents);
+export const NORMALIZATION = SCHEMA.normalization || {};
 
 /**
  * Explicit migration and normalization of component metadata from schema 1.0.0 to 2.0.0.
@@ -74,42 +76,36 @@ export function normalizeComponentMetadata(rawMeta, options = {}) {
       if (meta.appearance === 'default') {
         delete meta.appearance;
       } else if (meta.appearance === 'elevated') {
-        meta.appearance = 'filled-outlined';
+        meta.appearance = NORMALIZATION.cardAppearances?.elevated || 'filled-outlined';
         meta.class = meta.class ? `${meta.class} sc-elevation`.trim() : 'sc-elevation';
-      } else if (meta.appearance === 'flat') {
-        meta.appearance = 'plain';
+      } else if (meta.appearance && NORMALIZATION.cardAppearances?.[meta.appearance]) {
+        meta.appearance = NORMALIZATION.cardAppearances[meta.appearance];
       }
       break;
     }
 
     case 'wa-callout': {
-      if (meta.appearance === 'soft') {
-        meta.appearance = 'filled-outlined';
-      } else if (meta.appearance === 'solid') {
-        meta.appearance = 'filled';
-      } else if (meta.appearance === 'outline') {
-        meta.appearance = 'outlined';
-      } else if (meta.appearance === 'default') {
+      if (meta.appearance === 'default') {
         delete meta.appearance;
+      } else if (meta.appearance && NORMALIZATION.calloutAppearances?.[meta.appearance]) {
+        meta.appearance = NORMALIZATION.calloutAppearances[meta.appearance];
       }
 
-      if (meta.icon) {
-        if (meta.icon === 'info' || meta.icon === 'info-circle') {
-          meta.icon = 'circle-info';
-        }
+      if (meta.icon && NORMALIZATION.iconNames?.[meta.icon]) {
+        meta.icon = NORMALIZATION.iconNames[meta.icon];
       }
       break;
     }
 
     case 'wa-button': {
-      if (meta.variant === 'primary') {
-        meta.variant = 'brand';
-      } else if (meta.variant === 'default') {
+      if (meta.variant === 'default') {
         delete meta.variant;
+      } else if (meta.variant && NORMALIZATION.buttonVariants?.[meta.variant]) {
+        meta.variant = NORMALIZATION.buttonVariants[meta.variant];
       }
 
-      if (meta.appearance === 'text' || meta.appearance === 'flat') {
-        meta.appearance = 'plain';
+      if (meta.appearance && NORMALIZATION.buttonAppearances?.[meta.appearance]) {
+        meta.appearance = NORMALIZATION.buttonAppearances[meta.appearance];
       }
 
       if (meta.outline) {
@@ -128,15 +124,15 @@ export function normalizeComponentMetadata(rawMeta, options = {}) {
       }
 
       if (meta.size) {
-        const sizeMap = { small: 's', medium: 'm', large: 'l' };
+        const sizeMap = NORMALIZATION.buttonSizes || { small: 's', medium: 'm', large: 'l' };
         meta.size = sizeMap[String(meta.size).toLowerCase()] || meta.size;
       }
       break;
     }
 
     case 'wa-icon': {
-      if (meta.name === 'info' || meta.name === 'info-circle') {
-        meta.name = 'circle-info';
+      if (meta.name && NORMALIZATION.iconNames?.[meta.name]) {
+        meta.name = NORMALIZATION.iconNames[meta.name];
       }
       if (meta.style === 'solid') {
         meta.variant = 'solid';
