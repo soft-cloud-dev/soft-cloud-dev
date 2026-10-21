@@ -19,6 +19,7 @@ The existing four typed MyST Web Awesome integrations (`wa-button`, `wa-card`, `
 
 ## Documentation and real-media examples
 
+- [Design Tokens & Style Preview](design-tokens.md) — paired light/dark surfaces, semantic colors, type scale, spacing, radii, shadows, and typed SSR components.
 - [Authoring and migration guide](authoring-guide.md) — choose MyST built-ins for prose and layout, retain anywidget for interactive Web Awesome components, and follow the phased API documentation plan.
 - [Practical UI patterns](practical-patterns.md) — original Tailwind-inspired marketing and application-UI recipes using native MyST grids/cards/tabs with Web Awesome interactive atoms.
 - [Real media showcase](showcase-media.md) — bundled public-domain/CC0 photographs, photographic carousel, comparison, avatar, photo tabs, zoomable frame, and native video.
