@@ -19,9 +19,33 @@ test('Stages Web Awesome dist-cdn, Font Awesome, and SoftCloud assets', () => {
     fs.rmSync(tmpStageDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 });
   }
 
-  const { destRoot, stagedCount } = stageAssets(tmpStageDir);
+  const { destRoot, stagedCount, chunkStats } = stageAssets(tmpStageDir);
   assert.equal(destRoot, tmpStageDir);
   assert.equal(stagedCount, 10);
+  assert.equal(chunkStats.initialCount, 320);
+  assert.equal(chunkStats.finalCount, 88);
+  assert.equal(chunkStats.eliminatedCount, 232);
+
+  // Verify empty chunks and unused React wrapper directory were pruned
+  assert.ok(!fs.existsSync(path.join(tmpStageDir, 'vendor/webawesome/react')));
+  for (const emptyChunk of [
+    'chunk.D5YFE5NT.js',
+    'chunk.KBS6YHTA.js',
+    'chunk.MEATLWHD.js',
+    'chunk.N2TXQSKF.js',
+  ]) {
+    assert.ok(!fs.existsSync(path.join(tmpStageDir, 'vendor/webawesome/chunks', emptyChunk)));
+  }
+
+  // Verify merged target chunks exist
+  for (const mergedChunk of [
+    'chunk.JHZRD2LV.js', // bootstrap core
+    'chunk.26QE47KB.js', // merged events
+    'chunk.LBLI4KS5.js', // merged internal & shared styles
+    'chunk.QVJVDGCX.js', // merged core SSR components + styles
+  ]) {
+    assert.ok(fs.existsSync(path.join(tmpStageDir, 'vendor/webawesome/chunks', mergedChunk)));
+  }
 
   const filesToCheck = [
     'vendor/webawesome/webawesome.ssr-loader.js',
