@@ -4,6 +4,15 @@ test.describe('Keyboard & Screen Reader Accessibility', () => {
   test('button has accessible name and is keyboard focusable', async ({ page }) => {
     await page.goto('/');
 
+    // Wait for custom elements to be defined and hydrated
+    await page.waitForFunction(() => {
+      return (
+        customElements.get('wa-button') !== undefined &&
+        customElements.get('wa-callout') !== undefined &&
+        customElements.get('wa-icon') !== undefined
+      );
+    }, { timeout: 10000 });
+
     const button = page.locator('wa-button');
     await expect(button).toBeVisible();
 

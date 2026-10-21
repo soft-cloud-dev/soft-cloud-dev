@@ -276,14 +276,18 @@
   }
 
   // Observe theme class changes & dynamic DOM mutations
+  let pendingSyncTimeout = null;
   const observer = new MutationObserver(function (mutations) {
-    if (isUpdating) return;
     let themeChanged = false;
     let needsTransform = false;
 
     for (let i = 0; i < mutations.length; i++) {
       const m = mutations[i];
-      if (m.type === 'attributes' && m.attributeName === 'class' && m.target === document.documentElement) {
+      if (
+        m.type === 'attributes' &&
+        (m.attributeName === 'class' || m.attributeName === 'data-theme') &&
+        m.target === document.documentElement
+      ) {
         themeChanged = true;
       }
       if (m.type === 'childList' && m.addedNodes.length > 0) {
@@ -304,7 +308,14 @@
     }
 
     if (themeChanged) {
-      syncTheme();
+      if (isUpdating) {
+        clearTimeout(pendingSyncTimeout);
+        pendingSyncTimeout = setTimeout(function () {
+          syncTheme();
+        }, 10);
+      } else {
+        syncTheme();
+      }
     }
     if (needsTransform) {
       transformHosts(document);
