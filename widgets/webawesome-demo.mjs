@@ -54,6 +54,17 @@ function createNode(data) {
   return node;
 }
 
+const componentDependencies = {
+  'time-input': ['icon'],
+  'date-input': ['icon'],
+  'date-picker': ['icon'],
+  'color-picker': ['icon'],
+  'copy-button': ['icon'],
+  'carousel': ['icon'],
+  'rating': ['icon'],
+  'combobox': ['icon']
+};
+
 function componentNames(data) {
   const out = new Set();
   const visit = item => {
@@ -62,7 +73,12 @@ function componentNames(data) {
       item.forEach(visit);
       return;
     }
-    if (item.tag && item.tag.startsWith('wa-')) out.add(item.tag.slice(3));
+    if (item.tag && item.tag.startsWith('wa-')) {
+      const name = item.tag.slice(3);
+      out.add(name);
+      const deps = componentDependencies[name];
+      if (deps) deps.forEach(dep => out.add(dep));
+    }
     (item.children || []).forEach(visit);
   };
   visit(data);
@@ -89,6 +105,20 @@ async function loadComponents(names) {
     }
     return moduleImports.get(name);
   }));
+  const drawerCtor = customElements.get('wa-drawer');
+  if (drawerCtor?.prototype && !drawerCtor.prototype.__scPatched) {
+    drawerCtor.prototype.__scPatched = true;
+    drawerCtor.prototype.handleOpenChange = function() {
+      if (this.open && !this.drawer?.open) {
+        this.show();
+      } else if (!this.open && this.drawer?.open) {
+        this.open = true;
+        this.requestClose(this.drawer);
+      } else if (!this.open) {
+        this.renderedWatcher?.stop();
+      }
+    };
+  }
 }
 
 export default {
@@ -133,6 +163,7 @@ export default {
       frame.addEventListener('click', event => {
         const actionNode = event.target.closest?.('[data-demo-target]');
         if (!actionNode || !frame.contains(actionNode)) return;
+        event.stopPropagation();
         const action = actionNode.getAttribute('data-demo-action');
         const id = actionNode.getAttribute('data-demo-target');
         if (!id || (action !== 'show' && action !== 'hide')) return;
