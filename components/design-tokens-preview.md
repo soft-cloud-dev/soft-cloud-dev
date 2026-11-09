@@ -23,7 +23,7 @@ The visual samples are **illustrative UI**, not live infrastructure telemetry. T
 The two samples explicitly scope `wa-light` and `wa-dark` to **individual sections**. They appear side by side regardless of the reader's currently selected site theme and do not modify the global MyST theme.
 
 <div class="sc-token-preview-grid">
-<section class="sc-token-panel wa-light" aria-label="Light theme example">
+<div class="sc-token-panel wa-light" role="region" aria-label="Light theme example">
   <div class="sc-token-panel-heading"><span class="sc-token-panel-name">Light theme</span><span class="sc-token-panel-mode">Illustrative interface</span></div>
   <div class="sc-token-panel-card">
     <div class="sc-token-panel-topline"><span class="sc-token-panel-appmark" aria-hidden="true">S</span><div><strong>SoftCloud UI</strong><small>Design system preview</small></div><span class="sc-token-panel-indicator">Sample</span></div>
@@ -33,8 +33,8 @@ The two samples explicitly scope `wa-light` and `wa-dark` to **individual sectio
     </div>
     <div class="sc-token-panel-actionrow"><a class="sc-token-panel-link" href="https://webawesome.com/docs/tokens/">Explore tokens</a><span>Theme: light</span></div>
   </div>
-</section>
-<section class="sc-token-panel wa-dark" aria-label="Dark theme example">
+</div>
+<div class="sc-token-panel wa-dark" role="region" aria-label="Dark theme example">
   <div class="sc-token-panel-heading"><span class="sc-token-panel-name">Dark theme</span><span class="sc-token-panel-mode">Illustrative interface</span></div>
   <div class="sc-token-panel-card">
     <div class="sc-token-panel-topline"><span class="sc-token-panel-appmark" aria-hidden="true">S</span><div><strong>SoftCloud UI</strong><small>Design system preview</small></div><span class="sc-token-panel-indicator">Sample</span></div>
@@ -44,7 +44,7 @@ The two samples explicitly scope `wa-light` and `wa-dark` to **individual sectio
     </div>
     <div class="sc-token-panel-actionrow"><a class="sc-token-panel-link" href="https://webawesome.com/docs/tokens/">Explore tokens</a><span>Theme: dark</span></div>
   </div>
-</section>
+</div>
 </div>
 
 ## 2. Semantic color variants

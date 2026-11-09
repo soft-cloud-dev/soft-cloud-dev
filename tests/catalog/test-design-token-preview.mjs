@@ -17,7 +17,7 @@ test('Design Tokens route is discoverable in MyST and the component catalog', ()
 test('all primary previews render as semantic no-JS HTML with paired scoped themes', () => {
   assert.match(page, /class="sc-token-preview-grid"/);
   for (const mode of ['light', 'dark']) {
-    assert.match(page, new RegExp('<section class="sc-token-panel wa-' + mode + '"'));
+    assert.match(page, new RegExp('<div class="sc-token-panel wa-' + mode + '"'));
   }
   for (const variant of ['brand', 'neutral', 'success', 'warning', 'danger']) {
     assert.match(page, new RegExp('class="sc-token-color sc-token-' + variant + '"'));
