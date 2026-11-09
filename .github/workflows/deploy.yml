@@ -69,6 +69,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
     permissions:
       pages: write
       id-token: write
@@ -79,3 +80,5 @@ jobs:
       - name: Deploy accepted artifact
         id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346
+        with:
+          timeout: 1800000
