@@ -35,7 +35,7 @@ jobs:
         run: |
           . .venv/bin/activate
           python tools/check_profile.py
-          python tools/translate_sources.py --check-only
+          python tools/translate_sources.py --check-only --progressive
 
       - name: Verify localized narration audio checksums (API-free)
         run: |
