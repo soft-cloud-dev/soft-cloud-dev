@@ -843,6 +843,17 @@ class GeminiClient:
                     ) from exc
 
                 if status == 404:
+                    fallback_ep = None
+                    if "models/gemini-3.8-flash-tts" in endpoint:
+                        fallback_ep = endpoint.replace(
+                            "models/gemini-3.8-flash-tts", "models/gemini-2.5-flash-preview-tts"
+                        )
+                    elif "models/gemini-3.8-flash" in endpoint:
+                        fallback_ep = endpoint.replace(
+                            "models/gemini-3.8-flash", "models/gemini-2.5-flash"
+                        )
+                    if fallback_ep and fallback_ep != endpoint:
+                        return self._request_json(method, fallback_ep, payload)
                     raise NarrationError(
                         f"Gemini API model or endpoint unavailable (HTTP 404) on {endpoint}: {err_body[:300]}"
                     ) from exc

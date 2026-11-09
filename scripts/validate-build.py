@@ -22,11 +22,13 @@ import re
 import sys
 from pathlib import Path
 from urllib.parse import urlparse
+import xml.etree.ElementTree as ET
 from bs4 import BeautifulSoup
 
 _SCHEMA_PATH = Path(__file__).resolve().parent.parent / "assets" / "shared" / "component-schema.json"
 _SCHEMA = json.loads(_SCHEMA_PATH.read_text(encoding="utf-8"))
 SUPPORTED_COMPONENTS = set(_SCHEMA.get("allowedComponents", ["wa-card", "wa-callout", "wa-button", "wa-icon"]))
+_SVG_PARSE_CACHE: dict[Path, str | None] = {}
 
 
 def check_html_file(
@@ -139,6 +141,17 @@ def check_html_file(
                 # SoftCloud themes might reference optional font sourcemaps or font sub-variants
                 if "webawesome" in asset_url or "fontawesome" in asset_url or "softcloud" in asset_url:
                     errors.append(msg)
+        elif candidate.suffix.lower() == ".svg":
+            resolved = candidate.resolve()
+            if resolved not in _SVG_PARSE_CACHE:
+                try:
+                    ET.fromstring(resolved.read_text(encoding="utf-8"))
+                    _SVG_PARSE_CACHE[resolved] = None
+                except Exception as exc:
+                    _SVG_PARSE_CACHE[resolved] = str(exc)
+            svg_err = _SVG_PARSE_CACHE[resolved]
+            if svg_err:
+                errors.append(f"{rel_path}: Malformed SVG XML in {asset_url}: {svg_err}")
 
     for s in stylesheets:
         verify_local_asset(s, "href")

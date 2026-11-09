@@ -89,7 +89,75 @@ function runtimeRoot() {
   return new URL('../vendor/webawesome/', import.meta.url);
 }
 
+let runtimeConfigPromise = null;
+
+function ensureRuntimeConfig() {
+  if (!runtimeConfigPromise) {
+    const root = runtimeRoot();
+    const iconRoot = new URL('../vendor/fontawesome/svgs/', import.meta.url);
+    runtimeConfigPromise = import(new URL('webawesome.js', root).href)
+      .then(mod => {
+        if (typeof mod.setBasePath === 'function') {
+          mod.setBasePath(root.pathname.replace(/\/$/, ''));
+        }
+        if (typeof mod.setIconPath === 'function') {
+          mod.setIconPath(iconRoot.pathname.replace(/\/$/, ''));
+        }
+      })
+      .catch(() => {});
+  }
+  return runtimeConfigPromise;
+}
+
+function hasStylesheetHref(container, suffix) {
+  const links = container.getElementsByTagName ? Array.from(container.getElementsByTagName('link')) : [];
+  return links.some(link => {
+    const href = link.getAttribute('href') || '';
+    return href.endsWith(suffix);
+  });
+}
+
+function ensureStylesheets() {
+  if (typeof document === 'undefined' || !document.head) return;
+  const root = runtimeRoot();
+  const sheets = [
+    [new URL('styles/webawesome.css', root).href, '/vendor/webawesome/styles/webawesome.css'],
+    [new URL('../vendor/fontawesome/css/all.min.css', import.meta.url).href, '/vendor/fontawesome/css/all.min.css'],
+    [new URL('../static/softcloud.css', import.meta.url).href, '/static/softcloud.css']
+  ];
+  for (const [href, suffix] of sheets) {
+    if (!hasStylesheetHref(document.head, suffix)) {
+      const link = document.createElement('link');
+      link.setAttribute('rel', 'stylesheet');
+      link.setAttribute('href', href);
+      document.head.appendChild(link);
+    }
+  }
+}
+
+let themeObserverInstalled = false;
+
+function syncDocumentTheme() {
+  if (typeof document === 'undefined' || !document.documentElement) return;
+  const root = document.documentElement;
+  const isDark = root.classList.contains('dark');
+  const wantClass = isDark ? 'wa-dark' : 'wa-light';
+  const dropClass = isDark ? 'wa-light' : 'wa-dark';
+  const wantTheme = isDark ? 'dark' : 'light';
+  if (root.classList.contains(dropClass)) root.classList.remove(dropClass);
+  if (!root.classList.contains(wantClass)) root.classList.add(wantClass);
+  if (root.getAttribute('data-theme') !== wantTheme) root.setAttribute('data-theme', wantTheme);
+  if (!themeObserverInstalled && typeof MutationObserver !== 'undefined') {
+    themeObserverInstalled = true;
+    const obs = new MutationObserver(() => syncDocumentTheme());
+    obs.observe(root, { attributes: true, attributeFilter: ['class'] });
+  }
+}
+
 async function loadComponents(names) {
+  await ensureRuntimeConfig();
+  ensureStylesheets();
+  syncDocumentTheme();
   const root = runtimeRoot();
   for (const name of names) {
     if (!allowedComponents.has(name)) throw new Error('Unsupported Web Awesome component: ' + name);

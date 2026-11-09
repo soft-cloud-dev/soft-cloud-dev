@@ -846,6 +846,107 @@ const SWITCHER_STYLES = `
     font-weight: 600;
     text-decoration: underline;
   }
+
+  @media (max-width: 640px) {
+    .myst-top-nav {
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+    }
+    .myst-top-nav-bar > div:first-child {
+      margin-right: 0.25rem !important;
+      min-width: 0 !important;
+      flex-shrink: 1 !important;
+    }
+    .myst-home-link {
+      margin-left: 0.25rem !important;
+      min-width: 0 !important;
+    }
+    .myst-home-link-logo {
+      margin-right: 0 !important;
+    }
+    .myst-home-link-logo img {
+      max-width: 118px;
+      width: auto;
+      height: auto;
+      max-height: 2rem;
+    }
+    .myst-home-link > span {
+      display: none !important;
+    }
+    [data-sc-lang-switcher] {
+      margin: 0 0.25rem;
+      margin-inline: 0.25rem;
+    }
+    .myst-theme-button {
+      margin-left: 0.25rem !important;
+    }
+    .myst-footer-links {
+      flex-direction: column !important;
+      gap: 0.75rem;
+    }
+    .myst-footer-links > .myst-footer-link {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      width: 100%;
+      box-sizing: border-box;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+    .myst-footer-link .flex-grow {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+    pre,
+    pre code {
+      white-space: pre-wrap !important;
+      word-break: break-word !important;
+      overflow-wrap: anywhere !important;
+    }
+    th,
+    td,
+    article h1,
+    article h2,
+    article h3,
+    article h4,
+    article code:not(pre code),
+    main code:not(pre code) {
+      word-break: break-word !important;
+      overflow-wrap: anywhere !important;
+    }
+    article,
+    main,
+    article h1,
+    article h2,
+    article h3,
+    article h4 {
+      max-width: 100%;
+      overflow-x: clip;
+    }
+    th code,
+    td code {
+      white-space: pre-wrap !important;
+      word-break: break-all !important;
+      overflow-wrap: anywhere !important;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .myst-top-nav {
+      padding-left: 0.375rem !important;
+      padding-right: 0.375rem !important;
+    }
+    .myst-home-link-logo img {
+      max-width: 96px;
+      max-height: 1.75rem;
+    }
+    [data-sc-lang-switcher] {
+      margin: 0 0.15rem;
+      margin-inline: 0.15rem;
+    }
+    .myst-theme-button {
+      margin-left: 0.15rem !important;
+    }
+  }
 `;
 
 export function mountLanguageSwitcher(hostEl, options = {}) {
@@ -913,6 +1014,23 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
   );
 
   const currentLocaleInfo = localesMap[currentLocaleCode] || DEFAULT_LOCALES.en;
+  const expectedHtmlLang = currentLocaleInfo.html_lang || currentLocaleCode || "en";
+  if (doc.documentElement && typeof doc.documentElement.setAttribute === "function") {
+    doc.documentElement.setAttribute("data-sc-expected-lang", expectedHtmlLang);
+    if (doc.documentElement.getAttribute("lang") !== expectedHtmlLang) {
+      doc.documentElement.setAttribute("lang", expectedHtmlLang);
+    }
+    if (!doc.documentElement._scLangObserver && typeof MutationObserver !== "undefined") {
+      const langObs = new MutationObserver(() => {
+        const exp = doc.documentElement.getAttribute("data-sc-expected-lang");
+        if (exp && doc.documentElement.getAttribute("lang") !== exp) {
+          doc.documentElement.setAttribute("lang", exp);
+        }
+      });
+      langObs.observe(doc.documentElement, { attributes: true, attributeFilter: ["lang"] });
+      doc.documentElement._scLangObserver = langObs;
+    }
+  }
   const ui = {
     ...DEFAULT_LOCALES.en.ui,
     ...(DEFAULT_LOCALES[currentLocaleCode]?.ui || {}),

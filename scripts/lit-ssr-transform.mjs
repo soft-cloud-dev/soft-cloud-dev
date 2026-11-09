@@ -23,7 +23,7 @@ const CARD_SLOT_ATTRIBUTES = NORMALIZATION.cardSlotAttributes || {
   'header-actions': 'with-header-actions',
   'footer-actions': 'with-footer-actions',
 };
-const WA_DETECTION_RE = /sc-wa-host|sc-wa-meta|<wa-(?:card|callout|button|icon)\b|webawesome-demo\.mjs/i;
+const WA_DETECTION_RE = /sc-wa-host|sc-wa-meta|<wa-(?:card|callout|button|icon)\b|webawesome-demo(?:-[a-f0-9]+)?\.mjs/i;
 
 /**
  * Transforms an HTML document: expands placeholders and attaches Lit SSR DSD.
@@ -122,7 +122,7 @@ export function transformAndRenderSSR(html, baseUrl = '') {
   // Step 7: MyST anywidget demos need Web Awesome styles and the self-hosted loader
   // even when no typed SSR component exists on the page. Text detection is only
   // an asset-injection hint; all HTML mutations still use the parse5 tree.
-  const hasCatalogWidget = html.includes('webawesome-demo.mjs');
+  const hasCatalogWidget = /webawesome-demo(?:-[a-f0-9]+)?\.mjs/i.test(html);
   if (hosts.length > 0 || docValidation.totalHosts > 0 || hasCatalogWidget) {
     injectRuntimeAssets(ast, baseUrl);
   }

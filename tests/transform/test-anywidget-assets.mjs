@@ -16,6 +16,12 @@ test('anywidget-only component showcases receive self-hosted Web Awesome assets'
   const again = transformAndRenderSSR(html, '/docs');
   assert.equal(again.html, html, 'asset injection must be idempotent');
   assert.equal(again.ssrCount, 0);
+
+  const hashedSource = '<!doctype html><html><head><title>Hashed Showcase</title></head>' +
+    '<body><script>window.__anywidget="/build/webawesome-demo-73e9addc32f86477fee3f5de53069234.mjs";</script></body></html>';
+  const hashedResult = transformAndRenderSSR(hashedSource, '/docs');
+  assert.ok(hashedResult.html.includes('href="/docs/vendor/webawesome/styles/webawesome.css"'));
+  assert.ok(hashedResult.html.includes('href="/docs/static/softcloud.css"'));
 });
 
 test('ordinary documents without Web Awesome content remain uninjected', () => {

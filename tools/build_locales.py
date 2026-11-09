@@ -561,7 +561,7 @@ def inject_language_switcher_into_html(
             header_bar_re = re.compile(r'(<div\b[^>]*\bclass="[^"]*\bmyst-header-bar\b[^"]*"[^>]*>)', re.I)
 
             if theme_btn_re.search(text):
-                text = theme_btn_re.sub(rf"{host_markup}\n        \1", text, count=1)
+                text = theme_btn_re.sub(rf"{host_markup}\1", text, count=1)
             elif header_end_re.search(text):
                 text = header_end_re.sub(rf"\1\n      {host_markup}", text, count=1)
             elif header_bar_re.search(text):

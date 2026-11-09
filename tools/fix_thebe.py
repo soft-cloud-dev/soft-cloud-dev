@@ -124,6 +124,62 @@ def strip_thebe_sourcemap(js_code: str) -> tuple[str, int]:
     return new_code, (n1 + n2)
 
 
+def patch_myst_hydration_and_lang(js_code: str) -> tuple[str, int]:
+    """Aligns compiled MyST React bundles with localized <html lang>, search .sr-only, and switcher host."""
+    count = 0
+    lang_target = 'lang:"en"'
+    lang_repl = 'lang:(typeof document!="undefined"&&document.documentElement.getAttribute("lang"))||"en"'
+    if lang_target in js_code:
+        js_code = js_code.replace(lang_target, lang_repl)
+        count += 1
+
+    search_target = '(0,$e.jsx)("span",{className:"myst-search-text-placeholder hidden sm:block grow",children:"Search"})'
+    search_repl = (
+        '(0,$e.jsx)("span",{className:"sr-only",children:(typeof document!="undefined"&&'
+        'document.querySelector(".myst-search-bar .sr-only")?.textContent)||"Search"}),'
+        + search_target
+    )
+    if search_target in js_code and 'document.querySelector(".myst-search-bar .sr-only")' not in js_code:
+        js_code = js_code.replace(search_target, search_repl)
+        count += 1
+
+    theme_target = '(0,ft.jsx)(c4,{className:"w-8 h-8 ml-3"})'
+    theme_repl = (
+        '(0,ft.jsx)("div",{id:"softcloud-lang-switcher-root","data-sc-lang-switcher":"1",'
+        '"data-sc-base-url":(typeof document!="undefined"&&'
+        'document.getElementById("softcloud-lang-switcher-root")?.getAttribute("data-sc-base-url"))||""}),'
+        + theme_target
+    )
+    if theme_target in js_code and 'id:"softcloud-lang-switcher-root"' not in js_code:
+        js_code = js_code.replace(theme_target, theme_repl)
+        count += 1
+
+    dc_target = 'function Dc(l,t){return l==="textarea"||l==="noscript"||(t&&t.id==="softcloud-lang-switcher-root")'
+    dc_target_orig = 'function Dc(l,t){return l==="textarea"||l==="noscript"'
+    dc_repl = (
+        'function Dc(l,t){return l==="textarea"||l==="noscript"||'
+        '(t&&(t.id==="softcloud-lang-switcher-root"||(typeof t.className=="string"&&t.className.includes("sc-wa-host"))))'
+    )
+    if dc_target in js_code and 'sc-wa-host' not in js_code:
+        js_code = js_code.replace(dc_target, dc_repl)
+        count += 1
+    elif dc_target_orig in js_code and 't.id==="softcloud-lang-switcher-root"' not in js_code:
+        js_code = js_code.replace(dc_target_orig, dc_repl)
+        count += 1
+
+    lh_target = 'if(l.nodeName.toLowerCase()!==t.toLowerCase()){if(!a&&(l.nodeName!=="INPUT"||l.type!=="hidden"))break}'
+    lh_repl = (
+        'if(l.nodeName.toLowerCase()!==t.toLowerCase()&&!(n&&typeof n.className=="string"&&'
+        'n.className.includes("sc-wa-host")&&l.nodeName.startsWith("WA-"))){'
+        'if(!a&&(l.nodeName!=="INPUT"||l.type!=="hidden"))break}'
+    )
+    if lh_target in js_code and 'l.nodeName.startsWith("WA-")' not in js_code:
+        js_code = js_code.replace(lh_target, lh_repl)
+        count += 1
+
+    return js_code, count
+
+
 def process_thebe(html_dir: str) -> bool:
     """Processes built HTML directory to sanitize thebe debug logs and sourcemap errors."""
     if not os.path.isdir(html_dir):
@@ -163,16 +219,32 @@ def process_thebe(html_dir: str) -> bool:
 
                     mod_content, dbg_count = strip_thebe_console_debug(content)
                     mod_content, map_count = strip_thebe_sourcemap(mod_content)
+                    mod_content, hyd_count = patch_myst_hydration_and_lang(mod_content)
 
-                    if dbg_count > 0 or map_count > 0:
+                    if dbg_count > 0 or map_count > 0 or hyd_count > 0:
                         with open(fpath, "w", encoding="utf-8") as f:
                             f.write(mod_content)
                         js_patched += 1
                         rel = os.path.relpath(fpath, html_dir)
-                        print(f"[OK] Patched {rel} (stripped {dbg_count} debug call(s), {map_count} sourcemap directive(s))")
+                        print(
+                            f"[OK] Patched {rel} (stripped {dbg_count} debug call(s), "
+                            f"{map_count} sourcemap directive(s), {hyd_count} hydration patch(es))"
+                        )
 
                 except Exception as e:
                     print(f"[WARN] Error processing JS {fpath}: {e}", file=sys.stderr)
+
+            # Process CSS bundles to fix unresolved /myst_assets_folder/_assets/ references
+            elif fname.endswith(".css"):
+                try:
+                    with open(fpath, "r", encoding="utf-8", errors="ignore") as f:
+                        content = f.read()
+                    if "/myst_assets_folder/_assets/" in content:
+                        content = content.replace("/myst_assets_folder/_assets/", "/build/_assets/")
+                        with open(fpath, "w", encoding="utf-8") as f:
+                            f.write(content)
+                except Exception as e:
+                    print(f"[WARN] Error processing CSS {fpath}: {e}", file=sys.stderr)
 
             # Process HTML pages to inject early console.debug filter
             elif fname.endswith(".html"):
@@ -180,8 +252,17 @@ def process_thebe(html_dir: str) -> bool:
                     with open(fpath, "r", encoding="utf-8") as f:
                         content = f.read()
 
+                    orig_content = content
                     if "__thebe_debug_filtered" not in content and "<head" in content:
                         content = re.sub(r"(<head[^>]*>)", r"\1" + INLINE_HEAD_FILTER, content, count=1)
+
+                    content = re.sub(
+                        r'(id="softcloud-lang-switcher-root"[^>]*></div>)\s+(<button)',
+                        r"\1\2",
+                        content,
+                    )
+
+                    if content != orig_content:
                         with open(fpath, "w", encoding="utf-8") as f:
                             f.write(content)
                         html_patched += 1
