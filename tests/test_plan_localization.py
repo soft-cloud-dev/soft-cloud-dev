@@ -31,7 +31,7 @@ def stage(tmp: Path) -> Path:
     config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
     required = tuple(
         yaml.safe_load((tmp / "i18n/locales.yml").read_text(encoding="utf-8"))["required_pages"]
-    )
+    ) + ("notebooks/webawesome-docs.ipynb",)
     config["project"]["toc"] = [{"file": name} for name in required]
     config_path.write_text(
         yaml.safe_dump(config, sort_keys=False, allow_unicode=True),
