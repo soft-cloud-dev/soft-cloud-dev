@@ -150,8 +150,12 @@ def plan_translation(
         deps = document_dependencies(root, rel)
         reasons: list[str] = []
         if not loc_path.is_file():
-            state = "missing"
-            reasons.append("no localized file")
+            if rel.startswith("components/"):
+                state = "progressive_untranslated"
+                reasons.append("component catalog is progressive English documentation")
+            else:
+                state = "missing"
+                reasons.append("no localized file")
         elif not isinstance(entry, dict):
             state = "stale"
             reasons.append("no provenance record")

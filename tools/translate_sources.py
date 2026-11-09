@@ -862,6 +862,8 @@ def update_locale_translations(
         if only_docs is not None and rel not in only_docs:
             continue
         en_path, loc_path = root / rel, loc_dir / rel
+        if not loc_path.is_file() and rel.startswith("components/") and only_docs is None:
+            continue
         entry = old_docs.get(rel) if isinstance(old_docs.get(rel), dict) else {}
         src_changed = (
             not entry

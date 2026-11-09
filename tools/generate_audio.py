@@ -2245,6 +2245,14 @@ def main(argv: list[str] | None = None) -> int:
                 )
 
     except NarrationError as exc:
+        if getattr(args, "plan_needed", False) and any(
+            k in str(exc).lower() for k in ("429", "503", "quota", "rate-limit", "capacity", "demand")
+        ):
+            print(
+                f"::warning title=Narration Quota Exhausted::Gemini API rate limit or quota exceeded during narration: {exc}",
+                file=sys.stderr,
+            )
+            return 0
         print(f"[NARRATION FAILURE] {exc}", file=sys.stderr)
         return 1
     except Exception as exc:
