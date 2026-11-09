@@ -14,8 +14,16 @@ import { renderComponentDSD } from './lib/lit-renderer.mjs';
 import { validateHostDSD, validateDocumentDSD } from './lib/dsd-validator.mjs';
 import { walkPostOrder, setAttr } from './lib/parse5-tree.mjs';
 import { injectRuntimeAssets } from './lib/asset-injection.mjs';
+import { SUPPORTED_COMPONENTS, NORMALIZATION } from './lib/schema.mjs';
 
-const SUPPORTED_COMPONENTS = new Set(['wa-card', 'wa-callout', 'wa-button', 'wa-icon']);
+const CARD_SLOT_ATTRIBUTES = NORMALIZATION.cardSlotAttributes || {
+  header: 'with-header',
+  footer: 'with-footer',
+  media: 'with-media',
+  'header-actions': 'with-header-actions',
+  'footer-actions': 'with-footer-actions',
+};
+const WA_DETECTION_RE = /sc-wa-host|sc-wa-meta|<wa-(?:card|callout|button|icon)\b|webawesome-demo\.mjs/i;
 
 /**
  * Transforms an HTML document: expands placeholders and attaches Lit SSR DSD.
@@ -24,6 +32,11 @@ const SUPPORTED_COMPONENTS = new Set(['wa-card', 'wa-callout', 'wa-button', 'wa-
  * @returns {{ html: string, transformedCount: number, ssrCount: number }}
  */
 export function transformAndRenderSSR(html, baseUrl = '') {
+  // Fast-path for ordinary documents without any Web Awesome placeholders, custom elements, or demo widgets
+  if (!WA_DETECTION_RE.test(html)) {
+    return { html, transformedCount: 0, ssrCount: 0 };
+  }
+
   // Step 1: Transform placeholders to custom element hosts
   const { html: placeholderHtml, transformedCount } = transformPlaceholders(html);
 
@@ -66,20 +79,10 @@ export function transformAndRenderSSR(html, baseUrl = '') {
           if (slotAttr) childSlots.add(slotAttr.value);
         }
       }
-      if (childSlots.has('header') && !attrs.some((a) => a.name === 'with-header')) {
-        setAttr(host, 'with-header', '');
-      }
-      if (childSlots.has('footer') && !attrs.some((a) => a.name === 'with-footer')) {
-        setAttr(host, 'with-footer', '');
-      }
-      if (childSlots.has('media') && !attrs.some((a) => a.name === 'with-media')) {
-        setAttr(host, 'with-media', '');
-      }
-      if (childSlots.has('header-actions') && !attrs.some((a) => a.name === 'with-header-actions')) {
-        setAttr(host, 'with-header-actions', '');
-      }
-      if (childSlots.has('footer-actions') && !attrs.some((a) => a.name === 'with-footer-actions')) {
-        setAttr(host, 'with-footer-actions', '');
+      for (const [slotName, attrName] of Object.entries(CARD_SLOT_ATTRIBUTES)) {
+        if (childSlots.has(slotName) && !attrs.some((a) => a.name === attrName)) {
+          setAttr(host, attrName, '');
+        }
       }
     }
 
@@ -157,7 +160,9 @@ export async function processPath(targetPath, baseUrl = '') {
   for (const filePath of files) {
     const rawHtml = fs.readFileSync(filePath, 'utf8');
     const { html, transformedCount, ssrCount } = transformAndRenderSSR(rawHtml, baseUrl);
-    fs.writeFileSync(filePath, html, 'utf8');
+    if (html !== rawHtml) {
+      fs.writeFileSync(filePath, html, 'utf8');
+    }
     totalTransformed += transformedCount;
     totalSSR += ssrCount;
   }

@@ -187,6 +187,7 @@ def verify_built_html_artifact(root: Path, build_dir: Path) -> list[str]:
         except Exception:
             pass
     rm_pages = route_manifest_obj.get("pages", {})
+    rm_aliases = route_manifest_obj.get("aliases", {})
 
     # 3. Verify every localized page route exists and has valid lang, canonical, and reciprocal hreflang
     expected_sitemap_locs: set[str] = set()
@@ -205,7 +206,14 @@ def verify_built_html_artifact(root: Path, build_dir: Path) -> list[str]:
                 active_slug = flat_slug
 
         slug_key = active_slug if active_slug else "index"
-        page_rec = rm_pages.get(slug_key) or rm_pages.get(raw_slug if raw_slug else "index") or {}
+        raw_key = raw_slug if raw_slug else "index"
+        alias_target = rm_aliases.get(slug_key) or rm_aliases.get(raw_key)
+        page_rec = (
+            rm_pages.get(slug_key)
+            or rm_pages.get(raw_key)
+            or (rm_pages.get(alias_target) if alias_target else None)
+            or {}
+        )
         page_translations = page_rec.get("translations", {})
 
         expected_alternates: dict[str, str] = {}
@@ -305,8 +313,15 @@ def verify_built_html_artifact(root: Path, build_dir: Path) -> list[str]:
                 try:
                     embedded_rm = json.loads(manifest_match.group(1))
                     embedded_pages = embedded_rm.get("pages", {})
+                    embedded_aliases = embedded_rm.get("aliases", {})
                     slug_key = active_slug if active_slug else "index"
-                    page_rec = embedded_pages.get(slug_key) or embedded_pages.get(raw_slug if raw_slug else "index")
+                    raw_key = raw_slug if raw_slug else "index"
+                    emb_alias = embedded_aliases.get(slug_key) or embedded_aliases.get(raw_key)
+                    page_rec = (
+                        embedded_pages.get(slug_key)
+                        or embedded_pages.get(raw_key)
+                        or (embedded_pages.get(emb_alias) if emb_alias else None)
+                    )
                     if not isinstance(page_rec, dict):
                         errors.append(
                             f"[{code}] Embedded manifest missing page entry for '{slug_key}' in {found_html.relative_to(build_dir)}"

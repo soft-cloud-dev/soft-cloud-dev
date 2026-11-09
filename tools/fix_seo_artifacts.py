@@ -30,6 +30,7 @@ if str(TOOLS_DIR) not in sys.path:
     sys.path.insert(0, str(TOOLS_DIR))
 
 from i18n_utils import (
+    SEARCH_LABELS,
     atomic_write_text,
     canonical_url_for_page,
     get_enabled_locales,
@@ -119,15 +120,6 @@ def _update_html_seo_head(
     return html_text
 
 
-SEARCH_LABELS: dict[str, str] = {
-    "en": "Search",
-    "pl": "Szukaj",
-    "de": "Suchen",
-    "es": "Buscar",
-    "fr": "Rechercher",
-}
-
-
 def fix_html_accessibility(
     html_text: str,
     loc_code: str = "en",
@@ -148,14 +140,31 @@ def fix_html_accessibility(
         inner = match.group(2)
         close_tag = match.group(3)
 
-        if not re.search(r'\baria-label\s*=', open_tag, re.IGNORECASE):
+        if re.search(r'\baria-label\s*=', open_tag, re.IGNORECASE):
+            open_tag = re.sub(
+                r'\baria-label\s*=\s*["\'][^"\']*["\']',
+                f'aria-label="{search_label}"',
+                open_tag,
+                count=1,
+                flags=re.IGNORECASE,
+            )
+        else:
             open_tag = re.sub(
                 r'(<button\b)',
                 rf'\1 aria-label="{search_label}"',
                 open_tag,
                 count=1,
             )
-        if not re.search(r'\btitle\s*=', open_tag, re.IGNORECASE):
+
+        if re.search(r'\btitle\s*=', open_tag, re.IGNORECASE):
+            open_tag = re.sub(
+                r'\btitle\s*=\s*["\'][^"\']*["\']',
+                f'title="{search_label}"',
+                open_tag,
+                count=1,
+                flags=re.IGNORECASE,
+            )
+        else:
             open_tag = re.sub(
                 r'(<button\b)',
                 rf'\1 title="{search_label}"',
@@ -163,8 +172,16 @@ def fix_html_accessibility(
                 count=1,
             )
 
-        if '<span class="sr-only">' not in inner and "sr-only" not in inner:
-            sr_span = f'<span class="sr-only">{search_label}</span>'
+        sr_span = f'<span class="sr-only">{search_label}</span>'
+        if re.search(r'<span\b[^>]*\bclass="[^"]*\bsr-only\b[^"]*"[^>]*>.*?</span>', inner, re.IGNORECASE | re.DOTALL):
+            inner = re.sub(
+                r'<span\b[^>]*\bclass="[^"]*\bsr-only\b[^"]*"[^>]*>.*?</span>',
+                sr_span,
+                inner,
+                count=1,
+                flags=re.IGNORECASE | re.DOTALL,
+            )
+        elif "sr-only" not in inner:
             placeholder_re = re.compile(
                 r'(<span\b[^>]*\bclass="[^"]*\bmyst-search-text-placeholder\b[^"]*"[^>]*>)',
                 re.IGNORECASE,
@@ -293,14 +310,6 @@ def process_site(domain: str, html_dir: str) -> None:
     print(
         f"[OK] Generated unified multilingual {sitemap_path} with {len(all_entries)} localized URLs"
     )
-
-    # 6. Process Thebe artifacts & sourcemaps
-    try:
-        from fix_thebe import process_thebe
-
-        process_thebe(str(html_root))
-    except Exception as exc:
-        print(f"[INFO] Note on Thebe artifact processing: {exc}", file=sys.stderr)
 
 
 if __name__ == "__main__":

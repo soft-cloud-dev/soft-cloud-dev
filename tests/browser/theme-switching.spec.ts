@@ -4,6 +4,9 @@ test.describe('Theme Switching & Appearance', () => {
   test('initializes SoftCloud theme and allows dynamic switching', async ({ page }) => {
     await page.goto('/');
 
+    // Ensure page and theme API are fully initialized
+    await page.waitForFunction(() => typeof window.SoftCloudTheme === 'object' && document.readyState === 'complete');
+
     // Check window.SoftCloudTheme availability
     const hasThemeApi = await page.evaluate(() => typeof window.SoftCloudTheme === 'object');
     expect(hasThemeApi).toBe(true);

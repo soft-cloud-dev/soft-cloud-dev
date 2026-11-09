@@ -43,6 +43,7 @@ if str(TOOLS_DIR) not in sys.path:
 from i18n_utils import (
     atomic_write_json,
     atomic_write_text,
+    discover_toc_files,
     extract_code_fingerprint,
     extract_fenced_code_blocks_from_markdown,
     extract_inline_code_spans,
@@ -104,20 +105,7 @@ def current_source_commit(root: Path) -> str | None:
 def discover_source_documents(root: Path) -> list[str]:
     """Return ordered list of relative document paths from authoritative myst.yml."""
     myst_cfg = load_yaml_file(root / "myst.yml")
-    toc = myst_cfg.get("project", {}).get("toc", [])
-    docs: list[str] = []
-
-    def walk(entries: list[dict[str, Any]]) -> None:
-        for entry in entries:
-            if not isinstance(entry, dict):
-                continue
-            if "file" in entry and isinstance(entry["file"], str):
-                docs.append(entry["file"])
-            if "children" in entry and isinstance(entry["children"], list):
-                walk(entry["children"])
-
-    walk(toc)
-    return docs
+    return discover_toc_files(myst_cfg.get("project", {}).get("toc", []))
 
 
 def compute_document_section_hashes(path: Path) -> list[dict[str, str]]:

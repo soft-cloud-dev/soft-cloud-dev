@@ -6,6 +6,7 @@
 import { render } from '@lit-labs/ssr';
 import { html, nothing } from 'lit';
 import { parseFragment } from 'parse5';
+import { NORMALIZATION } from './schema.mjs';
 
 // Import Web Awesome component definitions
 import '@awesome.me/webawesome/dist/components/button/button.js';
@@ -36,7 +37,7 @@ export function buildLitTemplate(tagName, attrMap) {
         pill,
       } = attrMap;
 
-      const sizeMap = { small: 's', medium: 'm', large: 'l' };
+      const sizeMap = NORMALIZATION.buttonSizes || { small: 's', medium: 'm', large: 'l' };
       const normalizedSize = (size && sizeMap[String(size).toLowerCase()]) || size;
 
       return html`<wa-button

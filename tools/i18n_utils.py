@@ -302,6 +302,48 @@ def dump_yaml_text(data: Any) -> str:
 # Locale & Route Helpers
 # ---------------------------------------------------------------------------
 
+DEFAULT_LOCALE_FLAGS: dict[str, str] = {
+    "en": "🇬🇧",
+    "pl": "🇵🇱",
+    "de": "🇩🇪",
+    "es": "🇪🇸",
+    "fr": "🇫🇷",
+}
+
+SEARCH_LABELS: dict[str, str] = {
+    "en": "Search",
+    "pl": "Szukaj",
+    "de": "Suchen",
+    "es": "Buscar",
+    "fr": "Rechercher",
+}
+
+SWITCHER_UI_KEYS: frozenset[str] = frozenset(
+    {
+        "language_label",
+        "language_menu_label",
+        "fallback_notice",
+        "fallback_action",
+        "unavailable_badge",
+        "search_placeholder",
+    }
+)
+
+
+def discover_toc_files(toc: list[dict[str, Any]]) -> list[str]:
+    """Recursively collect file entries from a MyST project.toc structure."""
+    files: list[str] = []
+    for item in toc:
+        if not isinstance(item, dict):
+            continue
+        f = item.get("file")
+        if isinstance(f, str) and f.strip():
+            files.append(f.strip())
+        children = item.get("children")
+        if isinstance(children, list):
+            files.extend(discover_toc_files(children))
+    return files
+
 
 def load_locales_config(root: Path) -> dict[str, Any]:
     locales_path = root / "i18n" / "locales.yml"

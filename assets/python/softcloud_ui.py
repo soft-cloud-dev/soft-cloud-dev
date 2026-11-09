@@ -17,7 +17,9 @@ SCHEMA_PATH = SHARED_DIR / "component-schema.json"
 try:
     SCHEMA = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
 except Exception:
-    SCHEMA = {"allowedComponents": ["wa-card", "wa-callout", "wa-button", "wa-icon"]}
+    SCHEMA = {"allowedComponents": ["wa-card", "wa-callout", "wa-button", "wa-icon"], "normalization": {}}
+
+NORMALIZATION: dict[str, dict[str, str]] = SCHEMA.get("normalization", {})
 
 
 class TrustedHTML:
@@ -96,10 +98,7 @@ class UI:
         if not isinstance(name, str) or not name.strip():
             raise ValueError("Icon name must be a non-empty string")
 
-        clean_name = name.strip()
-        # Canonical 2.0.0 icon normalization
-        if clean_name == "info-circle":
-            clean_name = "circle-info"
+        clean_name = NORMALIZATION.get("iconNames", {}).get(name.strip(), name.strip())
 
         canonical_family = family or "classic"
         canonical_variant = variant or "solid"
@@ -151,15 +150,11 @@ class UI:
         if not isinstance(label, str):
             raise TypeError("Button label must be a string")
 
-        canonical_variant = variant
-        if canonical_variant == "primary":
-            canonical_variant = "brand"
-        elif canonical_variant == "default":
+        canonical_variant = NORMALIZATION.get("buttonVariants", {}).get(variant, variant)
+        if canonical_variant == "default":
             canonical_variant = "neutral"
 
-        canonical_appearance = appearance
-        if canonical_appearance in ("text", "flat"):
-            canonical_appearance = "plain"
+        canonical_appearance = NORMALIZATION.get("buttonAppearances", {}).get(appearance or "", appearance) if appearance else None
         if outline:
             canonical_appearance = "outlined"
 
@@ -178,7 +173,7 @@ class UI:
         if canonical_appearance:
             meta["appearance"] = canonical_appearance
         if size:
-            size_map = {"small": "s", "medium": "m", "large": "l"}
+            size_map = NORMALIZATION.get("buttonSizes", {"small": "s", "medium": "m", "large": "l"})
             meta["size"] = size_map.get(size.strip().lower(), size.strip().lower())
         if target:
             meta["target"] = target
@@ -258,11 +253,12 @@ class UI:
         if class_name:
             final_classes.append(class_name)
 
+        card_appearances = NORMALIZATION.get("cardAppearances", {"elevated": "filled-outlined", "flat": "plain"})
         if canonical_appearance == "elevated":
-            canonical_appearance = "filled-outlined"
+            canonical_appearance = card_appearances.get("elevated", "filled-outlined")
             final_classes.append("sc-elevation")
-        elif canonical_appearance == "flat":
-            canonical_appearance = "plain"
+        elif canonical_appearance in card_appearances:
+            canonical_appearance = card_appearances[canonical_appearance]
         elif canonical_appearance == "default":
             canonical_appearance = "outlined"
 
@@ -334,15 +330,13 @@ class UI:
         icon: Optional[str] = None,
         class_name: Optional[str] = None,
     ) -> HTMLOutput:
-        canonical_appearance = appearance
-        if canonical_appearance == "soft":
-            canonical_appearance = "filled-outlined"
-        elif canonical_appearance == "solid":
-            canonical_appearance = "filled"
-        elif canonical_appearance == "outline":
-            canonical_appearance = "outlined"
-        elif canonical_appearance == "default":
-            canonical_appearance = "outlined"
+        callout_appearances = NORMALIZATION.get(
+            "calloutAppearances",
+            {"soft": "filled-outlined", "solid": "filled", "outline": "outlined"},
+        )
+        canonical_appearance = callout_appearances.get(
+            appearance, "outlined" if appearance == "default" else appearance
+        )
 
         meta: dict[str, Any] = {
             "schema_version": "2.0.0",

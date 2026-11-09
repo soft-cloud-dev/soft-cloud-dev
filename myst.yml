@@ -28,6 +28,7 @@ project:
       children:
         - file: components/index.md
         - file: components/design-tokens.md
+        - file: components/design-tokens-preview.md
         - file: components/practical-patterns.md
         - file: components/showcase-media.md
         - title: Actions

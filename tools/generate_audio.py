@@ -42,6 +42,22 @@ try:
 except ImportError:
     mistune = None
 
+TOOLS_DIR = Path(__file__).resolve().parent
+if str(TOOLS_DIR) not in sys.path:
+    sys.path.insert(0, str(TOOLS_DIR))
+
+from i18n_utils import (
+    atomic_write_bytes,
+    atomic_write_json,
+    discover_toc_files,
+    get_enabled_locales,
+    load_locales_config,
+    sha256_bytes,
+    sha256_file,
+    sha256_json,
+    sha256_text,
+)
+
 
 # ---------------------------------------------------------------------------
 # Configuration & Constants
@@ -165,32 +181,6 @@ class NarrationConfig:
 # ---------------------------------------------------------------------------
 
 
-def sha256_bytes(data: bytes) -> str:
-    return hashlib.sha256(data).hexdigest()
-
-
-def sha256_text(text: str) -> str:
-    return sha256_bytes(text.encode("utf-8"))
-
-
-def sha256_json(obj: Any) -> str:
-    canonical = json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
-    return sha256_text(canonical)
-
-
-def sha256_file(path: Path) -> str:
-    with path.open("rb") as f:
-        if hasattr(hashlib, "file_digest"):
-            return hashlib.file_digest(f, "sha256").hexdigest()
-        h = hashlib.sha256()
-        while True:
-            chunk = f.read(65536)
-            if not chunk:
-                break
-            h.update(chunk)
-        return h.hexdigest()
-
-
 def compute_speech_input_hash(locale: str, text_sha256: str, tts_config_hash: str) -> str:
     """Compute speech-input hash independent of document position and element IDs."""
     return sha256_json(
@@ -213,11 +203,6 @@ def resolve_locale_narration_config(
     norm_locale = (locale or DEFAULT_LOCALE).strip().lower()
     voice_cfg: dict[str, Any] = {}
     try:
-        tools_dir = str((root / "tools").resolve())
-        if tools_dir not in sys.path:
-            sys.path.insert(0, tools_dir)
-        from i18n_utils import get_enabled_locales, load_locales_config
-
         cfg = load_locales_config(root)
         enabled = get_enabled_locales(cfg)
         loc_info = enabled.get(norm_locale, {})
@@ -249,31 +234,6 @@ def resolve_locale_narration_config(
         voice_name=voice_name,
         text_system_prompt=prompt,
     )
-
-
-def atomic_write_bytes(target: Path, data: bytes) -> None:
-    target.parent.mkdir(parents=True, exist_ok=True)
-    fd, tmp_path_str = tempfile.mkstemp(
-        dir=str(target.parent),
-        prefix=f".tmp.{target.name}.",
-    )
-    tmp_path = Path(tmp_path_str)
-    try:
-        with os.fdopen(fd, "wb") as f:
-            f.write(data)
-            f.flush()
-            os.fsync(f.fileno())
-        os.chmod(tmp_path, 0o644)
-        os.replace(tmp_path, target)
-    except Exception:
-        if tmp_path.exists():
-            tmp_path.unlink(missing_ok=True)
-        raise
-
-
-def atomic_write_json(target: Path, obj: Any) -> None:
-    content = json.dumps(obj, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
-    atomic_write_bytes(target, content.encode("utf-8"))
 
 
 def slugify_anchor(heading_text: str) -> str:
@@ -1893,28 +1853,19 @@ def discover_enabled_pages(
         audio_root = default_audio_root_for_locale(root, "audio", norm_locale)
         pages = []
         if audio_root.is_dir():
+            myst_path = root / "myst.yml"
+            toc_files = (
+                discover_toc_files(load_yaml_file(myst_path).get("project", {}).get("toc", []))
+                if myst_path.is_file()
+                else []
+            )
             for m_path in sorted(audio_root.glob("*/manifest.json")):
                 p_id = m_path.parent.name
-                myst_path = root / "myst.yml"
-                if myst_path.is_file():
-                    config = load_yaml_file(myst_path)
-                    toc = config.get("project", {}).get("toc", [])
-                    toc_files: list[str] = []
-
-                    def walk_t(entries: list[Any]) -> None:
-                        for entry in entries:
-                            if isinstance(entry, dict):
-                                if "file" in entry:
-                                    toc_files.append(entry["file"])
-                                if "children" in entry and isinstance(entry["children"], list):
-                                    walk_t(entry["children"])
-
-                    walk_t(toc)
-                    for rel_doc in toc_files:
-                        if page_id_from_path(rel_doc) == p_id:
-                            fpath = resolve_locale_page_path(root, rel_doc, norm_locale)
-                            if fpath.is_file():
-                                pages.append(fpath)
+                for rel_doc in toc_files:
+                    if page_id_from_path(rel_doc) == p_id:
+                        fpath = resolve_locale_page_path(root, rel_doc, norm_locale)
+                        if fpath.is_file():
+                            pages.append(fpath)
         return pages
 
     if plan_path or plan_needed_only:
@@ -1922,9 +1873,6 @@ def discover_enabled_pages(
         if plan_path and plan_path.is_file():
             plan = json.loads(plan_path.read_text(encoding="utf-8"))
         else:
-            tools_dir = str((root / "tools").resolve())
-            if tools_dir not in sys.path:
-                sys.path.insert(0, tools_dir)
             from plan_localization import build_plan
 
             plan = build_plan(root, norm_locale)
@@ -1962,11 +1910,6 @@ def discover_enabled_pages(
     opt_out_set: set[str] = set()
     allowlist_set: set[str] = set()
     try:
-        tools_dir = str((root / "tools").resolve())
-        if tools_dir not in sys.path:
-            sys.path.insert(0, tools_dir)
-        from i18n_utils import load_locales_config
-
         lcfg = load_locales_config(root)
         pol = lcfg.get("localization", {}).get("narration", {})
         narration_mode = str(pol.get("mode", "all_except"))
@@ -1976,26 +1919,16 @@ def discover_enabled_pages(
         pass
 
     discovered: list[Path] = []
-
-    def walk(entries: list[Any]) -> None:
-        for entry in entries:
-            if isinstance(entry, dict):
-                if "file" in entry:
-                    rel_doc = str(entry["file"]).strip()
-                    if narration_mode == "allowlist" and rel_doc not in allowlist_set:
-                        pass
-                    elif narration_mode == "all_except" and rel_doc in opt_out_set:
-                        pass
-                    else:
-                        fpath = resolve_locale_page_path(root, rel_doc, norm_locale)
-                        if fpath.is_file() and (
-                            fpath.suffix == ".md" or (include_notebooks and fpath.suffix == ".ipynb")
-                        ):
-                            discovered.append(fpath)
-                if "children" in entry and isinstance(entry["children"], list):
-                    walk(entry["children"])
-
-    walk(toc)
+    for rel_doc in discover_toc_files(toc):
+        if narration_mode == "allowlist" and rel_doc not in allowlist_set:
+            continue
+        if narration_mode == "all_except" and rel_doc in opt_out_set:
+            continue
+        fpath = resolve_locale_page_path(root, rel_doc, norm_locale)
+        if fpath.is_file() and (
+            fpath.suffix == ".md" or (include_notebooks and fpath.suffix == ".ipynb")
+        ):
+            discovered.append(fpath)
     return discovered
 
 

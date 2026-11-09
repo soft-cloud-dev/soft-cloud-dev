@@ -4,8 +4,7 @@
  */
 
 import { walkPostOrder } from './parse5-tree.mjs';
-
-const SUPPORTED_COMPONENTS = new Set(['wa-card', 'wa-callout', 'wa-button', 'wa-icon']);
+import { SUPPORTED_COMPONENTS } from './schema.mjs';
 
 /**
  * Validates the DSD template attachment on a single custom element host.

@@ -3,6 +3,40 @@
   "title": "SoftCloud Web Awesome Component Schema",
   "version": "2.0.0",
   "allowedComponents": ["wa-card", "wa-callout", "wa-button", "wa-icon"],
+  "normalization": {
+    "cardAppearances": {
+      "elevated": "filled-outlined",
+      "flat": "plain"
+    },
+    "calloutAppearances": {
+      "soft": "filled-outlined",
+      "solid": "filled",
+      "outline": "outlined"
+    },
+    "buttonAppearances": {
+      "text": "plain",
+      "flat": "plain"
+    },
+    "buttonVariants": {
+      "primary": "brand"
+    },
+    "buttonSizes": {
+      "small": "s",
+      "medium": "m",
+      "large": "l"
+    },
+    "iconNames": {
+      "info": "circle-info",
+      "info-circle": "circle-info"
+    },
+    "cardSlotAttributes": {
+      "header": "with-header",
+      "footer": "with-footer",
+      "media": "with-media",
+      "header-actions": "with-header-actions",
+      "footer-actions": "with-footer-actions"
+    }
+  },
   "definitions": {
     "wa-card": {
       "type": "object",

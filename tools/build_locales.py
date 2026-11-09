@@ -37,9 +37,13 @@ if str(TOOLS_DIR) not in sys.path:
     sys.path.insert(0, str(TOOLS_DIR))
 
 from i18n_utils import (
+    DEFAULT_LOCALE_FLAGS,
+    SEARCH_LABELS,
+    SWITCHER_UI_KEYS,
     atomic_write_json,
     atomic_write_text,
     canonical_url_for_page,
+    discover_toc_files,
     dump_yaml_text,
     get_enabled_locales,
     load_locales_config,
@@ -136,18 +140,6 @@ def is_page_translation_current(
     return True
 
 
-def discover_toc_files(toc: list[dict[str, Any]]) -> list[str]:
-    files: list[str] = []
-    for entry in toc:
-        if not isinstance(entry, dict):
-            continue
-        if "file" in entry and isinstance(entry["file"], str):
-            files.append(entry["file"])
-        if "children" in entry and isinstance(entry["children"], list):
-            files.extend(discover_toc_files(entry["children"]))
-    return files
-
-
 def build_localized_myst_config(
     base_myst: dict[str, Any],
     locale_code: str,
@@ -219,6 +211,15 @@ def compute_locale_base_url(outer_base_url: str, locale_prefix: str) -> str:
     return combined
 
 
+def _safe_rmtree(path: Path) -> None:
+    """Remove a directory tree resiliently (handles macOS Finder .DS_Store race conditions)."""
+    if not path.exists():
+        return
+    shutil.rmtree(path, ignore_errors=True)
+    if path.exists():
+        subprocess.run(["rm", "-rf", str(path)], check=False)
+
+
 def stage_locale_workspace(
     root: Path,
     locale_code: str,
@@ -230,7 +231,7 @@ def stage_locale_workspace(
     """Create an isolated MyST workspace for a single locale."""
     ws = staging_root / locale_code / "workspace"
     if ws.exists():
-        shutil.rmtree(ws)
+        _safe_rmtree(ws)
     ws.mkdir(parents=True, exist_ok=True)
 
     # 1. Copy TOC source files from authoritative root (en) or i18n/<locale>/
@@ -303,15 +304,6 @@ def stage_locale_workspace(
                 shutil.copytree(child, ws_audio_dst / child.name, dirs_exist_ok=True)
 
     return ws
-
-
-SEARCH_LABELS: dict[str, str] = {
-    "en": "Search",
-    "pl": "Szukaj",
-    "de": "Suchen",
-    "es": "Buscar",
-    "fr": "Rechercher",
-}
 
 
 def generate_mock_html_for_workspace(
@@ -439,20 +431,14 @@ def build_route_manifest(
     enabled_locales = get_enabled_locales(locales_cfg)
     toc_files = discover_toc_files(base_myst.get("project", {}).get("toc", []))
 
-    DEFAULT_FLAGS = {
-        "en": "🇬🇧",
-        "pl": "🇵🇱",
-        "de": "🇩🇪",
-        "es": "🇪🇸",
-        "fr": "🇫🇷",
-    }
-
     locales_meta: dict[str, Any] = {}
     for code, info in enabled_locales.items():
         prefix = str(info.get("prefix", ""))
+        raw_ui = info.get("ui", {})
+        compact_ui = {k: v for k, v in raw_ui.items() if k in SWITCHER_UI_KEYS} if isinstance(raw_ui, dict) else {}
         locales_meta[code] = {
             "code": code,
-            "flag": str(info.get("flag") or DEFAULT_FLAGS.get(code, "🌐")),
+            "flag": str(info.get("flag") or DEFAULT_LOCALE_FLAGS.get(code, "🌐")),
             "html_lang": str(info.get("html_lang", code)),
             "hreflang": str(info.get("hreflang", code)),
             "native_name": str(info.get("native_name", code)),
@@ -460,11 +446,12 @@ def build_route_manifest(
             "name": str(info.get("name") or info.get("english_name") or code),
             "prefix": prefix,
             "base_route": route_url_for_page(prefix, "", base_url=outer_base_url),
-            "ui": info.get("ui", {}),
+            "ui": compact_ui,
         }
 
     prov_cache: dict[str, dict[str, Any]] = {}
     pages_meta: dict[str, Any] = {}
+    aliases: dict[str, str] = {}
     for rel_file in toc_files:
         raw_slug = page_slug_from_rel_path(rel_file)
         flat_name = Path(raw_slug).name if raw_slug else ""
@@ -483,33 +470,30 @@ def build_route_manifest(
             active_slug = flat_slug
 
         slug_key = raw_slug if raw_slug else "index"
+        canonical_key = active_slug if active_slug else "index"
         translations: dict[str, Any] = {}
         for code, info in enabled_locales.items():
             prefix = str(info.get("prefix", ""))
-            src_dir = (
-                root
-                if code == default_locale
-                else (root / str(info.get("source_dir", f"i18n/{code}")))
-            )
-            src_file = src_dir / rel_file
             is_avail = is_page_translation_current(root, code, default_locale, rel_file, prov_cache)
-            route = route_url_for_page(prefix, active_slug, base_url=outer_base_url)
-            canonical = canonical_url_for_page(domain, prefix, active_slug)
-            translations[code] = {
-                "available": is_avail,
-                "route": route if is_avail else None,
-                "canonical_url": canonical if is_avail else None,
-                "source_path": src_file.relative_to(root).as_posix() if is_avail else None,
-            }
+            if is_avail:
+                route = route_url_for_page(prefix, active_slug, base_url=outer_base_url)
+                translations[code] = {
+                    "available": True,
+                    "route": route,
+                }
+            else:
+                translations[code] = {
+                    "available": False,
+                }
 
-        entry_obj = {
+        pages_meta[canonical_key] = {
             "slug": active_slug,
-            "source_file": rel_file,
             "translations": translations,
         }
-        pages_meta[slug_key] = entry_obj
-        if flat_slug and flat_slug != slug_key:
-            pages_meta[flat_slug] = entry_obj
+        if slug_key != canonical_key:
+            aliases[slug_key] = canonical_key
+        if flat_slug and flat_slug != canonical_key:
+            aliases[flat_slug] = canonical_key
 
     return {
         "schema_version": "1.0",
@@ -518,6 +502,7 @@ def build_route_manifest(
         "base_url": outer_base_url,
         "locales": locales_meta,
         "pages": pages_meta,
+        "aliases": aliases,
     }
 
 
@@ -556,6 +541,16 @@ def inject_language_switcher_into_html(
             continue
         text = html_file.read_text(encoding="utf-8")
         if 'id="softcloud-i18n-manifest"' in text:
+            updated = re.sub(
+                r'<script\b[^>]*\bid=["\']softcloud-i18n-manifest["\'][^>]*>.*?</script>',
+                lambda _: f'<script id="softcloud-i18n-manifest" type="application/json">{manifest_json}</script>',
+                text,
+                count=1,
+                flags=re.DOTALL | re.IGNORECASE,
+            )
+            if updated != text:
+                atomic_write_text(html_file, updated)
+                count += 1
             continue
         if "data-sc-lang-switcher" not in text:
             theme_btn_re = re.compile(
@@ -577,34 +572,6 @@ def inject_language_switcher_into_html(
                     f'  <div id="softcloud-lang-switcher-root" class="sc-lang-host-floating" data-sc-lang-switcher="1" data-sc-base-url="{clean_base}"></div>\n</body>',
                     1,
                 )
-        # Ensure search bar buttons have discernible text and well-formed accessibility tree entries
-        search_btn_re = re.compile(
-            r'(<button\b[^>]*\bclass="[^"]*\bmyst-search-bar\b[^"]*"[^>]*>)(.*?)(</button>)',
-            re.DOTALL | re.IGNORECASE,
-        )
-
-        def _patch_btn(m: re.Match[str]) -> str:
-            open_tag = m.group(1)
-            inner = m.group(2)
-            close_tag = m.group(3)
-            if not re.search(r'\baria-label\s*=', open_tag, re.IGNORECASE):
-                open_tag = re.sub(r'(<button\b)', r'\1 aria-label="Search"', open_tag, count=1)
-            if not re.search(r'\btitle\s*=', open_tag, re.IGNORECASE):
-                open_tag = re.sub(r'(<button\b)', r'\1 title="Search"', open_tag, count=1)
-            if '<span class="sr-only">' not in inner and "sr-only" not in inner:
-                sr_span = '<span class="sr-only">Search</span>'
-                if 'class="myst-search-text-placeholder' in inner:
-                    inner = re.sub(
-                        r'(<span\b[^>]*\bclass="[^"]*\bmyst-search-text-placeholder\b[^"]*"[^>]*>)',
-                        rf"{sr_span}\1",
-                        inner,
-                        count=1,
-                    )
-                else:
-                    inner = sr_span + inner
-            return f"{open_tag}{inner}{close_tag}"
-
-        text = search_btn_re.sub(_patch_btn, text)
 
         if "</body>" in text:
             text = text.replace("</body>", f"{script_snippet}</body>", 1)
@@ -626,7 +593,7 @@ def assemble_combined_html(
     enabled_locales = get_enabled_locales(locales_cfg)
 
     if output_html_dir.exists():
-        shutil.rmtree(output_html_dir)
+        _safe_rmtree(output_html_dir)
     output_html_dir.mkdir(parents=True, exist_ok=True)
 
     # 1. Copy default locale (English) to root of output_html_dir
@@ -642,22 +609,22 @@ def assemble_combined_html(
         target_subdir = output_html_dir / prefix
         shutil.copytree(html_src, target_subdir, dirs_exist_ok=True)
 
-    # 3. Ensure widgets and static images are present at root and per-locale
-    for asset_dir_name in ("widgets", "images"):
-        asset_src = root / asset_dir_name
-        if asset_src.is_dir():
-            shutil.copytree(asset_src, output_html_dir / asset_dir_name, dirs_exist_ok=True)
-            for code, info in enabled_locales.items():
-                if code == default_locale:
-                    continue
-                prefix = str(info.get("prefix", f"/{code}")).strip("/")
-                shutil.copytree(asset_src, output_html_dir / prefix / asset_dir_name, dirs_exist_ok=True)
+    # 3. Ensure widgets exist at root and static images exist at root and per-locale
+    widgets_src = root / "widgets"
+    if widgets_src.is_dir():
+        shutil.copytree(widgets_src, output_html_dir / "widgets", dirs_exist_ok=True)
+    images_src = root / "images"
+    if images_src.is_dir():
+        shutil.copytree(images_src, output_html_dir / "images", dirs_exist_ok=True)
+        for code, info in enabled_locales.items():
+            if code == default_locale:
+                continue
+            prefix = str(info.get("prefix", f"/{code}")).strip("/")
+            shutil.copytree(images_src, output_html_dir / prefix / "images", dirs_exist_ok=True)
 
-    # 4. Copy top-level CNAME and thebe sourcemap if present
+    # 4. Copy top-level CNAME if present
     if (root / "CNAME").is_file():
         shutil.copy2(root / "CNAME", output_html_dir / "CNAME")
-    if (root / "thebe-core.min.js.map").is_file():
-        shutil.copy2(root / "thebe-core.min.js.map", output_html_dir / "thebe-core.min.js.map")
 
     # 5. Write _build/html/i18n/route-manifest.json
     route_manifest = build_route_manifest(

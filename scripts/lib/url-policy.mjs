@@ -3,12 +3,20 @@
  * URL policy enforcement for SoftCloud Web Awesome SSR components.
  */
 
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const POLICY_PATH = path.resolve(__dirname, '../../assets/shared/url-policy.json');
+const URL_POLICY = JSON.parse(fs.readFileSync(POLICY_PATH, 'utf8'));
+
 const CONTROL_CHARS_REGEX = /[\x00-\x1F\x7F]/;
 const HTML_CHARS_REGEX = /[<>"']/;
 const BACKSLASH_REGEX = /\\/;
 
-const ALLOWED_SCHEMES_LINK = new Set(['http:', 'https:', 'mailto:']);
-const ALLOWED_SCHEMES_MEDIA = new Set(['http:', 'https:']);
+const ALLOWED_SCHEMES_LINK = new Set((URL_POLICY.allowed_schemes?.link || ['http', 'https', 'mailto']).map((s) => `${s}:`));
+const ALLOWED_SCHEMES_MEDIA = new Set((URL_POLICY.allowed_schemes?.media || ['http', 'https']).map((s) => `${s}:`));
 
 /**
  * Validates a URL against SoftCloud security policy.
