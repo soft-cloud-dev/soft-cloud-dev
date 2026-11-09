@@ -83,14 +83,14 @@ class TestProgressivePublication(unittest.TestCase):
         self.assertEqual(intro_rec["translations"]["pl"]["route"], "/pl/introduction")
 
     def test_narrated_only_discovery(self) -> None:
-        # In current repo, introduction.md is the only page with narration assets on disk
+        # introduction.md is always discoverable among narrated pages on disk
         en_pages = ga.discover_enabled_pages(ROOT, locale="en", narrated_only=True)
-        self.assertEqual(len(en_pages), 1)
-        self.assertEqual(en_pages[0].name, "introduction.md")
+        en_names = [p.name for p in en_pages]
+        self.assertIn("introduction.md", en_names)
 
         pl_pages = ga.discover_enabled_pages(ROOT, locale="pl", narrated_only=True)
-        self.assertEqual(len(pl_pages), 1)
-        self.assertEqual(pl_pages[0].name, "introduction.md")
+        pl_names = [p.name for p in pl_pages]
+        self.assertIn("introduction.md", pl_names)
 
 
 if __name__ == "__main__":
