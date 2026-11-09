@@ -861,7 +861,7 @@ class GeminiClient:
                 raise NarrationError(
                     f"Gemini API error (HTTP {status}) on {endpoint}: {err_body[:300]}"
                 ) from exc
-            except urllib.error.URLError as exc:
+            except (urllib.error.URLError, TimeoutError) as exc:
                 if attempt >= self.max_retries:
                     raise NarrationError(
                         f"Network failure communicating with Gemini API ({endpoint}) after "
