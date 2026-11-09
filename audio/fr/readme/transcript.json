@@ -1,0 +1,195 @@
+{
+  "chunks": [
+    {
+      "chunk_hash": "f331323915186ea8b748c4cf36a0a60a5c90ccbb54d4716862d947883d2ecc49",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph",
+        "el-0003-paragraph"
+      ],
+      "section_anchor": "software-cloud",
+      "section_title": "Software Cloud",
+      "segments": [
+        {
+          "element_id": "el-0001-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "a8e1384694a0f2fb0fec83a1faa59c9cefd57a9a446f64f91f20d7d1afdb2c96",
+          "spoken_text": "Software Cloud"
+        },
+        {
+          "element_id": "el-0002-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "83c02df67b4ef980933c3eb3d326de861104a4b29402de9a7f3cc1dafd3215c5",
+          "spoken_text": "Bienvenue sur Software Cloud, une plateforme de recherche et de publication informatique construite avec Jupyter Book 2 et hébergée sur GitHub Pages à l'adresse my.softcloud.dev."
+        },
+        {
+          "element_id": "el-0003-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "f3ba84704f847a99225a46b4bead1cd934e4596fc7d2d6a3cb2141c81492b898",
+          "spoken_text": "Software Cloud sert d'architecture ouverte et de référence exécutable pour les pipelines de recherche déterministes, les architectures cloud reproductibles et les carnets de calcul vérifiables."
+        }
+      ],
+      "speech_input_hash": "e5cb20e59ec494e1861a624e76ab8af6a460d2d6660c61595a527c0c3381ad4c",
+      "text": "Software Cloud.\n\nBienvenue sur Software Cloud, une plateforme de recherche et de publication informatique construite avec Jupyter Book 2 et hébergée sur GitHub Pages à l'adresse my.softcloud.dev.\n\nSoftware Cloud sert d'architecture ouverte et de référence exécutable pour les pipelines de recherche déterministes, les architectures cloud reproductibles et les carnets de calcul vérifiables.",
+      "text_sha256": "06c638c24cc9a787c680822d2a5c4cf3b2d69b20fe564ccc8ee3af15d9328c01"
+    },
+    {
+      "chunk_hash": "ede6174704397e278725fdf974ea254ec4df9b3923df9c82463d795a60f0adf7",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "element_ids": [
+        "el-0004-heading",
+        "el-0005-list"
+      ],
+      "section_anchor": "piliers-cles",
+      "section_title": "Piliers clés",
+      "segments": [
+        {
+          "element_id": "el-0004-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "f92950fbceaa1d1543eaea43303894dc8bac2ceaa535b09e45dcc1bf19bc19c6",
+          "spoken_text": "Piliers clés"
+        },
+        {
+          "element_id": "el-0005-list",
+          "is_ai_summary": false,
+          "kind": "list",
+          "source_hash": "56f89eb3133b3b9ea69fe5722f432dc16f777c2238ab5233a5e9c0ea8b0977f4",
+          "spoken_text": "Reproductibilité cryptographique : Toutes les dépendances sont verrouillées sur des distributions exactes avec des empreintes d'intégrité SHA-256 (--require-hashes, --only-binary=:all:), éliminant ainsi la dérive des dépendances. Exécution hermétique : Les exécutions informatiques ciblent CPython 3.12.14 canonique sous Linux x86-64 avec une isolation explicite de l'environnement virtuel. Conformité stricte au profil : Chaque artefact de publication fait l'objet d'une vérification préalable automatisée (tools/check_profile.py) avant la compilation et le déploiement. Livraison continue : Le pipeline CI/CD entièrement automatisé via GitHub Actions compile et vérifie la documentation et les carnets à chaque validation."
+        }
+      ],
+      "speech_input_hash": "057a0b5e97d8eb7104349c78fa7f052b2f16e1276e0c7fcd1e38d3cadf1c9106",
+      "text": "Piliers clés.\n\nReproductibilité cryptographique : Toutes les dépendances sont verrouillées sur des distributions exactes avec des empreintes d'intégrité SHA-256 (--require-hashes, --only-binary=:all:), éliminant ainsi la dérive des dépendances. Exécution hermétique : Les exécutions informatiques ciblent CPython 3.12.14 canonique sous Linux x86-64 avec une isolation explicite de l'environnement virtuel. Conformité stricte au profil : Chaque artefact de publication fait l'objet d'une vérification préalable automatisée (tools/check_profile.py) avant la compilation et le déploiement. Livraison continue : Le pipeline CI/CD entièrement automatisé via GitHub Actions compile et vérifie la documentation et les carnets à chaque validation.",
+      "text_sha256": "77da42ed8a9ddfba1d0a89d42dcc415467b2af6e3520f90ef2e9be1d090a1c8a"
+    },
+    {
+      "chunk_hash": "16b9c83b171a1fd1e84ab9510435306198a30ce0994c862f38700c9e83788611",
+      "chunk_id": "chunk-003",
+      "chunk_index": 3,
+      "element_ids": [
+        "el-0006-heading",
+        "el-0007-list"
+      ],
+      "section_anchor": "feuille-de-route-de-la-documentation",
+      "section_title": "Feuille de route de la documentation",
+      "segments": [
+        {
+          "element_id": "el-0006-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "5c3d39b93c580b1fe9344c90b4327128d4c07fd23652055da8d8908afdf2634b",
+          "spoken_text": "Feuille de route de la documentation"
+        },
+        {
+          "element_id": "el-0007-list",
+          "is_ai_summary": false,
+          "kind": "list",
+          "source_hash": "f601a3cd601ab5c1e2e4fbcf1d103884f68f210a3199266d8c481183dcda7bb1",
+          "spoken_text": "Introduction : Contexte, philosophie de la plateforme et périmètre opérationnel. Architecture et référence du mémorandum : Spécification technique complète, structure du dépôt, fichiers d'échafaudage textuels et chaîne d'outils de vérification. Carnet de vérification informatique : Carnet de validation de l'environnement d'exécution s'exécutant dans le noyau jb2-python."
+        }
+      ],
+      "speech_input_hash": "7bce295e0caf644e7e4cfe4f7c82472c09cff15c87b3c5da92d23be8374fdea7",
+      "text": "Feuille de route de la documentation.\n\nIntroduction : Contexte, philosophie de la plateforme et périmètre opérationnel. Architecture et référence du mémorandum : Spécification technique complète, structure du dépôt, fichiers d'échafaudage textuels et chaîne d'outils de vérification. Carnet de vérification informatique : Carnet de validation de l'environnement d'exécution s'exécutant dans le noyau jb2-python.",
+      "text_sha256": "7c8e6777e0e0c3801d0d3aa383ad6166a44aea5a796c4019fd01fa496d7bb45e"
+    }
+  ],
+  "code_summary_hashes": {},
+  "config_hash": "699663dab374726886e538e3564c70a1712d5e0736b0e01565f579a19f9afcfa",
+  "element_ids": [
+    "el-0001-heading",
+    "el-0002-paragraph",
+    "el-0003-paragraph",
+    "el-0004-heading",
+    "el-0005-list",
+    "el-0006-heading",
+    "el-0007-list"
+  ],
+  "elements": [
+    {
+      "element_id": "el-0001-heading",
+      "heading_level": 1,
+      "kind": "heading",
+      "section_anchor": "software-cloud",
+      "section_title": "Software Cloud",
+      "source_hash": "a8e1384694a0f2fb0fec83a1faa59c9cefd57a9a446f64f91f20d7d1afdb2c96",
+      "text": "Software Cloud"
+    },
+    {
+      "element_id": "el-0002-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "software-cloud",
+      "section_title": "Software Cloud",
+      "source_hash": "83c02df67b4ef980933c3eb3d326de861104a4b29402de9a7f3cc1dafd3215c5",
+      "text": "Bienvenue sur Software Cloud, une plateforme de recherche et de publication informatique construite avec Jupyter Book 2 et hébergée sur GitHub Pages à l'adresse my.softcloud.dev."
+    },
+    {
+      "element_id": "el-0003-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "software-cloud",
+      "section_title": "Software Cloud",
+      "source_hash": "f3ba84704f847a99225a46b4bead1cd934e4596fc7d2d6a3cb2141c81492b898",
+      "text": "Software Cloud sert d'architecture ouverte et de référence exécutable pour les pipelines de recherche déterministes, les architectures cloud reproductibles et les carnets de calcul vérifiables."
+    },
+    {
+      "element_id": "el-0004-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "piliers-cles",
+      "section_title": "Piliers clés",
+      "source_hash": "f92950fbceaa1d1543eaea43303894dc8bac2ceaa535b09e45dcc1bf19bc19c6",
+      "text": "Piliers clés"
+    },
+    {
+      "element_id": "el-0005-list",
+      "kind": "list",
+      "section_anchor": "piliers-cles",
+      "section_title": "Piliers clés",
+      "source_hash": "56f89eb3133b3b9ea69fe5722f432dc16f777c2238ab5233a5e9c0ea8b0977f4",
+      "text": "Reproductibilité cryptographique : Toutes les dépendances sont verrouillées sur des distributions exactes avec des empreintes d'intégrité SHA-256 (--require-hashes, --only-binary=:all:), éliminant ainsi la dérive des dépendances. Exécution hermétique : Les exécutions informatiques ciblent CPython 3.12.14 canonique sous Linux x86-64 avec une isolation explicite de l'environnement virtuel. Conformité stricte au profil : Chaque artefact de publication fait l'objet d'une vérification préalable automatisée (tools/check_profile.py) avant la compilation et le déploiement. Livraison continue : Le pipeline CI/CD entièrement automatisé via GitHub Actions compile et vérifie la documentation et les carnets à chaque validation."
+    },
+    {
+      "element_id": "el-0006-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "feuille-de-route-de-la-documentation",
+      "section_title": "Feuille de route de la documentation",
+      "source_hash": "5c3d39b93c580b1fe9344c90b4327128d4c07fd23652055da8d8908afdf2634b",
+      "text": "Feuille de route de la documentation"
+    },
+    {
+      "element_id": "el-0007-list",
+      "kind": "list",
+      "section_anchor": "feuille-de-route-de-la-documentation",
+      "section_title": "Feuille de route de la documentation",
+      "source_hash": "f601a3cd601ab5c1e2e4fbcf1d103884f68f210a3199266d8c481183dcda7bb1",
+      "text": "Introduction : Contexte, philosophie de la plateforme et périmètre opérationnel. Architecture et référence du mémorandum : Spécification technique complète, structure du dépôt, fichiers d'échafaudage textuels et chaîne d'outils de vérification. Carnet de vérification informatique : Carnet de validation de l'environnement d'exécution s'exécutant dans le noyau jb2-python."
+    }
+  ],
+  "locale": "fr",
+  "logical_source_path": "README.md",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "fr",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in French (français) matching document locale 'fr'.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "readme",
+  "page_source_hash": "62ae9e36d23a30152b269dbd7b8ce19720f665527663de68f3c9f0a0ea510756",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "f556275ab269192005154e6c57a3e24813f53823a343d1b0a471bf4cc58be698",
+  "source_path": "i18n/fr/README.md",
+  "transcript_sha256": "1b2455c8682f0c659019630e2569262fb0cc9095ca0671f8b1e9f2f6f435f405"
+}
