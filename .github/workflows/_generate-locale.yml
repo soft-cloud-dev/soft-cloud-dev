@@ -218,8 +218,10 @@ jobs:
           EXISTING_PR=$(gh pr list --head "$TARGET_BRANCH" --base main --state open --json number --jq '.[0].number')
           if [ -n "$EXISTING_PR" ]; then
             echo "Updating existing PR #$EXISTING_PR..."
-            gh pr edit "$EXISTING_PR" --title "$PR_TITLE" --body "$PR_BODY"
+            gh pr edit "$EXISTING_PR" --title "$PR_TITLE" --body "$PR_BODY" || true
           else
             echo "Creating new PR for $TARGET_BRANCH..."
-            gh pr create --base main --head "$TARGET_BRANCH" --title "$PR_TITLE" --body "$PR_BODY" "${LABEL_ARGS[@]}"
+            gh pr create --base main --head "$TARGET_BRANCH" --title "$PR_TITLE" --body "$PR_BODY" "${LABEL_ARGS[@]}" || {
+              echo "::warning title=PR Creation Restricted::GitHub Actions GITHUB_TOKEN is not permitted to create pull requests in repository settings. The branch $TARGET_BRANCH has been pushed successfully and can be opened manually."
+            }
           fi
