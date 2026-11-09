@@ -42,6 +42,7 @@ export BASE_URL="${BASE_URL:-}"
 export SOFTCLOUD_AUDIO_OFFLINE="${SOFTCLOUD_AUDIO_OFFLINE:-1}"
 bash tools/build.sh
 python scripts/validate-build.py --verify-dir _build/html --strict
+npx playwright test --config playwright.handbook.config.ts
 
 echo "=========================================================="
 echo "🎉 CI VERIFICATION AND DEPLOYMENT REHEARSAL PASSED CLEANLY"
