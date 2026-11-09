@@ -42,7 +42,7 @@ test('core handbook routes resolve through the compiled publication', async ({ p
     ['/guides/', 'Guides'],
     ['/notebooks/', 'Computational Notebooks'],
     ['/projects/', 'Systems & Laboratories'],
-    ['/projects/freeipa/', 'FreeIPA Identity & Directory'],
+    ['/freeipa/', 'FreeIPA Identity & Directory'],
   ] as const) {
     const response = await page.goto(path);
     expect(response?.ok(), path).toBeTruthy();
