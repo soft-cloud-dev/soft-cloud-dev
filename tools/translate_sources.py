@@ -549,13 +549,19 @@ def _post_json(url: str, payload: dict[str, Any], api_key: str, max_attempts: in
             with urllib.request.urlopen(req, timeout=60) as resp:
                 return json.loads(resp.read().decode("utf-8"))
         except urllib.error.HTTPError as exc:
-            if exc.code == 404 and "models/gemini-3.8-flash" in url:
-                return _post_json(
-                    url.replace("models/gemini-3.8-flash", "models/gemini-2.5-flash"),
-                    payload,
-                    api_key,
-                    max_attempts=max_attempts,
-                )
+            if exc.code == 404:
+                for candidate in ("gemini-3.8-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-2.5-flash"):
+                    if f"models/{candidate}" not in url:
+                        fb_url = re.sub(r"models/[^:]+", f"models/{candidate}", url)
+                        try:
+                            return _post_json(
+                                fb_url,
+                                payload,
+                                api_key,
+                                max_attempts=max_attempts,
+                            )
+                        except FatalTranslationError:
+                            continue
             if exc.code in (400, 401, 403, 404):
                 raise FatalTranslationError(f"Gemini rejected the request (HTTP {exc.code})") from exc
             if not (exc.code in (408, 429) or exc.code >= 500):

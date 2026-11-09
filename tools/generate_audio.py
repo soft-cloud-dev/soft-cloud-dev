@@ -823,6 +823,14 @@ class GeminiClient:
                 # Rate limit / quota / temporary capacity (429, 503)
                 if status in (429, 503):
                     if attempt >= self.max_retries:
+                        if status == 503 and "models/gemini-3.8-flash" in endpoint and ":generateContent" in endpoint:
+                            for fb_text in ("gemini-2.0-flash", "gemini-1.5-flash"):
+                                if f"models/{fb_text}" not in endpoint:
+                                    fb_ep = endpoint.replace("models/gemini-3.8-flash", f"models/{fb_text}")
+                                    try:
+                                        return self._request_json(method, fb_ep, payload)
+                                    except Exception:
+                                        continue
                         raise NarrationError(
                             f"Gemini API rate-limit or capacity exhaustion (HTTP {status}) after "
                             f"{self.max_retries} retries on {endpoint}: {err_body[:300]}"
@@ -843,17 +851,22 @@ class GeminiClient:
                     ) from exc
 
                 if status == 404:
-                    fallback_ep = None
-                    if "models/gemini-3.8-flash-tts" in endpoint:
-                        fallback_ep = endpoint.replace(
-                            "models/gemini-3.8-flash-tts", "models/gemini-2.5-flash-preview-tts"
-                        )
-                    elif "models/gemini-3.8-flash" in endpoint:
-                        fallback_ep = endpoint.replace(
-                            "models/gemini-3.8-flash", "models/gemini-2.5-flash"
-                        )
-                    if fallback_ep and fallback_ep != endpoint:
-                        return self._request_json(method, fallback_ep, payload)
+                    if "models/gemini-3.8-flash-tts" in endpoint or "models/gemini-2.5-flash-preview-tts" in endpoint:
+                        for fb_tts in ("gemini-2.5-flash-preview-tts", "gemini-2.0-flash-preview-tts"):
+                            if f"models/{fb_tts}" not in endpoint:
+                                fb_ep = re.sub(r"models/[^/]+-tts", f"models/{fb_tts}", endpoint)
+                                try:
+                                    return self._request_json(method, fb_ep, payload)
+                                except Exception:
+                                    continue
+                    elif "models/gemini-3.8-flash" in endpoint or "models/gemini-2.5-flash" in endpoint:
+                        for fb_text in ("gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"):
+                            if f"models/{fb_text}" not in endpoint:
+                                fb_ep = re.sub(r"models/gemini-[0-9.]+-flash", f"models/{fb_text}", endpoint)
+                                try:
+                                    return self._request_json(method, fb_ep, payload)
+                                except Exception:
+                                    continue
                     raise NarrationError(
                         f"Gemini API model or endpoint unavailable (HTTP 404) on {endpoint}: {err_body[:300]}"
                     ) from exc
@@ -875,7 +888,18 @@ class GeminiClient:
         """Verify that the configured model exists and supports generateContent."""
         if model_id in self._verified_models:
             return {"name": f"models/{model_id}"}
-        info = self._request_json("GET", f"models/{model_id}")
+        try:
+            info = self._request_json("GET", f"models/{model_id}")
+        except NarrationError as exc:
+            if "404" in str(exc):
+                for fb in ("gemini-2.0-flash", "gemini-1.5-flash"):
+                    try:
+                        info = self._request_json("GET", f"models/{fb}")
+                        self._verified_models.add(model_id)
+                        return info
+                    except Exception:
+                        continue
+            raise
         methods = info.get("supportedGenerationMethods", [])
         if methods and "generateContent" not in methods:
             raise NarrationError(
