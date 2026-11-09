@@ -18,6 +18,7 @@ node scripts/stage-webawesome-assets.mjs _build/html
 node scripts/lit-ssr-transform.mjs _build/html "$BASE_URL"
 python tools/verify_locales.py --verify-build-dir _build/html --progressive
 python scripts/validate-build.py --verify-dir _build/html
+python scripts/verify-design-token-preview.py _build/html
 test -s _build/html/index.html
 test -s _build/html/pl/index.html
 test -s _build/html/de/index.html
