@@ -4,6 +4,8 @@ description: Practical engineering guides, executable notebooks, UI patterns, an
 site:
   hide_title_block: true
   hide_outline: true
+  hide_toc: true
+  hide_footer_links: true
 ---
 
 :::{div}
