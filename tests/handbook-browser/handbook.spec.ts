@@ -17,6 +17,24 @@ test('handbook presents task-based navigation and authentic verification framing
 
   const grid = await handbook.locator('.sc-handbook__hero').evaluate(el => getComputedStyle(el).display);
   expect(grid).toBe('grid');
+  const contentWidth = await handbook.evaluate(el => el.getBoundingClientRect().width);
+  expect(contentWidth).toBeGreaterThan(900);
+
+  const headlineSize = await handbook.locator('.sc-handbook__intro h2').evaluate(el =>
+    parseFloat(getComputedStyle(el).fontSize)
+  );
+  expect(headlineSize).toBeGreaterThanOrEqual(42);
+
+  const firstCta = handbook.locator('.sc-handbook__intro > p:last-of-type > span:first-child a');
+  const secondCta = handbook.locator('.sc-handbook__intro > p:last-of-type > span:not(:first-child) a');
+  const primaryBackground = await firstCta.evaluate(el => getComputedStyle(el).backgroundColor);
+  const secondaryBackground = await secondCta.evaluate(el => getComputedStyle(el).backgroundColor);
+  expect(primaryBackground).not.toBe(secondaryBackground);
+
+  const routeIcon = await handbook.locator('.sc-handbook__route--guide').evaluate(el =>
+    getComputedStyle(el, '::after').maskImage
+  );
+  expect(routeIcon).toContain('file-lines.svg');
   expect(errors).toEqual([]);
   await page.screenshot({ path: testInfo.outputPath('handbook-desktop.png'), fullPage: true });
 });
@@ -27,6 +45,7 @@ test('mobile handbook has no horizontal scrolling and retains all primary action
   expect(response?.ok()).toBeTruthy();
   const handbook = page.locator('.sc-handbook');
   await expect(handbook).toBeVisible();
+  await expect(page.locator('.myst-top-nav-bar .myst-home-link img:visible').first()).toBeVisible();
   await expect(handbook.locator('.sc-handbook__route')).toHaveCount(3);
   const fits = await page.evaluate(() =>
     document.documentElement.scrollWidth <= window.innerWidth + 2
