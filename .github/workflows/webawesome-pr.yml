@@ -17,8 +17,6 @@ jobs:
   verify:
     runs-on: ubuntu-24.04
     timeout-minutes: 25
-    env:
-      PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/ms-playwright
     defaults:
       run:
         shell: bash
@@ -40,6 +38,7 @@ jobs:
       - name: Install Node dependencies
         env:
           DEBIAN_FRONTEND: noninteractive
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/ms-playwright
         run: |
           npm ci
           node scripts/check-node-dependencies.mjs
@@ -51,6 +50,7 @@ jobs:
           HOME: ${{ runner.temp }}/ci-home
           JUPYTER_CONFIG_DIR: ${{ runner.temp }}/jupyter-config
           JUPYTER_RUNTIME_DIR: ${{ runner.temp }}/jupyter-runtime
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/ms-playwright
           HOST: "127.0.0.1"
           NODE_OPTIONS: "--dns-result-order=ipv4first"
           SOFTCLOUD_AUDIO_OFFLINE: '1'
