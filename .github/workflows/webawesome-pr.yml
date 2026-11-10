@@ -49,6 +49,17 @@ jobs:
           . .venv/bin/activate
           bash scripts/ci-test-driver.sh
 
+      - name: Upload compiled handbook DOM for visual QA
+        if: always()
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        with:
+          name: executable-handbook-dom
+          path: |
+            _build/html/handbook/index.html
+            _build/html/static/handbook.css
+          if-no-files-found: warn
+          retention-days: 7
+
       - name: Upload handbook viewport screenshots
         if: always()
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
