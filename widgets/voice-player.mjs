@@ -518,6 +518,14 @@ const PLAYER_STYLES = `
     cursor: not-allowed;
   }
 
+  .sc-btn-listen:focus-visible,
+  .sc-btn-collapse:focus-visible,
+  .sc-icon-btn:focus-visible,
+  .sc-play-pill:focus-visible {
+    outline: 2px solid var(--sc-vp-fg);
+    outline-offset: 2px;
+  }
+
   /* Collapse Pill Button (Flat Outline) */
   .sc-btn-collapse {
     appearance: none;
@@ -652,6 +660,8 @@ const PLAYER_STYLES = `
     color: var(--sc-vp-muted) !important;
     cursor: pointer;
     padding: 0.4rem;
+    min-block-size: 24px;
+    min-inline-size: 24px;
     border-radius: 6px;
     display: inline-flex;
     align-items: center;
@@ -746,7 +756,6 @@ function render({ model, el }) {
   container.setAttribute("aria-label", titleOverride);
   container.setAttribute("data-sc-locale", locale);
   container.setAttribute("data-sc-page", pageId);
-  container.tabIndex = 0;
 
   let isSyncingTheme = false;
   function syncTheme() {
@@ -858,22 +867,52 @@ function render({ model, el }) {
   const headerRow = document.createElement("div");
   headerRow.className = "sc-header-row";
 
+  const SVG_NS = "http://www.w3.org/2000/svg";
+
+  function createSvgElement(tag, attrs = {}, children = []) {
+    const node = document.createElementNS(SVG_NS, tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      node.setAttribute(k, String(v));
+    }
+    for (const child of children) {
+      node.appendChild(child);
+    }
+    return node;
+  }
+
+  function replaceElementChildren(target, ...nodes) {
+    if (typeof target.replaceChildren === "function") {
+      target.replaceChildren(...nodes);
+    } else {
+      while (target.firstChild) {
+        target.removeChild(target.firstChild);
+      }
+      target.append(...nodes);
+    }
+  }
+
   const overviewLeft = document.createElement("div");
   overviewLeft.className = "sc-overview-left";
 
-  const headphonesSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  headphonesSvg.setAttribute("class", "sc-headphones-icon");
-  headphonesSvg.setAttribute("viewBox", "0 0 24 24");
-  headphonesSvg.setAttribute("fill", "none");
-  headphonesSvg.setAttribute("stroke", "currentColor");
-  headphonesSvg.setAttribute("stroke-width", "2");
-  headphonesSvg.setAttribute("stroke-linecap", "round");
-  headphonesSvg.setAttribute("stroke-linejoin", "round");
-  headphonesSvg.setAttribute("aria-hidden", "true");
-  headphonesSvg.innerHTML = `
-    <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
-    <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
-  `;
+  const headphonesSvg = createSvgElement(
+    "svg",
+    {
+      class: "sc-headphones-icon",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      "stroke-width": "2",
+      "stroke-linecap": "round",
+      "stroke-linejoin": "round",
+      "aria-hidden": "true",
+    },
+    [
+      createSvgElement("path", { d: "M3 18v-6a9 9 0 0 1 18 0v6" }),
+      createSvgElement("path", {
+        d: "M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z",
+      }),
+    ]
+  );
 
   const overviewText = document.createElement("div");
   overviewText.className = "sc-overview-text";
@@ -889,39 +928,64 @@ function render({ model, el }) {
   overviewText.append(overviewTitle, overviewSubtitle);
   overviewLeft.append(headphonesSvg, overviewText);
 
+  // Expanded View Body (Collapsed by Default)
+  const expandedBody = document.createElement("div");
+  expandedBody.id = `sc-vp-body-${pageId}`;
+  expandedBody.className = "sc-expanded-body";
+  expandedBody.hidden = true;
+
   // Single Action Button: localized "Listen" when collapsed, "^ Collapse" when expanded
   const toggleBtn = document.createElement("button");
   toggleBtn.type = "button";
   toggleBtn.className = "sc-btn-listen";
+  toggleBtn.setAttribute("aria-controls", expandedBody.id);
   toggleBtn.disabled = true;
 
   function renderToggleButton() {
     toggleBtn.setAttribute("aria-expanded", String(isExpanded));
+    const labelSpan = document.createElement("span");
     if (isExpanded) {
       toggleBtn.className = "sc-btn-collapse";
-      toggleBtn.innerHTML = `
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="18 15 12 9 6 15"></polyline>
-        </svg>
-        <span>${ui.collapse}</span>
-      `;
+      labelSpan.textContent = ui.collapse;
+      const icon = createSvgElement(
+        "svg",
+        {
+          width: "12",
+          height: "12",
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "currentColor",
+          "stroke-width": "2.5",
+          "stroke-linecap": "round",
+          "stroke-linejoin": "round",
+          "aria-hidden": "true",
+        },
+        [createSvgElement("polyline", { points: "18 15 12 9 6 15" })]
+      );
+      replaceElementChildren(toggleBtn, icon, labelSpan);
     } else {
       toggleBtn.className = "sc-btn-listen";
-      toggleBtn.innerHTML = `
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polygon points="6 4 20 12 6 20 6 4" fill="currentColor"></polygon>
-        </svg>
-        <span>${ui.listen}</span>
-      `;
+      labelSpan.textContent = ui.listen;
+      const icon = createSvgElement(
+        "svg",
+        {
+          width: "14",
+          height: "14",
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "currentColor",
+          "stroke-width": "2.5",
+          "stroke-linecap": "round",
+          "stroke-linejoin": "round",
+          "aria-hidden": "true",
+        },
+        [createSvgElement("polygon", { points: "6 4 20 12 6 20 6 4", fill: "currentColor" })]
+      );
+      replaceElementChildren(toggleBtn, icon, labelSpan);
     }
   }
 
   headerRow.append(overviewLeft, toggleBtn);
-
-  // Expanded View Body (Collapsed by Default)
-  const expandedBody = document.createElement("div");
-  expandedBody.className = "sc-expanded-body";
-  expandedBody.hidden = true;
 
   // Section Indicator and Time Counter
   const metaRow = document.createElement("div");
@@ -971,24 +1035,54 @@ function render({ model, el }) {
   prevBtn.setAttribute("aria-label", ui.previous_section);
   prevBtn.title = ui.previous_section;
   prevBtn.disabled = true;
-  prevBtn.innerHTML = `
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <polygon points="19 20 9 12 19 4 19 20" fill="currentColor"></polygon>
-      <line x1="5" y1="19" x2="5" y2="5"></line>
-    </svg>
-  `;
+  replaceElementChildren(
+    prevBtn,
+    createSvgElement(
+      "svg",
+      {
+        width: "18",
+        height: "18",
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        "stroke-width": "2",
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round",
+        "aria-hidden": "true",
+      },
+      [
+        createSvgElement("polygon", { points: "19 20 9 12 19 4 19 20", fill: "currentColor" }),
+        createSvgElement("line", { x1: "5", y1: "19", x2: "5", y2: "5" }),
+      ]
+    )
+  );
 
   // Play / Pause Pill Button
   const playPill = document.createElement("button");
   playPill.type = "button";
   playPill.className = "sc-play-pill";
   playPill.setAttribute("aria-label", ui.play);
-  playPill.innerHTML = `
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="10"></circle>
-      <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"></polygon>
-    </svg>
-  `;
+  replaceElementChildren(
+    playPill,
+    createSvgElement(
+      "svg",
+      {
+        width: "16",
+        height: "16",
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        "stroke-width": "2.5",
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round",
+        "aria-hidden": "true",
+      },
+      [
+        createSvgElement("circle", { cx: "12", cy: "12", r: "10" }),
+        createSvgElement("polygon", { points: "10 8 16 12 10 16 10 8", fill: "currentColor" }),
+      ]
+    )
+  );
 
   // Next Button (▶|)
   const nextBtn = document.createElement("button");
@@ -997,12 +1091,27 @@ function render({ model, el }) {
   nextBtn.setAttribute("aria-label", ui.next_section);
   nextBtn.title = ui.next_section;
   nextBtn.disabled = true;
-  nextBtn.innerHTML = `
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <polygon points="5 4 15 12 5 20 5 4" fill="currentColor"></polygon>
-      <line x1="19" y1="5" x2="19" y2="19"></line>
-    </svg>
-  `;
+  replaceElementChildren(
+    nextBtn,
+    createSvgElement(
+      "svg",
+      {
+        width: "18",
+        height: "18",
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        "stroke-width": "2",
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round",
+        "aria-hidden": "true",
+      },
+      [
+        createSvgElement("polygon", { points: "5 4 15 12 5 20 5 4", fill: "currentColor" }),
+        createSvgElement("line", { x1: "19", y1: "5", x2: "19", y2: "19" }),
+      ]
+    )
+  );
 
   // Speed Dropdown
   const speedDropdown = document.createElement("select");
@@ -1072,18 +1181,53 @@ function render({ model, el }) {
   function updateScrubber(current, duration) {
     const safeDuration = duration > 0 ? duration : 1;
     const pct = Math.min(100, Math.max(0, (current / safeDuration) * 100));
+    const currentSeconds = Math.floor(current);
+    const totalSeconds = Math.round(safeDuration);
+    const formattedProgress = `${currentSeconds}${ui.sec_unit} / ${totalSeconds}${ui.sec_unit}`;
     scrubberFill.style.width = `${pct}%`;
     scrubberKnob.style.left = `${pct}%`;
+    scrubberContainer.setAttribute("aria-valuemax", String(totalSeconds));
     scrubberContainer.setAttribute("aria-valuenow", String(Math.round(current)));
-    timeDisplay.textContent = `${Math.floor(current)}${ui.sec_unit} / ${Math.round(safeDuration)}${ui.sec_unit}`;
+    scrubberContainer.setAttribute("aria-valuetext", formattedProgress);
+    timeDisplay.textContent = formattedProgress;
   }
 
-  function syncDocumentAnchor(anchor, updateHash = false) {
+  let currentScrollId = 0;
+
+  function scrollIntoViewAsync(element, options, scroller = typeof window !== "undefined" ? window : null) {
+    const result = element.scrollIntoView(options);
+    if (result instanceof Promise) {
+      return result;
+    }
+    if (!scroller || typeof scroller.addEventListener !== "function") {
+      return Promise.resolve();
+    }
+    return new Promise((resolve) => {
+      let timeoutId;
+      const finish = () => {
+        clearTimeout(timeoutId);
+        scroller.removeEventListener("scrollend", finish);
+        scroller.removeEventListener("scroll", onScroll);
+        resolve();
+      };
+      const onScroll = () => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(finish, 100);
+      };
+      scroller.addEventListener("scrollend", finish, { once: true });
+      scroller.addEventListener("scroll", onScroll, { passive: true });
+      timeoutId = setTimeout(finish, 100);
+    });
+  }
+
+  async function syncDocumentAnchor(anchor, updateHash = false) {
     if (!autoSyncScroll || !anchor) return;
+    const scrollId = ++currentScrollId;
     const heading = findHeadingElement(anchor);
     if (heading && typeof heading.scrollIntoView === "function") {
-      heading.scrollIntoView({ behavior: "smooth", block: "start" });
+      await scrollIntoViewAsync(heading, { behavior: "smooth", block: "start" });
     }
+    if (scrollId !== currentScrollId || isDestroyed) return;
     if (updateHash && typeof history !== "undefined" && history.replaceState) {
       history.replaceState(null, "", `#${anchor}`);
     }
@@ -1131,21 +1275,52 @@ function render({ model, el }) {
 
   function updatePlayIcons() {
     playPill.setAttribute("aria-label", isPlaying ? ui.pause : ui.play);
+    playPill.setAttribute("aria-pressed", String(isPlaying));
     if (isPlaying) {
-      playPill.innerHTML = `
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="10" y1="15" x2="10" y2="9"></line>
-          <line x1="14" y1="15" x2="14" y2="9"></line>
-        </svg>
-      `;
+      replaceElementChildren(
+        playPill,
+        createSvgElement(
+          "svg",
+          {
+            width: "16",
+            height: "16",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            "stroke-width": "2.5",
+            "stroke-linecap": "round",
+            "stroke-linejoin": "round",
+            "aria-hidden": "true",
+          },
+          [
+            createSvgElement("circle", { cx: "12", cy: "12", r: "10" }),
+            createSvgElement("line", { x1: "10", y1: "15", x2: "10", y2: "9" }),
+            createSvgElement("line", { x1: "14", y1: "15", x2: "14", y2: "9" }),
+          ]
+        )
+      );
     } else {
-      playPill.innerHTML = `
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"></polygon>
-        </svg>
-      `;
+      replaceElementChildren(
+        playPill,
+        createSvgElement(
+          "svg",
+          {
+            width: "16",
+            height: "16",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            "stroke-width": "2.5",
+            "stroke-linecap": "round",
+            "stroke-linejoin": "round",
+            "aria-hidden": "true",
+          },
+          [
+            createSvgElement("circle", { cx: "12", cy: "12", r: "10" }),
+            createSvgElement("polygon", { points: "10 8 16 12 10 16 10 8", fill: "currentColor" }),
+          ]
+        )
+      );
     }
   }
 
@@ -1268,7 +1443,7 @@ function render({ model, el }) {
 
     for (const dirCandidate of candidateAudioDirs) {
       try {
-        const manifestResp = await fetch(`${dirCandidate}/manifest.json`);
+        const manifestResp = await fetch(`${dirCandidate}/manifest.json`, { priority: "low" });
         if (!manifestResp.ok) {
           throw new Error(`HTTP ${manifestResp.status}`);
         }

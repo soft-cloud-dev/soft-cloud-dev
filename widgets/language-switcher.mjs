@@ -415,6 +415,20 @@ export function findThemeToggle(doc = typeof document !== "undefined" ? document
 
 function insertBeforeOrAppend(parent, newChild, refChild) {
   if (!parent || !newChild) return;
+  if (
+    typeof Element !== "undefined" &&
+    "moveBefore" in Element.prototype &&
+    typeof parent.moveBefore === "function" &&
+    parent.isConnected &&
+    newChild.isConnected
+  ) {
+    try {
+      parent.moveBefore(newChild, refChild || null);
+      return;
+    } catch (_err) {
+      // Fallback to insertBefore / appendChild when moveBefore cannot be used
+    }
+  }
   if (refChild && typeof parent.insertBefore === "function") {
     parent.insertBefore(newChild, refChild);
   } else if (typeof parent.appendChild === "function") {
@@ -524,18 +538,14 @@ export function ensureLanguageSwitcherHost(doc = typeof document !== "undefined"
     }
   } else if (searchControl && searchControl.parentElement && !isAdjacent(hostEl, searchControl)) {
     removeClass(hostEl, "sc-lang-host-floating");
-    if (searchControl.nextSibling) {
-      searchControl.parentElement.insertBefore(hostEl, searchControl.nextSibling);
-    } else {
-      searchControl.parentElement.appendChild(hostEl);
-    }
+    insertBeforeOrAppend(searchControl.parentElement, hostEl, searchControl.nextSibling || null);
   } else if (
     headerContainer &&
     hostEl.parentElement === doc.body &&
     !headerContainer.contains(hostEl)
   ) {
     removeClass(hostEl, "sc-lang-host-floating");
-    headerContainer.appendChild(hostEl);
+    insertBeforeOrAppend(headerContainer, hostEl, null);
   }
   return hostEl;
 }
@@ -1047,13 +1057,16 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
   wrapper.setAttribute("data-sc-locale", currentLocaleCode);
   wrapper.setAttribute("data-sc-page-slug", currentPageSlug);
 
-  const panelId = `sc-lang-panel-${Math.random().toString(36).slice(2, 8)}`;
+  const instanceSuffix = Math.random().toString(36).slice(2, 8);
+  const panelId = `sc-lang-panel-${instanceSuffix}`;
+  const anchorName = `--sc-lang-trigger-${instanceSuffix}`;
 
   const currentFlag = getLocaleFlag(currentLocaleCode, currentLocaleInfo);
 
   const triggerBtn = doc.createElement("button");
   triggerBtn.type = "button";
   triggerBtn.className = "sc-lang-trigger";
+  triggerBtn.style?.setProperty?.("anchor-name", anchorName);
   triggerBtn.setAttribute("aria-haspopup", "true");
   triggerBtn.setAttribute("aria-expanded", "false");
   triggerBtn.setAttribute("aria-controls", panelId);
@@ -1070,6 +1083,7 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
   const panel = doc.createElement("div");
   panel.id = panelId;
   panel.className = "sc-lang-panel sc-lang-TriggerAnchored";
+  panel.style?.setProperty?.("position-anchor", anchorName);
   panel.setAttribute("role", "group");
   panel.setAttribute("aria-label", ui.switch_language);
   panel.hidden = true;
@@ -1166,7 +1180,11 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
           "{language}",
           locInfo.native_name || code
         );
-        noticeBox.innerHTML = "";
+        if (typeof noticeBox.replaceChildren === "function") {
+          noticeBox.replaceChildren();
+        } else {
+          noticeBox.textContent = "";
+        }
         const msgSpan = doc.createElement("div");
         msgSpan.textContent = `${locInfo.native_name}: ${unavailMsg}.`;
         const homeLink = doc.createElement("a");
