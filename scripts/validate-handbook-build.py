@@ -16,10 +16,9 @@ from bs4 import BeautifulSoup
 
 def validate(root: Path) -> list[str]:
     errors: list[str] = []
-    candidates = (root / "handbook" / "index.html", root / "handbook.html")
-    page = next((p for p in candidates if p.is_file()), None)
-    if page is None:
-        return ["Missing compiled handbook route (/handbook)"]
+    page = root / "index.html"
+    if not page.is_file():
+        return ["Missing compiled root handbook route (/)"]
 
     soup = BeautifulSoup(page.read_text(encoding="utf-8"), "html.parser")
     source = soup.select_one(".sc-handbook")
@@ -78,6 +77,33 @@ def validate(root: Path) -> list[str]:
             break
     if not css_found:
         errors.append("Compiled site is missing the handbook design CSS")
+
+    for code in ("en", "pl", "de", "es", "fr"):
+        sub = root if code == "en" else root / code
+        doc = sub / "index.html"
+        if not doc.is_file():
+            errors.append(f"[{code}] Missing localized homepage: {doc}")
+            continue
+        localized = BeautifulSoup(doc.read_text(encoding="utf-8"), "html.parser")
+        if localized.select_one(".sc-handbook") is None:
+            errors.append(f"[{code}] Missing handbook container")
+        if len(localized.select(".sc-handbook__route")) != 3:
+            errors.append(f"[{code}] Expected three starting points")
+        html = localized.find("html")
+        if not html or html.get("lang") != code:
+            errors.append(f"[{code}] Incorrect document language")
+        header = localized.select_one("nav.myst-top-nav-bar")
+        if header is None:
+            errors.append(f"[{code}] Missing top navbar")
+            continue
+        prefix = "" if code == "en" else f"/{code}"
+        links = {a.get("href", "").rstrip("/") for a in header.find_all("a")}
+        for slug in ("guides", "notebooks", "ui-library", "projects"):
+            expected = f"{prefix}/{slug}"
+            if expected not in links:
+                errors.append(f"[{code}] Missing localized navbar destination {expected}")
+            if not (sub / slug / "index.html").is_file() and not (sub / f"{slug}.html").is_file():
+                errors.append(f"[{code}] Missing localized page for {slug}")
 
     return errors
 
