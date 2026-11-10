@@ -1,0 +1,178 @@
+{
+  "chunks": [
+    {
+      "chunk_hash": "f0121f1942969ce519cfd26386a52e2a6a709a778584df165a46e37b018d6c8f",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph"
+      ],
+      "section_anchor": "softcloud-node-linux",
+      "section_title": "SoftCloud Node Linux",
+      "segments": [
+        {
+          "element_id": "el-0001-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "c3e008b0107fd2bfc2f36e67d704ddd286843d19a257fa733b709dd15800c82b",
+          "spoken_text": "SoftCloud Node Linux"
+        },
+        {
+          "element_id": "el-0002-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "dc53ab416b84c0187a500fc480107c94f7eaf1983c3d510ed80fcec6572e8a7b",
+          "spoken_text": "SoftCloud Node Linux untersucht Linux-Kubernetes-Knoten, die als virtuelle Maschinen unter FreeBSD bhyve ausgeführt werden. Die Projektdokumentation behandelt den Image-Build-Prozess, die Boot-Architektur, die Container-Laufzeitumgebung, das Netzwerk sowie die Validierungsarbeiten."
+        }
+      ],
+      "speech_input_hash": "6d22b1f72d8c8ff579f0490bd608a9fa26b1f70bc977d60498f87bb92a66fd5a",
+      "text": "SoftCloud Node Linux.\n\nSoftCloud Node Linux untersucht Linux-Kubernetes-Knoten, die als virtuelle Maschinen unter FreeBSD bhyve ausgeführt werden. Die Projektdokumentation behandelt den Image-Build-Prozess, die Boot-Architektur, die Container-Laufzeitumgebung, das Netzwerk sowie die Validierungsarbeiten.",
+      "text_sha256": "23756ced429efd3a19f1172d645a2d05e1b61cd3e89f2f58e8c3a56eb60ebf01"
+    },
+    {
+      "chunk_hash": "01c742c320e56c47c2878984833c753103f6f43076915541ae6bbb4a4dd28436",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "element_ids": [
+        "el-0003-heading",
+        "el-0004-list"
+      ],
+      "section_anchor": "einstieg",
+      "section_title": "Einstieg",
+      "segments": [
+        {
+          "element_id": "el-0003-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "97fabbfa9499fee01039853fd039e3dd824feba1a626f95028a091e7e06a238d",
+          "spoken_text": "Einstieg"
+        },
+        {
+          "element_id": "el-0004-list",
+          "is_ai_summary": false,
+          "kind": "list",
+          "source_hash": "c7616d6b7a8dccf905b3685fffb95c9d0c02d704abbc33ce288f9dbf1458a7b3",
+          "spoken_text": "Dokumentation zu Node Linux lesen. Quellcode-Repository durchsuchen."
+        }
+      ],
+      "speech_input_hash": "61a11c31d1c4b1be6411cffeffd12c58c676d2abd503ef4eaec192f71e8832d4",
+      "text": "Einstieg.\n\nDokumentation zu Node Linux lesen. Quellcode-Repository durchsuchen.",
+      "text_sha256": "a743e7c89395a2cdc42a4d77f0402a2a06e7ddffa17e82166fa6eb82ffa7dfdd"
+    },
+    {
+      "chunk_hash": "68164d9a2d6343b811fe638b6af705a325d267a866e653fc873b187463b6d3ac",
+      "chunk_id": "chunk-003",
+      "chunk_index": 3,
+      "element_ids": [
+        "el-0005-heading",
+        "el-0006-paragraph"
+      ],
+      "section_anchor": "implementierungsstatus",
+      "section_title": "Implementierungsstatus",
+      "segments": [
+        {
+          "element_id": "el-0005-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "b7318bff02aca2319326bdb04654e24787262b633c5b1175acda0d353db94490",
+          "spoken_text": "Implementierungsstatus"
+        },
+        {
+          "element_id": "el-0006-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "7310ad9a786f68509641a647d5738c53fdfeba3aca3ed6ac1938102fd28b1e7d",
+          "spoken_text": "Die Projektdokumentation unterscheidet zwischen implementierten Funktionen, validiertem Verhalten, bekannten Einschränkungen und geplanten Arbeiten."
+        }
+      ],
+      "speech_input_hash": "a7b1125a7d343a048bc5320179666d4344c187147f78b30f24ff0df5078f5403",
+      "text": "Implementierungsstatus.\n\nDie Projektdokumentation unterscheidet zwischen implementierten Funktionen, validiertem Verhalten, bekannten Einschränkungen und geplanten Arbeiten.",
+      "text_sha256": "fc8c71c70d15c7b882259b82db3a45acffdc46814356ffd3582e3a8873e8b588"
+    }
+  ],
+  "code_summary_hashes": {},
+  "config_hash": "8e764f1bbc93d18905309a7c8547a196154843383e971c32ef0e0c41b1241f8b",
+  "element_ids": [
+    "el-0001-heading",
+    "el-0002-paragraph",
+    "el-0003-heading",
+    "el-0004-list",
+    "el-0005-heading",
+    "el-0006-paragraph"
+  ],
+  "elements": [
+    {
+      "element_id": "el-0001-heading",
+      "heading_level": 1,
+      "kind": "heading",
+      "section_anchor": "softcloud-node-linux",
+      "section_title": "SoftCloud Node Linux",
+      "source_hash": "c3e008b0107fd2bfc2f36e67d704ddd286843d19a257fa733b709dd15800c82b",
+      "text": "SoftCloud Node Linux"
+    },
+    {
+      "element_id": "el-0002-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "softcloud-node-linux",
+      "section_title": "SoftCloud Node Linux",
+      "source_hash": "dc53ab416b84c0187a500fc480107c94f7eaf1983c3d510ed80fcec6572e8a7b",
+      "text": "SoftCloud Node Linux untersucht Linux-Kubernetes-Knoten, die als virtuelle Maschinen unter FreeBSD bhyve ausgeführt werden. Die Projektdokumentation behandelt den Image-Build-Prozess, die Boot-Architektur, die Container-Laufzeitumgebung, das Netzwerk sowie die Validierungsarbeiten."
+    },
+    {
+      "element_id": "el-0003-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "einstieg",
+      "section_title": "Einstieg",
+      "source_hash": "97fabbfa9499fee01039853fd039e3dd824feba1a626f95028a091e7e06a238d",
+      "text": "Einstieg"
+    },
+    {
+      "element_id": "el-0004-list",
+      "kind": "list",
+      "section_anchor": "einstieg",
+      "section_title": "Einstieg",
+      "source_hash": "c7616d6b7a8dccf905b3685fffb95c9d0c02d704abbc33ce288f9dbf1458a7b3",
+      "text": "Dokumentation zu Node Linux lesen. Quellcode-Repository durchsuchen."
+    },
+    {
+      "element_id": "el-0005-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "implementierungsstatus",
+      "section_title": "Implementierungsstatus",
+      "source_hash": "b7318bff02aca2319326bdb04654e24787262b633c5b1175acda0d353db94490",
+      "text": "Implementierungsstatus"
+    },
+    {
+      "element_id": "el-0006-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "implementierungsstatus",
+      "section_title": "Implementierungsstatus",
+      "source_hash": "7310ad9a786f68509641a647d5738c53fdfeba3aca3ed6ac1938102fd28b1e7d",
+      "text": "Die Projektdokumentation unterscheidet zwischen implementierten Funktionen, validiertem Verhalten, bekannten Einschränkungen und geplanten Arbeiten."
+    }
+  ],
+  "locale": "de",
+  "logical_source_path": "projects/linux.md",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "de",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in German (Deutsch) matching document locale 'de'.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "projects-linux",
+  "page_source_hash": "6d46acdb7572bcfe06adc400ab8e2604abd45cd3c9e00ebdb949d8e73f3849a5",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "12aa58a33b83d1d3f458a206a3c21730eae83399d0ee9ba595456c3b211f0ec1",
+  "source_path": "i18n/de/projects/linux.md",
+  "transcript_sha256": "4e49c5b1677d91c02b8f6d8bcbe57a25ab2a1c8fc0695af7b7a47a4465d5aab3"
+}

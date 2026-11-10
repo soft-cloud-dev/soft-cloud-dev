@@ -1,174 +1,42 @@
 {
   "chunks": [
     {
-      "chunk_hash": "3ea23fb11a7c1cb720250059d401597aafe95d156b7058c39c59793c0a72546b",
+      "chunk_hash": "b9012e544f46c527eae31d1fd9f646e1b46cf84699581b005bf7d2e5a1a618ef",
       "chunk_id": "chunk-001",
       "chunk_index": 1,
       "element_ids": [
-        "el-0001-heading",
-        "el-0002-paragraph",
-        "el-0003-paragraph"
+        "el-0001-directive"
       ],
-      "section_anchor": "software-cloud",
-      "section_title": "Software Cloud",
+      "section_anchor": "top",
+      "section_title": "Introduction",
       "segments": [
         {
-          "element_id": "el-0001-heading",
+          "element_id": "el-0001-directive",
           "is_ai_summary": false,
-          "kind": "heading",
-          "source_hash": "a8e1384694a0f2fb0fec83a1faa59c9cefd57a9a446f64f91f20d7d1afdb2c96",
-          "spoken_text": "Software Cloud"
-        },
-        {
-          "element_id": "el-0002-paragraph",
-          "is_ai_summary": false,
-          "kind": "paragraph",
-          "source_hash": "1d7230f993a96b89b3e48f33e53c60174dd3642a7cb732997cc5864da5538ba1",
-          "spoken_text": "Willkommen bei Software Cloud, einer Plattform für computergestützte Forschung und Veröffentlichung auf Basis von Jupyter Book 2, gehostet über GitHub Pages unter my.softcloud.dev."
-        },
-        {
-          "element_id": "el-0003-paragraph",
-          "is_ai_summary": false,
-          "kind": "paragraph",
-          "source_hash": "9520e4c51f22252a7b5d65a8b1da7c1d1e5448cfb35fa184d8d26df98b9f5160",
-          "spoken_text": "Software Cloud dient als offene Architektur und ausführbare Referenz für deterministische Forschungspipelines, reproduzierbare Cloud-Architekturen und verifizierbare Berechnungs-Notebooks."
+          "kind": "directive",
+          "source_hash": "91fd52362295c7110b545201b76035a2d52cb505cb9766efed450ea1068c7365",
+          "spoken_text": "DAS SOFTCLOUD-HANDBUCH. Ingenieurwissen, das sich reproduzieren lässt. Praktische Anleitungen, ausführbare Notebooks und wiederverwendbare UI-Beispiele — mit ihren Quellen verknüpft. Mit einer Anleitung beginnen Notebooks durchsuchen. Rechnerische Verifikation. Erforderliches Ausführungsprofil. CPython 3.12.14 · Linux x86-64 · jb2-python. Verifikations-Notebook öffnen. Einen Einstieg wählen. Erste Seite veröffentlichen. Lernen Sie Struktur, Erstellung und Veröffentlichungsablauf des SoftCloud-Handbuchs kennen. GUIDE. Umgebungsprüfung reproduzieren. Führen Sie das Referenz-Notebook zur Umgebungsverifikation aus und verstehen Sie das kontrollierte Ausführungsprofil. NOTEBOOK. Wiederverwendbares UI-Muster finden. Entdecken Sie den Web-Awesome-Katalog, Design-Tokens und wiederverwendbare Oberflächenbeispiele. UI-BIBLIOTHEK. SoftCloud-Projekte entdecken. SoftCloud Node Linux — Reproduzierbare Dokumentation für Linux/Kubernetes-Knoten. FreeIPA — Labor für Identität, Richtlinien und Zugriffsverwaltung. Reproduzierbare Entwicklung, überprüfbare Ergebnisse. SoftCloud veröffentlicht computergestützte Forschung, Cloud-Architektur und Betriebshandbücher zusammen mit ausführbaren Referenzen. Nicht fixierte Abhängigkeiten, abweichende Binärdateien, versteckter Umgebungszustand und ungeprüfte Laufzeit-Kernels erschweren die Reproduktion. Der Publikationsvertrag umfasst SHA-256-gesicherte Abhängigkeiten, eine kanonische CPython-3.12.14-Laufzeit unter Linux x86-64, strenge Vorabprüfung und automatisierte CI/CD. Lesen Sie die Architektur und Spezifikation sowie den Hintergrund und Betriebsumfang für weitere Einzelheiten."
         }
       ],
-      "speech_input_hash": "b1fe8e93f12215137476403554b32c75bdad877c5b64aaf8dced692bd2d5746b",
-      "text": "Software Cloud.\n\nWillkommen bei Software Cloud, einer Plattform für computergestützte Forschung und Veröffentlichung auf Basis von Jupyter Book 2, gehostet über GitHub Pages unter my.softcloud.dev.\n\nSoftware Cloud dient als offene Architektur und ausführbare Referenz für deterministische Forschungspipelines, reproduzierbare Cloud-Architekturen und verifizierbare Berechnungs-Notebooks.",
-      "text_sha256": "6419b48054aebd50a6c18fbc842d070fc6b8fa183c2b3eaa31dabef92e57e498"
-    },
-    {
-      "chunk_hash": "3b9886c498815f93a2930a38a6189c320571fb9286f824c96cdc0ec1cf73802d",
-      "chunk_id": "chunk-002",
-      "chunk_index": 2,
-      "element_ids": [
-        "el-0004-heading",
-        "el-0005-list"
-      ],
-      "section_anchor": "zentrale-saulen",
-      "section_title": "Zentrale Säulen",
-      "segments": [
-        {
-          "element_id": "el-0004-heading",
-          "is_ai_summary": false,
-          "kind": "heading",
-          "source_hash": "ec1656a009379a85f616d77a775b9be8ddaad867f0be8dd27e9c85230ee5bf54",
-          "spoken_text": "Zentrale Säulen"
-        },
-        {
-          "element_id": "el-0005-list",
-          "is_ai_summary": false,
-          "kind": "list",
-          "source_hash": "a0b4ce54b34aaa8bf2395facf838bb9b571a0c71d74f071989478ac55ab53ddc",
-          "spoken_text": "Kryptografische Reproduzierbarkeit: Alle Abhängigkeiten sind mit SHA-256-Integritätsprüfsummen (--require-hashes, --only-binary=:all:) fest an exakte Distributionen gebunden, wodurch Abhängigkeitsdrift ausgeschlossen wird. Hermetische Ausführung: Berechnungsläufe zielen auf kanonisches CPython 3.12.14 unter Linux x86-64 mit expliziter Isolierung der virtuellen Umgebung ab. Strikte Profilkonformität: Jedes Publikationsartefakt durchläuft vor dem Build und Deployment eine automatisierte Vorabprüfung (tools/check_profile.py). Kontinuierliche Bereitstellung: Vollautomatisiertes CI/CD über GitHub Actions erstellt und verifiziert Dokumentation und Notebooks bei jedem Commit."
-        }
-      ],
-      "speech_input_hash": "22583b5baeed8bd7b196ee429beccc8771c90cd8fdba84f0371459d6f7a14d40",
-      "text": "Zentrale Säulen.\n\nKryptografische Reproduzierbarkeit: Alle Abhängigkeiten sind mit SHA-256-Integritätsprüfsummen (--require-hashes, --only-binary=:all:) fest an exakte Distributionen gebunden, wodurch Abhängigkeitsdrift ausgeschlossen wird. Hermetische Ausführung: Berechnungsläufe zielen auf kanonisches CPython 3.12.14 unter Linux x86-64 mit expliziter Isolierung der virtuellen Umgebung ab. Strikte Profilkonformität: Jedes Publikationsartefakt durchläuft vor dem Build und Deployment eine automatisierte Vorabprüfung (tools/check_profile.py). Kontinuierliche Bereitstellung: Vollautomatisiertes CI/CD über GitHub Actions erstellt und verifiziert Dokumentation und Notebooks bei jedem Commit.",
-      "text_sha256": "09b9942b51e4670837e7612f4aab18235d3ec3cb4b4fe0c236e88a2d5ecedd45"
-    },
-    {
-      "chunk_hash": "7690e65cf5401bd912b2955c12fb7d91b58701ec8afd46def929de590ea8e374",
-      "chunk_id": "chunk-003",
-      "chunk_index": 3,
-      "element_ids": [
-        "el-0006-heading",
-        "el-0007-list"
-      ],
-      "section_anchor": "dokumentations-roadmap",
-      "section_title": "Dokumentations-Roadmap",
-      "segments": [
-        {
-          "element_id": "el-0006-heading",
-          "is_ai_summary": false,
-          "kind": "heading",
-          "source_hash": "09130f15866c4ebbc876e5b6b9c88183737a4aeb859059d3fb8a7ee580a52af1",
-          "spoken_text": "Dokumentations-Roadmap"
-        },
-        {
-          "element_id": "el-0007-list",
-          "is_ai_summary": false,
-          "kind": "list",
-          "source_hash": "3e0335d3404d0f94331ba9de80c03b617147a9062e7df5f429d0113c494b3969",
-          "spoken_text": "Einführung: Hintergrund, Plattformphilosophie und operativer Umfang. Architektur & Memorandumsreferenz: Vollständige technische Spezifikation, Repository-Struktur, wortgetreue Gerüstdateien und Verifikations-Toolchain. Notebook zur Berechnungsverifikation: Notebook zur Laufzeitvalidierung, das im jb2-python-Kernel ausgeführt wird."
-        }
-      ],
-      "speech_input_hash": "28eab75c0b992233443ffde42757656c7d78b4208b9e118b51687c58a4ac8997",
-      "text": "Dokumentations-Roadmap.\n\nEinführung: Hintergrund, Plattformphilosophie und operativer Umfang. Architektur & Memorandumsreferenz: Vollständige technische Spezifikation, Repository-Struktur, wortgetreue Gerüstdateien und Verifikations-Toolchain. Notebook zur Berechnungsverifikation: Notebook zur Laufzeitvalidierung, das im jb2-python-Kernel ausgeführt wird.",
-      "text_sha256": "04aad3c681b287c1af03d96624a2c3164840543bdb47799ec4bb9c411b0a2561"
+      "speech_input_hash": "864f56f4ceea2da4814a72d02cd29016d3b065d1b79e5ecda3e5f92eb01322af",
+      "text": "DAS SOFTCLOUD-HANDBUCH. Ingenieurwissen, das sich reproduzieren lässt. Praktische Anleitungen, ausführbare Notebooks und wiederverwendbare UI-Beispiele — mit ihren Quellen verknüpft. Mit einer Anleitung beginnen Notebooks durchsuchen. Rechnerische Verifikation. Erforderliches Ausführungsprofil. CPython 3.12.14 · Linux x86-64 · jb2-python. Verifikations-Notebook öffnen. Einen Einstieg wählen. Erste Seite veröffentlichen. Lernen Sie Struktur, Erstellung und Veröffentlichungsablauf des SoftCloud-Handbuchs kennen. GUIDE. Umgebungsprüfung reproduzieren. Führen Sie das Referenz-Notebook zur Umgebungsverifikation aus und verstehen Sie das kontrollierte Ausführungsprofil. NOTEBOOK. Wiederverwendbares UI-Muster finden. Entdecken Sie den Web-Awesome-Katalog, Design-Tokens und wiederverwendbare Oberflächenbeispiele. UI-BIBLIOTHEK. SoftCloud-Projekte entdecken. SoftCloud Node Linux — Reproduzierbare Dokumentation für Linux/Kubernetes-Knoten. FreeIPA — Labor für Identität, Richtlinien und Zugriffsverwaltung. Reproduzierbare Entwicklung, überprüfbare Ergebnisse. SoftCloud veröffentlicht computergestützte Forschung, Cloud-Architektur und Betriebshandbücher zusammen mit ausführbaren Referenzen. Nicht fixierte Abhängigkeiten, abweichende Binärdateien, versteckter Umgebungszustand und ungeprüfte Laufzeit-Kernels erschweren die Reproduktion. Der Publikationsvertrag umfasst SHA-256-gesicherte Abhängigkeiten, eine kanonische CPython-3.12.14-Laufzeit unter Linux x86-64, strenge Vorabprüfung und automatisierte CI/CD. Lesen Sie die Architektur und Spezifikation sowie den Hintergrund und Betriebsumfang für weitere Einzelheiten.",
+      "text_sha256": "7f454a98ed1867fb7574d593bd60aaea514582fd315f609deb232649a710f55e"
     }
   ],
   "code_summary_hashes": {},
   "config_hash": "8e764f1bbc93d18905309a7c8547a196154843383e971c32ef0e0c41b1241f8b",
   "element_ids": [
-    "el-0001-heading",
-    "el-0002-paragraph",
-    "el-0003-paragraph",
-    "el-0004-heading",
-    "el-0005-list",
-    "el-0006-heading",
-    "el-0007-list"
+    "el-0001-directive"
   ],
   "elements": [
     {
-      "element_id": "el-0001-heading",
-      "heading_level": 1,
-      "kind": "heading",
-      "section_anchor": "software-cloud",
-      "section_title": "Software Cloud",
-      "source_hash": "a8e1384694a0f2fb0fec83a1faa59c9cefd57a9a446f64f91f20d7d1afdb2c96",
-      "text": "Software Cloud"
-    },
-    {
-      "element_id": "el-0002-paragraph",
-      "kind": "paragraph",
-      "section_anchor": "software-cloud",
-      "section_title": "Software Cloud",
-      "source_hash": "1d7230f993a96b89b3e48f33e53c60174dd3642a7cb732997cc5864da5538ba1",
-      "text": "Willkommen bei Software Cloud, einer Plattform für computergestützte Forschung und Veröffentlichung auf Basis von Jupyter Book 2, gehostet über GitHub Pages unter my.softcloud.dev."
-    },
-    {
-      "element_id": "el-0003-paragraph",
-      "kind": "paragraph",
-      "section_anchor": "software-cloud",
-      "section_title": "Software Cloud",
-      "source_hash": "9520e4c51f22252a7b5d65a8b1da7c1d1e5448cfb35fa184d8d26df98b9f5160",
-      "text": "Software Cloud dient als offene Architektur und ausführbare Referenz für deterministische Forschungspipelines, reproduzierbare Cloud-Architekturen und verifizierbare Berechnungs-Notebooks."
-    },
-    {
-      "element_id": "el-0004-heading",
-      "heading_level": 2,
-      "kind": "heading",
-      "section_anchor": "zentrale-saulen",
-      "section_title": "Zentrale Säulen",
-      "source_hash": "ec1656a009379a85f616d77a775b9be8ddaad867f0be8dd27e9c85230ee5bf54",
-      "text": "Zentrale Säulen"
-    },
-    {
-      "element_id": "el-0005-list",
-      "kind": "list",
-      "section_anchor": "zentrale-saulen",
-      "section_title": "Zentrale Säulen",
-      "source_hash": "a0b4ce54b34aaa8bf2395facf838bb9b571a0c71d74f071989478ac55ab53ddc",
-      "text": "Kryptografische Reproduzierbarkeit: Alle Abhängigkeiten sind mit SHA-256-Integritätsprüfsummen (--require-hashes, --only-binary=:all:) fest an exakte Distributionen gebunden, wodurch Abhängigkeitsdrift ausgeschlossen wird. Hermetische Ausführung: Berechnungsläufe zielen auf kanonisches CPython 3.12.14 unter Linux x86-64 mit expliziter Isolierung der virtuellen Umgebung ab. Strikte Profilkonformität: Jedes Publikationsartefakt durchläuft vor dem Build und Deployment eine automatisierte Vorabprüfung (tools/check_profile.py). Kontinuierliche Bereitstellung: Vollautomatisiertes CI/CD über GitHub Actions erstellt und verifiziert Dokumentation und Notebooks bei jedem Commit."
-    },
-    {
-      "element_id": "el-0006-heading",
-      "heading_level": 2,
-      "kind": "heading",
-      "section_anchor": "dokumentations-roadmap",
-      "section_title": "Dokumentations-Roadmap",
-      "source_hash": "09130f15866c4ebbc876e5b6b9c88183737a4aeb859059d3fb8a7ee580a52af1",
-      "text": "Dokumentations-Roadmap"
-    },
-    {
-      "element_id": "el-0007-list",
-      "kind": "list",
-      "section_anchor": "dokumentations-roadmap",
-      "section_title": "Dokumentations-Roadmap",
-      "source_hash": "3e0335d3404d0f94331ba9de80c03b617147a9062e7df5f429d0113c494b3969",
-      "text": "Einführung: Hintergrund, Plattformphilosophie und operativer Umfang. Architektur & Memorandumsreferenz: Vollständige technische Spezifikation, Repository-Struktur, wortgetreue Gerüstdateien und Verifikations-Toolchain. Notebook zur Berechnungsverifikation: Notebook zur Laufzeitvalidierung, das im jb2-python-Kernel ausgeführt wird."
+      "directive_name": "div",
+      "element_id": "el-0001-directive",
+      "kind": "directive",
+      "section_anchor": "top",
+      "section_title": "Introduction",
+      "source_hash": "91fd52362295c7110b545201b76035a2d52cb505cb9766efed450ea1068c7365",
+      "text": "DAS SOFTCLOUD-HANDBUCH. Ingenieurwissen, das sich reproduzieren lässt. Praktische Anleitungen, ausführbare Notebooks und wiederverwendbare UI-Beispiele — mit ihren Quellen verknüpft. Mit einer Anleitung beginnen Notebooks durchsuchen. Rechnerische Verifikation. Erforderliches Ausführungsprofil. CPython 3.12.14 · Linux x86-64 · jb2-python. Verifikations-Notebook öffnen. Einen Einstieg wählen. Erste Seite veröffentlichen. Lernen Sie Struktur, Erstellung und Veröffentlichungsablauf des SoftCloud-Handbuchs kennen. GUIDE. Umgebungsprüfung reproduzieren. Führen Sie das Referenz-Notebook zur Umgebungsverifikation aus und verstehen Sie das kontrollierte Ausführungsprofil. NOTEBOOK. Wiederverwendbares UI-Muster finden. Entdecken Sie den Web-Awesome-Katalog, Design-Tokens und wiederverwendbare Oberflächenbeispiele. UI-BIBLIOTHEK. SoftCloud-Projekte entdecken. SoftCloud Node Linux — Reproduzierbare Dokumentation für Linux/Kubernetes-Knoten. FreeIPA — Labor für Identität, Richtlinien und Zugriffsverwaltung. Reproduzierbare Entwicklung, überprüfbare Ergebnisse. SoftCloud veröffentlicht computergestützte Forschung, Cloud-Architektur und Betriebshandbücher zusammen mit ausführbaren Referenzen. Nicht fixierte Abhängigkeiten, abweichende Binärdateien, versteckter Umgebungszustand und ungeprüfte Laufzeit-Kernels erschweren die Reproduktion. Der Publikationsvertrag umfasst SHA-256-gesicherte Abhängigkeiten, eine kanonische CPython-3.12.14-Laufzeit unter Linux x86-64, strenge Vorabprüfung und automatisierte CI/CD. Lesen Sie die Architektur und Spezifikation sowie den Hintergrund und Betriebsumfang für weitere Einzelheiten."
     }
   ],
   "locale": "de",
@@ -187,9 +55,9 @@
     "voice_name": "Kore"
   },
   "page_id": "readme",
-  "page_source_hash": "0bcd86a980467ff650d535bbfbd553c6511bb2198395d68c7eb467bcadf8beaa",
+  "page_source_hash": "ad3393eff913a7f502a865a2869746cc8e5fefaccbe11e35e9fe45e62d234a94",
   "schema_version": "1.0.0",
-  "source_file_sha256": "ff20e7fb53a2457e054645dbc310de1061ce87d8f46f2bedd3fe7437e25095e0",
+  "source_file_sha256": "352cd0a92a4d03d002def85aa04a96ae6dff8d76dc60affc15fb78ea761a8d21",
   "source_path": "i18n/de/README.md",
-  "transcript_sha256": "b18d5ad2c30f25fdef5f1e871aa32936527ce73d94819e4c776b965ddd77b304"
+  "transcript_sha256": "76a1bbf74abca37aee6aa9fc10c1c77fab2a6c4ddc323c19f7facf2fd669f785"
 }

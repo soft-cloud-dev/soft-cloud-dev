@@ -1,0 +1,52 @@
+{
+  "chunks": [
+    {
+      "audio_file": "chunk-001-b9012e544f46.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "7aa02e236d8dfa3630d55b3380dfa05ab63a876ce0e5acf8cf433f42d31a34bb",
+      "chunk_hash": "b9012e544f46c527eae31d1fd9f646e1b46cf84699581b005bf7d2e5a1a618ef",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "duration_seconds": 134.496,
+      "element_ids": [
+        "el-0001-directive"
+      ],
+      "locale": "de",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "top",
+      "section_title": "Introduction",
+      "size_bytes": 1075968,
+      "speech_input_hash": "864f56f4ceea2da4814a72d02cd29016d3b065d1b79e5ecda3e5f92eb01322af",
+      "text_sha256": "7f454a98ed1867fb7574d593bd60aaea514582fd315f609deb232649a710f55e",
+      "tts_config_hash": "0f2ac04ed22b2b68f46a6c45ad6875ea89c14b2174b198454c422bb37ee07ebd",
+      "voice": "Kore"
+    }
+  ],
+  "config_hash": "8e764f1bbc93d18905309a7c8547a196154843383e971c32ef0e0c41b1241f8b",
+  "locale": "de",
+  "logical_source_path": "README.md",
+  "manifest_sha256": "85a9f399a4d6b7705fcc24badfe6b78105af8aaada9f932503a06204d603e212",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "de",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in German (Deutsch) matching document locale 'de'.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "readme",
+  "page_source_hash": "ad3393eff913a7f502a865a2869746cc8e5fefaccbe11e35e9fe45e62d234a94",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "352cd0a92a4d03d002def85aa04a96ae6dff8d76dc60affc15fb78ea761a8d21",
+  "source_path": "i18n/de/README.md",
+  "status": "complete",
+  "total_chunks": 1,
+  "total_duration_seconds": 134.496,
+  "transcript_file": "transcript.json",
+  "transcript_sha256": "76a1bbf74abca37aee6aa9fc10c1c77fab2a6c4ddc323c19f7facf2fd669f785"
+}

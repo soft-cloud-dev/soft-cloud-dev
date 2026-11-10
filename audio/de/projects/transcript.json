@@ -1,0 +1,229 @@
+{
+  "chunks": [
+    {
+      "chunk_hash": "28f8bd977ae187c305bf9de586e4e1aa5940bb99d45328a28211924cf19f1e93",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph"
+      ],
+      "section_anchor": "systeme-und-labore",
+      "section_title": "Systeme und Labore",
+      "segments": [
+        {
+          "element_id": "el-0001-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "44b69395e413311c41a10fbbbbce8a14f4b7673f688c3e4a4dc257d7af379030",
+          "spoken_text": "Systeme und Labore"
+        },
+        {
+          "element_id": "el-0002-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "1a214fe6064a3d84179e94ee9447f6885b2b46db7192d8e456253cd5291e6907",
+          "spoken_text": "Das Handbuch dient als Einstieg. Jedes Labor verantwortet seine Architektur, seinen Betriebsstatus und geprüfte Veröffentlichungen."
+        }
+      ],
+      "speech_input_hash": "7292437706c9776288c9b85835ffd09d0772f32d4ac3c1d7eea7baba8f706b01",
+      "text": "Systeme und Labore.\n\nDas Handbuch dient als Einstieg. Jedes Labor verantwortet seine Architektur, seinen Betriebsstatus und geprüfte Veröffentlichungen.",
+      "text_sha256": "efd45fb1d70897c8b832470bd6e7908f00c6ba54e32d92c9f8609ee79adbe7b6"
+    },
+    {
+      "chunk_hash": "3f493212bf9b3f1f6e29c51a261105744b4fa62a3b6fa1dc11705b9b094ca88d",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "element_ids": [
+        "el-0003-heading",
+        "el-0004-paragraph",
+        "el-0005-list"
+      ],
+      "section_anchor": "node-linux",
+      "section_title": "Node Linux",
+      "segments": [
+        {
+          "element_id": "el-0003-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "f866b1b0dd1ee4f8655777358b67eb5a2f2d6634791d778e70fdde3adfd8bb1c",
+          "spoken_text": "Node Linux"
+        },
+        {
+          "element_id": "el-0004-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "89235eba89c5376c874d67bdff5c1c56d44bf248a13a282dabcb8ff39d13cddf",
+          "spoken_text": "Reproduzierbare Architektur für Linux- und Kubernetes-Knoten."
+        },
+        {
+          "element_id": "el-0005-list",
+          "is_ai_summary": false,
+          "kind": "list",
+          "source_hash": "ea70971563f9fd2057120d9e1396d0bf470f8091f89ca8e90df2338beae0d8f1",
+          "spoken_text": "Lokaler Dokumentationsüberblick. Eigenständige Node-Linux-Publikation."
+        }
+      ],
+      "speech_input_hash": "48c1951b8ff271118a8b6fedfe78f4b8028f5eda842ed26856bb7b47b576c472",
+      "text": "Node Linux.\n\nReproduzierbare Architektur für Linux- und Kubernetes-Knoten.\n\nLokaler Dokumentationsüberblick. Eigenständige Node-Linux-Publikation.",
+      "text_sha256": "428e5a7f71eb21c76c9be0dfe90f0bedce8ed18644765949e8161da2eaee80e3"
+    },
+    {
+      "chunk_hash": "d7361f2d7e8aadf3cc3e40ccace3d277c4d4ce0b9354b8caa867a71e4c05134d",
+      "chunk_id": "chunk-003",
+      "chunk_index": 3,
+      "element_ids": [
+        "el-0006-heading",
+        "el-0007-paragraph",
+        "el-0008-list",
+        "el-0009-paragraph"
+      ],
+      "section_anchor": "freeipa",
+      "section_title": "FreeIPA",
+      "segments": [
+        {
+          "element_id": "el-0006-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "d5ecb476a8f76920092a76429b27349db57bba2c17421d23358c700ad7bf4ee5",
+          "spoken_text": "FreeIPA"
+        },
+        {
+          "element_id": "el-0007-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "2181a2234300cf566135ab2ae14b8a72998fb40d0f1a4f5e5b3d65a79e738122",
+          "spoken_text": "Identität, Verzeichnisdienste, Authentifizierung und Zugriffsrichtlinien."
+        },
+        {
+          "element_id": "el-0008-list",
+          "is_ai_summary": false,
+          "kind": "list",
+          "source_hash": "d5046c3b4d7d53b19f18e32d8fa8c193d16afbce83580dca247fe6f2d01616e2",
+          "spoken_text": "Eigenständige FreeIPA-Publikation."
+        },
+        {
+          "element_id": "el-0009-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "14bc84004885532a55d1092a98fa62fc5dc7cca3ea0f73f56aa23ba96f3334ed",
+          "spoken_text": "Die Labor-Subdomains bleiben vom Handbuch unabhängig."
+        }
+      ],
+      "speech_input_hash": "8f62af578d013695cdd8bcd27d85ae68161f77bce642c9c5013fc94ed78973b9",
+      "text": "FreeIPA.\n\nIdentität, Verzeichnisdienste, Authentifizierung und Zugriffsrichtlinien.\n\nEigenständige FreeIPA-Publikation.\n\nDie Labor-Subdomains bleiben vom Handbuch unabhängig.",
+      "text_sha256": "78b3a50c5f7fad6e47e88704ee4640ffce8df4c41a40489a9ecea3afb6741086"
+    }
+  ],
+  "code_summary_hashes": {},
+  "config_hash": "8e764f1bbc93d18905309a7c8547a196154843383e971c32ef0e0c41b1241f8b",
+  "element_ids": [
+    "el-0001-heading",
+    "el-0002-paragraph",
+    "el-0003-heading",
+    "el-0004-paragraph",
+    "el-0005-list",
+    "el-0006-heading",
+    "el-0007-paragraph",
+    "el-0008-list",
+    "el-0009-paragraph"
+  ],
+  "elements": [
+    {
+      "element_id": "el-0001-heading",
+      "heading_level": 1,
+      "kind": "heading",
+      "section_anchor": "systeme-und-labore",
+      "section_title": "Systeme und Labore",
+      "source_hash": "44b69395e413311c41a10fbbbbce8a14f4b7673f688c3e4a4dc257d7af379030",
+      "text": "Systeme und Labore"
+    },
+    {
+      "element_id": "el-0002-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "systeme-und-labore",
+      "section_title": "Systeme und Labore",
+      "source_hash": "1a214fe6064a3d84179e94ee9447f6885b2b46db7192d8e456253cd5291e6907",
+      "text": "Das Handbuch dient als Einstieg. Jedes Labor verantwortet seine Architektur, seinen Betriebsstatus und geprüfte Veröffentlichungen."
+    },
+    {
+      "element_id": "el-0003-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "node-linux",
+      "section_title": "Node Linux",
+      "source_hash": "f866b1b0dd1ee4f8655777358b67eb5a2f2d6634791d778e70fdde3adfd8bb1c",
+      "text": "Node Linux"
+    },
+    {
+      "element_id": "el-0004-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "node-linux",
+      "section_title": "Node Linux",
+      "source_hash": "89235eba89c5376c874d67bdff5c1c56d44bf248a13a282dabcb8ff39d13cddf",
+      "text": "Reproduzierbare Architektur für Linux- und Kubernetes-Knoten."
+    },
+    {
+      "element_id": "el-0005-list",
+      "kind": "list",
+      "section_anchor": "node-linux",
+      "section_title": "Node Linux",
+      "source_hash": "ea70971563f9fd2057120d9e1396d0bf470f8091f89ca8e90df2338beae0d8f1",
+      "text": "Lokaler Dokumentationsüberblick. Eigenständige Node-Linux-Publikation."
+    },
+    {
+      "element_id": "el-0006-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "freeipa",
+      "section_title": "FreeIPA",
+      "source_hash": "d5ecb476a8f76920092a76429b27349db57bba2c17421d23358c700ad7bf4ee5",
+      "text": "FreeIPA"
+    },
+    {
+      "element_id": "el-0007-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "freeipa",
+      "section_title": "FreeIPA",
+      "source_hash": "2181a2234300cf566135ab2ae14b8a72998fb40d0f1a4f5e5b3d65a79e738122",
+      "text": "Identität, Verzeichnisdienste, Authentifizierung und Zugriffsrichtlinien."
+    },
+    {
+      "element_id": "el-0008-list",
+      "kind": "list",
+      "section_anchor": "freeipa",
+      "section_title": "FreeIPA",
+      "source_hash": "d5046c3b4d7d53b19f18e32d8fa8c193d16afbce83580dca247fe6f2d01616e2",
+      "text": "Eigenständige FreeIPA-Publikation."
+    },
+    {
+      "element_id": "el-0009-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "freeipa",
+      "section_title": "FreeIPA",
+      "source_hash": "14bc84004885532a55d1092a98fa62fc5dc7cca3ea0f73f56aa23ba96f3334ed",
+      "text": "Die Labor-Subdomains bleiben vom Handbuch unabhängig."
+    }
+  ],
+  "locale": "de",
+  "logical_source_path": "projects.md",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "de",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in German (Deutsch) matching document locale 'de'.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "projects",
+  "page_source_hash": "1cd81ec707b261aced5c243e471a06d65d2454d31cbd820d96dbf873faf93f4f",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "a9a70059852a671d823003923e1cf485e2452ca8cd0c428316fb3add25ba7b31",
+  "source_path": "i18n/de/projects.md",
+  "transcript_sha256": "23dea963c015f9d8cf83cec2720912b4409f4fb4c72fa95032bde5da6378d64c"
+}
