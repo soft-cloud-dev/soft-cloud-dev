@@ -412,19 +412,25 @@ body:has(.sc-handbook) article.article-grid {
   }
 }
 
-/* Preserve the real MyST home link in the mobile header, then move menu last. */
+/* Preserve the original MyST home link. Avoid display:contents on the
+ * first header group: Chromium treats the promoted logo as non-visible.
+ * Keep the existing flex group and position only the menu button last. */
 @media (max-width: 640px) {
   body:has(.sc-handbook) .myst-top-nav-bar {
     display: flex !important;
+    position: relative;
     flex-wrap: nowrap !important;
     gap: .2rem !important;
   }
   body:has(.sc-handbook) .myst-top-nav-bar > div:first-child {
-    display: contents !important;
+    display: flex !important;
+    order: 0;
+    margin: 0 !important;
+    min-width: 0;
+    flex: 0 0 auto;
   }
   body:has(.sc-handbook) .myst-top-nav-bar .myst-home-link {
     display: inline-flex !important;
-    order: 0;
     margin: 0 !important;
     flex: 0 0 auto;
   }
@@ -436,17 +442,23 @@ body:has(.sc-handbook) article.article-grid {
     max-width: 106px !important;
     max-height: 2rem !important;
   }
+  body:has(.sc-handbook) .myst-top-nav-bar > div:first-child > div:first-child {
+    display: block !important;
+    position: absolute;
+    right: .1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+  }
   body:has(.sc-handbook) .myst-top-nav-bar > div:nth-child(2) {
     order: 1;
     margin-left: auto;
+    margin-right: 44px;
     flex: 0 1 auto;
     min-width: 0;
   }
-  body:has(.sc-handbook) .myst-top-nav-bar > div:first-child > div:first-child {
-    order: 2;
-    flex: 0 0 auto;
-  }
 }
+
 @media (prefers-reduced-motion: reduce) {
   .sc-handbook *,
   .sc-handbook *::before,
