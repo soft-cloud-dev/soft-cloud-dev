@@ -192,14 +192,37 @@ def build_localized_myst_config(
 
         project["toc"] = prune_toc(project["toc"])
 
+    # Route labels and destinations are both derived from the active locale.
+    # Never send a translated navbar entry back to an unrelated English route.
+    nav_sources = {
+        "Guides": "guides.md",
+        "Notebooks": "notebooks.md",
+        "UI Library": "ui-library.md",
+        "Projects": "projects.md",
+    }
     nav_titles = (
         site_meta.get("nav_titles", {}) if isinstance(site_meta, dict) else {}
     ) or locale_info.get("nav_titles", {})
     site = cfg.setdefault("site", {})
-    if isinstance(nav_titles, dict) and isinstance(site.get("nav"), list):
+    if isinstance(site.get("nav"), list):
+        localized_nav: list[dict[str, Any]] = []
         for item in site["nav"]:
-            if isinstance(item, dict) and item.get("title") in nav_titles:
-                item["title"] = nav_titles[item["title"]]
+            if not isinstance(item, dict):
+                continue
+            new_item = dict(item)
+            source = nav_sources.get(str(item.get("title", "")))
+            if source is not None:
+                if staged_files is not None and source not in staged_files:
+                    continue
+                # MyST adds BASE_URL (including the locale prefix) while
+                # compiling the site. Adding it here produces /pl/pl/guides.
+                new_item["url"] = route_url_for_page(
+                    "", page_slug_from_rel_path(source)
+                )
+            if new_item.get("title") in nav_titles:
+                new_item["title"] = nav_titles[new_item["title"]]
+            localized_nav.append(new_item)
+        site["nav"] = localized_nav
 
     return cfg
 

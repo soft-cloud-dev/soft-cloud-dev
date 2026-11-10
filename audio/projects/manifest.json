@@ -1,0 +1,100 @@
+{
+  "chunks": [
+    {
+      "audio_file": "chunk-001-b3c8be0560ff.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "53f5abadb85aaddbc073c226a915775b539ade6ea88628bb8592029572df54a8",
+      "chunk_hash": "b3c8be0560ff07d6238a6d59ef229c49263455e056555419b85fe092dcea1c98",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "duration_seconds": 12.336,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph"
+      ],
+      "locale": "en",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "systems-laboratories",
+      "section_title": "Systems & Laboratories",
+      "size_bytes": 98688,
+      "speech_input_hash": "22f82e621f18d0d9ed3601603960a800e220b7aeab7e7d13b14e8690cc0339fd",
+      "text_sha256": "740583aa063cb9ee6056f94e596300eea254a59befd4e61737995ac39735e54b",
+      "tts_config_hash": "9160343c18f0699d577bb323ec5457bbdbb90e79af1828796210da5dec369e87",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-002-3109a251719f.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "da7f93a773ea488e45ed38cc9b31d0abf0a4163d4d860b1df6c68ce5bb19d9a7",
+      "chunk_hash": "3109a251719fa340778d5377921b5628befd0971bab89ef28963428a371cc1ab",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "duration_seconds": 10.536,
+      "element_ids": [
+        "el-0003-heading",
+        "el-0004-paragraph",
+        "el-0005-list"
+      ],
+      "locale": "en",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "node-linux",
+      "section_title": "Node Linux",
+      "size_bytes": 84288,
+      "speech_input_hash": "c5cb9fd6c8f9165ef0e91808025d8a1cc46b45e7c46b6abe5e4481acfb59c01d",
+      "text_sha256": "185325c900d1bcd2389e9df548c4c72955d5325ed3a37e065b65c5564b8b3616",
+      "tts_config_hash": "9160343c18f0699d577bb323ec5457bbdbb90e79af1828796210da5dec369e87",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-003-d922c12a13b7.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "0b3a9268ac288ff07922d89f136841482f25803637ee9e7c289f5fe642cfd351",
+      "chunk_hash": "d922c12a13b71828d3384da7bbad6a8df7d0d0d59dd5a5aa29b362ce1ee6fa65",
+      "chunk_id": "chunk-003",
+      "chunk_index": 3,
+      "duration_seconds": 15.336,
+      "element_ids": [
+        "el-0006-heading",
+        "el-0007-paragraph",
+        "el-0008-list",
+        "el-0009-paragraph"
+      ],
+      "locale": "en",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "freeipa",
+      "section_title": "FreeIPA",
+      "size_bytes": 122688,
+      "speech_input_hash": "d068664f2f0fbadcbfcebecc84b0590c22bf3549299784e96d325a6fe2b24b78",
+      "text_sha256": "4246d512ca3247182cc59c4621b72a60c125b22b893412b7e3a970d63a37b85b",
+      "tts_config_hash": "9160343c18f0699d577bb323ec5457bbdbb90e79af1828796210da5dec369e87",
+      "voice": "Kore"
+    }
+  ],
+  "config_hash": "d5baac4fad1f9b181890c898934a905b75aa725dee29a66f520b062347b9bd18",
+  "locale": "en",
+  "logical_source_path": "projects.md",
+  "manifest_sha256": "4d298cc17957fb85f0b4d1c94d3d9050fe398c262afccc021bdd8496f46cff4f",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "en",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "projects",
+  "page_source_hash": "5bdf46c1d0a0d635328a0d3dcc62778158121be762ee93814bd870016e92ca86",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "563646cfd58fc7355df7345b78a5bf31e40893ec4accc3013fd32f2d4de04331",
+  "source_path": "projects.md",
+  "status": "complete",
+  "total_chunks": 3,
+  "total_duration_seconds": 38.208,
+  "transcript_file": "transcript.json",
+  "transcript_sha256": "9824293c56baa5d464faf828a974a0baee261d3d6039c2f44c2cec0a2e8f62fc"
+}

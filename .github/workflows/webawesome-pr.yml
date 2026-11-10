@@ -36,6 +36,9 @@ jobs:
           cache: 'npm'
 
       - name: Install Node dependencies
+        env:
+          DEBIAN_FRONTEND: noninteractive
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/ms-playwright
         run: |
           npm ci
           node scripts/check-node-dependencies.mjs
@@ -44,10 +47,27 @@ jobs:
       - name: Run shared CI verification driver
         env:
           BASE_URL: ""
+          HOME: ${{ runner.temp }}/ci-home
+          JUPYTER_CONFIG_DIR: ${{ runner.temp }}/jupyter-config
+          JUPYTER_RUNTIME_DIR: ${{ runner.temp }}/jupyter-runtime
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/ms-playwright
+          HOST: "127.0.0.1"
+          NODE_OPTIONS: "--dns-result-order=ipv4first"
           SOFTCLOUD_AUDIO_OFFLINE: '1'
         run: |
+          mkdir -p "$HOME" "$JUPYTER_CONFIG_DIR" "$JUPYTER_RUNTIME_DIR"
+          printf 'c.ServerApp.allow_root = True\n' > "$JUPYTER_CONFIG_DIR/jupyter_server_config.py"
           . .venv/bin/activate
           bash scripts/ci-test-driver.sh
+
+      - name: Upload handbook viewport screenshots
+        if: always()
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        with:
+          name: executable-handbook-visuals
+          path: test-results/**/handbook-*.png
+          if-no-files-found: ignore
+          retention-days: 14
 
       - name: Upload test artifacts on failure
         if: failure()
