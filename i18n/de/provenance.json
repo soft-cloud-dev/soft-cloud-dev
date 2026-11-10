@@ -161,6 +161,73 @@
       "translated_sha256": "91c7e3b43e5ff1dc0430f89b5bbd480204e4fef1b54277adc6b56475e0fb6016",
       "translation_model": "gemini-2.5-flash"
     },
+    "contributing.md": {
+      "accepted_from": "human_edit",
+      "code_block_count": 1,
+      "code_fingerprint_sha256": "831e984de9d7fcfd40235f8964264159a920e73c0e8ece3b0513206c5ba1c97c",
+      "dependency_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "glossary_sha256": "49d88d6d5cc4d25bd538b6e7621497026343e7944687c1c6758b3f91848eadc4",
+      "localized_code_fingerprint_sha256": "831e984de9d7fcfd40235f8964264159a920e73c0e8ece3b0513206c5ba1c97c",
+      "localized_path": "i18n/de/contributing.md",
+      "policy_sha256": "bf4115911eca60f7a480990ca224e61e1b3501d0b0dc74019bd5bc9c11408775",
+      "revision_state": "reviewed",
+      "sections": [
+        {
+          "index": "frontmatter",
+          "source_heading": "__frontmatter__",
+          "source_sha256": "94943d39e41da3378848d9efd59e1f37e923ec774fde22fad3ab7050eaf52be7",
+          "translated_heading": "__frontmatter__",
+          "translated_sha256": "e8c3c6965399729874e2d38c4459f39865c0047762f8d033df56f070c9fdc4d0"
+        },
+        {
+          "index": "0",
+          "source_heading": "__preamble__",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "translated_heading": "__preamble__",
+          "translated_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "index": "1",
+          "source_heading": "Contributor Guide",
+          "source_sha256": "0a7146854e3b2a911cb071fb9df2fd3a03ca6a013acb0749402bb5fbd3294f11",
+          "translated_heading": "Leitfaden für Mitwirkende",
+          "translated_sha256": "cdaaa88f5c4e4fc8b5929d7f369989d16e548f7eb562fb9c5cf9f8bb637c38cd"
+        },
+        {
+          "index": "2",
+          "source_heading": "Toolchain and source of truth",
+          "source_sha256": "9d9492ed803b9f32879a17ff6c4718736130b151aa0c42678f71d88001ac4f90",
+          "translated_heading": "Toolchain und Quelle der Wahrheit",
+          "translated_sha256": "5fe11efd3b6e36ed942d1931692a094a4f8d68ce41d0bb0dc8a5cc4a2889198a"
+        },
+        {
+          "index": "3",
+          "source_heading": "Local development",
+          "source_sha256": "a470c782ac74f3a019e61093d5056fc4d5fdb96a9690caccdacb0a0afb907c96",
+          "translated_heading": "Lokale Entwicklung",
+          "translated_sha256": "58e42c56fe4af8bb29fb70f7f78b12e991f3443c02f6514575e89d32d29c0b75"
+        },
+        {
+          "index": "4",
+          "source_heading": "Editing the handbook",
+          "source_sha256": "39ebc8b4f3b6f6fea9762f4650549370179385e048de508d1c1c7d715535e58c",
+          "translated_heading": "Bearbeiten des Handbuchs",
+          "translated_sha256": "658e5ee687629242411bcce787a166bd753a3089b8da2f5e0ecae344a2f69dda"
+        },
+        {
+          "index": "5",
+          "source_heading": "Review and publication",
+          "source_sha256": "4552898c54234539aed8a5890844d96c0e842d94d9487ab4949a053f8fd409e4",
+          "translated_heading": "Überprüfung und Veröffentlichung",
+          "translated_sha256": "ad8f1abe92ec7156712d9be9960f5aa978262e5a620209683aa50aadfb9a0390"
+        }
+      ],
+      "source_commit": "e5f63d7112d050ab36c51c598eac405c6244dd45",
+      "source_path": "contributing.md",
+      "source_sha256": "063e0c8b208b5dac7fb921b054a4d7fb9e65b23518fd0b84f72b75434686a301",
+      "translated_sha256": "b2f92d24a844bae846ce387d570f6bbf9a5479b0eebceb8ded0a9351a0b5a46f",
+      "translation_model": "gemini-2.5-flash"
+    },
     "guides.md": {
       "code_block_count": 0,
       "code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -588,6 +655,52 @@
       "translated_sha256": "a9a70059852a671d823003923e1cf485e2452ca8cd0c428316fb3add25ba7b31",
       "translation_model": "openai-gpt-6"
     },
+    "projects/freeipa.md": {
+      "accepted_from": "human_edit",
+      "code_block_count": 0,
+      "code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "dependency_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "glossary_sha256": "49d88d6d5cc4d25bd538b6e7621497026343e7944687c1c6758b3f91848eadc4",
+      "localized_code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "localized_path": "i18n/de/projects/freeipa.md",
+      "policy_sha256": "bf4115911eca60f7a480990ca224e61e1b3501d0b0dc74019bd5bc9c11408775",
+      "revision_state": "reviewed",
+      "sections": [
+        {
+          "index": "frontmatter",
+          "source_heading": "__frontmatter__",
+          "source_sha256": "51ffe2f1115870ec5c691a165d87f1d0b422935a9d12bf61b7edb8229134b3eb",
+          "translated_heading": "__frontmatter__",
+          "translated_sha256": "1b18d8ef856ab98d12e88d563035fb1ba4cbdb8611c728ccc6676b822a23a7b8"
+        },
+        {
+          "index": "0",
+          "source_heading": "__preamble__",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "translated_heading": "__preamble__",
+          "translated_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "index": "1",
+          "source_heading": "FreeIPA Identity & Directory",
+          "source_sha256": "94b81158784c9e3ea773d1b8814c23e7122e93fe013dd678d53a6b7b5b900767",
+          "translated_heading": "FreeIPA-Identität & Verzeichnis",
+          "translated_sha256": "c32fe8733ac786c43c6cd799719993a9d15037fad0a7f2661954c807682e3465"
+        },
+        {
+          "index": "2",
+          "source_heading": "Start here",
+          "source_sha256": "4519119403a0afb0f2e00744a323a48388ba575e5510ef4a2692862fd7bbdc0c",
+          "translated_heading": "Start hier",
+          "translated_sha256": "dea4273583bd2458c59af651f166eba01c789845efd2b61d831e4fddae01ca37"
+        }
+      ],
+      "source_commit": "e5f63d7112d050ab36c51c598eac405c6244dd45",
+      "source_path": "projects/freeipa.md",
+      "source_sha256": "ae43d6974c92c50ab6f72d563d47a21ba46d9aa06d7f5ab59430bbdb179e20e1",
+      "translated_sha256": "216d09c8139e3c9906d9703de5308010d24cc44386f808bc109f2fb3d203776c",
+      "translation_model": "gemini-2.5-flash"
+    },
     "projects/linux.md": {
       "code_block_count": 0,
       "code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -696,7 +809,7 @@
   },
   "glossary_sha256": "49d88d6d5cc4d25bd538b6e7621497026343e7944687c1c6758b3f91848eadc4",
   "locale": "de",
-  "provenance_sha256": "dcbd50a3db209c84f194d700addafef7df4324b14d20ac3ac3fa5607ae97c78c",
+  "provenance_sha256": "e9d61f8d1cc76ad69a0f95a3cdc312ad523b832507d349d28d4333aa3d73421e",
   "schema_version": "1.0",
   "source_locale": "en"
 }

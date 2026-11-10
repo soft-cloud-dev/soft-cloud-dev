@@ -19,13 +19,27 @@
     var targetTheme = isDark ? 'dark' : 'light';
     var targetWaClass = isDark ? 'wa-dark' : 'wa-light';
     var removeWaClass = isDark ? 'wa-light' : 'wa-dark';
+    var metaContent = stored === 'dark' || stored === 'light' ? stored : 'light dark';
 
     root.setAttribute('data-theme', targetTheme);
+    root.style.colorScheme = targetTheme;
     root.classList.add(targetTheme);
     root.classList.remove(isDark ? 'light' : 'dark');
     root.classList.add(targetWaClass);
     root.classList.remove(removeWaClass);
     root.classList.remove('wa-theme-dark', 'wa-theme-light');
+
+    if (document.head) {
+      var meta = document.querySelector('meta[name="color-scheme"]');
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.name = 'color-scheme';
+        document.head.appendChild(meta);
+      }
+      if (meta.content !== metaContent) {
+        meta.content = metaContent;
+      }
+    }
   } catch (e) {
     // Non-fatal if localStorage is restricted
   }

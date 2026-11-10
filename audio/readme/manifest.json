@@ -1,0 +1,52 @@
+{
+  "chunks": [
+    {
+      "audio_file": "chunk-001-805f0b1dcc5c.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "d98b03ada58ccb31115bf99ae3d664a3942fdbe123a24eaec2cf99b281780e27",
+      "chunk_hash": "805f0b1dcc5cd5e6978b63b2c7b882bbb52ed07f22ba028509ca72cd33263b91",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "duration_seconds": 113.544,
+      "element_ids": [
+        "el-0001-directive"
+      ],
+      "locale": "en",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "top",
+      "section_title": "Introduction",
+      "size_bytes": 908352,
+      "speech_input_hash": "e48cbfce2170c7325e56dade14c48b7e2035c888e96821b1389045a999620c10",
+      "text_sha256": "ff29d78eecfeb4e5a69109252d13969d6efa7719ac0b6f9c97974e8a8147f7bc",
+      "tts_config_hash": "9160343c18f0699d577bb323ec5457bbdbb90e79af1828796210da5dec369e87",
+      "voice": "Kore"
+    }
+  ],
+  "config_hash": "d5baac4fad1f9b181890c898934a905b75aa725dee29a66f520b062347b9bd18",
+  "locale": "en",
+  "logical_source_path": "README.md",
+  "manifest_sha256": "2646c8163853186da89eaa22e8ca7a9fdb6c7dbecdbd187eebd64f11a2bb09d4",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "en",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "readme",
+  "page_source_hash": "a72474d9b82987ed386a843e553f56fc0279cdcf61c1357dcc2ded77d20d63cf",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "5a9cbad85020e097eb784846cedd8205ce60a0bb1b5548d1a9e1aaa89d966526",
+  "source_path": "README.md",
+  "status": "complete",
+  "total_chunks": 1,
+  "total_duration_seconds": 113.544,
+  "transcript_file": "transcript.json",
+  "transcript_sha256": "bcd546f43792b17172df68157905a078b74d674b3a35251b66d31ba16f089ede"
+}

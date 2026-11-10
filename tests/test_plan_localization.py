@@ -16,7 +16,7 @@ import plan_localization as pl  # noqa: E402
 
 
 def stage(tmp: Path) -> Path:
-    for name in ("myst.yml", "README.md", "guides.md", "notebooks.md", "projects.md", "ui-library.md", "introduction.md", "architecture.md", "i18n", "projects", "notebooks", "audio"):
+    for name in ("myst.yml", "README.md", "guides.md", "notebooks.md", "projects.md", "ui-library.md", "contributing.md", "introduction.md", "architecture.md", "i18n", "projects", "notebooks", "audio"):
         src = ROOT / name
         if src.is_dir():
             shutil.copytree(src, tmp / name)
@@ -31,8 +31,12 @@ def stage(tmp: Path) -> Path:
     config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
     required = tuple(
         yaml.safe_load((tmp / "i18n/locales.yml").read_text(encoding="utf-8"))["required_pages"]
-    ) + ("notebooks/webawesome-docs.ipynb",)
-    config["project"]["toc"] = [{"file": name} for name in required]
+    )
+    recorded = tuple(
+        json.loads((tmp / "i18n/pl/provenance.json").read_text(encoding="utf-8")).get("documents", {}).keys()
+    )
+    toc_files = list(dict.fromkeys((*required, "notebooks/webawesome-docs.ipynb", *recorded)))
+    config["project"]["toc"] = [{"file": name} for name in toc_files]
     config_path.write_text(
         yaml.safe_dump(config, sort_keys=False, allow_unicode=True),
         encoding="utf-8",

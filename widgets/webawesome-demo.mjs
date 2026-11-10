@@ -5,8 +5,8 @@
  */
 const native = new Set(['a', 'code', 'div', 'figcaption', 'figure', 'h3', 'img', 'li', 'p', 'small', 'source', 'span', 'strong', 'ul', 'video']);
 const permittedAttrs = new Set([
-  'active', 'alt', 'anchor', 'appearance', 'aria-label', 'checked', 'class',
-  'content', 'controls', 'caret', 'date', 'day', 'decoding', 'duration', 'effect', 'expanded',
+  'active', 'alt', 'anchor', 'appearance', 'aria-controls', 'aria-expanded', 'aria-label', 'checked', 'class',
+  'command', 'commandfor', 'content', 'controls', 'caret', 'date', 'day', 'decoding', 'duration', 'effect', 'expanded',
   'for', 'href', 'id', 'image', 'initials', 'label', 'length', 'loading', 'loop', 'max', 'min', 'month', 'mouse-dragging', 'muted',
   'name', 'navigation', 'open', 'page', 'pages', 'panel', 'pagination',
   'pill', 'placeholder', 'play', 'playsinline', 'position', 'poster', 'preload', 'referrerpolicy', 'rows', 'shape', 'size', 'slot', 'src',
@@ -30,6 +30,21 @@ function localShowcaseUrl(raw) {
   return resolveShowcaseMedia(raw);
 }
 
+function isSameOriginUrl(candidateUrl, referenceUrl = import.meta.url) {
+  try {
+    const resolvedCandidate = new URL(candidateUrl, referenceUrl).href;
+    const resolvedRef = new URL(referenceUrl).href;
+    if ('Origin' in globalThis) {
+      return globalThis.Origin.from(resolvedCandidate).isSameOrigin(globalThis.Origin.from(resolvedRef));
+    }
+    const candidateParsed = new URL(resolvedCandidate);
+    const refParsed = new URL(resolvedRef);
+    return candidateParsed.origin !== 'null' && candidateParsed.origin === refParsed.origin;
+  } catch {
+    return false;
+  }
+}
+
 function createNode(data) {
   if (typeof data === 'string') return document.createTextNode(data);
   if (!data || typeof data !== 'object' || typeof data.tag !== 'string') {
@@ -49,6 +64,14 @@ function createNode(data) {
     if (['href', 'src', 'image', 'poster'].includes(attr) &&
         !validUrl.test(safeValue) && !(isShowcase && safeValue.startsWith('file://'))) continue;
     node.setAttribute(attr, safeValue);
+  }
+  const demoTarget = node.getAttribute('data-demo-target');
+  const demoAction = node.getAttribute('data-demo-action');
+  if (demoTarget && (demoAction === 'show' || demoAction === 'hide')) {
+    if (!node.hasAttribute('commandfor')) node.setAttribute('commandfor', demoTarget);
+    if (!node.hasAttribute('command')) node.setAttribute('command', `--${demoAction}`);
+    if (!node.hasAttribute('aria-controls')) node.setAttribute('aria-controls', demoTarget);
+    if (!node.hasAttribute('aria-expanded')) node.setAttribute('aria-expanded', 'false');
   }
   for (const child of data.children || []) node.append(createNode(child));
   return node;
@@ -113,7 +136,7 @@ function hasStylesheetHref(container, suffix) {
   const links = container.getElementsByTagName ? Array.from(container.getElementsByTagName('link')) : [];
   return links.some(link => {
     const href = link.getAttribute('href') || '';
-    return href.endsWith(suffix);
+    return href.endsWith(suffix) && (href.startsWith('/') || isSameOriginUrl(href));
   });
 }
 
@@ -147,6 +170,7 @@ function syncDocumentTheme() {
   if (root.classList.contains(dropClass)) root.classList.remove(dropClass);
   if (!root.classList.contains(wantClass)) root.classList.add(wantClass);
   if (root.getAttribute('data-theme') !== wantTheme) root.setAttribute('data-theme', wantTheme);
+  if (root.style && root.style.colorScheme !== wantTheme) root.style.colorScheme = wantTheme;
   if (!themeObserverInstalled && typeof MutationObserver !== 'undefined') {
     themeObserverInstalled = true;
     const obs = new MutationObserver(() => syncDocumentTheme());
@@ -228,17 +252,37 @@ export default {
       if (!names.size || names.size > 25) throw new Error('Invalid component count.');
       await loadComponents(names);
       for (const node of nodes) frame.append(createNode(node));
+      const applyDemoCommand = (receiver, action) => {
+        if (!receiver || (action !== 'show' && action !== 'hide')) return;
+        const isShowing = action === 'show';
+        if (typeof receiver[action] === 'function') receiver[action]();
+        else receiver.open = isShowing;
+        if (receiver.id) {
+          const triggers = frame.querySelectorAll(`[data-demo-target="${CSS.escape(receiver.id)}"], [commandfor="${CSS.escape(receiver.id)}"]`);
+          for (const trig of triggers) {
+            trig.setAttribute('aria-expanded', String(isShowing));
+          }
+        }
+      };
+      frame.addEventListener('command', event => {
+        const target = event.composedPath ? event.composedPath()[0] : event.target;
+        const command = event.command;
+        if (command === '--show' || command === '--hide') {
+          applyDemoCommand(target, command.slice(2));
+        }
+      }, { capture: true });
       frame.addEventListener('click', event => {
         const actionNode = event.target.closest?.('[data-demo-target]');
         if (!actionNode || !frame.contains(actionNode)) return;
         event.stopPropagation();
+        if ('commandForElement' in HTMLButtonElement.prototype && actionNode.tagName === 'BUTTON' && actionNode.hasAttribute('commandfor')) {
+          return;
+        }
         const action = actionNode.getAttribute('data-demo-action');
         const id = actionNode.getAttribute('data-demo-target');
         if (!id || (action !== 'show' && action !== 'hide')) return;
         const receiver = frame.querySelector('#' + CSS.escape(id));
-        if (!receiver) return;
-        if (typeof receiver[action] === 'function') receiver[action]();
-        else receiver.open = action === 'show';
+        applyDemoCommand(receiver, action);
       });
       message.remove();
     } catch (error) {
