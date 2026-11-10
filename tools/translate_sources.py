@@ -378,6 +378,7 @@ def check_locale_provenance(root: Path, locale: str, docs: list[str], progressiv
     errors: list[str] = []
     locales_cfg = load_locales_config(root)
     locales_map = get_enabled_locales(locales_cfg)
+    required_pages = set(locales_cfg.get("required_pages", []))
     if locale not in locales_map:
         return [f"Unknown locale: {locale}"]
     locale_info = locales_map[locale]
@@ -411,7 +412,8 @@ def check_locale_provenance(root: Path, locale: str, docs: list[str], progressiv
         en_path = root / rel_doc
         loc_path = loc_root / rel_doc
         if not loc_path.is_file():
-            if not progressive and not rel_doc.startswith("components/"):
+            # Progressive publication does not waive mandatory translations.
+            if rel_doc in required_pages or (not progressive and not rel_doc.startswith("components/")):
                 errors.append(f"[{locale}] Missing translated document: {loc_path.relative_to(root)}")
             continue
 

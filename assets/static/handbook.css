@@ -1,0 +1,478 @@
+/* Executable Handbook design layer.
+ * Scoped to .sc-handbook, preserving existing MyST and Web Awesome pages.
+ * Keep the documentation structure in myst.yml rather than duplicating it here.
+ */
+
+/* Scope layout widening to the handbook; other pages keep the book grid. */
+body:has(.sc-handbook) main.article-grid {
+  display: block !important;
+  max-width: none !important;
+}
+body:has(.sc-handbook) article.article-grid {
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 1230px !important;
+  margin-inline: auto !important;
+  padding-inline: clamp(1rem, 3.5vw, 3.25rem) !important;
+}
+.sc-handbook {
+  --sc-h-ink: #11182c;
+  --sc-h-muted: #5a6170;
+  --sc-h-border: #e4e6ec;
+  --sc-h-red: #c90018;
+  --sc-h-panel: #f6f7f9;
+  --sc-h-canvas: #ffffff;
+  width: 100%;
+  max-width: 1160px;
+  margin-inline: auto;
+  color: var(--sc-h-ink);
+  line-height: 1.5;
+}
+
+.sc-handbook a {
+  text-decoration: none;
+}
+
+.sc-handbook a:focus-visible {
+  outline: 3px solid #2458ae;
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+
+.sc-handbook__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(290px, 1fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
+  padding: clamp(1.5rem, 4vw, 3.75rem) 0 2.75rem;
+}
+
+.sc-handbook__intro > p:first-of-type {
+  margin: 0 0 1.25rem;
+  color: #6b7280;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.sc-handbook__intro > :is(h1, h2) {
+  max-width: 15ch;
+  margin: 0 0 1.3rem;
+  color: var(--sc-h-ink);
+  font-size: clamp(2.4rem, 4.1vw, 3.65rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+
+.sc-handbook__intro > p:nth-of-type(2) {
+  max-width: 46ch;
+  margin: 0 0 1.5rem;
+  color: var(--sc-h-muted);
+  font-size: clamp(1rem, 1.45vw, 1.2rem);
+}
+
+.sc-handbook__intro > p:last-of-type {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  margin: 0;
+}
+
+.sc-handbook__intro > p:last-of-type > span a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: .65rem .2rem;
+  font-weight: 650;
+  color: #b80017;
+}
+
+.sc-handbook__intro > p:last-of-type > span:first-child a {
+  padding: .7rem 1.25rem;
+  border-radius: 6px;
+  background: var(--sc-h-red);
+  color: #fff;
+  box-shadow: 0 2px 5px #95051a20;
+}
+
+.sc-handbook__intro > p:last-of-type > span:first-child a:hover {
+  background: #a90017;
+}
+
+.sc-handbook__intro > p:last-of-type > span:not(:first-child) a {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: .65rem .2rem !important;
+  color: #b80017 !important;
+}
+.sc-handbook__verification {
+  min-width: 0;
+  padding: clamp(1.1rem, 2vw, 1.5rem);
+  background: var(--sc-h-panel);
+  border: 1px solid var(--sc-h-border);
+  border-radius: 7px;
+}
+
+.sc-handbook__verification > :is(h3, h4) {
+  margin: 0 0 1rem;
+  color: var(--sc-h-ink);
+  font-size: 1rem;
+  font-weight: 750;
+}
+
+.sc-handbook__verification pre {
+  margin: 0 0 1.1rem;
+  padding: 1rem;
+  overflow-x: auto;
+  border: 1px solid #e7e8ed;
+  border-radius: 6px;
+  background: #fff;
+  color: #1c2437;
+  font-size: .8rem;
+  line-height: 1.75;
+}
+
+.sc-handbook__verification > p {
+  margin: .7rem 0;
+  color: var(--sc-h-muted);
+  font-size: .85rem;
+}
+
+.sc-handbook__verification > p:has(> strong) {
+  padding-top: .7rem;
+  border-top: 1px solid var(--sc-h-border);
+}
+
+.sc-handbook__verification > p > code {
+  display: block;
+  overflow-x: auto;
+  padding: .7rem .8rem;
+  border-radius: 5px;
+  background: #eceef3;
+  color: #2b3342;
+  white-space: nowrap;
+}
+
+.sc-handbook__verification > p:last-child a {
+  display: inline-flex;
+  padding-top: .35rem;
+  color: #bb0016;
+  font-weight: 600;
+}
+
+.sc-handbook > :is(h2, h3) {
+  margin: 0 0 .8rem;
+  padding-top: 1.9rem;
+  border-top: 1px solid var(--sc-h-border);
+  color: var(--sc-h-ink);
+  font-size: clamp(1.6rem, 2.5vw, 2rem);
+  font-weight: 750;
+  line-height: 1.25;
+  letter-spacing: -.035em;
+}
+
+.sc-handbook__routes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.sc-handbook__route {
+  position: relative;
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  column-gap: 1.25rem;
+  align-items: center;
+  min-width: 0;
+  padding: 1.25rem .75rem 1.25rem .25rem;
+  min-height: 94px;
+  border-bottom: 1px solid var(--sc-h-border);
+}
+
+.sc-handbook__route::before {
+  content: "";
+  grid-column: 1;
+  grid-row: 1 / 3;
+  display: block;
+  width: 64px;
+  height: 64px;
+  background: #faeaed;
+  border-radius: 11px;
+}
+.sc-handbook__route::after {
+  content: "";
+  position: absolute;
+  left: 21px;
+  top: calc(50% - 14px);
+  width: 28px;
+  height: 28px;
+  background: #bb001a;
+  -webkit-mask: url("../vendor/fontawesome/svgs/solid/file-lines.svg") center / contain no-repeat;
+  mask: url("../vendor/fontawesome/svgs/solid/file-lines.svg") center / contain no-repeat;
+}
+.sc-handbook__route--notebook::before { background: #e9f1fd; }
+.sc-handbook__route--notebook::after {
+  background: #205fb3;
+  -webkit-mask-image: url("../vendor/fontawesome/svgs/solid/code.svg");
+  mask-image: url("../vendor/fontawesome/svgs/solid/code.svg");
+}
+.sc-handbook__route--library::before { background: #eaf4ee; }
+.sc-handbook__route--library::after {
+  background: #19633e;
+  -webkit-mask-image: url("../vendor/fontawesome/svgs/solid/cube.svg");
+  mask-image: url("../vendor/fontawesome/svgs/solid/cube.svg");
+}
+
+.sc-handbook__route > :is(h3, h4) {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0 .5rem .25rem 0;
+  font-size: 1.05rem;
+  font-weight: 750;
+  letter-spacing: -.02em;
+}
+
+.sc-handbook__route > :is(h3, h4) .heading-text a {
+  color: var(--sc-h-ink);
+}
+
+.sc-handbook__route > :is(h3, h4) .heading-text a:hover {
+  color: var(--sc-h-red);
+}
+
+.sc-handbook__route > p:nth-of-type(1) {
+  grid-column: 2;
+  grid-row: 2;
+  margin: 0;
+  max-width: 64ch;
+  color: var(--sc-h-muted);
+  font-size: .88rem;
+}
+
+.sc-handbook__route > p:last-of-type {
+  grid-column: 3;
+  grid-row: 1 / 3;
+  justify-self: end;
+  margin: 0;
+  padding: .28rem .6rem;
+  border-radius: 5px;
+  background: #f9e9eb;
+  color: #9f071c;
+  font-size: .66rem;
+  font-weight: 750;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+
+.sc-handbook__route--notebook > p:last-of-type {
+  background: #eaf0fa;
+  color: #174f96;
+}
+
+.sc-handbook__route--library > p:last-of-type {
+  background: #e8f3ec;
+  color: #1c6440;
+}
+
+.sc-handbook__projects {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: .5rem 2rem;
+  padding: 1.45rem 0;
+  border-bottom: 1px solid var(--sc-h-border);
+}
+
+.sc-handbook__projects > :is(h3, h4) {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.sc-handbook__projects > h3 a {
+  color: var(--sc-h-ink);
+}
+
+.sc-handbook__projects > p {
+  margin: 0;
+  color: var(--sc-h-muted);
+  font-size: .82rem;
+}
+
+.sc-handbook__projects > p a {
+  color: var(--sc-h-ink);
+  font-weight: 650;
+}
+
+.sc-handbook__overview {
+  max-width: 86ch;
+  padding: 2.5rem 0 1rem;
+}
+
+.sc-handbook__overview :is(h2, h3) {
+  margin-top: 0;
+  font-size: 1.5rem;
+  letter-spacing: -.02em;
+}
+
+.sc-handbook__overview p {
+  color: var(--sc-h-muted);
+}
+
+:root.dark .sc-handbook,
+:root[data-theme="dark"] .sc-handbook {
+  --sc-h-ink: #f4f6fc;
+  --sc-h-muted: #a5afc1;
+  --sc-h-border: #354051;
+  --sc-h-panel: #202937;
+  --sc-h-canvas: #111b29;
+}
+
+:root.dark .sc-handbook__verification pre,
+:root[data-theme="dark"] .sc-handbook__verification pre {
+  background: #151e2d;
+  color: #f1f4fb;
+  border-color: #364153;
+}
+
+:root.dark .sc-handbook__verification > p > code,
+:root[data-theme="dark"] .sc-handbook__verification > p > code {
+  background: #172133;
+  color: #f1f4fb;
+}
+
+@media (max-width: 800px) {
+  .sc-handbook__hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.25rem;
+  }
+  .sc-handbook__intro > :is(h1, h2) {
+    max-width: 18ch;
+  }
+}
+
+@media (max-width: 520px) {
+  .sc-handbook__hero {
+    padding: 1.5rem 0 2rem;
+  }
+  .sc-handbook__intro > :is(h1, h2) {
+    max-width: 13ch;
+    font-size: clamp(2.15rem, 9vw, 2.7rem);
+  }
+  .sc-handbook__intro > p:last-of-type {
+    align-items: stretch;
+    flex-direction: column;
+    gap: .5rem;
+  }
+  .sc-handbook__intro > p:last-of-type > span a {
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .sc-handbook__route {
+    grid-template-columns: 54px minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    gap: .3rem .75rem;
+    padding: 1rem 0;
+  }
+  .sc-handbook__route::before {
+    grid-column: 1;
+    grid-row: 1 / 4;
+    width: 48px;
+    height: 48px;
+    align-self: start;
+  }
+  .sc-handbook__route::after {
+    top: 23px;
+    left: 13px;
+    width: 22px;
+    height: 22px;
+  }
+  .sc-handbook__route > :is(h3, h4) {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .sc-handbook__route > p:nth-of-type(1) {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .sc-handbook__route > p:last-of-type {
+    grid-column: 2;
+    grid-row: 3;
+    justify-self: start;
+  }
+  .sc-handbook__projects {
+    display: block;
+  }
+  .sc-handbook__projects > p {
+    margin-top: .7rem;
+  }
+}
+
+/* Preserve the original MyST home link. Avoid display:contents on the
+ * first header group: Chromium treats the promoted logo as non-visible.
+ * Keep the existing flex group and position only the menu button last. */
+@media (max-width: 640px) {
+  body:has(.sc-handbook) .myst-top-nav-bar {
+    display: flex !important;
+    position: relative;
+    flex-wrap: nowrap !important;
+    gap: .2rem !important;
+  }
+  body:has(.sc-handbook) .myst-top-nav-bar > div:first-child {
+    display: flex !important;
+    order: 0;
+    margin: 0 !important;
+    width: 106px;
+    min-width: 106px;
+    flex: 0 0 106px;
+  }
+  body:has(.sc-handbook) .myst-top-nav-bar .myst-home-link {
+    display: inline-flex !important;
+    margin: 0 !important;
+    width: 106px;
+    min-width: 106px;
+    flex: 0 0 106px;
+  }
+  body:has(.sc-handbook) .myst-top-nav-bar .myst-home-link-logo {
+    display: flex !important;
+    margin: 0 !important;
+    width: 106px;
+    min-width: 106px;
+    height: 32px;
+  }
+  body:has(.sc-handbook) .myst-top-nav-bar .myst-home-link-logo img {
+    width: 106px !important;
+    min-width: 106px !important;
+    max-width: 106px !important;
+    height: auto !important;
+    max-height: 2rem !important;
+  }
+  body:has(.sc-handbook) .myst-top-nav-bar > div:first-child > div:first-child {
+    display: block !important;
+    position: absolute;
+    right: .1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+  }
+  body:has(.sc-handbook) .myst-top-nav-bar > div:nth-child(2) {
+    order: 1;
+    margin-left: auto;
+    margin-right: 44px;
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-handbook *,
+  .sc-handbook *::before,
+  .sc-handbook *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}

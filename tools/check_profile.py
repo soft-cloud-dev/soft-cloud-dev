@@ -148,6 +148,10 @@ default_locale = locales_cfg.get("default_locale", "en")
 locales_map = locales_cfg.get("locales", {})
 require(isinstance(locales_map, dict) and default_locale in locales_map,
         "Invalid locales mapping in i18n/locales.yml")
+required_pages = set(locales_cfg.get("required_pages", []))
+registered_pages = {path.relative_to(root).as_posix() for path in files}
+require(required_pages <= registered_pages,
+        "Required localized pages must remain registered in the TOC")
 
 for loc_code, loc_info in locales_map.items():
     if not isinstance(loc_info, dict) or not loc_info.get("enabled", True):
@@ -159,10 +163,13 @@ for loc_code, loc_info in locales_map.items():
         require(prov_data.get("locale") == loc_code, f"Provenance locale mismatch: {prov_file}")
         for en_file in files:
             rel_doc = en_file.relative_to(root).as_posix()
-            # Untranslated component catalog files publish progressively. Existing
-            # core documentation remains subject to strict locale validation.
+            # The publication stages only translated documents. Mandatory pages
+            # remain strict; optional new handbook and catalog entries are omitted
+            # from that locale until translation + provenance are available.
             candidate = root / src_dir / rel_doc
-            if rel_doc.startswith("components/") and not candidate.is_file():
+            if not candidate.is_file():
+                require(rel_doc not in required_pages,
+                        f"Missing required localized page: {candidate}")
                 continue
             loc_path = local_file(f"{src_dir}/{rel_doc}")
             if loc_path.suffix == ".ipynb":

@@ -49,6 +49,15 @@ jobs:
           . .venv/bin/activate
           bash scripts/ci-test-driver.sh
 
+      - name: Upload handbook viewport screenshots
+        if: always()
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        with:
+          name: executable-handbook-visuals
+          path: test-results/**/handbook-*.png
+          if-no-files-found: ignore
+          retention-days: 14
+
       - name: Upload test artifacts on failure
         if: failure()
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3

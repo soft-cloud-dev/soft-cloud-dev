@@ -16,12 +16,27 @@ import plan_localization as pl  # noqa: E402
 
 
 def stage(tmp: Path) -> Path:
-    for name in ("myst.yml", "README.md", "introduction.md", "architecture.md", "i18n", "projects", "notebooks", "audio"):
+    for name in ("myst.yml", "README.md", "guides.md", "notebooks.md", "projects.md", "ui-library.md", "introduction.md", "architecture.md", "i18n", "projects", "notebooks", "audio"):
         src = ROOT / name
         if src.is_dir():
             shutil.copytree(src, tmp / name)
         elif src.is_file():
             shutil.copy2(src, tmp / name)
+    # Exercise the original mandatory localized publication contract. The real
+    # project TOC also contains optional English-first pages; those belong to
+    # integration tests and must not trigger translation in stable test fixtures.
+    import yaml
+
+    config_path = tmp / "myst.yml"
+    config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+    required = tuple(
+        yaml.safe_load((tmp / "i18n/locales.yml").read_text(encoding="utf-8"))["required_pages"]
+    ) + ("notebooks/webawesome-docs.ipynb",)
+    config["project"]["toc"] = [{"file": name} for name in required]
+    config_path.write_text(
+        yaml.safe_dump(config, sort_keys=False, allow_unicode=True),
+        encoding="utf-8",
+    )
     return tmp
 
 
