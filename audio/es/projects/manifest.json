@@ -1,0 +1,100 @@
+{
+  "chunks": [
+    {
+      "audio_file": "chunk-001-d591ec514070.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "c4da89c3e606963f194bf2574c69f045283faca3e3cc25faa0a2b5ffcb5194af",
+      "chunk_hash": "d591ec51407040304bba79dce579a573d7b82676cbf783b7dd1817fd6389bf9a",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "duration_seconds": 10.944,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph"
+      ],
+      "locale": "es",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "sistemas-y-laboratorios",
+      "section_title": "Sistemas y laboratorios",
+      "size_bytes": 87552,
+      "speech_input_hash": "103723b4049cebef9343a5d53263d08be57e95d2bfc5d5733bbcb704aed64493",
+      "text_sha256": "3394579e8284cf830948ea53cf6f92a6304ea7b4bf5e1dbf347d1d7add7674e9",
+      "tts_config_hash": "974a0b12687b2329d30e99a3ec44775178590907d0686ee645fe6481b3e2374d",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-002-5187096be17c.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "a14b2bedfc6f01fe7b4ca4e0d0030289446f2020a7ef85743925be5d4668befc",
+      "chunk_hash": "5187096be17cf17617e97182a0a62a8e1d8e9b6cef0fb14bcdb4535a54daec9d",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "duration_seconds": 11.496,
+      "element_ids": [
+        "el-0003-heading",
+        "el-0004-paragraph",
+        "el-0005-list"
+      ],
+      "locale": "es",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "node-linux",
+      "section_title": "Node Linux",
+      "size_bytes": 91968,
+      "speech_input_hash": "8deb4dc6df6539a8f1da970784d5b5e42b25775a66d393b21935db5f2c78b6c6",
+      "text_sha256": "0cd78e67a4bae4232b43e7edd7efa2e1a226ad9d50b475779e996f4485797df9",
+      "tts_config_hash": "974a0b12687b2329d30e99a3ec44775178590907d0686ee645fe6481b3e2374d",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-003-c40eced7c37b.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "e9bd1fe894c316921ebd091ac58deb3165fa9999f0c1d7cc8a3a4ff3b0bc6b95",
+      "chunk_hash": "c40eced7c37bf505a12ac3500c6f9525227f06f031fbbfcc15cc819401645ad0",
+      "chunk_id": "chunk-003",
+      "chunk_index": 3,
+      "duration_seconds": 23.184,
+      "element_ids": [
+        "el-0006-heading",
+        "el-0007-paragraph",
+        "el-0008-list",
+        "el-0009-paragraph"
+      ],
+      "locale": "es",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "freeipa",
+      "section_title": "FreeIPA",
+      "size_bytes": 185472,
+      "speech_input_hash": "af06afff3c151185cdd1830a3715cc7666879510250ff50f1403d73b645e4da3",
+      "text_sha256": "f757292bcc4f5b19ef7a4585b8dbf16e24c4a9b24c15dea04e9e54d61b6b14f4",
+      "tts_config_hash": "974a0b12687b2329d30e99a3ec44775178590907d0686ee645fe6481b3e2374d",
+      "voice": "Kore"
+    }
+  ],
+  "config_hash": "8d36f75f176de8dde9204fb0212c8496cf77d474cd391c1e0a26ac9736eaaead",
+  "locale": "es",
+  "logical_source_path": "projects.md",
+  "manifest_sha256": "01a50801851247adc25f9042591534b28953180dd83549b85a7e6ba94d61c36c",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "es",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in Spanish (español) matching document locale 'es'.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "projects",
+  "page_source_hash": "6f80a5a43a6d79d8c470869476c4cc71720bc4524cf1ddded2b74b6c0b01fe90",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "d4e44bb108a0079fd0625d5c152b90b09acd8782a3141a3a7039cb64fc0f3162",
+  "source_path": "i18n/es/projects.md",
+  "status": "complete",
+  "total_chunks": 3,
+  "total_duration_seconds": 45.624,
+  "transcript_file": "transcript.json",
+  "transcript_sha256": "1157bdb9d6151f430fcf1d473d2738d13072b9cd1b08e76dbc6695089b26022e"
+}

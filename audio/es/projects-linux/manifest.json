@@ -1,0 +1,97 @@
+{
+  "chunks": [
+    {
+      "audio_file": "chunk-001-73f971f0e904.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "f1e422d68fda4ffdade3c47d0dc87cefab5925e5320388ee024e4505b0699428",
+      "chunk_hash": "73f971f0e904d19724acfcbbc2dadaa98da9729100f4a24c69ef86add8cdbdf5",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "duration_seconds": 19.776,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph"
+      ],
+      "locale": "es",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "softcloud-node-linux",
+      "section_title": "SoftCloud Node Linux",
+      "size_bytes": 158208,
+      "speech_input_hash": "7d5b8ba7340ea6c142bb3b61e284fe8c56527ebc477e4099946318416a6f8bc6",
+      "text_sha256": "005b30def1ceb3299910daeb1497c1c1404b9d477121834f206e251ea613a404",
+      "tts_config_hash": "974a0b12687b2329d30e99a3ec44775178590907d0686ee645fe6481b3e2374d",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-002-afabd335ef51.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "5fe1512955830efe2dd21348ef3ad8f7b7dd7fdc940bb838a631639bccc69bc0",
+      "chunk_hash": "afabd335ef5102c3d6256409eae406fc57cfcb231592155b5ee1c717938bba75",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "duration_seconds": 7.248,
+      "element_ids": [
+        "el-0003-heading",
+        "el-0004-list"
+      ],
+      "locale": "es",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "comience-aqui",
+      "section_title": "Comience aquí",
+      "size_bytes": 57984,
+      "speech_input_hash": "7fdf7737d2d198ca8278765b552be9a90a4af7904e38721497b9692863bd8eee",
+      "text_sha256": "391ff636e0f33662e9d8ef39bbfe0e19ddf6feb143986bbf8e2b6ba7d71fc9af",
+      "tts_config_hash": "974a0b12687b2329d30e99a3ec44775178590907d0686ee645fe6481b3e2374d",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-003-f7965e41f805.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "c73bd0ea30d5661aa811bc4fe3f6c618144d9162e515929d127a3dd760a0a898",
+      "chunk_hash": "f7965e41f805da53da6e40e32bff53a9ff7a0f80d9c3425ad1f7d5f096479515",
+      "chunk_id": "chunk-003",
+      "chunk_index": 3,
+      "duration_seconds": 13.368,
+      "element_ids": [
+        "el-0005-heading",
+        "el-0006-paragraph"
+      ],
+      "locale": "es",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "estado-de-la-implementacion",
+      "section_title": "Estado de la implementación",
+      "size_bytes": 106944,
+      "speech_input_hash": "3c24631c0f424de49b97ed53c34c2686f25dd57efa6e8b347019a06f29fe3803",
+      "text_sha256": "8767c027181a06a4b224ab490959f14df537520f1aaf4d98e56d6351741fb19b",
+      "tts_config_hash": "974a0b12687b2329d30e99a3ec44775178590907d0686ee645fe6481b3e2374d",
+      "voice": "Kore"
+    }
+  ],
+  "config_hash": "8d36f75f176de8dde9204fb0212c8496cf77d474cd391c1e0a26ac9736eaaead",
+  "locale": "es",
+  "logical_source_path": "projects/linux.md",
+  "manifest_sha256": "449e342f05b1963e8618d912dcf43c865a11650371faacb445df62c0d9f1ab28",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "es",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in Spanish (español) matching document locale 'es'.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "projects-linux",
+  "page_source_hash": "e903c0421258293baaf682e2e1586c920b697dfaceac3d5d9c8dfe1192bd99e4",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "6a247e0c8a6701673a478dd0cd10145eba4d1e6575361e6f45cd9205132188bb",
+  "source_path": "i18n/es/projects/linux.md",
+  "status": "complete",
+  "total_chunks": 3,
+  "total_duration_seconds": 40.392,
+  "transcript_file": "transcript.json",
+  "transcript_sha256": "55d623f66e24a8f6594073e497085ff994f3e0b7610f16a9418a5284dbd409c7"
+}

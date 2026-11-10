@@ -1,174 +1,42 @@
 {
   "chunks": [
     {
-      "chunk_hash": "56387043bacc096892877d061de3774b6ca1d6bac6dc38ceca66f7a28feea010",
+      "chunk_hash": "85cd1848c64f01f5c41693ea4cf582398833b1ffd0edf6dad03a0b342faeb768",
       "chunk_id": "chunk-001",
       "chunk_index": 1,
       "element_ids": [
-        "el-0001-heading",
-        "el-0002-paragraph",
-        "el-0003-paragraph"
+        "el-0001-directive"
       ],
-      "section_anchor": "software-cloud",
-      "section_title": "Software Cloud",
+      "section_anchor": "top",
+      "section_title": "Introduction",
       "segments": [
         {
-          "element_id": "el-0001-heading",
+          "element_id": "el-0001-directive",
           "is_ai_summary": false,
-          "kind": "heading",
-          "source_hash": "a8e1384694a0f2fb0fec83a1faa59c9cefd57a9a446f64f91f20d7d1afdb2c96",
-          "spoken_text": "Software Cloud"
-        },
-        {
-          "element_id": "el-0002-paragraph",
-          "is_ai_summary": false,
-          "kind": "paragraph",
-          "source_hash": "4719e5af556ff1effd32533d54f8cb384ffc84ba53e2ef9d786aefb04181d0dc",
-          "spoken_text": "Bienvenido a Software Cloud, una plataforma de investigación y publicación computacional construida sobre Jupyter Book 2 y alojada en GitHub Pages en my.softcloud.dev."
-        },
-        {
-          "element_id": "el-0003-paragraph",
-          "is_ai_summary": false,
-          "kind": "paragraph",
-          "source_hash": "57bcbdd60fb61d59b9de5c9dde1d8e88822fba55134b874cec928c63896c085a",
-          "spoken_text": "Software Cloud sirve como arquitectura abierta y referencia ejecutable para canalizaciones de investigación deterministas, arquitecturas en la nube reproducibles y cuadernos computacionales verificables."
+          "kind": "directive",
+          "source_hash": "12fd377358c90b2fb9ae5370271e2c2c6cb2d19e0c628f8047368e18ff1bd394",
+          "spoken_text": "EL MANUAL DE SOFTCLOUD. Conocimiento de ingeniería reproducible. Guías prácticas, cuadernos ejecutables y ejemplos de interfaz reutilizables, vinculados a sus fuentes. Empezar con una guía Explorar cuadernos. Verificación computacional. Perfil de ejecución requerido. CPython 3.12.14 · Linux x86-64 · jb2-python. Abrir cuaderno de verificación. Elige un punto de partida. Publica tu primera página. Conoce la estructura, el proceso de autoría y el modelo de publicación del manual SoftCloud. GUIDE. Reproduce una comprobación del entorno. Ejecuta el cuaderno de verificación de referencia y comprende su perfil de ejecución controlado. NOTEBOOK. Encuentra un patrón de interfaz. Explora el catálogo de Web Awesome, los tokens de diseño y los ejemplos reutilizables. BIBLIOTECA UI. Explora los proyectos de SoftCloud. SoftCloud Node Linux — Documentación reproducible de nodos Linux/Kubernetes. FreeIPA — Laboratorio de identidad, políticas y gestión de acceso. Ingeniería reproducible, resultados verificables. SoftCloud publica investigación computacional, arquitectura de nube y documentación operativa junto con referencias ejecutables. Las dependencias sin fijar, los binarios divergentes, el estado implícito del entorno y los núcleos sin verificar dificultan reproducir resultados. Su contrato de publicación utiliza dependencias bloqueadas con SHA-256, un entorno canónico CPython 3.12.14 sobre Linux x86-64, verificación previa estricta y CI/CD automatizado. Consulta Arquitectura y especificación y el contexto y alcance operativo para conocer los detalles."
         }
       ],
-      "speech_input_hash": "a68764b1ce52422d453aa03a64bcd6426475828e9ea6422baf500f7bf96eda36",
-      "text": "Software Cloud.\n\nBienvenido a Software Cloud, una plataforma de investigación y publicación computacional construida sobre Jupyter Book 2 y alojada en GitHub Pages en my.softcloud.dev.\n\nSoftware Cloud sirve como arquitectura abierta y referencia ejecutable para canalizaciones de investigación deterministas, arquitecturas en la nube reproducibles y cuadernos computacionales verificables.",
-      "text_sha256": "76d86dfc64ca00c4ee5cdfee0bda86c957b8e05bd23348ab3a6373b50e699572"
-    },
-    {
-      "chunk_hash": "92492acd31cf6a9c9200f0bb00880244c04a3bfc3a9412cc8fc38dab1c91f3c9",
-      "chunk_id": "chunk-002",
-      "chunk_index": 2,
-      "element_ids": [
-        "el-0004-heading",
-        "el-0005-list"
-      ],
-      "section_anchor": "pilares-clave",
-      "section_title": "Pilares clave",
-      "segments": [
-        {
-          "element_id": "el-0004-heading",
-          "is_ai_summary": false,
-          "kind": "heading",
-          "source_hash": "6e07f8f9f2bd5d623952b90bd667fd73f77d168a97c7d161d36eaee4a0e84b52",
-          "spoken_text": "Pilares clave"
-        },
-        {
-          "element_id": "el-0005-list",
-          "is_ai_summary": false,
-          "kind": "list",
-          "source_hash": "259cdb38f83336ee0db3b2bcf69c79fa4cd69c7e69be5766f0489caf8ec6a25c",
-          "spoken_text": "Reproducibilidad criptográfica: Todas las dependencias están fijadas a distribuciones exactas con resúmenes de integridad SHA-256 (--require-hashes, --only-binary=:all:), eliminando la deriva de dependencias. Ejecución hermética: Las ejecuciones computacionales apuntan al CPython 3.12.14 canónico en Linux x86-64 con aislamiento explícito del entorno virtual. Conformidad estricta del perfil: Cada artefacto de publicación se somete a una verificación previa automatizada (tools/check_profile.py) antes de su compilación y despliegue. Entrega continua: El flujo CI/CD totalmente automatizado mediante GitHub Actions compila y verifica la documentación y los cuadernos en cada confirmación."
-        }
-      ],
-      "speech_input_hash": "c40f7c5c73b9fb40add86dccbf7f2d96a11596c7ce57e875892ffa50533f3479",
-      "text": "Pilares clave.\n\nReproducibilidad criptográfica: Todas las dependencias están fijadas a distribuciones exactas con resúmenes de integridad SHA-256 (--require-hashes, --only-binary=:all:), eliminando la deriva de dependencias. Ejecución hermética: Las ejecuciones computacionales apuntan al CPython 3.12.14 canónico en Linux x86-64 con aislamiento explícito del entorno virtual. Conformidad estricta del perfil: Cada artefacto de publicación se somete a una verificación previa automatizada (tools/check_profile.py) antes de su compilación y despliegue. Entrega continua: El flujo CI/CD totalmente automatizado mediante GitHub Actions compila y verifica la documentación y los cuadernos en cada confirmación.",
-      "text_sha256": "91e3cd3d350b1dfbda2c3169c54846efff7ce4d7dbbb168d066410996dc15628"
-    },
-    {
-      "chunk_hash": "3fca98da48a2618f0eac58b09c1da1907f4f26f5013ddd07de04645190d989b4",
-      "chunk_id": "chunk-003",
-      "chunk_index": 3,
-      "element_ids": [
-        "el-0006-heading",
-        "el-0007-list"
-      ],
-      "section_anchor": "hoja-de-ruta-de-la-documentacion",
-      "section_title": "Hoja de ruta de la documentación",
-      "segments": [
-        {
-          "element_id": "el-0006-heading",
-          "is_ai_summary": false,
-          "kind": "heading",
-          "source_hash": "edf664e8b77fdfa653a83bc66f86207089b0f8ca63741184e140f7b3b7459207",
-          "spoken_text": "Hoja de ruta de la documentación"
-        },
-        {
-          "element_id": "el-0007-list",
-          "is_ai_summary": false,
-          "kind": "list",
-          "source_hash": "48e795f643c7565194dca03d88c6d0c0202d89c74826ca476e9a3c24cf6fcb35",
-          "spoken_text": "Introducción: Antecedentes, filosofía de la plataforma y alcance operativo. Arquitectura y referencia del memorando: Especificación técnica completa, diseño del repositorio, archivos base literales y cadena de herramientas de verificación. Cuaderno de verificación computacional: Cuaderno de validación del entorno de ejecución que se ejecuta en el kernel jb2-python."
-        }
-      ],
-      "speech_input_hash": "9957be9e1b05e268b2ee40977e370fe9b81a0fa67a078652bd9de97e14114a92",
-      "text": "Hoja de ruta de la documentación.\n\nIntroducción: Antecedentes, filosofía de la plataforma y alcance operativo. Arquitectura y referencia del memorando: Especificación técnica completa, diseño del repositorio, archivos base literales y cadena de herramientas de verificación. Cuaderno de verificación computacional: Cuaderno de validación del entorno de ejecución que se ejecuta en el kernel jb2-python.",
-      "text_sha256": "5445de4546bf88ee67870c71e1832f4e7b614464f602dee6e59744a06422fb50"
+      "speech_input_hash": "36ef673a30cf4896c5ff1cf1ae80d8ecf309f408bb5b297391667caa3361a5c3",
+      "text": "EL MANUAL DE SOFTCLOUD. Conocimiento de ingeniería reproducible. Guías prácticas, cuadernos ejecutables y ejemplos de interfaz reutilizables, vinculados a sus fuentes. Empezar con una guía Explorar cuadernos. Verificación computacional. Perfil de ejecución requerido. CPython 3.12.14 · Linux x86-64 · jb2-python. Abrir cuaderno de verificación. Elige un punto de partida. Publica tu primera página. Conoce la estructura, el proceso de autoría y el modelo de publicación del manual SoftCloud. GUIDE. Reproduce una comprobación del entorno. Ejecuta el cuaderno de verificación de referencia y comprende su perfil de ejecución controlado. NOTEBOOK. Encuentra un patrón de interfaz. Explora el catálogo de Web Awesome, los tokens de diseño y los ejemplos reutilizables. BIBLIOTECA UI. Explora los proyectos de SoftCloud. SoftCloud Node Linux — Documentación reproducible de nodos Linux/Kubernetes. FreeIPA — Laboratorio de identidad, políticas y gestión de acceso. Ingeniería reproducible, resultados verificables. SoftCloud publica investigación computacional, arquitectura de nube y documentación operativa junto con referencias ejecutables. Las dependencias sin fijar, los binarios divergentes, el estado implícito del entorno y los núcleos sin verificar dificultan reproducir resultados. Su contrato de publicación utiliza dependencias bloqueadas con SHA-256, un entorno canónico CPython 3.12.14 sobre Linux x86-64, verificación previa estricta y CI/CD automatizado. Consulta Arquitectura y especificación y el contexto y alcance operativo para conocer los detalles.",
+      "text_sha256": "fcf3a6acdb3285a6830997bc6ebb61b922be929479874a8f0dc8d5968fd05390"
     }
   ],
   "code_summary_hashes": {},
   "config_hash": "8d36f75f176de8dde9204fb0212c8496cf77d474cd391c1e0a26ac9736eaaead",
   "element_ids": [
-    "el-0001-heading",
-    "el-0002-paragraph",
-    "el-0003-paragraph",
-    "el-0004-heading",
-    "el-0005-list",
-    "el-0006-heading",
-    "el-0007-list"
+    "el-0001-directive"
   ],
   "elements": [
     {
-      "element_id": "el-0001-heading",
-      "heading_level": 1,
-      "kind": "heading",
-      "section_anchor": "software-cloud",
-      "section_title": "Software Cloud",
-      "source_hash": "a8e1384694a0f2fb0fec83a1faa59c9cefd57a9a446f64f91f20d7d1afdb2c96",
-      "text": "Software Cloud"
-    },
-    {
-      "element_id": "el-0002-paragraph",
-      "kind": "paragraph",
-      "section_anchor": "software-cloud",
-      "section_title": "Software Cloud",
-      "source_hash": "4719e5af556ff1effd32533d54f8cb384ffc84ba53e2ef9d786aefb04181d0dc",
-      "text": "Bienvenido a Software Cloud, una plataforma de investigación y publicación computacional construida sobre Jupyter Book 2 y alojada en GitHub Pages en my.softcloud.dev."
-    },
-    {
-      "element_id": "el-0003-paragraph",
-      "kind": "paragraph",
-      "section_anchor": "software-cloud",
-      "section_title": "Software Cloud",
-      "source_hash": "57bcbdd60fb61d59b9de5c9dde1d8e88822fba55134b874cec928c63896c085a",
-      "text": "Software Cloud sirve como arquitectura abierta y referencia ejecutable para canalizaciones de investigación deterministas, arquitecturas en la nube reproducibles y cuadernos computacionales verificables."
-    },
-    {
-      "element_id": "el-0004-heading",
-      "heading_level": 2,
-      "kind": "heading",
-      "section_anchor": "pilares-clave",
-      "section_title": "Pilares clave",
-      "source_hash": "6e07f8f9f2bd5d623952b90bd667fd73f77d168a97c7d161d36eaee4a0e84b52",
-      "text": "Pilares clave"
-    },
-    {
-      "element_id": "el-0005-list",
-      "kind": "list",
-      "section_anchor": "pilares-clave",
-      "section_title": "Pilares clave",
-      "source_hash": "259cdb38f83336ee0db3b2bcf69c79fa4cd69c7e69be5766f0489caf8ec6a25c",
-      "text": "Reproducibilidad criptográfica: Todas las dependencias están fijadas a distribuciones exactas con resúmenes de integridad SHA-256 (--require-hashes, --only-binary=:all:), eliminando la deriva de dependencias. Ejecución hermética: Las ejecuciones computacionales apuntan al CPython 3.12.14 canónico en Linux x86-64 con aislamiento explícito del entorno virtual. Conformidad estricta del perfil: Cada artefacto de publicación se somete a una verificación previa automatizada (tools/check_profile.py) antes de su compilación y despliegue. Entrega continua: El flujo CI/CD totalmente automatizado mediante GitHub Actions compila y verifica la documentación y los cuadernos en cada confirmación."
-    },
-    {
-      "element_id": "el-0006-heading",
-      "heading_level": 2,
-      "kind": "heading",
-      "section_anchor": "hoja-de-ruta-de-la-documentacion",
-      "section_title": "Hoja de ruta de la documentación",
-      "source_hash": "edf664e8b77fdfa653a83bc66f86207089b0f8ca63741184e140f7b3b7459207",
-      "text": "Hoja de ruta de la documentación"
-    },
-    {
-      "element_id": "el-0007-list",
-      "kind": "list",
-      "section_anchor": "hoja-de-ruta-de-la-documentacion",
-      "section_title": "Hoja de ruta de la documentación",
-      "source_hash": "48e795f643c7565194dca03d88c6d0c0202d89c74826ca476e9a3c24cf6fcb35",
-      "text": "Introducción: Antecedentes, filosofía de la plataforma y alcance operativo. Arquitectura y referencia del memorando: Especificación técnica completa, diseño del repositorio, archivos base literales y cadena de herramientas de verificación. Cuaderno de verificación computacional: Cuaderno de validación del entorno de ejecución que se ejecuta en el kernel jb2-python."
+      "directive_name": "div",
+      "element_id": "el-0001-directive",
+      "kind": "directive",
+      "section_anchor": "top",
+      "section_title": "Introduction",
+      "source_hash": "12fd377358c90b2fb9ae5370271e2c2c6cb2d19e0c628f8047368e18ff1bd394",
+      "text": "EL MANUAL DE SOFTCLOUD. Conocimiento de ingeniería reproducible. Guías prácticas, cuadernos ejecutables y ejemplos de interfaz reutilizables, vinculados a sus fuentes. Empezar con una guía Explorar cuadernos. Verificación computacional. Perfil de ejecución requerido. CPython 3.12.14 · Linux x86-64 · jb2-python. Abrir cuaderno de verificación. Elige un punto de partida. Publica tu primera página. Conoce la estructura, el proceso de autoría y el modelo de publicación del manual SoftCloud. GUIDE. Reproduce una comprobación del entorno. Ejecuta el cuaderno de verificación de referencia y comprende su perfil de ejecución controlado. NOTEBOOK. Encuentra un patrón de interfaz. Explora el catálogo de Web Awesome, los tokens de diseño y los ejemplos reutilizables. BIBLIOTECA UI. Explora los proyectos de SoftCloud. SoftCloud Node Linux — Documentación reproducible de nodos Linux/Kubernetes. FreeIPA — Laboratorio de identidad, políticas y gestión de acceso. Ingeniería reproducible, resultados verificables. SoftCloud publica investigación computacional, arquitectura de nube y documentación operativa junto con referencias ejecutables. Las dependencias sin fijar, los binarios divergentes, el estado implícito del entorno y los núcleos sin verificar dificultan reproducir resultados. Su contrato de publicación utiliza dependencias bloqueadas con SHA-256, un entorno canónico CPython 3.12.14 sobre Linux x86-64, verificación previa estricta y CI/CD automatizado. Consulta Arquitectura y especificación y el contexto y alcance operativo para conocer los detalles."
     }
   ],
   "locale": "es",
@@ -187,9 +55,9 @@
     "voice_name": "Kore"
   },
   "page_id": "readme",
-  "page_source_hash": "db0ad2d27d77d3c072b6ba1417bccc4a75bab181b2d5afbfaeecbb2b6ad12f3a",
+  "page_source_hash": "c754344f27fa6f8dfb809f87add6e888a89c8d601535dd796ebc9de43c761be6",
   "schema_version": "1.0.0",
-  "source_file_sha256": "e778317c20d485e1306e6bc39063940e916c98e39194abdfa2fa078dade4cf00",
+  "source_file_sha256": "8fe9b348aa7304531ada2db6e0607288f2adaee6364f866387f68fad359392d7",
   "source_path": "i18n/es/README.md",
-  "transcript_sha256": "4853915e7ab6b973cd9a1b496dbce44e0843eab74013841910352e4ecd697cb6"
+  "transcript_sha256": "e5315b94106e7ca97e555f79d52a5457b2cad5fce1496380d470c72f76ff3564"
 }

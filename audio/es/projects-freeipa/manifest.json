@@ -1,0 +1,77 @@
+{
+  "chunks": [
+    {
+      "audio_file": "chunk-001-0c14120feb71.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "8efed33df509ce37e6c33fc8f739f23ec6a80a4582c1086a4748ce13927e7468",
+      "chunk_hash": "0c14120feb71dba61ea6bea3b52b2d895a99ed38f43b263615fc056374cea2e6",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "duration_seconds": 27.888,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph",
+        "el-0003-paragraph"
+      ],
+      "locale": "es",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "identidad-y-directorio-de-freeipa",
+      "section_title": "Identidad y Directorio de FreeIPA",
+      "size_bytes": 223104,
+      "speech_input_hash": "037ff85dc0ace3fb49a4bea03761a0c835f7ea6d744dc7b61bca26059e02fff6",
+      "text_sha256": "30807adf1450aecf6df4c36282340210f3d1ee910e016950df6ebbc41071d540",
+      "tts_config_hash": "974a0b12687b2329d30e99a3ec44775178590907d0686ee645fe6481b3e2374d",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-002-94032486bfef.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "0cfdc214ee5ded4a745a162449f0355ef5bdf606f004667621d6fc8c64ba2a61",
+      "chunk_hash": "94032486bfefef11192b4d6d490dad30f2ff87186e791ce8029ff3ad284a7151",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "duration_seconds": 14.136,
+      "element_ids": [
+        "el-0004-heading",
+        "el-0005-list",
+        "el-0006-paragraph"
+      ],
+      "locale": "es",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "empiece-aqui",
+      "section_title": "Empiece aquí",
+      "size_bytes": 113088,
+      "speech_input_hash": "224996bd50035dd2fdce8af426d8bef93d5a9398c50b7b131887106bd9e389b4",
+      "text_sha256": "40f823b4df1c94ac26b26ac7573e50d5bb2ca8c92c9424582b27dcfddd541c34",
+      "tts_config_hash": "974a0b12687b2329d30e99a3ec44775178590907d0686ee645fe6481b3e2374d",
+      "voice": "Kore"
+    }
+  ],
+  "config_hash": "8d36f75f176de8dde9204fb0212c8496cf77d474cd391c1e0a26ac9736eaaead",
+  "locale": "es",
+  "logical_source_path": "projects/freeipa.md",
+  "manifest_sha256": "67e0013074d9fbea5807d56558b9be61e5dc952333442fdb297525c8bfade6cf",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "es",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in Spanish (español) matching document locale 'es'.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "projects-freeipa",
+  "page_source_hash": "a63644c47c1e2cf71e868fdd15b992f3c746a555dbe79936fadbc3358d5da3b3",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "a95d52858cb2125369f8617ae648e180afe8cd027bdb677710b5158d28862991",
+  "source_path": "i18n/es/projects/freeipa.md",
+  "status": "complete",
+  "total_chunks": 2,
+  "total_duration_seconds": 42.024,
+  "transcript_file": "transcript.json",
+  "transcript_sha256": "0eee26f8d65e3b6bd9018dd8aa09e75086ac219abac5a64c9f4103bf4b91e9fa"
+}
