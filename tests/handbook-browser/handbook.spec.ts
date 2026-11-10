@@ -20,7 +20,11 @@ for (const locale of locales) {
     await expect(page.locator('html')).toHaveAttribute('lang', locale.code);
     const root = page.locator('.sc-handbook');
     await expect(root).toBeVisible();
-    await expect(root.getByRole('heading', { name: locale.headline })).toBeVisible();
+    const heroHeading = root.locator('.sc-handbook__intro h2').first();
+    await expect(heroHeading).toBeVisible();
+    const normalizedHeading = (await heroHeading.innerText())
+      .replace(/[\u2018\u2019]/g, "'").replace(/\s+/g, ' ').trim();
+    expect(normalizedHeading).toBe(locale.headline);
     await expect(root.locator('.sc-handbook__route')).toHaveCount(3);
     await expect(root.getByRole('link', { name: locale.cta })).toHaveAttribute('href', locale.prefix + '/guides');
     const nav = page.locator('nav.myst-top-nav-bar');
@@ -89,6 +93,6 @@ test('localized UI Library entry identifies the English-only catalog', async ({ 
   for (const locale of locales.slice(1)) {
     await page.goto(locale.prefix + '/ui-library/');
     await expect(page.locator('main a[href="https://my.softcloud.dev/components"]').first()).toBeVisible();
-    expect((await page.locator('main').innerText()).toLowerCase()).toContain('web awesome');
+    await expect(page.locator('main')).toContainText(/web[- ]awesome/i);
   }
 });
