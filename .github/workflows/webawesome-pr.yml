@@ -49,6 +49,21 @@ jobs:
           . .venv/bin/activate
           bash scripts/ci-test-driver.sh
 
+      - name: Upload localized homepage markup for navigation QA
+        if: always()
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
+        with:
+          name: executable-handbook-localized-navbar
+          path: |
+            _build/html/index.html
+            _build/html/pl/index.html
+            _build/html/de/index.html
+            _build/html/es/index.html
+            _build/html/fr/index.html
+            _build/locales/pl/workspace/myst.yml
+          if-no-files-found: ignore
+          retention-days: 3
+
       - name: Upload handbook viewport screenshots
         if: always()
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882
