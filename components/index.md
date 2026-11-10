@@ -23,6 +23,7 @@ The existing four typed MyST Web Awesome integrations (`wa-button`, `wa-card`, `
 - [Design Tokens & Style Preview](design-tokens-preview.md) — paired light/dark interface samples, semantic swatches, a brand tint ramp, and static CSS examples.
 - [Authoring and migration guide](authoring-guide.md) — choose MyST built-ins for prose and layout, retain anywidget for interactive Web Awesome components, and follow the phased API documentation plan.
 - [Practical UI patterns](practical-patterns.md) — original Tailwind-inspired marketing and application-UI recipes using native MyST grids/cards/tabs with Web Awesome interactive atoms.
+- [Pricing & comparison patterns](pricing-comparison.md) — multi-tier pricing cards (`{grid}`, `{wa-card}`, `{wa-button}`), `{list-table}` and pipe comparison matrices, and interactive capacity configurators (`wa-slider`, `wa-switch`, `wa-radio-group`).
 - [Real media showcase](showcase-media.md) — bundled public-domain/CC0 photographs, photographic carousel, comparison, avatar, photo tabs, zoomable frame, and native video.
 
 For this catalog, an interactive preview is **client-rendered by anywidget**; it must not be mistaken for the genuine Lit SSR path used by four existing typed primitives. Core media previews use site-local `/static/showcase/` runtime assets. Standalone HTML snippets should instead use host-provided relative media URLs. The 17 Pro alternatives are documented as non-Core recipes without licensed Pro executables.

@@ -10,8 +10,10 @@
   // 1. Theme Synchronization (WA-005, WA-THEME-001)
   let isUpdating = false;
 
-  function syncTheme(force = false) {
-    if (isUpdating && force !== true) return;
+  function syncTheme(forceOrOpts = false) {
+    const force = forceOrOpts === true || (forceOrOpts && forceOrOpts.force === true);
+    const preferDom = Boolean(forceOrOpts && forceOrOpts.preferDom === true);
+    if (isUpdating && !force) return;
     isUpdating = true;
     try {
       const root = document.documentElement;
@@ -24,7 +26,9 @@
       })();
 
       let isDark;
-      if (storedTheme === 'dark') {
+      if (preferDom && (root.classList.contains('dark') || root.classList.contains('light'))) {
+        isDark = root.classList.contains('dark');
+      } else if (storedTheme === 'dark') {
         isDark = true;
       } else if (storedTheme === 'light') {
         isDark = false;
@@ -45,6 +49,26 @@
       const removeWaClass = isDark ? 'wa-light' : 'wa-dark';
       const removeTheme = isDark ? 'light' : 'dark';
 
+      if (preferDom) {
+        try {
+          const prevSc = localStorage.getItem('softcloud-theme');
+          if (prevSc === 'light' || prevSc === 'dark') {
+            localStorage.setItem('softcloud-theme', targetTheme);
+          }
+        } catch (e) {}
+      }
+
+      const effectiveStored = (() => {
+        try {
+          return localStorage.getItem('softcloud-theme') || localStorage.getItem('myst:theme');
+        } catch (e) {
+          return null;
+        }
+      })();
+      const targetMetaContent =
+        effectiveStored === 'dark' || effectiveStored === 'light' ? effectiveStored : 'light dark';
+      const metaEl = document.head ? document.querySelector('meta[name="color-scheme"]') : null;
+
       const currentTheme = root.getAttribute('data-theme');
       const hasTargetTheme = root.classList.contains(targetTheme);
       const hasRemoveTheme = root.classList.contains(removeTheme);
@@ -52,6 +76,8 @@
       const hasRemoveWa = root.classList.contains(removeWaClass);
       const hasLegacyDark = root.classList.contains('wa-theme-dark');
       const hasLegacyLight = root.classList.contains('wa-theme-light');
+      const hasColorScheme = root.style && root.style.colorScheme === targetTheme;
+      const hasMetaScheme = Boolean(metaEl && metaEl.content === targetMetaContent);
 
       if (
         currentTheme === targetTheme &&
@@ -60,13 +86,28 @@
         hasTargetWa &&
         !hasRemoveWa &&
         !hasLegacyDark &&
-        !hasLegacyLight
+        !hasLegacyLight &&
+        hasColorScheme &&
+        hasMetaScheme
       ) {
         return;
       }
 
       if (currentTheme !== targetTheme) {
         root.setAttribute('data-theme', targetTheme);
+      }
+      if (root.style && root.style.colorScheme !== targetTheme) {
+        root.style.colorScheme = targetTheme;
+      }
+      if (document.head) {
+        const activeMeta = metaEl || document.createElement('meta');
+        if (!metaEl) {
+          activeMeta.name = 'color-scheme';
+          document.head.appendChild(activeMeta);
+        }
+        if (activeMeta.content !== targetMetaContent) {
+          activeMeta.content = targetMetaContent;
+        }
       }
       if (!hasTargetTheme) {
         root.classList.add(targetTheme);
@@ -89,179 +130,256 @@
     }
   }
 
-  // 2. Client-side Web Awesome placeholder transform (WA-002, WA-003, WA-007)
-  function transformHosts(container) {
-    const root = container || document;
-    const hosts = root.querySelectorAll ? root.querySelectorAll('.sc-wa-host') : [];
-    if (!hosts || hosts.length === 0) return;
-
-    hosts.forEach(function (host) {
-      const metaEl = host.querySelector(':scope > .sc-wa-meta');
-      if (!metaEl) return;
-
-      let meta;
+  function moveNodePreservingState(targetParent, node, refNode) {
+    if (!targetParent || !node) return;
+    const reference = refNode === undefined ? null : refNode;
+    if (
+      typeof Element !== 'undefined' &&
+      'moveBefore' in Element.prototype &&
+      typeof targetParent.moveBefore === 'function' &&
+      targetParent.isConnected &&
+      node.isConnected
+    ) {
       try {
-        meta = JSON.parse(metaEl.textContent || '{}');
-      } catch (err) {
-        console.warn('[SoftCloud] Failed to parse component metadata:', err);
+        targetParent.moveBefore(node, reference);
         return;
+      } catch (_err) {
+        // Fall back to insertBefore if atomic move is rejected
+      }
+    }
+    targetParent.insertBefore(node, reference);
+  }
+
+  function yieldToMain() {
+    if (typeof window !== 'undefined' && 'scheduler' in window && window.scheduler && 'yield' in window.scheduler) {
+      return window.scheduler.yield();
+    }
+    return new Promise(function (resolve) {
+      setTimeout(resolve, 0);
+    });
+  }
+
+  function transformSingleHost(host) {
+    if (!host || !host.isConnected) return;
+    const metaEl = host.querySelector(':scope > .sc-wa-meta');
+    if (!metaEl) return;
+
+    let meta;
+    try {
+      meta = JSON.parse(metaEl.textContent || '{}');
+    } catch (err) {
+      console.warn('[SoftCloud] Failed to parse component metadata:', err);
+      return;
+    }
+
+    const tag = meta.component;
+    if (!tag) return;
+
+    const el = document.createElement(tag);
+    // NOTE: Do NOT set did-ssr here: dynamic client elements are not server-rendered (WA-007)
+
+    // Normalize legacy parameters
+    let appearance = meta.appearance;
+    let variant = meta.variant;
+    let extraClass = meta.class || '';
+
+    if (tag === 'wa-card') {
+      if (appearance === 'default') appearance = 'outlined';
+      else if (appearance === 'elevated') {
+        appearance = 'filled-outlined';
+        extraClass = extraClass ? extraClass + ' sc-elevation' : 'sc-elevation';
+      } else if (appearance === 'flat') appearance = 'plain';
+    } else if (tag === 'wa-callout') {
+      if (appearance === 'soft') appearance = 'filled-outlined';
+      else if (appearance === 'solid') appearance = 'filled';
+      else if (appearance === 'outline') appearance = 'outlined';
+      else if (appearance === 'default') appearance = 'outlined';
+    } else if (tag === 'wa-button') {
+      if (variant === 'primary') variant = 'brand';
+      else if (variant === 'default') variant = 'neutral';
+      if (appearance === 'text' || appearance === 'flat') appearance = 'plain';
+      if (meta.outline) appearance = 'outlined';
+      if (meta.circle) extraClass = extraClass ? extraClass + ' sc-button-circle' : 'sc-button-circle';
+      if (meta.caret || meta['with-caret']) el.setAttribute('with-caret', '');
+      if (meta.size) {
+        const sMap = { small: 's', medium: 'm', large: 'l' };
+        const normSize = sMap[String(meta.size).toLowerCase()] || meta.size;
+        el.setAttribute('size', normSize);
+      }
+    } else if (tag === 'wa-icon') {
+      let family = meta.family || 'classic';
+      let iconVariant = meta.variant || 'solid';
+      let name = meta.name;
+      if (meta.style === 'brands' || family === 'brands') {
+        family = 'brands';
+        iconVariant = null;
+      } else if (meta.style === 'regular' || iconVariant === 'regular') {
+        iconVariant = 'regular';
+      }
+      if (name === 'info-circle' || name === 'info') name = 'circle-info';
+      el.setAttribute('name', name);
+      el.setAttribute('family', family);
+      if (iconVariant) el.setAttribute('variant', iconVariant);
+    }
+
+    if (variant && tag !== 'wa-icon') el.setAttribute('variant', variant);
+    if (appearance && tag !== 'wa-icon') el.setAttribute('appearance', appearance);
+    if (extraClass) el.setAttribute('class', extraClass.trim());
+
+    // Copy other standard attributes
+    const excludeKeys = new Set([
+      'schema_version',
+      'component',
+      'title',
+      'header',
+      'footer',
+      'image',
+      'image_alt',
+      'icon',
+      'variant',
+      'appearance',
+      'class',
+      'caret',
+      'with-caret',
+      'outline',
+      'circle',
+      'size',
+      'style',
+      'family',
+      'library',
+      'name',
+    ]);
+
+    for (const [k, v] of Object.entries(meta)) {
+      if (excludeKeys.has(k)) continue;
+      if (typeof v === 'boolean') {
+        if (v) el.setAttribute(k, '');
+      } else if (v !== undefined && v !== null) {
+        el.setAttribute(k, String(v));
+      }
+    }
+
+    // Slot handling for callout (WA-002)
+    if (tag === 'wa-callout') {
+      if (meta.icon) {
+        let iconName = meta.icon;
+        if (iconName === 'info' || iconName === 'info-circle') iconName = 'circle-info';
+        const iconEl = document.createElement('wa-icon');
+        iconEl.setAttribute('slot', 'icon');
+        iconEl.setAttribute('name', iconName);
+        iconEl.setAttribute('family', 'classic');
+        iconEl.setAttribute('variant', 'solid');
+        iconEl.setAttribute('aria-hidden', 'true');
+        el.appendChild(iconEl);
       }
 
-      const tag = meta.component;
-      if (!tag) return;
-
-      const el = document.createElement(tag);
-      // NOTE: Do NOT set did-ssr here: dynamic client elements are not server-rendered (WA-007)
-
-      // Normalize legacy parameters
-      let appearance = meta.appearance;
-      let variant = meta.variant;
-      let extraClass = meta.class || '';
-
-      if (tag === 'wa-card') {
-        if (appearance === 'default') appearance = 'outlined';
-        else if (appearance === 'elevated') {
-          appearance = 'filled-outlined';
-          extraClass = extraClass ? extraClass + ' sc-elevation' : 'sc-elevation';
-        } else if (appearance === 'flat') appearance = 'plain';
-      } else if (tag === 'wa-callout') {
-        if (appearance === 'soft') appearance = 'filled-outlined';
-        else if (appearance === 'solid') appearance = 'filled';
-        else if (appearance === 'outline') appearance = 'outlined';
-        else if (appearance === 'default') appearance = 'outlined';
-      } else if (tag === 'wa-button') {
-        if (variant === 'primary') variant = 'brand';
-        else if (variant === 'default') variant = 'neutral';
-        if (appearance === 'text' || appearance === 'flat') appearance = 'plain';
-        if (meta.outline) appearance = 'outlined';
-        if (meta.circle) extraClass = extraClass ? extraClass + ' sc-button-circle' : 'sc-button-circle';
-        if (meta.caret || meta['with-caret']) el.setAttribute('with-caret', '');
-        if (meta.size) {
-          const sMap = { small: 's', medium: 'm', large: 'l' };
-          const normSize = sMap[String(meta.size).toLowerCase()] || meta.size;
-          el.setAttribute('size', normSize);
-        }
-      } else if (tag === 'wa-icon') {
-        let family = meta.family || 'classic';
-        let iconVariant = meta.variant || 'solid';
-        let name = meta.name;
-        if (meta.style === 'brands' || family === 'brands') {
-          family = 'brands';
-          iconVariant = null;
-        } else if (meta.style === 'regular' || iconVariant === 'regular') {
-          iconVariant = 'regular';
-        }
-        if (name === 'info-circle' || name === 'info') name = 'circle-info';
-        el.setAttribute('name', name);
-        el.setAttribute('family', family);
-        if (iconVariant) el.setAttribute('variant', iconVariant);
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'sc-wa-callout-content';
+      if (meta.title) {
+        const titleStrong = document.createElement('strong');
+        titleStrong.className = 'sc-wa-callout-title';
+        titleStrong.textContent = meta.title;
+        contentDiv.appendChild(titleStrong);
       }
 
-      if (variant && tag !== 'wa-icon') el.setAttribute('variant', variant);
-      if (appearance && tag !== 'wa-icon') el.setAttribute('appearance', appearance);
-      if (extraClass) el.setAttribute('class', extraClass.trim());
-
-      // Copy other standard attributes
-      const excludeKeys = new Set([
-        'schema_version',
-        'component',
-        'title',
-        'header',
-        'footer',
-        'image',
-        'image_alt',
-        'icon',
-        'variant',
-        'appearance',
-        'class',
-        'caret',
-        'with-caret',
-        'outline',
-        'circle',
-        'size',
-        'style',
-        'family',
-        'library',
-        'name',
-      ]);
-
-      for (const [k, v] of Object.entries(meta)) {
-        if (excludeKeys.has(k)) continue;
-        if (typeof v === 'boolean') {
-          if (v) el.setAttribute(k, '');
-        } else if (v !== undefined && v !== null) {
-          el.setAttribute(k, String(v));
+      metaEl.remove();
+      el.appendChild(contentDiv);
+      if (host.parentNode) {
+        host.parentNode.insertBefore(el, host);
+        while (host.firstChild) {
+          moveNodePreservingState(contentDiv, host.firstChild, null);
         }
-      }
-
-      // Slot handling for callout (WA-002)
-      if (tag === 'wa-callout') {
-        if (meta.icon) {
-          let iconName = meta.icon;
-          if (iconName === 'info' || iconName === 'info-circle') iconName = 'circle-info';
-          const iconEl = document.createElement('wa-icon');
-          iconEl.setAttribute('slot', 'icon');
-          iconEl.setAttribute('name', iconName);
-          iconEl.setAttribute('family', 'classic');
-          iconEl.setAttribute('variant', 'solid');
-          iconEl.setAttribute('aria-hidden', 'true');
-          el.appendChild(iconEl);
-        }
-
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'sc-wa-callout-content';
-        if (meta.title) {
-          const titleStrong = document.createElement('strong');
-          titleStrong.className = 'sc-wa-callout-title';
-          titleStrong.textContent = meta.title;
-          contentDiv.appendChild(titleStrong);
-        }
-
-        metaEl.remove();
+        host.remove();
+      } else {
         while (host.firstChild) {
           contentDiv.appendChild(host.firstChild);
         }
-        el.appendChild(contentDiv);
         host.replaceWith(el);
-        return;
       }
+      return;
+    }
 
-      // Slot handling for card (WA-004)
-      if (tag === 'wa-card') {
-        if (meta.image) {
-          const img = document.createElement('img');
-          img.slot = 'media';
-          img.src = meta.image;
-          img.alt = meta.image_alt || '';
-          el.appendChild(img);
-          el.setAttribute('with-media', '');
-        }
-        if (meta.header) {
-          const hdr = document.createElement('div');
-          hdr.slot = 'header';
-          hdr.textContent = meta.header;
-          el.appendChild(hdr);
-          el.setAttribute('with-header', '');
-        }
+    // Slot handling for card (WA-004)
+    if (tag === 'wa-card') {
+      if (meta.image) {
+        const img = document.createElement('img');
+        img.slot = 'media';
+        img.src = meta.image;
+        img.alt = meta.image_alt || '';
+        el.appendChild(img);
+        el.setAttribute('with-media', '');
       }
+      if (meta.header) {
+        const hdr = document.createElement('div');
+        hdr.slot = 'header';
+        hdr.textContent = meta.header;
+        el.appendChild(hdr);
+        el.setAttribute('with-header', '');
+      }
+    }
 
-      // Transfer light DOM children
-      metaEl.remove();
+    // Transfer light DOM children while preserving element state when supported
+    metaEl.remove();
+    if (host.parentNode) {
+      host.parentNode.insertBefore(el, host);
+      while (host.firstChild) {
+        moveNodePreservingState(el, host.firstChild, null);
+      }
+    } else {
       while (host.firstChild) {
         el.appendChild(host.firstChild);
       }
+    }
 
-      // Slot handling for card footer
-      if (tag === 'wa-card' && meta.footer) {
-        const ftr = document.createElement('div');
-        ftr.slot = 'footer';
-        ftr.textContent = meta.footer;
-        el.appendChild(ftr);
-        el.setAttribute('with-footer', '');
-      }
+    // Slot handling for card footer
+    if (tag === 'wa-card' && meta.footer) {
+      const ftr = document.createElement('div');
+      ftr.slot = 'footer';
+      ftr.textContent = meta.footer;
+      el.appendChild(ftr);
+      el.setAttribute('with-footer', '');
+    }
 
+    if (host.parentNode) {
+      host.remove();
+    } else {
       host.replaceWith(el);
-    });
+    }
+  }
+
+  async function transformRemainingHostsAsync(remainingHosts) {
+    await yieldToMain();
+    const nowFn = typeof performance !== 'undefined' && typeof performance.now === 'function'
+      ? function () { return performance.now(); }
+      : function () { return Date.now(); };
+    let deadline = nowFn() + 50;
+    for (let i = 0; i < remainingHosts.length; i++) {
+      transformSingleHost(remainingHosts[i]);
+      if (nowFn() >= deadline && i + 1 < remainingHosts.length) {
+        await yieldToMain();
+        deadline = nowFn() + 50;
+      }
+    }
+  }
+
+  // 2. Client-side Web Awesome placeholder transform (WA-002, WA-003, WA-007)
+  function transformHosts(container) {
+    const root = container || document;
+    const hosts = root.querySelectorAll ? Array.from(root.querySelectorAll('.sc-wa-host')) : [];
+    if (!hosts || hosts.length === 0) return;
+
+    const nowFn = typeof performance !== 'undefined' && typeof performance.now === 'function'
+      ? function () { return performance.now(); }
+      : function () { return Date.now(); };
+    const deadline = nowFn() + 50;
+
+    for (let i = 0; i < hosts.length; i++) {
+      transformSingleHost(hosts[i]);
+      if (nowFn() >= deadline && i + 1 < hosts.length) {
+        transformRemainingHostsAsync(hosts.slice(i + 1));
+        break;
+      }
+    }
   }
 
   // Initial setup
@@ -311,10 +429,10 @@
       if (isUpdating) {
         clearTimeout(pendingSyncTimeout);
         pendingSyncTimeout = setTimeout(function () {
-          syncTheme();
+          syncTheme({ preferDom: true });
         }, 10);
       } else {
-        syncTheme();
+        syncTheme({ preferDom: true });
       }
     }
     if (needsTransform) {
@@ -330,8 +448,16 @@
   });
 
   if (window.matchMedia) {
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', syncTheme);
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+      syncTheme();
+    });
   }
+
+  window.addEventListener('storage', function (event) {
+    if (!event.key || event.key === 'softcloud-theme' || event.key === 'myst:theme') {
+      syncTheme(true);
+    }
+  });
 
   // Public SoftCloudTheme API
   window.SoftCloudTheme = {

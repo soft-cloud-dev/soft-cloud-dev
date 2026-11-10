@@ -1,22 +1,113 @@
-# Software Cloud
-
-Bienvenue sur **Software Cloud**, une plateforme de recherche et de publication informatique construite avec **Jupyter Book 2** et hébergée sur **GitHub Pages** à l'adresse [my.softcloud.dev](https://my.softcloud.dev/).
-
-Software Cloud sert d'architecture ouverte et de référence exécutable pour les pipelines de recherche déterministes, les architectures cloud reproductibles et les carnets de calcul vérifiables.
-
+---
+title: Manuel exécutable SoftCloud
+description: Guides, notebooks exécutables, modèles d'interface et laboratoires système aux sources vérifiables.
+site:
+  hide_title_block: true
+  hide_outline: true
+  hide_toc: true
+  hide_footer_links: true
 ---
 
-## Piliers clés
+:::::::{div}
+:class: sc-handbook
 
-- **Reproductibilité cryptographique** : Toutes les dépendances sont verrouillées sur des distributions exactes avec des empreintes d'intégrité SHA-256 (`--require-hashes`, `--only-binary=:all:`), éliminant ainsi la dérive des dépendances.
-- **Exécution hermétique** : Les exécutions informatiques ciblent **CPython 3.12.14 canonique sous Linux x86-64** avec une isolation explicite de l'environnement virtuel.
-- **Conformité stricte au profil** : Chaque artefact de publication fait l'objet d'une vérification préalable automatisée (`tools/check_profile.py`) avant la compilation et le déploiement.
-- **Livraison continue** : Le pipeline CI/CD entièrement automatisé via GitHub Actions compile et vérifie la documentation et les carnets à chaque validation.
+::::::{div}
+:class: sc-handbook__hero
 
----
+:::::{div}
+:class: sc-handbook__intro
 
-## Feuille de route de la documentation
+LE MANUEL SOFTCLOUD
 
-- [**Introduction**](introduction.md) : Contexte, philosophie de la plateforme et périmètre opérationnel.
-- [**Architecture et référence du mémorandum**](architecture.md) : Spécification technique complète, structure du dépôt, fichiers d'échafaudage textuels et chaîne d'outils de vérification.
-- [**Carnet de vérification informatique**](notebooks/experiment.ipynb) : Carnet de validation de l'environnement d'exécution s'exécutant dans le noyau `jb2-python`.
+# Un savoir d'ingénierie reproductible.
+
+Des guides pratiques, des notebooks exécutables et des exemples d'interface réutilisables, reliés à leurs sources.
+
+[Commencer par un guide](guides.md) [Parcourir les notebooks](notebooks.md)
+
+:::::
+
+:::::{div}
+:class: sc-handbook__verification
+
+### Vérification computationnelle
+
+```python
+import sys
+print(sys.version.split()[0])
+assert sys.version_info[:3] == (3, 12, 14)
+```
+
+**Profil d'exécution requis**
+
+`CPython 3.12.14 · Linux x86-64 · jb2-python`
+
+[Ouvrir le notebook de vérification](notebooks/experiment.ipynb)
+
+:::::
+
+::::::
+
+## Choisir un point de départ
+
+::::::{div}
+:class: sc-handbook__routes
+
+:::::{div}
+:class: sc-handbook__route sc-handbook__route--guide
+
+### [Publier sa première page](guides.md)
+
+Découvrez la structure documentaire, le processus de rédaction et le modèle de publication du manuel SoftCloud.
+
+**GUIDE**
+
+:::::
+
+:::::{div}
+:class: sc-handbook__route sc-handbook__route--notebook
+
+### [Reproduire un contrôle d'environnement](notebooks/experiment.ipynb)
+
+Exécutez le notebook de vérification de référence et comprenez son profil d'exécution contrôlé.
+
+**NOTEBOOK**
+
+:::::
+
+:::::{div}
+:class: sc-handbook__route sc-handbook__route--library
+
+### [Trouver un modèle d'interface réutilisable](ui-library.md)
+
+Découvrez le catalogue Web Awesome, les jetons de conception et les exemples d'interface réutilisables.
+
+**BIBLIOTHÈQUE UI**
+
+:::::
+
+::::::
+
+::::::{div}
+:class: sc-handbook__projects
+
+### [Découvrir les projets SoftCloud](projects.md)
+
+[**SoftCloud Node Linux**](projects/linux.md) — Documentation reproductible des nœuds Linux/Kubernetes.
+
+[**FreeIPA**](https://freeipa.softcloud.dev/) — Laboratoire d'identité, de politiques et de gestion des accès.
+
+::::::
+
+::::::{div}
+:class: sc-handbook__overview
+
+## Ingénierie reproductible, résultats vérifiables
+
+SoftCloud publie des recherches computationnelles, des architectures cloud et des guides opérationnels avec des références exécutables. Des dépendances non figées, des binaires divergents, un état d'environnement implicite et des noyaux d'exécution non vérifiés nuisent à la reproductibilité.
+
+Son contrat de publication s'appuie sur des dépendances verrouillées par SHA-256, un environnement CPython 3.12.14 sous Linux x86-64, des vérifications préalables strictes et une CI/CD automatisée. Consultez [Architecture et spécification](architecture.md) ainsi que le [contexte et périmètre opérationnel](introduction.md) pour davantage de détails.
+
+::::::
+
+:::::::

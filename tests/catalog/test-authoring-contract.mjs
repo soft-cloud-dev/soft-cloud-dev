@@ -14,11 +14,13 @@ test('authoring guide has unambiguous nested MyST example fences', () => {
   assert.match(guide, /A `<noscript>` message is not sufficient/);
 });
 
-test('authoring and catalog routes are separate navigation groups', () => {
+test('Web Awesome authoring is catalog-owned; contributor operations are separate', () => {
   const myst = read('myst.yml');
   const catalog = read('components/index.md');
-  assert.match(myst, /- title: Contributor Guide\n      children:\n        - file: components\/authoring-guide\.md/);
+  assert.match(myst, /- file: contributing\.md\n\s+title: Contributor Guide/);
+  assert.match(myst, /- title: Web Awesome Components\n\s+children:\n\s+- file: components\/index\.md\n\s+- file: components\/authoring-guide\.md/);
   assert.equal((myst.match(/file: components\/authoring-guide\.md/g) || []).length, 1);
+  assert.equal((myst.match(/file: contributing\.md/g) || []).length, 1);
   assert.match(catalog, /^---\nslug: components\n/);
 });
 

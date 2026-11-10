@@ -1,22 +1,113 @@
-# Software Cloud
-
-Bienvenido a **Software Cloud**, una plataforma de investigación y publicación computacional construida sobre **Jupyter Book 2** y alojada en **GitHub Pages** en [my.softcloud.dev](https://my.softcloud.dev/).
-
-Software Cloud sirve como arquitectura abierta y referencia ejecutable para canalizaciones de investigación deterministas, arquitecturas en la nube reproducibles y cuadernos computacionales verificables.
-
+---
+title: Manual ejecutable de SoftCloud
+description: Guías, cuadernos ejecutables, patrones de interfaz y laboratorios de sistemas con fuentes verificables.
+site:
+  hide_title_block: true
+  hide_outline: true
+  hide_toc: true
+  hide_footer_links: true
 ---
 
-## Pilares clave
+:::::::{div}
+:class: sc-handbook
 
-- **Reproducibilidad criptográfica**: Todas las dependencias están fijadas a distribuciones exactas con resúmenes de integridad SHA-256 (`--require-hashes`, `--only-binary=:all:`), eliminando la deriva de dependencias.
-- **Ejecución hermética**: Las ejecuciones computacionales apuntan al **CPython 3.12.14 canónico en Linux x86-64** con aislamiento explícito del entorno virtual.
-- **Conformidad estricta del perfil**: Cada artefacto de publicación se somete a una verificación previa automatizada (`tools/check_profile.py`) antes de su compilación y despliegue.
-- **Entrega continua**: El flujo CI/CD totalmente automatizado mediante GitHub Actions compila y verifica la documentación y los cuadernos en cada confirmación.
+::::::{div}
+:class: sc-handbook__hero
 
----
+:::::{div}
+:class: sc-handbook__intro
 
-## Hoja de ruta de la documentación
+EL MANUAL DE SOFTCLOUD
 
-- [**Introducción**](introduction.md): Antecedentes, filosofía de la plataforma y alcance operativo.
-- [**Arquitectura y referencia del memorando**](architecture.md): Especificación técnica completa, diseño del repositorio, archivos base literales y cadena de herramientas de verificación.
-- [**Cuaderno de verificación computacional**](notebooks/experiment.ipynb): Cuaderno de validación del entorno de ejecución que se ejecuta en el kernel `jb2-python`.
+# Conocimiento de ingeniería reproducible.
+
+Guías prácticas, cuadernos ejecutables y ejemplos de interfaz reutilizables, vinculados a sus fuentes.
+
+[Empezar con una guía](guides.md) [Explorar cuadernos](notebooks.md)
+
+:::::
+
+:::::{div}
+:class: sc-handbook__verification
+
+### Verificación computacional
+
+```python
+import sys
+print(sys.version.split()[0])
+assert sys.version_info[:3] == (3, 12, 14)
+```
+
+**Perfil de ejecución requerido**
+
+`CPython 3.12.14 · Linux x86-64 · jb2-python`
+
+[Abrir cuaderno de verificación](notebooks/experiment.ipynb)
+
+:::::
+
+::::::
+
+## Elige un punto de partida
+
+::::::{div}
+:class: sc-handbook__routes
+
+:::::{div}
+:class: sc-handbook__route sc-handbook__route--guide
+
+### [Publica tu primera página](guides.md)
+
+Conoce la estructura, el proceso de autoría y el modelo de publicación del manual SoftCloud.
+
+**GUIDE**
+
+:::::
+
+:::::{div}
+:class: sc-handbook__route sc-handbook__route--notebook
+
+### [Reproduce una comprobación del entorno](notebooks/experiment.ipynb)
+
+Ejecuta el cuaderno de verificación de referencia y comprende su perfil de ejecución controlado.
+
+**NOTEBOOK**
+
+:::::
+
+:::::{div}
+:class: sc-handbook__route sc-handbook__route--library
+
+### [Encuentra un patrón de interfaz](ui-library.md)
+
+Explora el catálogo de Web Awesome, los tokens de diseño y los ejemplos reutilizables.
+
+**BIBLIOTECA UI**
+
+:::::
+
+::::::
+
+::::::{div}
+:class: sc-handbook__projects
+
+### [Explora los proyectos de SoftCloud](projects.md)
+
+[**SoftCloud Node Linux**](projects/linux.md) — Documentación reproducible de nodos Linux/Kubernetes.
+
+[**FreeIPA**](https://freeipa.softcloud.dev/) — Laboratorio de identidad, políticas y gestión de acceso.
+
+::::::
+
+::::::{div}
+:class: sc-handbook__overview
+
+## Ingeniería reproducible, resultados verificables
+
+SoftCloud publica investigación computacional, arquitectura de nube y documentación operativa junto con referencias ejecutables. Las dependencias sin fijar, los binarios divergentes, el estado implícito del entorno y los núcleos sin verificar dificultan reproducir resultados.
+
+Su contrato de publicación utiliza dependencias bloqueadas con SHA-256, un entorno canónico CPython 3.12.14 sobre Linux x86-64, verificación previa estricta y CI/CD automatizado. Consulta [Arquitectura y especificación](architecture.md) y el [contexto y alcance operativo](introduction.md) para conocer los detalles.
+
+::::::
+
+:::::::

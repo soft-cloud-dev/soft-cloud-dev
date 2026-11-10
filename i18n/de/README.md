@@ -1,22 +1,113 @@
-# Software Cloud
-
-Willkommen bei **Software Cloud**, einer Plattform für computergestützte Forschung und Veröffentlichung auf Basis von **Jupyter Book 2**, gehostet über **GitHub Pages** unter [my.softcloud.dev](https://my.softcloud.dev/).
-
-Software Cloud dient als offene Architektur und ausführbare Referenz für deterministische Forschungspipelines, reproduzierbare Cloud-Architekturen und verifizierbare Berechnungs-Notebooks.
-
+---
+title: Ausführbares SoftCloud-Handbuch
+description: Anleitungen, ausführbare Notebooks, UI-Muster und Systemlabore mit überprüfbaren Quellen.
+site:
+  hide_title_block: true
+  hide_outline: true
+  hide_toc: true
+  hide_footer_links: true
 ---
 
-## Zentrale Säulen
+:::::::{div}
+:class: sc-handbook
 
-- **Kryptografische Reproduzierbarkeit**: Alle Abhängigkeiten sind mit SHA-256-Integritätsprüfsummen (`--require-hashes`, `--only-binary=:all:`) fest an exakte Distributionen gebunden, wodurch Abhängigkeitsdrift ausgeschlossen wird.
-- **Hermetische Ausführung**: Berechnungsläufe zielen auf kanonisches **CPython 3.12.14 unter Linux x86-64** mit expliziter Isolierung der virtuellen Umgebung ab.
-- **Strikte Profilkonformität**: Jedes Publikationsartefakt durchläuft vor dem Build und Deployment eine automatisierte Vorabprüfung (`tools/check_profile.py`).
-- **Kontinuierliche Bereitstellung**: Vollautomatisiertes CI/CD über GitHub Actions erstellt und verifiziert Dokumentation und Notebooks bei jedem Commit.
+::::::{div}
+:class: sc-handbook__hero
 
----
+:::::{div}
+:class: sc-handbook__intro
 
-## Dokumentations-Roadmap
+DAS SOFTCLOUD-HANDBUCH
 
-- [**Einführung**](introduction.md): Hintergrund, Plattformphilosophie und operativer Umfang.
-- [**Architektur & Memorandumsreferenz**](architecture.md): Vollständige technische Spezifikation, Repository-Struktur, wortgetreue Gerüstdateien und Verifikations-Toolchain.
-- [**Notebook zur Berechnungsverifikation**](notebooks/experiment.ipynb): Notebook zur Laufzeitvalidierung, das im `jb2-python`-Kernel ausgeführt wird.
+# Ingenieurwissen, das sich reproduzieren lässt.
+
+Praktische Anleitungen, ausführbare Notebooks und wiederverwendbare UI-Beispiele — mit ihren Quellen verknüpft.
+
+[Mit einer Anleitung beginnen](guides.md) [Notebooks durchsuchen](notebooks.md)
+
+:::::
+
+:::::{div}
+:class: sc-handbook__verification
+
+### Rechnerische Verifikation
+
+```python
+import sys
+print(sys.version.split()[0])
+assert sys.version_info[:3] == (3, 12, 14)
+```
+
+**Erforderliches Ausführungsprofil**
+
+`CPython 3.12.14 · Linux x86-64 · jb2-python`
+
+[Verifikations-Notebook öffnen](notebooks/experiment.ipynb)
+
+:::::
+
+::::::
+
+## Einen Einstieg wählen
+
+::::::{div}
+:class: sc-handbook__routes
+
+:::::{div}
+:class: sc-handbook__route sc-handbook__route--guide
+
+### [Erste Seite veröffentlichen](guides.md)
+
+Lernen Sie Struktur, Erstellung und Veröffentlichungsablauf des SoftCloud-Handbuchs kennen.
+
+**GUIDE**
+
+:::::
+
+:::::{div}
+:class: sc-handbook__route sc-handbook__route--notebook
+
+### [Umgebungsprüfung reproduzieren](notebooks/experiment.ipynb)
+
+Führen Sie das Referenz-Notebook zur Umgebungsverifikation aus und verstehen Sie das kontrollierte Ausführungsprofil.
+
+**NOTEBOOK**
+
+:::::
+
+:::::{div}
+:class: sc-handbook__route sc-handbook__route--library
+
+### [Wiederverwendbares UI-Muster finden](ui-library.md)
+
+Entdecken Sie den Web-Awesome-Katalog, Design-Tokens und wiederverwendbare Oberflächenbeispiele.
+
+**UI-BIBLIOTHEK**
+
+:::::
+
+::::::
+
+::::::{div}
+:class: sc-handbook__projects
+
+### [SoftCloud-Projekte entdecken](projects.md)
+
+[**SoftCloud Node Linux**](projects/linux.md) — Reproduzierbare Dokumentation für Linux/Kubernetes-Knoten.
+
+[**FreeIPA**](https://freeipa.softcloud.dev/) — Labor für Identität, Richtlinien und Zugriffsverwaltung.
+
+::::::
+
+::::::{div}
+:class: sc-handbook__overview
+
+## Reproduzierbare Entwicklung, überprüfbare Ergebnisse
+
+SoftCloud veröffentlicht computergestützte Forschung, Cloud-Architektur und Betriebshandbücher zusammen mit ausführbaren Referenzen. Nicht fixierte Abhängigkeiten, abweichende Binärdateien, versteckter Umgebungszustand und ungeprüfte Laufzeit-Kernels erschweren die Reproduktion.
+
+Der Publikationsvertrag umfasst SHA-256-gesicherte Abhängigkeiten, eine kanonische CPython-3.12.14-Laufzeit unter Linux x86-64, strenge Vorabprüfung und automatisierte CI/CD. Lesen Sie die [Architektur und Spezifikation](architecture.md) sowie den [Hintergrund und Betriebsumfang](introduction.md) für weitere Einzelheiten.
+
+::::::
+
+:::::::

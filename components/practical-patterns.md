@@ -154,7 +154,7 @@ An application that already compiles Tailwind may use its **utility vocabulary**
 | --- | --- | --- |
 | Hero, features, bento, logo cloud, statistics | Headings, grid, cards, images | An action, carousel, or dynamic display is required |
 | FAQ, notice, release notes | Admonition, heading, list, native tabs | Details need stateful disclosure or application-specific behavior |
-| Pricing or feature comparison | Tables, grids, cards | User-selectable configuration affects the content |
+| [Pricing or feature comparison](pricing-comparison.md) | `{list-table}`, Pipe Tables, `{grid}` + SSR `{wa-card}`, `{wa-button}` | User-selectable configuration (`wa-slider`, `wa-switch`, `wa-radio-group`) affects the content |
 | Application dashboard | Grid, tables, figures, cards | Filters, tabs, sorting, dialogs, copy actions, or forms are required |
 | Gallery / media story | Images, figures, captions, grid | Controlled carousel, comparison slider, or pan/zoom behavior is required |
 | Forms / application shell | Narrative structure in MyST | Actual controls, validation, and events must execute in the browser |
