@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 
 const locales = [
   { code: 'en', prefix: '', headline: 'Engineering knowledge you can reproduce.', nav: ['Guides', 'Notebooks', 'UI Library', 'Projects'], cta: 'Start with a guide' },
@@ -9,6 +9,17 @@ const locales = [
 ] as const;
 
 const slugs = ['guides', 'notebooks', 'ui-library', 'projects'] as const;
+
+async function expectVerificationContentFits(page: Page) {
+  const card = page.locator('.sc-handbook__verification');
+  await expect(card).toBeVisible();
+  for (const selector of ['pre', 'p > code']) {
+    const element = card.locator(selector).first();
+    await expect(element).toBeVisible();
+    const overflow = await element.evaluate(node => node.scrollWidth - node.clientWidth);
+    expect(overflow, selector + ' must not require horizontal scrolling').toBeLessThanOrEqual(1);
+  }
+}
 
 for (const locale of locales) {
   test(locale.code + ' homepage and locale-aware navigation links', async ({ page }, testInfo) => {
@@ -62,9 +73,42 @@ for (const locale of locales) {
       await expect(page.locator('.sc-handbook__route')).toHaveCount(3);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2)).toBeTruthy();
       await expect(page.locator('.sc-handbook').getByRole('link', { name: locale.cta })).toBeVisible();
+      await expectVerificationContentFits(page);
       await page.screenshot({
         path: testInfo.outputPath('handbook-' + locale.code + '-mobile-' + width + '.png'),
         fullPage: true
+      });
+    }
+  });
+
+  test(locale.code + ' tablet verification and projects fit without clipping', async ({ page }, testInfo) => {
+    for (const width of [768, 820, 834, 1024]) {
+      await page.setViewportSize({ width, height: 1024 });
+      const response = await page.goto(locale.prefix + '/');
+      expect(response?.ok()).toBeTruthy();
+
+      await expectVerificationContentFits(page);
+      const projects = page.locator('.sc-handbook__projects');
+      const geometry = await projects.evaluate(element => {
+        const heading = element.querySelector(':scope > h3, :scope > h4');
+        const paragraphs = Array.from(element.querySelectorAll(':scope > p'));
+        return {
+          headingBottom: heading?.getBoundingClientRect().bottom ?? 0,
+          itemTops: paragraphs.map(p => p.getBoundingClientRect().top),
+          overflow: element.scrollWidth - element.clientWidth,
+        };
+      });
+      expect(geometry.itemTops).toHaveLength(2);
+      expect(geometry.overflow, 'project grid must not overflow').toBeLessThanOrEqual(1);
+      for (const top of geometry.itemTops) {
+        expect(top, 'project links must appear below their heading')
+          .toBeGreaterThanOrEqual(geometry.headingBottom - 1);
+      }
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2))
+        .toBeTruthy();
+      await page.screenshot({
+        path: testInfo.outputPath('handbook-' + locale.code + '-tablet-' + width + '.png'),
+        fullPage: true,
       });
     }
   });
