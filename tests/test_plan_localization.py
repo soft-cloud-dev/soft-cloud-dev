@@ -16,7 +16,7 @@ import plan_localization as pl  # noqa: E402
 
 
 def stage(tmp: Path) -> Path:
-    for name in ("myst.yml", "README.md", "introduction.md", "architecture.md", "i18n", "projects", "notebooks", "audio"):
+    for name in ("myst.yml", "README.md", "guides.md", "notebooks.md", "projects.md", "ui-library.md", "introduction.md", "architecture.md", "i18n", "projects", "notebooks", "audio"):
         src = ROOT / name
         if src.is_dir():
             shutil.copytree(src, tmp / name)
