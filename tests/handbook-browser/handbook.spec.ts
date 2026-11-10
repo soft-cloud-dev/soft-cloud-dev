@@ -45,33 +45,9 @@ test('mobile handbook has no horizontal scrolling and retains all primary action
   expect(response?.ok()).toBeTruthy();
   const handbook = page.locator('.sc-handbook');
   await expect(handbook).toBeVisible();
-  const mobileBrand = await page.evaluate(() => {
-    const selectors = [
-      '.myst-top-nav-bar',
-      '.myst-top-nav-bar > div:first-child',
-      '.myst-home-link',
-      '.myst-home-link-logo',
-      '.myst-home-link-logo img:first-child',
-      '.myst-home-link-logo img:last-child',
-      '.myst-top-nav-menu-button'
-    ];
-    return selectors.map(selector => {
-      const el = document.querySelector(selector);
-      if (!el) return { selector, exists: false };
-      const computed = window.getComputedStyle(el);
-      const rect = el.getBoundingClientRect();
-      return {
-        selector, exists: true, tag: el.tagName,
-        display: computed.display, visibility: computed.visibility,
-        opacity: computed.opacity, width: rect.width, height: rect.height,
-        x: rect.x, y: rect.y,
-        naturalWidth: el instanceof HTMLImageElement ? el.naturalWidth : undefined,
-        src: el instanceof HTMLImageElement ? el.getAttribute('src') : undefined
-      };
-    });
-  });
-  console.log('HANDBOOK_MOBILE_BRAND_DIAGNOSTIC', JSON.stringify(mobileBrand));
-  await expect(page.locator('.myst-top-nav-bar .myst-home-link img:visible').first()).toBeVisible();
+  const mobileLogo = page.locator('.myst-top-nav-bar .myst-home-link img:visible').first();
+  await expect(mobileLogo).toBeVisible();
+  expect(await mobileLogo.evaluate(el => (el as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await expect(handbook.locator('.sc-handbook__route')).toHaveCount(3);
   const fits = await page.evaluate(() =>
     document.documentElement.scrollWidth <= window.innerWidth + 2
@@ -79,6 +55,12 @@ test('mobile handbook has no horizontal scrolling and retains all primary action
   expect(fits).toBeTruthy();
   await expect(handbook.getByRole('link', { name: 'Start with a guide' })).toBeVisible();
   await expect(handbook.getByRole('link', { name: 'Explore SoftCloud projects' })).toBeVisible();
+  await page.setViewportSize({ width: 320, height: 720 });
+  await expect(page.locator('.myst-top-nav-bar .myst-home-link img:visible').first()).toBeVisible();
+  expect(await page.evaluate(() =>
+    document.documentElement.scrollWidth <= window.innerWidth + 2
+  )).toBeTruthy();
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.screenshot({ path: testInfo.outputPath('handbook-mobile.png'), fullPage: true });
 });
 
