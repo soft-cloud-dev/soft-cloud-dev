@@ -1,174 +1,42 @@
 {
   "chunks": [
     {
-      "chunk_hash": "cecd43da3dddf029633ed505f97d31d4ea8411cc6990a47c8c66bb410751bf98",
+      "chunk_hash": "805f0b1dcc5cd5e6978b63b2c7b882bbb52ed07f22ba028509ca72cd33263b91",
       "chunk_id": "chunk-001",
       "chunk_index": 1,
       "element_ids": [
-        "el-0001-heading",
-        "el-0002-paragraph",
-        "el-0003-paragraph"
+        "el-0001-directive"
       ],
-      "section_anchor": "software-cloud",
-      "section_title": "Software Cloud",
+      "section_anchor": "top",
+      "section_title": "Introduction",
       "segments": [
         {
-          "element_id": "el-0001-heading",
+          "element_id": "el-0001-directive",
           "is_ai_summary": false,
-          "kind": "heading",
-          "source_hash": "a8e1384694a0f2fb0fec83a1faa59c9cefd57a9a446f64f91f20d7d1afdb2c96",
-          "spoken_text": "Software Cloud"
-        },
-        {
-          "element_id": "el-0002-paragraph",
-          "is_ai_summary": false,
-          "kind": "paragraph",
-          "source_hash": "7c69650c2d8f873e4046a2fe14d502b9586612cc6c5929f407f33ceeba2f2a89",
-          "spoken_text": "Welcome to Software Cloud, a research and computational publishing platform built on Jupyter Book 2 and hosted on GitHub Pages at my.softcloud.dev."
-        },
-        {
-          "element_id": "el-0003-paragraph",
-          "is_ai_summary": false,
-          "kind": "paragraph",
-          "source_hash": "97c9e1f29ec2ef53add8f4f60dbbb927c3bf7de3d2cdc5d79982386297afdf7f",
-          "spoken_text": "Software Cloud serves as an open architecture and executable reference for deterministic research pipelines, reproducible cloud architectures, and verifiable computational notebooks."
+          "kind": "directive",
+          "source_hash": "e296e9416a3cb00aadff366ec568eed7313431b960921f5df8dacb784569d0a8",
+          "spoken_text": "THE SOFTCLOUD HANDBOOK. Engineering knowledge you can reproduce. Practical guides, executable notebooks, and reusable UI examples — connected to their source. Start with a guide Browse notebooks. Computational verification. Required execution profile. CPython 3.12.14 · Linux x86-64 · jb2-python. Open verification notebook. Choose a starting point. Publish your first page. Learn the documentation structure, authoring workflow, and publishing model for the SoftCloud handbook. GUIDE. Reproduce an environment check. Run the reference environment verification notebook and understand its controlled execution profile. NOTEBOOK. Find a reusable UI pattern. Explore the Web Awesome catalog, design tokens, and reusable interface examples. UI LIBRARY. Explore SoftCloud projects. SoftCloud Node Linux — Reproducible Linux/Kubernetes node documentation. FreeIPA — Identity, policy, and access management laboratory. Reproducible engineering, accountable results. SoftCloud publishes computational research, cloud architecture, and operational guidance alongside executable references. Unpinned dependencies, divergent binaries, implicit environment state, and unverified runtime kernels can make research difficult to reproduce. Its publication contract uses SHA-256 dependency locking, a canonical CPython 3.12.14 runtime on Linux x86-64, strict preflight verification, and automated CI/CD. See the Architecture & Specification for guarantees and the background and operational scope for context."
         }
       ],
-      "speech_input_hash": "1b57795614d1b11f7e725fc38adfe2d3999fa43d8f6f171b3cfedc502c6d6b90",
-      "text": "Software Cloud.\n\nWelcome to Software Cloud, a research and computational publishing platform built on Jupyter Book 2 and hosted on GitHub Pages at my.softcloud.dev.\n\nSoftware Cloud serves as an open architecture and executable reference for deterministic research pipelines, reproducible cloud architectures, and verifiable computational notebooks.",
-      "text_sha256": "8e04165f09ef714532fa0d2a86806f7766c48a6ca94d42ef878c9154fa098a16"
-    },
-    {
-      "chunk_hash": "93ca5dfae61750bd71ea940875c5dc96e82230e276d4b412544078333ef2aaaf",
-      "chunk_id": "chunk-002",
-      "chunk_index": 2,
-      "element_ids": [
-        "el-0004-heading",
-        "el-0005-list"
-      ],
-      "section_anchor": "key-pillars",
-      "section_title": "Key Pillars",
-      "segments": [
-        {
-          "element_id": "el-0004-heading",
-          "is_ai_summary": false,
-          "kind": "heading",
-          "source_hash": "d1eb73bc7cb39d7c49e7afd6bba8cbcd6e0cfdefc8f8022abe18819631068729",
-          "spoken_text": "Key Pillars"
-        },
-        {
-          "element_id": "el-0005-list",
-          "is_ai_summary": false,
-          "kind": "list",
-          "source_hash": "f385f5f5e03ef0e9729e1eb0702c3ea6ea04ef1b18ba11bf36a1456ca20487fd",
-          "spoken_text": "Cryptographic Reproducibility: All dependencies are locked to exact distributions with SHA-256 integrity hashes (--require-hashes, --only-binary=:all:), eliminating dependency drift. Hermetic Execution: Computational runs target canonical CPython 3.12.14 on Linux x86-64 with explicit virtual environment isolation. Strict Profile Conformance: Every publication artifact undergoes automated preflight verification (tools/check_profile.py) before build and deployment. Continuous Delivery: Fully automated CI/CD via GitHub Actions builds and verifies documentation and notebooks upon every commit."
-        }
-      ],
-      "speech_input_hash": "9ca2b3741353cddb480a8b169debac1b0c59cb0b2d93c358b51d4644f85427c2",
-      "text": "Key Pillars.\n\nCryptographic Reproducibility: All dependencies are locked to exact distributions with SHA-256 integrity hashes (--require-hashes, --only-binary=:all:), eliminating dependency drift. Hermetic Execution: Computational runs target canonical CPython 3.12.14 on Linux x86-64 with explicit virtual environment isolation. Strict Profile Conformance: Every publication artifact undergoes automated preflight verification (tools/check_profile.py) before build and deployment. Continuous Delivery: Fully automated CI/CD via GitHub Actions builds and verifies documentation and notebooks upon every commit.",
-      "text_sha256": "e976129a391dc52dfe00f5c8994f998e75056f374d6a198b5c5eb5971a7a3782"
-    },
-    {
-      "chunk_hash": "fc1208ed943cdccdf647fb7be12b234fcdfef5ec8e41a36905f897cfa6f32de1",
-      "chunk_id": "chunk-003",
-      "chunk_index": 3,
-      "element_ids": [
-        "el-0006-heading",
-        "el-0007-list"
-      ],
-      "section_anchor": "documentation-roadmap",
-      "section_title": "Documentation Roadmap",
-      "segments": [
-        {
-          "element_id": "el-0006-heading",
-          "is_ai_summary": false,
-          "kind": "heading",
-          "source_hash": "8c5ccac4b6687817bfc0bae3b60e22569ebe6697199aff1fa91aee45a78e93e7",
-          "spoken_text": "Documentation Roadmap"
-        },
-        {
-          "element_id": "el-0007-list",
-          "is_ai_summary": false,
-          "kind": "list",
-          "source_hash": "7b5b3fc6d2b4fc0e3856464e14af0ad4848f0d185f06c2aac99f9461f5f52b9e",
-          "spoken_text": "Introduction: Background, platform philosophy, and operational scope. Architecture & Memorandum Reference: Full technical specification, repository layout, verbatim scaffold files, and verification toolchain. Computational Verification Notebook: Runtime validation notebook executing in the jb2-python kernel."
-        }
-      ],
-      "speech_input_hash": "62fa77f360144bb192bce5eba571726f2a5edcdbf040f7face73a5d91ca826a6",
-      "text": "Documentation Roadmap.\n\nIntroduction: Background, platform philosophy, and operational scope. Architecture & Memorandum Reference: Full technical specification, repository layout, verbatim scaffold files, and verification toolchain. Computational Verification Notebook: Runtime validation notebook executing in the jb2-python kernel.",
-      "text_sha256": "9fe8f27059e88e31594570d6348c841128c936ca42f18cf9bcf6fb99c94f4215"
+      "speech_input_hash": "e48cbfce2170c7325e56dade14c48b7e2035c888e96821b1389045a999620c10",
+      "text": "THE SOFTCLOUD HANDBOOK. Engineering knowledge you can reproduce. Practical guides, executable notebooks, and reusable UI examples — connected to their source. Start with a guide Browse notebooks. Computational verification. Required execution profile. CPython 3.12.14 · Linux x86-64 · jb2-python. Open verification notebook. Choose a starting point. Publish your first page. Learn the documentation structure, authoring workflow, and publishing model for the SoftCloud handbook. GUIDE. Reproduce an environment check. Run the reference environment verification notebook and understand its controlled execution profile. NOTEBOOK. Find a reusable UI pattern. Explore the Web Awesome catalog, design tokens, and reusable interface examples. UI LIBRARY. Explore SoftCloud projects. SoftCloud Node Linux — Reproducible Linux/Kubernetes node documentation. FreeIPA — Identity, policy, and access management laboratory. Reproducible engineering, accountable results. SoftCloud publishes computational research, cloud architecture, and operational guidance alongside executable references. Unpinned dependencies, divergent binaries, implicit environment state, and unverified runtime kernels can make research difficult to reproduce. Its publication contract uses SHA-256 dependency locking, a canonical CPython 3.12.14 runtime on Linux x86-64, strict preflight verification, and automated CI/CD. See the Architecture & Specification for guarantees and the background and operational scope for context.",
+      "text_sha256": "ff29d78eecfeb4e5a69109252d13969d6efa7719ac0b6f9c97974e8a8147f7bc"
     }
   ],
   "code_summary_hashes": {},
   "config_hash": "d5baac4fad1f9b181890c898934a905b75aa725dee29a66f520b062347b9bd18",
   "element_ids": [
-    "el-0001-heading",
-    "el-0002-paragraph",
-    "el-0003-paragraph",
-    "el-0004-heading",
-    "el-0005-list",
-    "el-0006-heading",
-    "el-0007-list"
+    "el-0001-directive"
   ],
   "elements": [
     {
-      "element_id": "el-0001-heading",
-      "heading_level": 1,
-      "kind": "heading",
-      "section_anchor": "software-cloud",
-      "section_title": "Software Cloud",
-      "source_hash": "a8e1384694a0f2fb0fec83a1faa59c9cefd57a9a446f64f91f20d7d1afdb2c96",
-      "text": "Software Cloud"
-    },
-    {
-      "element_id": "el-0002-paragraph",
-      "kind": "paragraph",
-      "section_anchor": "software-cloud",
-      "section_title": "Software Cloud",
-      "source_hash": "7c69650c2d8f873e4046a2fe14d502b9586612cc6c5929f407f33ceeba2f2a89",
-      "text": "Welcome to Software Cloud, a research and computational publishing platform built on Jupyter Book 2 and hosted on GitHub Pages at my.softcloud.dev."
-    },
-    {
-      "element_id": "el-0003-paragraph",
-      "kind": "paragraph",
-      "section_anchor": "software-cloud",
-      "section_title": "Software Cloud",
-      "source_hash": "97c9e1f29ec2ef53add8f4f60dbbb927c3bf7de3d2cdc5d79982386297afdf7f",
-      "text": "Software Cloud serves as an open architecture and executable reference for deterministic research pipelines, reproducible cloud architectures, and verifiable computational notebooks."
-    },
-    {
-      "element_id": "el-0004-heading",
-      "heading_level": 2,
-      "kind": "heading",
-      "section_anchor": "key-pillars",
-      "section_title": "Key Pillars",
-      "source_hash": "d1eb73bc7cb39d7c49e7afd6bba8cbcd6e0cfdefc8f8022abe18819631068729",
-      "text": "Key Pillars"
-    },
-    {
-      "element_id": "el-0005-list",
-      "kind": "list",
-      "section_anchor": "key-pillars",
-      "section_title": "Key Pillars",
-      "source_hash": "f385f5f5e03ef0e9729e1eb0702c3ea6ea04ef1b18ba11bf36a1456ca20487fd",
-      "text": "Cryptographic Reproducibility: All dependencies are locked to exact distributions with SHA-256 integrity hashes (--require-hashes, --only-binary=:all:), eliminating dependency drift. Hermetic Execution: Computational runs target canonical CPython 3.12.14 on Linux x86-64 with explicit virtual environment isolation. Strict Profile Conformance: Every publication artifact undergoes automated preflight verification (tools/check_profile.py) before build and deployment. Continuous Delivery: Fully automated CI/CD via GitHub Actions builds and verifies documentation and notebooks upon every commit."
-    },
-    {
-      "element_id": "el-0006-heading",
-      "heading_level": 2,
-      "kind": "heading",
-      "section_anchor": "documentation-roadmap",
-      "section_title": "Documentation Roadmap",
-      "source_hash": "8c5ccac4b6687817bfc0bae3b60e22569ebe6697199aff1fa91aee45a78e93e7",
-      "text": "Documentation Roadmap"
-    },
-    {
-      "element_id": "el-0007-list",
-      "kind": "list",
-      "section_anchor": "documentation-roadmap",
-      "section_title": "Documentation Roadmap",
-      "source_hash": "7b5b3fc6d2b4fc0e3856464e14af0ad4848f0d185f06c2aac99f9461f5f52b9e",
-      "text": "Introduction: Background, platform philosophy, and operational scope. Architecture & Memorandum Reference: Full technical specification, repository layout, verbatim scaffold files, and verification toolchain. Computational Verification Notebook: Runtime validation notebook executing in the jb2-python kernel."
+      "directive_name": "div",
+      "element_id": "el-0001-directive",
+      "kind": "directive",
+      "section_anchor": "top",
+      "section_title": "Introduction",
+      "source_hash": "e296e9416a3cb00aadff366ec568eed7313431b960921f5df8dacb784569d0a8",
+      "text": "THE SOFTCLOUD HANDBOOK. Engineering knowledge you can reproduce. Practical guides, executable notebooks, and reusable UI examples — connected to their source. Start with a guide Browse notebooks. Computational verification. Required execution profile. CPython 3.12.14 · Linux x86-64 · jb2-python. Open verification notebook. Choose a starting point. Publish your first page. Learn the documentation structure, authoring workflow, and publishing model for the SoftCloud handbook. GUIDE. Reproduce an environment check. Run the reference environment verification notebook and understand its controlled execution profile. NOTEBOOK. Find a reusable UI pattern. Explore the Web Awesome catalog, design tokens, and reusable interface examples. UI LIBRARY. Explore SoftCloud projects. SoftCloud Node Linux — Reproducible Linux/Kubernetes node documentation. FreeIPA — Identity, policy, and access management laboratory. Reproducible engineering, accountable results. SoftCloud publishes computational research, cloud architecture, and operational guidance alongside executable references. Unpinned dependencies, divergent binaries, implicit environment state, and unverified runtime kernels can make research difficult to reproduce. Its publication contract uses SHA-256 dependency locking, a canonical CPython 3.12.14 runtime on Linux x86-64, strict preflight verification, and automated CI/CD. See the Architecture & Specification for guarantees and the background and operational scope for context."
     }
   ],
   "locale": "en",
@@ -187,9 +55,9 @@
     "voice_name": "Kore"
   },
   "page_id": "readme",
-  "page_source_hash": "9e4e35ce4eedaca76f90fe0f28ba844beabdd64d047ccf05efaa9c0160963dd0",
+  "page_source_hash": "a72474d9b82987ed386a843e553f56fc0279cdcf61c1357dcc2ded77d20d63cf",
   "schema_version": "1.0.0",
-  "source_file_sha256": "a9021a99ff77c202fd767fca52b07520ec6db4954c3ff48fef2a829e4e418986",
+  "source_file_sha256": "5a9cbad85020e097eb784846cedd8205ce60a0bb1b5548d1a9e1aaa89d966526",
   "source_path": "README.md",
-  "transcript_sha256": "f7b9bc3fac131f2d6e3f418b1f163202cba9b470d64b097b41db114782447ec1"
+  "transcript_sha256": "bcd546f43792b17172df68157905a078b74d674b3a35251b66d31ba16f089ede"
 }

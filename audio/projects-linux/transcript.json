@@ -1,0 +1,178 @@
+{
+  "chunks": [
+    {
+      "chunk_hash": "1c35288665f4d4dd4c34d8f287138dc4e80b7689f3c044739d046b55165e3ea2",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph"
+      ],
+      "section_anchor": "softcloud-node-linux",
+      "section_title": "SoftCloud Node Linux",
+      "segments": [
+        {
+          "element_id": "el-0001-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "c3e008b0107fd2bfc2f36e67d704ddd286843d19a257fa733b709dd15800c82b",
+          "spoken_text": "SoftCloud Node Linux"
+        },
+        {
+          "element_id": "el-0002-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "d776d0b800aa8dc0a8d431931dfebbff40869db392cdfd5fbc9000441d66897c",
+          "spoken_text": "SoftCloud Node Linux explores Linux Kubernetes nodes running as virtual machines under FreeBSD bhyve. The project documentation covers the image build process, boot architecture, container runtime, networking, and validation work."
+        }
+      ],
+      "speech_input_hash": "eb8beca0c677f28eef92e86810f5b9ecce9fbc602cd1857c902aabcbbb4bb56d",
+      "text": "SoftCloud Node Linux.\n\nSoftCloud Node Linux explores Linux Kubernetes nodes running as virtual machines under FreeBSD bhyve. The project documentation covers the image build process, boot architecture, container runtime, networking, and validation work.",
+      "text_sha256": "3ff1606170296d71be8f04bdf8c9e6360771420b541b0d0221d5a33aa04089ac"
+    },
+    {
+      "chunk_hash": "99aa2fc7dfdf1557d6e0043351a2185010e6ea0acb17fd0cbcbf9a25e4227586",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "element_ids": [
+        "el-0003-heading",
+        "el-0004-list"
+      ],
+      "section_anchor": "start-here",
+      "section_title": "Start here",
+      "segments": [
+        {
+          "element_id": "el-0003-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "723a6d813f80de8f3082177d54c6397a55ff8aa49a2c4d27dad831128c23bcf4",
+          "spoken_text": "Start here"
+        },
+        {
+          "element_id": "el-0004-list",
+          "is_ai_summary": false,
+          "kind": "list",
+          "source_hash": "563c8e492896717e761eb7c14ac8d4daf15e9ce6107f48e30ba7477afd8a791f",
+          "spoken_text": "Read the Node Linux documentation. Browse the source repository."
+        }
+      ],
+      "speech_input_hash": "26c41c4d4183bf8bed31e893f76ccba5bd441d1cc9178c11a1d76b0c8ffd5875",
+      "text": "Start here.\n\nRead the Node Linux documentation. Browse the source repository.",
+      "text_sha256": "2fdacca9eb34f7fae5af0fa047b08cce56e38838145582e823ffe16b335c4e53"
+    },
+    {
+      "chunk_hash": "5181984d7167a1b2cae043a5a7ea7460bae28129a682683b28a3fa778b1747da",
+      "chunk_id": "chunk-003",
+      "chunk_index": 3,
+      "element_ids": [
+        "el-0005-heading",
+        "el-0006-paragraph"
+      ],
+      "section_anchor": "implementation-status",
+      "section_title": "Implementation status",
+      "segments": [
+        {
+          "element_id": "el-0005-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "94b34083211f18ec55c4ffbac96c00c8846f6ef7f8b21d20909319286a9b25c7",
+          "spoken_text": "Implementation status"
+        },
+        {
+          "element_id": "el-0006-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "284da9f5ff00e3d989df32cf7e0caf5db157fd5655da7824b088c4e3ed003473",
+          "spoken_text": "The project documentation distinguishes implemented capabilities, validated behavior, known limitations, and planned work."
+        }
+      ],
+      "speech_input_hash": "d65adf37b9076a0e804655da930399f78a2ca00df7eacffa687971ec57f42041",
+      "text": "Implementation status.\n\nThe project documentation distinguishes implemented capabilities, validated behavior, known limitations, and planned work.",
+      "text_sha256": "abafe71eea1ec6da0681c0f134d93a1bfcc53e7dc7363af5e93a5120b2e1cd78"
+    }
+  ],
+  "code_summary_hashes": {},
+  "config_hash": "d5baac4fad1f9b181890c898934a905b75aa725dee29a66f520b062347b9bd18",
+  "element_ids": [
+    "el-0001-heading",
+    "el-0002-paragraph",
+    "el-0003-heading",
+    "el-0004-list",
+    "el-0005-heading",
+    "el-0006-paragraph"
+  ],
+  "elements": [
+    {
+      "element_id": "el-0001-heading",
+      "heading_level": 1,
+      "kind": "heading",
+      "section_anchor": "softcloud-node-linux",
+      "section_title": "SoftCloud Node Linux",
+      "source_hash": "c3e008b0107fd2bfc2f36e67d704ddd286843d19a257fa733b709dd15800c82b",
+      "text": "SoftCloud Node Linux"
+    },
+    {
+      "element_id": "el-0002-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "softcloud-node-linux",
+      "section_title": "SoftCloud Node Linux",
+      "source_hash": "d776d0b800aa8dc0a8d431931dfebbff40869db392cdfd5fbc9000441d66897c",
+      "text": "SoftCloud Node Linux explores Linux Kubernetes nodes running as virtual machines under FreeBSD bhyve. The project documentation covers the image build process, boot architecture, container runtime, networking, and validation work."
+    },
+    {
+      "element_id": "el-0003-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "start-here",
+      "section_title": "Start here",
+      "source_hash": "723a6d813f80de8f3082177d54c6397a55ff8aa49a2c4d27dad831128c23bcf4",
+      "text": "Start here"
+    },
+    {
+      "element_id": "el-0004-list",
+      "kind": "list",
+      "section_anchor": "start-here",
+      "section_title": "Start here",
+      "source_hash": "563c8e492896717e761eb7c14ac8d4daf15e9ce6107f48e30ba7477afd8a791f",
+      "text": "Read the Node Linux documentation. Browse the source repository."
+    },
+    {
+      "element_id": "el-0005-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "implementation-status",
+      "section_title": "Implementation status",
+      "source_hash": "94b34083211f18ec55c4ffbac96c00c8846f6ef7f8b21d20909319286a9b25c7",
+      "text": "Implementation status"
+    },
+    {
+      "element_id": "el-0006-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "implementation-status",
+      "section_title": "Implementation status",
+      "source_hash": "284da9f5ff00e3d989df32cf7e0caf5db157fd5655da7824b088c4e3ed003473",
+      "text": "The project documentation distinguishes implemented capabilities, validated behavior, known limitations, and planned work."
+    }
+  ],
+  "locale": "en",
+  "logical_source_path": "projects/linux.md",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "en",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "projects-linux",
+  "page_source_hash": "70438b99fd63c2077cd4582bd49a6a28777b2ae289e2b7da94265a278de1c501",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "02803cf87db79bbb6f665dcd5e1f87f912a994fa7906997c04ab7bdbdc77a933",
+  "source_path": "projects/linux.md",
+  "transcript_sha256": "8681a90607efcc7bb2407dfea4ea8cdca7a220ce5ed50361597b1c26fa0ad582"
+}
