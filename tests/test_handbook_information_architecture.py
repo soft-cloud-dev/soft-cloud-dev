@@ -67,6 +67,20 @@ class HandbookInformationArchitectureTests(unittest.TestCase):
             ],
         )
 
+    def test_nav_uses_source_relative_urls_before_myst_base_url(self):
+        import sys
+        sys.path.insert(0, str(ROOT / "tools"))
+        from build_locales import build_localized_myst_config
+        for code, info in self.locales["locales"].items():
+            with self.subTest(locale=code):
+                cfg = build_localized_myst_config(
+                    self.config, code, info, staged_files=set(self.files)
+                )
+                self.assertEqual(
+                    [item["url"] for item in cfg["site"]["nav"]],
+                    ["/guides", "/notebooks", "/ui-library", "/projects"],
+                )
+
     def test_stylesheet_and_document_links_exist(self):
         style = self.config["site"]["options"]["style"]
         css = (ROOT / style).read_text(encoding="utf-8")

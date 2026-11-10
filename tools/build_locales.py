@@ -214,10 +214,10 @@ def build_localized_myst_config(
             if source is not None:
                 if staged_files is not None and source not in staged_files:
                     continue
+                # MyST adds BASE_URL (including the locale prefix) while
+                # compiling the site. Adding it here produces /pl/pl/guides.
                 new_item["url"] = route_url_for_page(
-                    str(locale_info.get("prefix", "")),
-                    page_slug_from_rel_path(source),
-                    base_url=os.environ.get("BASE_URL", ""),
+                    "", page_slug_from_rel_path(source)
                 )
             if new_item.get("title") in nav_titles:
                 new_item["title"] = nav_titles[new_item["title"]]
