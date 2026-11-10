@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 
 const locales = [
   { code: 'en', prefix: '', headline: 'Engineering knowledge you can reproduce.', nav: ['Guides', 'Notebooks', 'UI Library', 'Projects'], cta: 'Start with a guide' },
@@ -9,6 +9,19 @@ const locales = [
 ] as const;
 
 const slugs = ['guides', 'notebooks', 'ui-library', 'projects'] as const;
+
+async function expectVerificationContentFits(page: Page) {
+  const card = page.locator('.sc-handbook__verification');
+  await expect(card).toBeVisible();
+  const codeWhitespace = await card.locator('pre code').evaluate(el => getComputedStyle(el).whiteSpace);
+  expect(codeWhitespace, 'MyST inline code style must not prevent wrapping').toBe('pre-wrap');
+  for (const selector of ['pre', 'p > code']) {
+    const element = card.locator(selector).first();
+    await expect(element).toBeVisible();
+    const overflow = await element.evaluate(node => node.scrollWidth - node.clientWidth);
+    expect(overflow, selector + ' must not require horizontal scrolling').toBeLessThanOrEqual(1);
+  }
+}
 
 for (const locale of locales) {
   test(locale.code + ' homepage and locale-aware navigation links', async ({ page }, testInfo) => {
@@ -56,15 +69,57 @@ for (const locale of locales) {
       await page.setViewportSize({ width, height: 844 });
       const response = await page.goto(locale.prefix + '/');
       expect(response?.ok()).toBeTruthy();
-      const logo = page.locator('.myst-top-nav-bar .myst-home-link img:visible').first();
-      await expect(logo).toBeVisible();
-      expect(await logo.evaluate(el => (el as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+      await expect.poll(async () => {
+        return page.locator('nav.myst-top-nav-bar img[alt="SoftCloud"]').evaluateAll(images =>
+          images.some(element => {
+            const img = element as HTMLImageElement;
+            const rect = img.getBoundingClientRect();
+            return img.complete && img.naturalWidth > 0 &&
+              rect.width > 0 && rect.height > 0 &&
+              rect.right > 0 && rect.left < window.innerWidth &&
+              getComputedStyle(img).visibility === 'visible';
+          })
+        );
+      }, { message: 'A loaded SoftCloud logo must be visible in the mobile navbar' }).toBe(true);
       await expect(page.locator('.sc-handbook__route')).toHaveCount(3);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2)).toBeTruthy();
       await expect(page.locator('.sc-handbook').getByRole('link', { name: locale.cta })).toBeVisible();
+      await expectVerificationContentFits(page);
       await page.screenshot({
         path: testInfo.outputPath('handbook-' + locale.code + '-mobile-' + width + '.png'),
         fullPage: true
+      });
+    }
+  });
+
+  test(locale.code + ' tablet verification and projects fit without clipping', async ({ page }, testInfo) => {
+    for (const width of [768, 820, 834, 1024]) {
+      await page.setViewportSize({ width, height: 1024 });
+      const response = await page.goto(locale.prefix + '/');
+      expect(response?.ok()).toBeTruthy();
+
+      await expectVerificationContentFits(page);
+      const projects = page.locator('.sc-handbook__projects');
+      const geometry = await projects.evaluate(element => {
+        const heading = element.querySelector(':scope > h3, :scope > h4');
+        const paragraphs = Array.from(element.querySelectorAll(':scope > p'));
+        return {
+          headingBottom: heading?.getBoundingClientRect().bottom ?? 0,
+          itemTops: paragraphs.map(p => p.getBoundingClientRect().top),
+          overflow: element.scrollWidth - element.clientWidth,
+        };
+      });
+      expect(geometry.itemTops).toHaveLength(2);
+      expect(geometry.overflow, 'project grid must not overflow').toBeLessThanOrEqual(1);
+      for (const top of geometry.itemTops) {
+        expect(top, 'project links must appear below their heading')
+          .toBeGreaterThanOrEqual(geometry.headingBottom - 1);
+      }
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2))
+        .toBeTruthy();
+      await page.screenshot({
+        path: testInfo.outputPath('handbook-' + locale.code + '-tablet-' + width + '.png'),
+        fullPage: true,
       });
     }
   });

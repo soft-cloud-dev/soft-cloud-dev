@@ -128,12 +128,27 @@ body:has(.sc-handbook) article.article-grid {
   margin: 0 0 1.1rem;
   padding: 1rem;
   overflow-x: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
   border: 1px solid #e7e8ed;
   border-radius: 6px;
   background: #fff;
   color: #1c2437;
   font-size: .8rem;
   line-height: 1.75;
+}
+
+/* MyST emits inline white-space:pre on <code>. Override it at tablet
+ * widths as well as mobile, keeping syntax-highlighted tokens wrappable. */
+.sc-handbook__verification pre code {
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word;
+}
+
+.sc-handbook__verification pre code span {
+  white-space: inherit;
+  overflow-wrap: inherit;
 }
 
 .sc-handbook__verification > p {
@@ -149,12 +164,13 @@ body:has(.sc-handbook) article.article-grid {
 
 .sc-handbook__verification > p > code {
   display: block;
-  overflow-x: auto;
+  min-width: 0;
   padding: .7rem .8rem;
   border-radius: 5px;
   background: #eceef3;
   color: #2b3342;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .sc-handbook__verification > p:last-child a {
@@ -279,15 +295,16 @@ body:has(.sc-handbook) article.article-grid {
 }
 
 .sc-handbook__projects {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: .5rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: .75rem 2rem;
   padding: 1.45rem 0;
   border-bottom: 1px solid var(--sc-h-border);
 }
 
 .sc-handbook__projects > :is(h3, h4) {
+  grid-column: 1 / -1;
   margin: 0;
   font-size: 1.05rem;
 }
@@ -297,6 +314,7 @@ body:has(.sc-handbook) article.article-grid {
 }
 
 .sc-handbook__projects > p {
+  min-width: 0;
   margin: 0;
   color: var(--sc-h-muted);
   font-size: .82rem;
@@ -348,6 +366,9 @@ body:has(.sc-handbook) article.article-grid {
   .sc-handbook__hero {
     grid-template-columns: minmax(0, 1fr);
     gap: 2.25rem;
+  }
+  .sc-handbook__projects {
+    grid-template-columns: minmax(0, 1fr);
   }
   .sc-handbook__intro > :is(h1, h2) {
     max-width: 18ch;
@@ -403,12 +424,6 @@ body:has(.sc-handbook) article.article-grid {
     grid-column: 2;
     grid-row: 3;
     justify-self: start;
-  }
-  .sc-handbook__projects {
-    display: block;
-  }
-  .sc-handbook__projects > p {
-    margin-top: .7rem;
   }
 }
 
