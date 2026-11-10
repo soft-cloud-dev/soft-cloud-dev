@@ -18,8 +18,6 @@ project:
   toc:
     - file: README.md
       title: SoftCloud Hub
-    - file: handbook.md
-      title: Executable Handbook
     - title: Systems & Laboratories
       children:
         - file: projects.md
@@ -34,6 +32,8 @@ project:
           title: Architecture & Specification
         - file: guides.md
           title: Guides
+        - file: ui-library.md
+          title: UI Library
         - file: notebooks.md
           title: Computational Notebooks
         - title: Verification & UI Labs
@@ -170,7 +170,7 @@ site:
     - title: Notebooks
       url: /notebooks
     - title: UI Library
-      url: /components
+      url: /ui-library
     - title: Projects
       url: /projects
   options:

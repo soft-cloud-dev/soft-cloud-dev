@@ -1,23 +1,23 @@
 ---
 title: Systems & Laboratories
-description: Discover independent SoftCloud laboratory publications from one handbook.
+description: Discover separate SoftCloud engineering laboratories.
 ---
 
 # Systems & Laboratories
 
-The handbook provides discovery and shared publication guidance. Each laboratory owns its detailed architecture, release history, and verification evidence.
+The handbook is the discovery portal. Each laboratory owns its detailed architecture, operational status, and verified release evidence.
 
-## [SoftCloud Node Linux](projects/linux.md)
+## Node Linux
 
-Linux and Kubernetes node architecture running in virtual machines under FreeBSD bhyve.
+Reproducible Linux and Kubernetes node architecture.
 
-- [Dedicated Node Linux documentation](https://linux.softcloud.dev/)
-- [Source repository](https://github.com/soft-cloud-dev/linux)
+- [Local documentation overview](projects/linux.md).
+- [Independent Node Linux publication](https://linux.softcloud.dev/).
 
-## [FreeIPA Identity & Directory](projects/freeipa.md)
+## FreeIPA
 
-Identity, directory, access policy, and authentication laboratory documentation.
+Identity, directory services, authentication, and access policy.
 
-- [Dedicated FreeIPA documentation](https://freeipa.softcloud.dev/)
+- [Independent FreeIPA publication](https://freeipa.softcloud.dev/).
 
-The project links above remain on their existing subdomains; they are not relocated into handbook URL paths.
+Laboratory subdomains are not relocated into the handbook.
