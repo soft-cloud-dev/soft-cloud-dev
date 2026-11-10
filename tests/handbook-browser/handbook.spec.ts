@@ -124,13 +124,14 @@ for (const locale of locales) {
     }
   });
 
-  test(locale.code + ' navbar remains in selected language during navigation', async ({ page }) => {
+  test(locale.code + ' navbar remains in selected language during navigation', async ({ page, baseURL }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(locale.prefix + '/');
+    const origin = (baseURL ?? 'http://127.0.0.1:4174').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     for (let i = 0; i < slugs.length; i++) {
       await page.locator('nav.myst-top-nav-bar')
         .getByRole('link', { name: locale.nav[i], exact: true }).click();
-      await expect(page).toHaveURL(new RegExp('^http://127\\.0\\.0\\.1:4174' + locale.prefix + '/' + slugs[i] + '/?$'));
+      await expect(page).toHaveURL(new RegExp('^' + origin + locale.prefix + '/' + slugs[i] + '/?$'));
       await expect(page.locator('main h1, main h2').first()).toBeVisible();
       await page.goto(locale.prefix + '/');
     }
@@ -152,4 +153,123 @@ test('localized UI Library entry identifies the English-only catalog', async ({ 
     await expect(page.locator('main a[href="https://my.softcloud.dev/components"]').first()).toBeVisible();
     await expect(page.locator('main')).toContainText(/web[- ]awesome/i);
   }
+});
+
+<<<<<<< HEAD
+test('localized homepages hydrate without crashing when browser storage throws SecurityError', async ({ page }) => {
+  await page.addInitScript(() => {
+    const blocked = {
+      get() {
+        throw new DOMException('The operation is insecure.', 'SecurityError');
+      },
+    };
+    Object.defineProperty(window, 'localStorage', blocked);
+    Object.defineProperty(window, 'sessionStorage', blocked);
+  });
+
+  const pageErrors: string[] = [];
+  const consoleErrors: string[] = [];
+  page.on('pageerror', error => pageErrors.push(error.message));
+  page.on('console', msg => {
+    if (msg.type() === 'error') consoleErrors.push(msg.text());
+  });
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const locale of locales.slice(0, 2)) {
+    await page.goto(locale.prefix + '/', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(300);
+    await expect(page.locator('body')).not.toContainText('Unexpected Error Occurred');
+    await expect(page.locator('.sc-handbook')).toBeVisible();
+  }
+
+  await page.reload({ waitUntil: 'networkidle' });
+  await expect(page.locator('body')).not.toContainText('Unexpected Error Occurred');
+  await page.locator('button.myst-theme-button').click();
+  await expect(page.locator('body')).not.toContainText('Unexpected Error Occurred');
+
+  await page.locator('[data-sc-lang-switcher] button').first().click();
+  await page.locator('[data-sc-lang-switcher] a, [data-sc-lang-switcher] button, [data-sc-lang-switcher] [role="menuitem"]')
+    .filter({ hasText: 'English' })
+    .first()
+    .click();
+  await page.waitForLoadState('networkidle');
+  await expect(page).toHaveURL(/^http:\/\/127\.0\.0\.1:4174\/$/);
+  await expect(page.locator('.sc-handbook')).toBeVisible();
+  await expect(page.locator('body')).not.toContainText('Unexpected Error Occurred');
+  expect(pageErrors).toEqual([]);
+  expect(consoleErrors).toEqual([]);
+});
+
+test('handbook badges, links, and eyebrow meet WCAG AA contrast in light and dark mode', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/');
+  await page.waitForLoadState('networkidle');
+
+  const measureContrast = async () => page.evaluate(() => {
+    const parseRgb = (cssColor: string): [number, number, number] => {
+      const m = cssColor.match(/\d+(\.\d+)?/g);
+      if (!m || m.length < 3) return [0, 0, 0];
+      return [Number(m[0]), Number(m[1]), Number(m[2])];
+    };
+    const relLum = (rgb: [number, number, number]) => {
+      const lin = rgb.map(v => {
+        const s = v / 255;
+        return s <= 0.04045 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2];
+    };
+    const ratio = (fg: string, bg: string) => {
+      let l1 = relLum(parseRgb(fg));
+      let l2 = relLum(parseRgb(bg));
+      if (l1 < l2) [l1, l2] = [l2, l1];
+      return (l1 + 0.05) / (l2 + 0.05);
+    };
+    const effectiveBg = (el: Element | null): string => {
+      let cur: Element | null = el;
+      while (cur) {
+        const bg = getComputedStyle(cur).backgroundColor;
+        const m = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+        if (m && (m[4] === undefined || parseFloat(m[4]) > 0.1)) return bg;
+        cur = cur.parentElement;
+      }
+      return 'rgb(255, 255, 255)';
+    };
+
+    const items: Array<{ label: string; fg: string; bg: string; ratio: number }> = [];
+    const targets: Array<[string, Element | null]> = [
+      ['eyebrow', document.querySelector('.sc-handbook__intro > p:first-of-type')],
+      ['primary-cta', document.querySelector('.sc-handbook__intro > p:last-of-type > span:first-child a')],
+      ['secondary-cta', document.querySelector('.sc-handbook__intro > p:last-of-type > span:not(:first-child) a')],
+      ['verification-link', document.querySelector('.sc-handbook__verification > p:last-child a')],
+    ];
+    for (const [label, el] of targets) {
+      if (!el) continue;
+      const fg = getComputedStyle(el).color;
+      const bg = effectiveBg(el);
+      items.push({ label, fg, bg, ratio: ratio(fg, bg) });
+    }
+    for (const p of document.querySelectorAll('.sc-handbook__route > p:last-of-type')) {
+      const strong = p.querySelector('strong') ?? p;
+      const fg = getComputedStyle(strong).color;
+      const bg = effectiveBg(p);
+      items.push({ label: 'badge:' + (p.textContent ?? '').trim(), fg, bg, ratio: ratio(fg, bg) });
+    }
+    return items;
+  });
+
+  const lightItems = await measureContrast();
+  expect(lightItems.length).toBe(7);
+  for (const item of lightItems) {
+    expect(item.ratio, 'Light mode contrast for ' + item.label).toBeGreaterThanOrEqual(4.5);
+  }
+
+  await page.locator('.myst-theme-button').click();
+  await expect(page.locator('html')).toHaveClass(/\bdark\b/);
+
+  const darkItems = await measureContrast();
+  expect(darkItems.length).toBe(7);
+  for (const item of darkItems) {
+    expect(item.ratio, 'Dark mode contrast for ' + item.label).toBeGreaterThanOrEqual(4.5);
+  }
+  await page.screenshot({ path: testInfo.outputPath('handbook-en-dark-desktop.png'), fullPage: true });
 });

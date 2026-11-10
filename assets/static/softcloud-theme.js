@@ -10,8 +10,10 @@
   // 1. Theme Synchronization (WA-005, WA-THEME-001)
   let isUpdating = false;
 
-  function syncTheme(force = false) {
-    if (isUpdating && force !== true) return;
+  function syncTheme(forceOrOpts = false) {
+    const force = forceOrOpts === true || (forceOrOpts && forceOrOpts.force === true);
+    const preferDom = Boolean(forceOrOpts && forceOrOpts.preferDom === true);
+    if (isUpdating && !force) return;
     isUpdating = true;
     try {
       const root = document.documentElement;
@@ -24,7 +26,9 @@
       })();
 
       let isDark;
-      if (storedTheme === 'dark') {
+      if (preferDom && (root.classList.contains('dark') || root.classList.contains('light'))) {
+        isDark = root.classList.contains('dark');
+      } else if (storedTheme === 'dark') {
         isDark = true;
       } else if (storedTheme === 'light') {
         isDark = false;
@@ -63,6 +67,15 @@
         !hasLegacyLight
       ) {
         return;
+      }
+
+      if (preferDom) {
+        try {
+          const prevSc = localStorage.getItem('softcloud-theme');
+          if (prevSc === 'light' || prevSc === 'dark') {
+            localStorage.setItem('softcloud-theme', targetTheme);
+          }
+        } catch (e) {}
       }
 
       if (currentTheme !== targetTheme) {
@@ -311,10 +324,10 @@
       if (isUpdating) {
         clearTimeout(pendingSyncTimeout);
         pendingSyncTimeout = setTimeout(function () {
-          syncTheme();
+          syncTheme({ preferDom: true });
         }, 10);
       } else {
-        syncTheme();
+        syncTheme({ preferDom: true });
       }
     }
     if (needsTransform) {
