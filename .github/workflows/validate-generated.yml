@@ -29,30 +29,6 @@ jobs:
       - name: Setup locked Python environment
         uses: ./.github/actions/setup-python-env
 
-      - name: Generate provenance evidence for the five new localized core pages
-        run: |
-          . .venv/bin/activate
-          python tools/translate_sources.py --sync-provenance --progressive --revision-state reviewed --doc README.md --doc guides.md --doc notebooks.md --doc projects.md --doc ui-library.md
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          from tools.i18n_utils import sha256_json
-          for code in ("pl", "de", "es", "fr"):
-              path = Path("i18n") / code / "provenance.json"
-              data = json.loads(path.read_text(encoding="utf-8"))
-              for rel in ("README.md", "guides.md", "notebooks.md", "projects.md", "ui-library.md"):
-                  entry = data["documents"][rel]
-                  entry["translation_model"] = "openai-gpt-6"
-                  entry["review_method"] = "AI-assisted editorial QA; human maintainer review required before merge"
-              data.pop("provenance_sha256")
-              data["provenance_sha256"] = sha256_json(data)
-              payload = json.dumps(data, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
-              print("SC_PROVENANCE_START", code, len(payload), flush=True)
-              for i in range(0, len(payload), 2000):
-                  print("SC_PROVENANCE_PART", code, i // 2000, payload[i:i + 2000], flush=True)
-              print("SC_PROVENANCE_END", code, flush=True)
-          PY
-
       - name: Verify JB2 profile and provenance
         env:
           BASE_URL: ""

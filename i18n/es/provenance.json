@@ -1,42 +1,36 @@
 {
   "documents": {
     "README.md": {
-      "code_block_count": 0,
-      "code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "code_block_count": 1,
+      "code_fingerprint_sha256": "ea703053c1c22c311d7e87f64368491feb9f15ecec56c065abe2da88b45e5fbf",
       "dependency_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
       "glossary_sha256": "49d88d6d5cc4d25bd538b6e7621497026343e7944687c1c6758b3f91848eadc4",
-      "localized_code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "localized_code_fingerprint_sha256": "ea703053c1c22c311d7e87f64368491feb9f15ecec56c065abe2da88b45e5fbf",
       "localized_path": "i18n/es/README.md",
       "policy_sha256": "bf4115911eca60f7a480990ca224e61e1b3501d0b0dc74019bd5bc9c11408775",
+      "review_method": "AI-assisted editorial QA; human maintainer review required before merge",
       "revision_state": "reviewed",
       "sections": [
         {
+          "index": "frontmatter",
+          "source_heading": "__frontmatter__",
+          "source_sha256": "f2e09580139cc59ba7022c8724086e64ce4691ecdc81fab947e5b253ab38ce92",
+          "translated_heading": "__frontmatter__",
+          "translated_sha256": "1dc7257636b237739078f3d44a5b3fb30867c242697377fc63f881df2d8023d7"
+        },
+        {
           "index": "0",
-          "source_heading": "Software Cloud",
-          "source_sha256": "2f8af3f7c63698c4f77950b47f9424403e506b4d52d21585d8404453866f3efa",
-          "translated_heading": "Software Cloud",
-          "translated_sha256": "950225d274e8fca68cf8a14680b8fae9f182c9b2fb83a841de1bb40fbc2a20c3"
-        },
-        {
-          "index": "1",
-          "source_heading": "Key Pillars",
-          "source_sha256": "d89540515b9d8eaf006c84df0c9707a96c5ffd0d08e988befe7447dd8ea0c586",
-          "translated_heading": "Pilares clave",
-          "translated_sha256": "9384925f900c1290ee31d5d3d6b094e9b0d96b1b68956ab583a10b61de4bcc17"
-        },
-        {
-          "index": "2",
-          "source_heading": "Documentation Roadmap",
-          "source_sha256": "26386d2a1bf94b2b4fd97abc53655d322dea90d54757cf6346b6443f88ae09e7",
-          "translated_heading": "Hoja de ruta de la documentación",
-          "translated_sha256": "29f5024463f3ae983e3c4fd72931e1c858c5544c20ca3a0327d3ab56fa095b0f"
+          "source_heading": "__preamble__",
+          "source_sha256": "88edf05cfa4a2c2d4ec5792f0d09a7c07081df83869d42c2f107164bb72e1cef",
+          "translated_heading": "__preamble__",
+          "translated_sha256": "bb010336f811197700a5771774fd10ab9dc25a3831448e990537d42a04dca4af"
         }
       ],
-      "source_commit": "d6884008eda9ef4cd996b72a2061a67e4e5386f0",
+      "source_commit": "f37aee849eeff5481939cc59441ce73fec2c52e0",
       "source_path": "README.md",
-      "source_sha256": "a9021a99ff77c202fd767fca52b07520ec6db4954c3ff48fef2a829e4e418986",
-      "translated_sha256": "e778317c20d485e1306e6bc39063940e916c98e39194abdfa2fa078dade4cf00",
-      "translation_model": "gemini-2.5-flash"
+      "source_sha256": "5a9cbad85020e097eb784846cedd8205ce60a0bb1b5548d1a9e1aaa89d966526",
+      "translated_sha256": "8fe9b348aa7304531ada2db6e0607288f2adaee6364f866387f68fad359392d7",
+      "translation_model": "openai-gpt-6"
     },
     "architecture.md": {
       "code_block_count": 11,
@@ -167,6 +161,59 @@
       "translated_sha256": "650caa2c366954a2fd92ee54b585ff07a622ca300bedf07bb4a896253f3c7a61",
       "translation_model": "gemini-2.5-flash"
     },
+    "guides.md": {
+      "code_block_count": 0,
+      "code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "dependency_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "glossary_sha256": "49d88d6d5cc4d25bd538b6e7621497026343e7944687c1c6758b3f91848eadc4",
+      "localized_code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "localized_path": "i18n/es/guides.md",
+      "policy_sha256": "bf4115911eca60f7a480990ca224e61e1b3501d0b0dc74019bd5bc9c11408775",
+      "review_method": "AI-assisted editorial QA; human maintainer review required before merge",
+      "revision_state": "reviewed",
+      "sections": [
+        {
+          "index": "frontmatter",
+          "source_heading": "__frontmatter__",
+          "source_sha256": "f41be7122dc7a275dadb71a6bdd182cc9e3a98912b88f293f6ac2d9a08b6a460",
+          "translated_heading": "__frontmatter__",
+          "translated_sha256": "7a250d554176645ffd06d6bd361c1f7262e3fa11ea66b9bee53916255395949f"
+        },
+        {
+          "index": "0",
+          "source_heading": "__preamble__",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "translated_heading": "__preamble__",
+          "translated_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "index": "1",
+          "source_heading": "Guides",
+          "source_sha256": "23fdd9a87e4ef2828cc02579edc5de879e9fae03b19a18fe4905c29d1f7ca10e",
+          "translated_heading": "Guías",
+          "translated_sha256": "76a2a224a9b88cbd2d3427095ccdfde4007657963f409fb09e5fb2f36bf31cbf"
+        },
+        {
+          "index": "2",
+          "source_heading": "Publish your first page",
+          "source_sha256": "fd3e8e8623c433407b549108ef8b1b183634af0f35ed18304c92f1f5b1ebdb38",
+          "translated_heading": "Publica tu primera página",
+          "translated_sha256": "4df651aec806313eee7c72c8f22dfdddb8fabdb3997e9d44245e1238b9010d1f"
+        },
+        {
+          "index": "3",
+          "source_heading": "Further reading",
+          "source_sha256": "00d9130c071191e8bf6a5596f5665cd253b5efdd0a1977671d05d1da2304271c",
+          "translated_heading": "Más recursos",
+          "translated_sha256": "1946a2e752943c0b0ff88ccb9887d417d150e639c82674503f356d8070061ec1"
+        }
+      ],
+      "source_commit": "f37aee849eeff5481939cc59441ce73fec2c52e0",
+      "source_path": "guides.md",
+      "source_sha256": "8696934e16950519ab028f4233e536d53cae19c1fb43e64fe0d3d9728539b927",
+      "translated_sha256": "12cd66b4c0fe67a19f66f1d3aa3342cba00ffab3dfc767478f01ef62e90e2481",
+      "translation_model": "openai-gpt-6"
+    },
     "introduction.md": {
       "code_block_count": 0,
       "code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -211,6 +258,52 @@
       "source_sha256": "d27451030aa96a3853c1cdbcf99697e64c7ecd6909c0dafdce35e7ae04320682",
       "translated_sha256": "58399381980620132a19914aecde810845ac36de701a8bbee321fcf1ffb28de3",
       "translation_model": "gemini-2.5-flash"
+    },
+    "notebooks.md": {
+      "code_block_count": 0,
+      "code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "dependency_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "glossary_sha256": "49d88d6d5cc4d25bd538b6e7621497026343e7944687c1c6758b3f91848eadc4",
+      "localized_code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "localized_path": "i18n/es/notebooks.md",
+      "policy_sha256": "bf4115911eca60f7a480990ca224e61e1b3501d0b0dc74019bd5bc9c11408775",
+      "review_method": "AI-assisted editorial QA; human maintainer review required before merge",
+      "revision_state": "reviewed",
+      "sections": [
+        {
+          "index": "frontmatter",
+          "source_heading": "__frontmatter__",
+          "source_sha256": "d311df3c4ccb3acac8092bc221204ee19792d7ba5f8d705e77a8778db17105a8",
+          "translated_heading": "__frontmatter__",
+          "translated_sha256": "bae923bbdeb9aaa8bc1f2d6a28ee20eff5d9ffe1130513cfc147164889a03a48"
+        },
+        {
+          "index": "0",
+          "source_heading": "__preamble__",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "translated_heading": "__preamble__",
+          "translated_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "index": "1",
+          "source_heading": "Computational Notebooks",
+          "source_sha256": "74e66ab858c8f39363e5b016de3a46c35d5a7fd029d83fcde7e6c7b7305b6194",
+          "translated_heading": "Cuadernos computacionales",
+          "translated_sha256": "6ca41fca17acceeffa956c08d92be308322e602fdd1fb4f9b305801ef01ca3d2"
+        },
+        {
+          "index": "2",
+          "source_heading": "Execution and evidence",
+          "source_sha256": "90ffc756eff5f2514c712cb10810acd26ae7d4b1d3ce652d772ad152f740fed7",
+          "translated_heading": "Ejecución y evidencias",
+          "translated_sha256": "6b22e8b7e71ae759561d15a87b652f4fdeecf7d7728eedbe9bbf79aee439a0d2"
+        }
+      ],
+      "source_commit": "f37aee849eeff5481939cc59441ce73fec2c52e0",
+      "source_path": "notebooks.md",
+      "source_sha256": "8981bf9e85037d4560d5ee0e6f5313ce453ec43762bc1f0bf8aef3e3339fd615",
+      "translated_sha256": "6c0ed7f901567512a3d89976f217407d4a4e766d46b8d1d8e792a71e653f4a7d",
+      "translation_model": "openai-gpt-6"
     },
     "notebooks/experiment.ipynb": {
       "code_block_count": 1,
@@ -442,6 +535,59 @@
       "translated_sha256": "c6aa516cbf5dddb909303d6a1ab800155be6cbeb3126a36a05bf8f7ebdec36e6",
       "translation_model": "gemini-2.5-flash"
     },
+    "projects.md": {
+      "code_block_count": 0,
+      "code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "dependency_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "glossary_sha256": "49d88d6d5cc4d25bd538b6e7621497026343e7944687c1c6758b3f91848eadc4",
+      "localized_code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "localized_path": "i18n/es/projects.md",
+      "policy_sha256": "bf4115911eca60f7a480990ca224e61e1b3501d0b0dc74019bd5bc9c11408775",
+      "review_method": "AI-assisted editorial QA; human maintainer review required before merge",
+      "revision_state": "reviewed",
+      "sections": [
+        {
+          "index": "frontmatter",
+          "source_heading": "__frontmatter__",
+          "source_sha256": "f3ad5dc964822ff17d0d6d83bc44f512ee2bb5c73da6fdb29461debe476d66db",
+          "translated_heading": "__frontmatter__",
+          "translated_sha256": "1f8bc6f32e7000f44c8f2391712df437e472106296d2d6c600f791a88ec35f26"
+        },
+        {
+          "index": "0",
+          "source_heading": "__preamble__",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "translated_heading": "__preamble__",
+          "translated_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "index": "1",
+          "source_heading": "Systems & Laboratories",
+          "source_sha256": "8b8ffa756595f9be3a2f91524928585314f870100bac8fc4af1c1d4d239ea4f4",
+          "translated_heading": "Sistemas y laboratorios",
+          "translated_sha256": "7b376c982d53e3b99f60f72db58632205d371fb17ffb6ff2d15a6bd55a517356"
+        },
+        {
+          "index": "2",
+          "source_heading": "Node Linux",
+          "source_sha256": "179eac734cd716ebe34b640f47bf0db77af5647ac3f436e3d292556a01a36c15",
+          "translated_heading": "Node Linux",
+          "translated_sha256": "d58a6acec00b2abe00014d20209f04d56ae34ff23b8db8249843e0d21f51629a"
+        },
+        {
+          "index": "3",
+          "source_heading": "FreeIPA",
+          "source_sha256": "13b5dd4aba5cb8848b76af1177831acab0a8c300e8529e9716f2d918417a98c6",
+          "translated_heading": "FreeIPA",
+          "translated_sha256": "4c5a2bd1c4b2582ccd81e7a370eec46ad5ec40bf81779e3dd118440ad46b3a25"
+        }
+      ],
+      "source_commit": "f37aee849eeff5481939cc59441ce73fec2c52e0",
+      "source_path": "projects.md",
+      "source_sha256": "563646cfd58fc7355df7345b78a5bf31e40893ec4accc3013fd32f2d4de04331",
+      "translated_sha256": "d4e44bb108a0079fd0625d5c152b90b09acd8782a3141a3a7039cb64fc0f3162",
+      "translation_model": "openai-gpt-6"
+    },
     "projects/linux.md": {
       "code_block_count": 0,
       "code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -493,11 +639,64 @@
       "source_sha256": "02803cf87db79bbb6f665dcd5e1f87f912a994fa7906997c04ab7bdbdc77a933",
       "translated_sha256": "6a247e0c8a6701673a478dd0cd10145eba4d1e6575361e6f45cd9205132188bb",
       "translation_model": "gemini-2.5-flash"
+    },
+    "ui-library.md": {
+      "code_block_count": 0,
+      "code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "dependency_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "glossary_sha256": "49d88d6d5cc4d25bd538b6e7621497026343e7944687c1c6758b3f91848eadc4",
+      "localized_code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "localized_path": "i18n/es/ui-library.md",
+      "policy_sha256": "bf4115911eca60f7a480990ca224e61e1b3501d0b0dc74019bd5bc9c11408775",
+      "review_method": "AI-assisted editorial QA; human maintainer review required before merge",
+      "revision_state": "reviewed",
+      "sections": [
+        {
+          "index": "frontmatter",
+          "source_heading": "__frontmatter__",
+          "source_sha256": "f85e1cd7da336bb94045522214e984613e09e2c7de6ce8858aeef869ed53495b",
+          "translated_heading": "__frontmatter__",
+          "translated_sha256": "1d8ea706efea235669de15c9426014473213bc27f4d77dbfcf554216342f1858"
+        },
+        {
+          "index": "0",
+          "source_heading": "__preamble__",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "translated_heading": "__preamble__",
+          "translated_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "index": "1",
+          "source_heading": "UI Library",
+          "source_sha256": "2c73250dc934c39127e1496235cfa13a5cf8f7d42ac63816e32ceb7744640b9f",
+          "translated_heading": "Biblioteca UI",
+          "translated_sha256": "d282edae48e986eb91f3f24320d8489639793a97bfb005ce566f2899520dc91e"
+        },
+        {
+          "index": "2",
+          "source_heading": "Component catalog",
+          "source_sha256": "27b730c48506cd6f4b278dba94258e50c9e78f4bfddfc4785167b9137f1a8047",
+          "translated_heading": "Catálogo de componentes",
+          "translated_sha256": "077488071bad8bd2c7de1120253163d723ca338cf99e4c8945c46ad48067a30c"
+        },
+        {
+          "index": "3",
+          "source_heading": "Continue in your language",
+          "source_sha256": "e2d8ace6b9731943ea2b376c45aa3cceb0268d08259ea50fc45990671a0df09c",
+          "translated_heading": "Continuar en tu idioma",
+          "translated_sha256": "0bc1941f3f229b7c2690c369ee05680ceddde747bfa4b95f5e726e3bb81011d1"
+        }
+      ],
+      "source_commit": "f37aee849eeff5481939cc59441ce73fec2c52e0",
+      "source_path": "ui-library.md",
+      "source_sha256": "d890938df93a97d2a68d687e8d56551f2824d7e2d96c2b5020347320c78c7791",
+      "translated_sha256": "f7007aa0f2cfb7e31146a0f90b20e26157c14aa3ba35c17ab03da9a1704e0b73",
+      "translation_model": "openai-gpt-6"
     }
   },
   "glossary_sha256": "49d88d6d5cc4d25bd538b6e7621497026343e7944687c1c6758b3f91848eadc4",
   "locale": "es",
-  "provenance_sha256": "e75df95c8edb6fe15738c22e8b5013cbdfcbdf6280c356e45d02f45ffd9efc52",
+  "provenance_sha256": "923140164de277cbeacac41aa267b654a6a9cbb71eb9a7f481ab1af6d8eb1db9",
   "schema_version": "1.0",
   "source_locale": "en"
 }
