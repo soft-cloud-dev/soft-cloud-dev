@@ -18,7 +18,7 @@ import translation_engine as te  # noqa: E402
 
 
 def stage(tmp: Path) -> Path:
-    for name in ("myst.yml", "README.md", "introduction.md", "architecture.md", "i18n", "projects", "notebooks", "audio", "widgets"):
+    for name in ("myst.yml", "README.md", "guides.md", "notebooks.md", "projects.md", "ui-library.md", "introduction.md", "architecture.md", "i18n", "projects", "notebooks", "audio", "widgets"):
         src = ROOT / name
         if src.is_dir():
             shutil.copytree(src, tmp / name)
