@@ -11,7 +11,8 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 HANDBOOK_PAGES = (
-    "handbook.md",
+    "README.md",
+    "ui-library.md",
     "guides.md",
     "notebooks.md",
     "projects.md",
@@ -61,7 +62,7 @@ class HandbookInformationArchitectureTests(unittest.TestCase):
             [
                 ("Guides", "/guides"),
                 ("Notebooks", "/notebooks"),
-                ("UI Library", "/components"),
+                ("UI Library", "/ui-library"),
                 ("Projects", "/projects"),
             ],
         )
@@ -91,6 +92,9 @@ class HandbookInformationArchitectureTests(unittest.TestCase):
         for code, info in self.locales["locales"].items():
             with self.subTest(locale=code):
                 self.assertEqual(required_nav, set(info["site"]["nav_titles"]))
+                for mandatory in self.locales["required_pages"]:
+                    expected = ROOT / mandatory if code == "en" else ROOT / "i18n" / code / mandatory
+                    self.assertTrue(expected.is_file(), f"Missing core localized source {expected}")
 
 
 if __name__ == "__main__":
