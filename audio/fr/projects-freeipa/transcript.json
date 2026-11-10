@@ -1,0 +1,163 @@
+{
+  "chunks": [
+    {
+      "chunk_hash": "da75e12c384fcdb96012f99fcbb2b197ab7d34658b38c9c51fb73dccce02db5d",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph",
+        "el-0003-paragraph"
+      ],
+      "section_anchor": "identite-et-annuaire-freeipa",
+      "section_title": "Identité et annuaire FreeIPA",
+      "segments": [
+        {
+          "element_id": "el-0001-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "dde612f60c11bef275498141bfae1d8a60f9dc9140774d9193da935f04e673f8",
+          "spoken_text": "Identité et annuaire FreeIPA"
+        },
+        {
+          "element_id": "el-0002-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "5d6fc5ea2921cd3346e9de8501c31c4e9e81f65b5796aed44ac3009598862e67",
+          "spoken_text": "FreeIPA est le laboratoire de SoftCloud axé sur l'identité, les services d'annuaire, l'authentification et les politiques d'accès."
+        },
+        {
+          "element_id": "el-0003-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "a77b18fcf009714f5b24a3084502c01eaf4ec74d60388ca3117e45e6ac8bf9c5",
+          "spoken_text": "Cette page est un point d'entrée de découverte, et non un duplicata de la documentation technique du laboratoire. Les détails d'implémentation, le statut opérationnel, les instructions de configuration et les preuves de publication relèvent de la publication dédiée."
+        }
+      ],
+      "speech_input_hash": "0fc63d7d86b6fd41eea2cdab2c3d2b61fb9ac96d6a6deeb09de09eee83522241",
+      "text": "Identité et annuaire FreeIPA.\n\nFreeIPA est le laboratoire de SoftCloud axé sur l'identité, les services d'annuaire, l'authentification et les politiques d'accès.\n\nCette page est un point d'entrée de découverte, et non un duplicata de la documentation technique du laboratoire. Les détails d'implémentation, le statut opérationnel, les instructions de configuration et les preuves de publication relèvent de la publication dédiée.",
+      "text_sha256": "4082cb770592336fa015087ad48fb7ccd1ae3328fa683d80ea103860ce605ba5"
+    },
+    {
+      "chunk_hash": "5d4e1919100422a53c0d4ddfb7d782c27d492c1675b8d59034b4ac9a36e096c3",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "element_ids": [
+        "el-0004-heading",
+        "el-0005-list",
+        "el-0006-paragraph"
+      ],
+      "section_anchor": "commencez-ici",
+      "section_title": "Commencez ici",
+      "segments": [
+        {
+          "element_id": "el-0004-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "aa933e82f7b0f192cd87985efd3e84879914398d59e044e6cbddda06e004cc86",
+          "spoken_text": "Commencez ici"
+        },
+        {
+          "element_id": "el-0005-list",
+          "is_ai_summary": false,
+          "kind": "list",
+          "source_hash": "bab1ce30d300a009d1038626c8b7437df4c070454abe6ceb2d981eb4f8bf6062",
+          "spoken_text": "Ouvrir la documentation FreeIPA. Retour à tous les projets."
+        },
+        {
+          "element_id": "el-0006-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "53330f9699d8374cf8413496c54b2b673d03b466734280d9dc48f412edfac03b",
+          "spoken_text": "La destination est un site indépendant ; sa disponibilité est vérifiée séparément de la compilation du manuel."
+        }
+      ],
+      "speech_input_hash": "7b1788ed506132e7280c6d6668ead1fda0ee282ec9d1e94aaf8168affc45b4b6",
+      "text": "Commencez ici.\n\nOuvrir la documentation FreeIPA. Retour à tous les projets.\n\nLa destination est un site indépendant ; sa disponibilité est vérifiée séparément de la compilation du manuel.",
+      "text_sha256": "3e323c2e8d1a7e77783af97ac2adf56abb1e10c9eafcb4418ed75438c0fdf4ea"
+    }
+  ],
+  "code_summary_hashes": {},
+  "config_hash": "699663dab374726886e538e3564c70a1712d5e0736b0e01565f579a19f9afcfa",
+  "element_ids": [
+    "el-0001-heading",
+    "el-0002-paragraph",
+    "el-0003-paragraph",
+    "el-0004-heading",
+    "el-0005-list",
+    "el-0006-paragraph"
+  ],
+  "elements": [
+    {
+      "element_id": "el-0001-heading",
+      "heading_level": 1,
+      "kind": "heading",
+      "section_anchor": "identite-et-annuaire-freeipa",
+      "section_title": "Identité et annuaire FreeIPA",
+      "source_hash": "dde612f60c11bef275498141bfae1d8a60f9dc9140774d9193da935f04e673f8",
+      "text": "Identité et annuaire FreeIPA"
+    },
+    {
+      "element_id": "el-0002-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "identite-et-annuaire-freeipa",
+      "section_title": "Identité et annuaire FreeIPA",
+      "source_hash": "5d6fc5ea2921cd3346e9de8501c31c4e9e81f65b5796aed44ac3009598862e67",
+      "text": "FreeIPA est le laboratoire de SoftCloud axé sur l'identité, les services d'annuaire, l'authentification et les politiques d'accès."
+    },
+    {
+      "element_id": "el-0003-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "identite-et-annuaire-freeipa",
+      "section_title": "Identité et annuaire FreeIPA",
+      "source_hash": "a77b18fcf009714f5b24a3084502c01eaf4ec74d60388ca3117e45e6ac8bf9c5",
+      "text": "Cette page est un point d'entrée de découverte, et non un duplicata de la documentation technique du laboratoire. Les détails d'implémentation, le statut opérationnel, les instructions de configuration et les preuves de publication relèvent de la publication dédiée."
+    },
+    {
+      "element_id": "el-0004-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "commencez-ici",
+      "section_title": "Commencez ici",
+      "source_hash": "aa933e82f7b0f192cd87985efd3e84879914398d59e044e6cbddda06e004cc86",
+      "text": "Commencez ici"
+    },
+    {
+      "element_id": "el-0005-list",
+      "kind": "list",
+      "section_anchor": "commencez-ici",
+      "section_title": "Commencez ici",
+      "source_hash": "bab1ce30d300a009d1038626c8b7437df4c070454abe6ceb2d981eb4f8bf6062",
+      "text": "Ouvrir la documentation FreeIPA. Retour à tous les projets."
+    },
+    {
+      "element_id": "el-0006-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "commencez-ici",
+      "section_title": "Commencez ici",
+      "source_hash": "53330f9699d8374cf8413496c54b2b673d03b466734280d9dc48f412edfac03b",
+      "text": "La destination est un site indépendant ; sa disponibilité est vérifiée séparément de la compilation du manuel."
+    }
+  ],
+  "locale": "fr",
+  "logical_source_path": "projects/freeipa.md",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "fr",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in French (français) matching document locale 'fr'.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "projects-freeipa",
+  "page_source_hash": "d2302245442bffb78477728d162f62f47ec6ada6291043d626f33907bbd2a280",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "16b8805fc1191d3efbb6c906650d70b7a21991972f0f47117ede5b8296e25851",
+  "source_path": "i18n/fr/projects/freeipa.md",
+  "transcript_sha256": "fc9a11583a8b7dd0aecf0cead5af50c95a26800b6a6e0f4082e6decd4cf99277"
+}

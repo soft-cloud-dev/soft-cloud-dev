@@ -1,0 +1,178 @@
+{
+  "chunks": [
+    {
+      "chunk_hash": "e5301d4d92ee9ddf314c95578cf99db5983860886384f1c1affea2e21ccf6ea4",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph"
+      ],
+      "section_anchor": "softcloud-node-linux",
+      "section_title": "SoftCloud Node Linux",
+      "segments": [
+        {
+          "element_id": "el-0001-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "c3e008b0107fd2bfc2f36e67d704ddd286843d19a257fa733b709dd15800c82b",
+          "spoken_text": "SoftCloud Node Linux"
+        },
+        {
+          "element_id": "el-0002-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "a60c0de26022b45c3407e246cc17ea637f3586c600bbd83593b4f191359010ce",
+          "spoken_text": "SoftCloud Node Linux explore l'exécution de nœuds Kubernetes sous Linux en tant que machines virtuelles sous l'hyperviseur FreeBSD bhyve. La documentation du projet couvre le processus de construction d'images, l'architecture de démarrage, l'environnement d'exécution des conteneurs, la mise en réseau et les travaux de validation."
+        }
+      ],
+      "speech_input_hash": "14e86c940c40cb47d20e17813d98e782b9ed565c8a91ad06d8f8ad17a5cb62b2",
+      "text": "SoftCloud Node Linux.\n\nSoftCloud Node Linux explore l'exécution de nœuds Kubernetes sous Linux en tant que machines virtuelles sous l'hyperviseur FreeBSD bhyve. La documentation du projet couvre le processus de construction d'images, l'architecture de démarrage, l'environnement d'exécution des conteneurs, la mise en réseau et les travaux de validation.",
+      "text_sha256": "54c6d08e5c0c83e20e22c840eefc6c4e5b4ff442e8e23e914eea2c01033089a1"
+    },
+    {
+      "chunk_hash": "fa71a2f767ebd2264ee86d3cf94b324f048dec31da2f81deee0860cf2dea7665",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "element_ids": [
+        "el-0003-heading",
+        "el-0004-list"
+      ],
+      "section_anchor": "commencer-ici",
+      "section_title": "Commencer ici",
+      "segments": [
+        {
+          "element_id": "el-0003-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "d6e5ab7efb19bd8d538eb1f1c8274af777bb46b6a102979cbc65c7a451e9e715",
+          "spoken_text": "Commencer ici"
+        },
+        {
+          "element_id": "el-0004-list",
+          "is_ai_summary": false,
+          "kind": "list",
+          "source_hash": "bdc42eaa82ed34ea388b12751538121c8bbdac05fed074dbd2a7fb0661c5f5bd",
+          "spoken_text": "Lire la documentation Node Linux. Parcourir le dépôt de code source."
+        }
+      ],
+      "speech_input_hash": "7d508c801f04970158dc501a21216735d19d6fa63c16e9ee4cdb6b970ade8fba",
+      "text": "Commencer ici.\n\nLire la documentation Node Linux. Parcourir le dépôt de code source.",
+      "text_sha256": "6258d17d07bf6cd414972b942c29f68d26d3c2d15ba271427c61284c4eba41fe"
+    },
+    {
+      "chunk_hash": "68001761c97aaa6d22807f712cc061d0d28616aa9d0c083ff9920dab5a8a17fa",
+      "chunk_id": "chunk-003",
+      "chunk_index": 3,
+      "element_ids": [
+        "el-0005-heading",
+        "el-0006-paragraph"
+      ],
+      "section_anchor": "etat-de-l-implementation",
+      "section_title": "État de l'implémentation",
+      "segments": [
+        {
+          "element_id": "el-0005-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "0fe0aeaf204751c822fac4308d1d3acc172ad4a60b0f208fd96c91316d9ded01",
+          "spoken_text": "État de l'implémentation"
+        },
+        {
+          "element_id": "el-0006-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "752c4d638d8020d2399358f7295b971ce974b3bc74e0798a49d325f9149f69c6",
+          "spoken_text": "La documentation du projet distingue les fonctionnalités implémentées, le comportement validé, les limitations connues et les travaux prévus."
+        }
+      ],
+      "speech_input_hash": "d4bc4867ae645ca885686609946eb29510a68b4749513f3352568933e9b6f41f",
+      "text": "État de l'implémentation.\n\nLa documentation du projet distingue les fonctionnalités implémentées, le comportement validé, les limitations connues et les travaux prévus.",
+      "text_sha256": "db926f66e27e9e844136a510e5135036c96ac6d05a5e8b669665f372842379c8"
+    }
+  ],
+  "code_summary_hashes": {},
+  "config_hash": "699663dab374726886e538e3564c70a1712d5e0736b0e01565f579a19f9afcfa",
+  "element_ids": [
+    "el-0001-heading",
+    "el-0002-paragraph",
+    "el-0003-heading",
+    "el-0004-list",
+    "el-0005-heading",
+    "el-0006-paragraph"
+  ],
+  "elements": [
+    {
+      "element_id": "el-0001-heading",
+      "heading_level": 1,
+      "kind": "heading",
+      "section_anchor": "softcloud-node-linux",
+      "section_title": "SoftCloud Node Linux",
+      "source_hash": "c3e008b0107fd2bfc2f36e67d704ddd286843d19a257fa733b709dd15800c82b",
+      "text": "SoftCloud Node Linux"
+    },
+    {
+      "element_id": "el-0002-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "softcloud-node-linux",
+      "section_title": "SoftCloud Node Linux",
+      "source_hash": "a60c0de26022b45c3407e246cc17ea637f3586c600bbd83593b4f191359010ce",
+      "text": "SoftCloud Node Linux explore l'exécution de nœuds Kubernetes sous Linux en tant que machines virtuelles sous l'hyperviseur FreeBSD bhyve. La documentation du projet couvre le processus de construction d'images, l'architecture de démarrage, l'environnement d'exécution des conteneurs, la mise en réseau et les travaux de validation."
+    },
+    {
+      "element_id": "el-0003-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "commencer-ici",
+      "section_title": "Commencer ici",
+      "source_hash": "d6e5ab7efb19bd8d538eb1f1c8274af777bb46b6a102979cbc65c7a451e9e715",
+      "text": "Commencer ici"
+    },
+    {
+      "element_id": "el-0004-list",
+      "kind": "list",
+      "section_anchor": "commencer-ici",
+      "section_title": "Commencer ici",
+      "source_hash": "bdc42eaa82ed34ea388b12751538121c8bbdac05fed074dbd2a7fb0661c5f5bd",
+      "text": "Lire la documentation Node Linux. Parcourir le dépôt de code source."
+    },
+    {
+      "element_id": "el-0005-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "etat-de-l-implementation",
+      "section_title": "État de l'implémentation",
+      "source_hash": "0fe0aeaf204751c822fac4308d1d3acc172ad4a60b0f208fd96c91316d9ded01",
+      "text": "État de l'implémentation"
+    },
+    {
+      "element_id": "el-0006-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "etat-de-l-implementation",
+      "section_title": "État de l'implémentation",
+      "source_hash": "752c4d638d8020d2399358f7295b971ce974b3bc74e0798a49d325f9149f69c6",
+      "text": "La documentation du projet distingue les fonctionnalités implémentées, le comportement validé, les limitations connues et les travaux prévus."
+    }
+  ],
+  "locale": "fr",
+  "logical_source_path": "projects/linux.md",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "fr",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in French (français) matching document locale 'fr'.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "projects-linux",
+  "page_source_hash": "12b54e98de0c99e5b3529ba5701ab93f5b7e59b3dbc348c5c4f6c3b52ac1a35e",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "1818fe79e33fd146f30481c64a6894710219450688bf4313639f6bb4a6fda375",
+  "source_path": "i18n/fr/projects/linux.md",
+  "transcript_sha256": "a6f3e931735843fba8b1e8fa9084e6b3bb68a5b5f413d7cc1e3c30250567594b"
+}
