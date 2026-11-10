@@ -69,9 +69,18 @@ for (const locale of locales) {
       await page.setViewportSize({ width, height: 844 });
       const response = await page.goto(locale.prefix + '/');
       expect(response?.ok()).toBeTruthy();
-      const logo = page.locator('.myst-top-nav-bar .myst-home-link img:visible').first();
-      await expect(logo).toBeVisible();
-      expect(await logo.evaluate(el => (el as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+      await expect.poll(async () => {
+        return page.locator('nav.myst-top-nav-bar img[alt="SoftCloud"]').evaluateAll(images =>
+          images.some(element => {
+            const img = element as HTMLImageElement;
+            const rect = img.getBoundingClientRect();
+            return img.complete && img.naturalWidth > 0 &&
+              rect.width > 0 && rect.height > 0 &&
+              rect.right > 0 && rect.left < window.innerWidth &&
+              getComputedStyle(img).visibility === 'visible';
+          })
+        );
+      }, { message: 'A loaded SoftCloud logo must be visible in the mobile navbar' }).toBe(true);
       await expect(page.locator('.sc-handbook__route')).toHaveCount(3);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2)).toBeTruthy();
       await expect(page.locator('.sc-handbook').getByRole('link', { name: locale.cta })).toBeVisible();
