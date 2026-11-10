@@ -32,18 +32,13 @@ jobs:
       - name: Setup locked Python environment
         uses: ./.github/actions/setup-python-env
 
-      - name: Configure Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
-        with:
-          node-version: '20'
-          cache: 'npm'
-
       - name: Install Node dependencies
         run: |
+          node --version
           npm ci
           node scripts/check-node-dependencies.mjs
           npx playwright --version
-          test -d "$PLAYWRIGHT_BROWSERS_PATH"
+          test -d "${PLAYWRIGHT_BROWSERS_PATH:-/ms-playwright}"
 
       - name: Run shared CI verification driver
         env:
