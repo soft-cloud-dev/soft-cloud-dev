@@ -1,174 +1,42 @@
 {
   "chunks": [
     {
-      "chunk_hash": "748c51b7df7c9582ad83739ce4caec4ec1c3a7c7b4b16127409f85fbd709b42b",
+      "chunk_hash": "5c07f40fc8de8d10e2d3162115087c29c77b2c8856563c36ff3287ffffe26dbf",
       "chunk_id": "chunk-001",
       "chunk_index": 1,
       "element_ids": [
-        "el-0001-heading",
-        "el-0002-paragraph",
-        "el-0003-paragraph"
+        "el-0001-directive"
       ],
-      "section_anchor": "software-cloud",
-      "section_title": "Software Cloud",
+      "section_anchor": "top",
+      "section_title": "Introduction",
       "segments": [
         {
-          "element_id": "el-0001-heading",
+          "element_id": "el-0001-directive",
           "is_ai_summary": false,
-          "kind": "heading",
-          "source_hash": "a8e1384694a0f2fb0fec83a1faa59c9cefd57a9a446f64f91f20d7d1afdb2c96",
-          "spoken_text": "Software Cloud"
-        },
-        {
-          "element_id": "el-0002-paragraph",
-          "is_ai_summary": false,
-          "kind": "paragraph",
-          "source_hash": "3467115b4b66db822d794f8039c8613986ec164310e0f3072e3d62936d16407b",
-          "spoken_text": "Witamy w Software Cloud, platformie publikacji obliczeniowych i badawczych zbudowanej w oparciu o Jupyter Book 2 i hostowanej na GitHub Pages pod adresem my.softcloud.dev."
-        },
-        {
-          "element_id": "el-0003-paragraph",
-          "is_ai_summary": false,
-          "kind": "paragraph",
-          "source_hash": "07d5d3fbd9a3b3c48a7a2ba96aabda9ef39ad91ae92e38b2dbf2ab2afb37ade0",
-          "spoken_text": "Software Cloud służy jako otwarta architektura i wykonywalna referencja dla deterministycznych potoków badawczych, powtarzalnych architektur chmurowych oraz weryfikowalnych notatników obliczeniowych."
+          "kind": "directive",
+          "source_hash": "90490fb81ae528482d2921f1d858d89f64bbd242ae59f49e08f6b1adde96adf2",
+          "spoken_text": "PODRĘCZNIK SOFTCLOUD. Wiedza inżynierska, którą można odtworzyć. Praktyczne poradniki, wykonywalne notatniki i wielokrotnego użytku przykłady UI — powiązane ze źródłem. Rozpocznij od poradnika Przeglądaj notatniki. Weryfikacja obliczeniowa. Wymagany profil wykonania. CPython 3.12.14 · Linux x86-64 · jb2-python. Otwórz notatnik weryfikacyjny. Wybierz punkt początkowy. Opublikuj pierwszą stronę. Poznaj strukturę dokumentacji, sposób tworzenia treści i proces publikowania podręcznika SoftCloud. GUIDE. Odtwórz kontrolę środowiska. Uruchom referencyjny notatnik weryfikujący środowisko i poznaj kontrolowany profil wykonania. NOTEBOOK. Znajdź wzorzec interfejsu. Przeglądaj katalog Web Awesome, tokeny projektowe i przykłady interfejsów do ponownego użycia. BIBLIOTEKA UI. Poznaj projekty SoftCloud. SoftCloud Node Linux — Powtarzalna dokumentacja węzłów Linux/Kubernetes. FreeIPA — Laboratorium tożsamości, zasad i zarządzania dostępem. Powtarzalna inżynieria, weryfikowalne wyniki. SoftCloud publikuje badania obliczeniowe, architekturę chmurową i wskazówki operacyjne wraz z wykonywalnymi materiałami referencyjnymi. Nieprzypięte zależności, różne wersje plików binarnych, ukryty stan środowiska i nieweryfikowane jądra wykonawcze utrudniają odtwarzanie wyników. Kontrakt publikacji obejmuje blokowanie zależności skrótami SHA-256, kanoniczne środowisko CPython 3.12.14 na Linux x86-64, ścisłą kontrolę wstępną i zautomatyzowane CI/CD. Zobacz Architekturę i specyfikację oraz kontekst i zakres operacyjny aby poznać założenia."
         }
       ],
-      "speech_input_hash": "338490e6e232ec621b615d005ea7be546ce3bef62ae85234a665966e15ef4371",
-      "text": "Software Cloud.\n\nWitamy w Software Cloud, platformie publikacji obliczeniowych i badawczych zbudowanej w oparciu o Jupyter Book 2 i hostowanej na GitHub Pages pod adresem my.softcloud.dev.\n\nSoftware Cloud służy jako otwarta architektura i wykonywalna referencja dla deterministycznych potoków badawczych, powtarzalnych architektur chmurowych oraz weryfikowalnych notatników obliczeniowych.",
-      "text_sha256": "7d959dbd4e73bb0606df8be9f731243e9e34affa55910f9e571a53da5c2947f4"
-    },
-    {
-      "chunk_hash": "f2966a410f2d2699d0fb2706cb35483d6c38a29ded32b94c74f81ab47f2375d1",
-      "chunk_id": "chunk-002",
-      "chunk_index": 2,
-      "element_ids": [
-        "el-0004-heading",
-        "el-0005-list"
-      ],
-      "section_anchor": "kluczowe-filary",
-      "section_title": "Kluczowe filary",
-      "segments": [
-        {
-          "element_id": "el-0004-heading",
-          "is_ai_summary": false,
-          "kind": "heading",
-          "source_hash": "5a143b6befdd397fe7980703f7981a664fa3451c7544efe8493edf9378e716fd",
-          "spoken_text": "Kluczowe filary"
-        },
-        {
-          "element_id": "el-0005-list",
-          "is_ai_summary": false,
-          "kind": "list",
-          "source_hash": "974dd87ec2bc66b215c3bf5c9e77399b5ca1fa7c75b7cc5e0e24cf8ec850408a",
-          "spoken_text": "Powtarzalność kryptograficzna: Wszystkie zależności są przypięte do dokładnych dystrybucji z kryptograficznymi skrótami integralności SHA-256 (--require-hashes, --only-binary=:all:), co eliminuje dryf zależności. Wykonywanie hermetyczne: Przebiegi obliczeniowe są ukierunkowane na kanoniczny CPython 3.12.14 na platformie Linux x86-64 z jawną izolacją środowiska wirtualnego. Ścisła zgodność z profilem: Każdy artefakt publikacji przechodzi automatyczną weryfikację wstępną (tools/check_profile.py) przed kompilacją i wdrożeniem. Ciągłe dostarczanie: W pełni zautomatyzowany potok CI/CD w GitHub Actions buduje i weryfikuje dokumentację oraz notatniki przy każdym zatwierdzeniu zmian."
-        }
-      ],
-      "speech_input_hash": "e0bd64645f97752319b7f238c15b2c4826515b938345b0e99b89a2fef212a2a5",
-      "text": "Kluczowe filary.\n\nPowtarzalność kryptograficzna: Wszystkie zależności są przypięte do dokładnych dystrybucji z kryptograficznymi skrótami integralności SHA-256 (--require-hashes, --only-binary=:all:), co eliminuje dryf zależności. Wykonywanie hermetyczne: Przebiegi obliczeniowe są ukierunkowane na kanoniczny CPython 3.12.14 na platformie Linux x86-64 z jawną izolacją środowiska wirtualnego. Ścisła zgodność z profilem: Każdy artefakt publikacji przechodzi automatyczną weryfikację wstępną (tools/check_profile.py) przed kompilacją i wdrożeniem. Ciągłe dostarczanie: W pełni zautomatyzowany potok CI/CD w GitHub Actions buduje i weryfikuje dokumentację oraz notatniki przy każdym zatwierdzeniu zmian.",
-      "text_sha256": "0d2310ebcffee66a4e800ea159bfd5e2343b7049af1daa9a52785b40b8b59e2c"
-    },
-    {
-      "chunk_hash": "43181f1865af27fc358083a44a2b9fa256ac9fb71a5aa4353bb0181f0236ac56",
-      "chunk_id": "chunk-003",
-      "chunk_index": 3,
-      "element_ids": [
-        "el-0006-heading",
-        "el-0007-list"
-      ],
-      "section_anchor": "mapa-drogowa-dokumentacji",
-      "section_title": "Mapa drogowa dokumentacji",
-      "segments": [
-        {
-          "element_id": "el-0006-heading",
-          "is_ai_summary": false,
-          "kind": "heading",
-          "source_hash": "b3909752dd10c855e0b412463b778baf7243ca2958d5a304916249d8ddb2c763",
-          "spoken_text": "Mapa drogowa dokumentacji"
-        },
-        {
-          "element_id": "el-0007-list",
-          "is_ai_summary": false,
-          "kind": "list",
-          "source_hash": "e5eb2bc91aed364f7b9e62d842405a9ecab0f54a4a89684029b664742e47ec06",
-          "spoken_text": "Wprowadzenie: Kontekst, filozofia platformy i zakres operacyjny. Architektura i referencja memorandum: Pełna specyfikacja techniczna, układ repozytorium, dosłowne pliki szkieletowe i narzędzia weryfikacyjne. Notatnik weryfikacji obliczeniowej: Notatnik walidacji środowiska uruchomieniowego wykonywany w jądrze jb2-python."
-        }
-      ],
-      "speech_input_hash": "5ecff50b1a843bdd7f7a86375b16ff79d84dac6b3feaebac6a6b153b1047d622",
-      "text": "Mapa drogowa dokumentacji.\n\nWprowadzenie: Kontekst, filozofia platformy i zakres operacyjny. Architektura i referencja memorandum: Pełna specyfikacja techniczna, układ repozytorium, dosłowne pliki szkieletowe i narzędzia weryfikacyjne. Notatnik weryfikacji obliczeniowej: Notatnik walidacji środowiska uruchomieniowego wykonywany w jądrze jb2-python.",
-      "text_sha256": "a533aef7589c779d46a69e8319d82da599ead0121dd657957149d7eb9a083ed3"
+      "speech_input_hash": "071518a73189300d035273248a3aeb361bcb316e6cae4e994614ea3533f72c10",
+      "text": "PODRĘCZNIK SOFTCLOUD. Wiedza inżynierska, którą można odtworzyć. Praktyczne poradniki, wykonywalne notatniki i wielokrotnego użytku przykłady UI — powiązane ze źródłem. Rozpocznij od poradnika Przeglądaj notatniki. Weryfikacja obliczeniowa. Wymagany profil wykonania. CPython 3.12.14 · Linux x86-64 · jb2-python. Otwórz notatnik weryfikacyjny. Wybierz punkt początkowy. Opublikuj pierwszą stronę. Poznaj strukturę dokumentacji, sposób tworzenia treści i proces publikowania podręcznika SoftCloud. GUIDE. Odtwórz kontrolę środowiska. Uruchom referencyjny notatnik weryfikujący środowisko i poznaj kontrolowany profil wykonania. NOTEBOOK. Znajdź wzorzec interfejsu. Przeglądaj katalog Web Awesome, tokeny projektowe i przykłady interfejsów do ponownego użycia. BIBLIOTEKA UI. Poznaj projekty SoftCloud. SoftCloud Node Linux — Powtarzalna dokumentacja węzłów Linux/Kubernetes. FreeIPA — Laboratorium tożsamości, zasad i zarządzania dostępem. Powtarzalna inżynieria, weryfikowalne wyniki. SoftCloud publikuje badania obliczeniowe, architekturę chmurową i wskazówki operacyjne wraz z wykonywalnymi materiałami referencyjnymi. Nieprzypięte zależności, różne wersje plików binarnych, ukryty stan środowiska i nieweryfikowane jądra wykonawcze utrudniają odtwarzanie wyników. Kontrakt publikacji obejmuje blokowanie zależności skrótami SHA-256, kanoniczne środowisko CPython 3.12.14 na Linux x86-64, ścisłą kontrolę wstępną i zautomatyzowane CI/CD. Zobacz Architekturę i specyfikację oraz kontekst i zakres operacyjny aby poznać założenia.",
+      "text_sha256": "b991af806912a7e622ba5008a09ce571da4fa667bc3685f464399e76ea5200d0"
     }
   ],
   "code_summary_hashes": {},
   "config_hash": "6c38cb8680c415b0ead0af6596a28955c42c374278bf121abbf4dba34db918e8",
   "element_ids": [
-    "el-0001-heading",
-    "el-0002-paragraph",
-    "el-0003-paragraph",
-    "el-0004-heading",
-    "el-0005-list",
-    "el-0006-heading",
-    "el-0007-list"
+    "el-0001-directive"
   ],
   "elements": [
     {
-      "element_id": "el-0001-heading",
-      "heading_level": 1,
-      "kind": "heading",
-      "section_anchor": "software-cloud",
-      "section_title": "Software Cloud",
-      "source_hash": "a8e1384694a0f2fb0fec83a1faa59c9cefd57a9a446f64f91f20d7d1afdb2c96",
-      "text": "Software Cloud"
-    },
-    {
-      "element_id": "el-0002-paragraph",
-      "kind": "paragraph",
-      "section_anchor": "software-cloud",
-      "section_title": "Software Cloud",
-      "source_hash": "3467115b4b66db822d794f8039c8613986ec164310e0f3072e3d62936d16407b",
-      "text": "Witamy w Software Cloud, platformie publikacji obliczeniowych i badawczych zbudowanej w oparciu o Jupyter Book 2 i hostowanej na GitHub Pages pod adresem my.softcloud.dev."
-    },
-    {
-      "element_id": "el-0003-paragraph",
-      "kind": "paragraph",
-      "section_anchor": "software-cloud",
-      "section_title": "Software Cloud",
-      "source_hash": "07d5d3fbd9a3b3c48a7a2ba96aabda9ef39ad91ae92e38b2dbf2ab2afb37ade0",
-      "text": "Software Cloud służy jako otwarta architektura i wykonywalna referencja dla deterministycznych potoków badawczych, powtarzalnych architektur chmurowych oraz weryfikowalnych notatników obliczeniowych."
-    },
-    {
-      "element_id": "el-0004-heading",
-      "heading_level": 2,
-      "kind": "heading",
-      "section_anchor": "kluczowe-filary",
-      "section_title": "Kluczowe filary",
-      "source_hash": "5a143b6befdd397fe7980703f7981a664fa3451c7544efe8493edf9378e716fd",
-      "text": "Kluczowe filary"
-    },
-    {
-      "element_id": "el-0005-list",
-      "kind": "list",
-      "section_anchor": "kluczowe-filary",
-      "section_title": "Kluczowe filary",
-      "source_hash": "974dd87ec2bc66b215c3bf5c9e77399b5ca1fa7c75b7cc5e0e24cf8ec850408a",
-      "text": "Powtarzalność kryptograficzna: Wszystkie zależności są przypięte do dokładnych dystrybucji z kryptograficznymi skrótami integralności SHA-256 (--require-hashes, --only-binary=:all:), co eliminuje dryf zależności. Wykonywanie hermetyczne: Przebiegi obliczeniowe są ukierunkowane na kanoniczny CPython 3.12.14 na platformie Linux x86-64 z jawną izolacją środowiska wirtualnego. Ścisła zgodność z profilem: Każdy artefakt publikacji przechodzi automatyczną weryfikację wstępną (tools/check_profile.py) przed kompilacją i wdrożeniem. Ciągłe dostarczanie: W pełni zautomatyzowany potok CI/CD w GitHub Actions buduje i weryfikuje dokumentację oraz notatniki przy każdym zatwierdzeniu zmian."
-    },
-    {
-      "element_id": "el-0006-heading",
-      "heading_level": 2,
-      "kind": "heading",
-      "section_anchor": "mapa-drogowa-dokumentacji",
-      "section_title": "Mapa drogowa dokumentacji",
-      "source_hash": "b3909752dd10c855e0b412463b778baf7243ca2958d5a304916249d8ddb2c763",
-      "text": "Mapa drogowa dokumentacji"
-    },
-    {
-      "element_id": "el-0007-list",
-      "kind": "list",
-      "section_anchor": "mapa-drogowa-dokumentacji",
-      "section_title": "Mapa drogowa dokumentacji",
-      "source_hash": "e5eb2bc91aed364f7b9e62d842405a9ecab0f54a4a89684029b664742e47ec06",
-      "text": "Wprowadzenie: Kontekst, filozofia platformy i zakres operacyjny. Architektura i referencja memorandum: Pełna specyfikacja techniczna, układ repozytorium, dosłowne pliki szkieletowe i narzędzia weryfikacyjne. Notatnik weryfikacji obliczeniowej: Notatnik walidacji środowiska uruchomieniowego wykonywany w jądrze jb2-python."
+      "directive_name": "div",
+      "element_id": "el-0001-directive",
+      "kind": "directive",
+      "section_anchor": "top",
+      "section_title": "Introduction",
+      "source_hash": "90490fb81ae528482d2921f1d858d89f64bbd242ae59f49e08f6b1adde96adf2",
+      "text": "PODRĘCZNIK SOFTCLOUD. Wiedza inżynierska, którą można odtworzyć. Praktyczne poradniki, wykonywalne notatniki i wielokrotnego użytku przykłady UI — powiązane ze źródłem. Rozpocznij od poradnika Przeglądaj notatniki. Weryfikacja obliczeniowa. Wymagany profil wykonania. CPython 3.12.14 · Linux x86-64 · jb2-python. Otwórz notatnik weryfikacyjny. Wybierz punkt początkowy. Opublikuj pierwszą stronę. Poznaj strukturę dokumentacji, sposób tworzenia treści i proces publikowania podręcznika SoftCloud. GUIDE. Odtwórz kontrolę środowiska. Uruchom referencyjny notatnik weryfikujący środowisko i poznaj kontrolowany profil wykonania. NOTEBOOK. Znajdź wzorzec interfejsu. Przeglądaj katalog Web Awesome, tokeny projektowe i przykłady interfejsów do ponownego użycia. BIBLIOTEKA UI. Poznaj projekty SoftCloud. SoftCloud Node Linux — Powtarzalna dokumentacja węzłów Linux/Kubernetes. FreeIPA — Laboratorium tożsamości, zasad i zarządzania dostępem. Powtarzalna inżynieria, weryfikowalne wyniki. SoftCloud publikuje badania obliczeniowe, architekturę chmurową i wskazówki operacyjne wraz z wykonywalnymi materiałami referencyjnymi. Nieprzypięte zależności, różne wersje plików binarnych, ukryty stan środowiska i nieweryfikowane jądra wykonawcze utrudniają odtwarzanie wyników. Kontrakt publikacji obejmuje blokowanie zależności skrótami SHA-256, kanoniczne środowisko CPython 3.12.14 na Linux x86-64, ścisłą kontrolę wstępną i zautomatyzowane CI/CD. Zobacz Architekturę i specyfikację oraz kontekst i zakres operacyjny aby poznać założenia."
     }
   ],
   "locale": "pl",
@@ -187,9 +55,9 @@
     "voice_name": "Kore"
   },
   "page_id": "readme",
-  "page_source_hash": "f01421098d5b213b5d1a8ac60561a8e675887c959ad39e6d353bf8f35afafe58",
+  "page_source_hash": "abf865337938b99583af823bef1bac80d844f62f14761b2f9102273858568581",
   "schema_version": "1.0.0",
-  "source_file_sha256": "acf2e4509f76dacd0c253f8c45e8f886296a26659afd674f039eb7eae42e374d",
+  "source_file_sha256": "5eb3cc525510fcff1e8dbd93ede10d865520690c438f2f6e1760e0fe7ecb7798",
   "source_path": "i18n/pl/README.md",
-  "transcript_sha256": "bf46b918e20657f4dd2eac24fb43780389a1931c92831c48119c16eb8b4228f1"
+  "transcript_sha256": "97c2dbe554fe67d9608fd6200c858a9396558c6d0c05c15c37371900f508667e"
 }
