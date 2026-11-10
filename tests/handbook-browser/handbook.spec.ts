@@ -5,7 +5,7 @@ const locales = [
   { code: 'pl', prefix: '/pl', headline: 'Wiedza inżynierska, którą można odtworzyć.', nav: ['Poradniki', 'Notatniki', 'Biblioteka UI', 'Projekty'], cta: 'Rozpocznij od poradnika' },
   { code: 'de', prefix: '/de', headline: 'Ingenieurwissen, das sich reproduzieren lässt.', nav: ['Anleitungen', 'Notebooks', 'UI-Bibliothek', 'Projekte'], cta: 'Mit einer Anleitung beginnen' },
   { code: 'es', prefix: '/es', headline: 'Conocimiento de ingeniería reproducible.', nav: ['Guías', 'Cuadernos', 'Biblioteca UI', 'Proyectos'], cta: 'Empezar con una guía' },
-  { code: 'fr', prefix: '/fr', headline: "Un savoir d'ingénierie reproductible.", nav: ['Guides', 'Notebooks', 'Bibliothèque UI', 'Projets'], cta: 'Commencer par un guide' },
+  { code: 'fr', prefix: '/fr', headline: 'Un savoir d’ingénierie reproductible.', nav: ['Guides', 'Notebooks', 'Bibliothèque UI', 'Projets'], cta: 'Commencer par un guide' },
 ] as const;
 
 const slugs = ['guides', 'notebooks', 'ui-library', 'projects'] as const;
