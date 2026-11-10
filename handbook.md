@@ -8,10 +8,10 @@ site:
   hide_footer_links: true
 ---
 
-:::{div}
+:::::::{div}
 :class: sc-handbook
 
-::::{div}
+::::::{div}
 :class: sc-handbook__hero
 
 :::::{div}
@@ -46,11 +46,11 @@ assert sys.version_info[:3] == (3, 12, 14)
 
 :::::
 
-::::
+::::::
 
 ## Choose a starting point
 
-::::{div}
+::::::{div}
 :class: sc-handbook__routes
 
 :::::{div}
@@ -86,9 +86,9 @@ Explore the Web Awesome component catalog, design tokens, and reusable interface
 
 :::::
 
-::::
+::::::
 
-::::{div}
+::::::{div}
 :class: sc-handbook__projects
 
 ### [Explore SoftCloud projects](projects.md)
@@ -97,9 +97,9 @@ Explore the Web Awesome component catalog, design tokens, and reusable interface
 
 [**FreeIPA**](projects/freeipa.md) — Identity, policy, and access management laboratory.
 
-::::
+::::::
 
-::::{div}
+::::::{div}
 :class: sc-handbook__overview
 
 ## Open engineering, verifiable results
@@ -108,6 +108,6 @@ SoftCloud publishes computational research, cloud architecture, and operational 
 
 The four governing principles are **cryptographic dependency locking**, **isolated canonical execution**, **strict profile validation**, and **automated publication**. The [Architecture & Specification](architecture.md) explains the guarantees; the [Contributor Guide](contributing.md) explains how to operate the toolchain.
 
-::::
+::::::
 
-:::
+:::::::
