@@ -101,7 +101,10 @@ def validate(root: Path) -> list[str]:
         for slug in ("guides", "notebooks", "ui-library", "projects"):
             expected = f"{prefix}/{slug}"
             if expected not in links:
-                errors.append(f"[{code}] Missing localized navbar destination {expected}")
+                errors.append(
+                    f"[{code}] Missing localized navbar destination {expected}; "
+                    f"actual links={sorted(links)}"
+                )
             if not (sub / slug / "index.html").is_file() and not (sub / f"{slug}.html").is_file():
                 errors.append(f"[{code}] Missing localized page for {slug}")
 
