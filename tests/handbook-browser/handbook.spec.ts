@@ -148,14 +148,30 @@ test('introduction and architecture remain reachable in all five locales', async
 });
 
 test('localized UI Library entry identifies the English-only catalog', async ({ page }) => {
-  for (const locale of locales.slice(1)) {
-    await page.goto(locale.prefix + '/ui-library/');
-    await expect(page.locator('main a[href="https://my.softcloud.dev/components"]').first()).toBeVisible();
+  const catalogResponse = await page.goto('/components/');
+  expect(catalogResponse?.ok(), '/components/ route must return HTTP 200').toBeTruthy();
+  await expect(page.locator('main h1').first()).toContainText('Web Awesome — Component Catalog');
+  await expect(page.locator('a[title="Edit This Page"]')).toHaveAttribute(
+    'href',
+    'https://github.com/soft-cloud-dev/soft-cloud-dev/edit/main/components/index.md',
+  );
+
+  for (const locale of locales) {
+    const response = await page.goto(locale.prefix + '/ui-library/');
+    expect(response?.ok(), locale.code + ' /ui-library/').toBeTruthy();
+    const cta = page.locator('main a[href="https://my.softcloud.dev/components"]').first();
+    await expect(cta).toBeVisible();
     await expect(page.locator('main')).toContainText(/web[- ]awesome/i);
+    const expectedEditHref =
+      locale.code === 'en'
+        ? 'https://github.com/soft-cloud-dev/soft-cloud-dev/edit/main/ui-library.md'
+        : `https://github.com/soft-cloud-dev/soft-cloud-dev/edit/main/i18n/${locale.code}/ui-library.md`;
+    await expect(page.locator('a[title="Edit This Page"]')).toHaveAttribute('href', expectedEditHref);
   }
 });
 
-test('localized homepages hydrate without crashing when browser storage throws SecurityError', async ({ page }) => {
+test('localized homepages hydrate without crashing when browser storage throws SecurityError', async ({ page, baseURL }) => {
+  const origin = (baseURL ?? 'http://127.0.0.1:4174').replace(/\/+$/, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   await page.addInitScript(() => {
     const blocked = {
       get() {
@@ -192,7 +208,7 @@ test('localized homepages hydrate without crashing when browser storage throws S
     .first()
     .click();
   await page.waitForLoadState('networkidle');
-  await expect(page).toHaveURL(/^http:\/\/127\.0\.0\.1:4174\/$/);
+  await expect(page).toHaveURL(new RegExp('^' + origin + '/$'));
   await expect(page.locator('.sc-handbook')).toBeVisible();
   await expect(page.locator('body')).not.toContainText('Unexpected Error Occurred');
   expect(pageErrors).toEqual([]);

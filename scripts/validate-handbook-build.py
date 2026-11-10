@@ -78,13 +78,24 @@ def validate(root: Path) -> list[str]:
     if not css_found:
         errors.append("Compiled site is missing the handbook design CSS")
 
+    components_index = root / "components" / "index.html"
+    if not components_index.is_file():
+        errors.append("Missing compiled component catalog route (/components/index.html)")
+    else:
+        components_soup = BeautifulSoup(components_index.read_text(encoding="utf-8"), "html.parser")
+        comp_h1 = components_soup.select_one("main h1")
+        if comp_h1 is None or "Component Catalog" not in comp_h1.get_text(" ", strip=True):
+            errors.append("Compiled /components/index.html is missing the Component Catalog heading")
+
+    github_edit_base = "https://github.com/soft-cloud-dev/soft-cloud-dev/edit/main"
     for code in ("en", "pl", "de", "es", "fr"):
         sub = root if code == "en" else root / code
         doc = sub / "index.html"
         if not doc.is_file():
             errors.append(f"[{code}] Missing localized homepage: {doc}")
             continue
-        localized = BeautifulSoup(doc.read_text(encoding="utf-8"), "html.parser")
+        doc_text = doc.read_text(encoding="utf-8")
+        localized = BeautifulSoup(doc_text, "html.parser")
         if localized.select_one(".sc-handbook") is None:
             errors.append(f"[{code}] Missing handbook container")
         if len(localized.select(".sc-handbook__route")) != 3:
@@ -92,6 +103,15 @@ def validate(root: Path) -> list[str]:
         html = localized.find("html")
         if not html or html.get("lang") != code:
             errors.append(f"[{code}] Incorrect document language")
+        expected_readme_edit = (
+            f"{github_edit_base}/README.md"
+            if code == "en"
+            else f"{github_edit_base}/i18n/{code}/README.md"
+        )
+        if expected_readme_edit not in doc_text or "/_build/locales/" in doc_text:
+            errors.append(
+                f"[{code}] Homepage Edit This Page metadata mismatch: expected {expected_readme_edit}"
+            )
         header = localized.select_one("nav.myst-top-nav-bar")
         if header is None:
             errors.append(f"[{code}] Missing top navbar")
@@ -105,8 +125,22 @@ def validate(root: Path) -> list[str]:
                     f"[{code}] Missing localized navbar destination {expected}; "
                     f"actual links={sorted(links)}"
                 )
-            if not (sub / slug / "index.html").is_file() and not (sub / f"{slug}.html").is_file():
+            slug_page = (sub / slug / "index.html") if (sub / slug / "index.html").is_file() else (sub / f"{slug}.html")
+            if not slug_page.is_file():
                 errors.append(f"[{code}] Missing localized page for {slug}")
+            else:
+                slug_soup = BeautifulSoup(slug_page.read_text(encoding="utf-8"), "html.parser")
+                expected_slug_edit = (
+                    f"{github_edit_base}/{slug}.md"
+                    if code == "en"
+                    else f"{github_edit_base}/i18n/{code}/{slug}.md"
+                )
+                slug_edit_link = slug_soup.select_one('a[title="Edit This Page"]')
+                if slug_edit_link is None or slug_edit_link.get("href") != expected_slug_edit:
+                    errors.append(
+                        f"[{code}] {slug} Edit This Page link mismatch: expected {expected_slug_edit}, "
+                        f"got {slug_edit_link.get('href') if slug_edit_link else None}"
+                    )
 
     return errors
 
