@@ -32,8 +32,14 @@ def validate(root: Path) -> list[str]:
         if source.select_one(selector) is None:
             errors.append(f"Compiled handbook missing {selector}")
 
-    headline = source.find(["h1", "h2"], string=lambda s: s and "Engineering knowledge" in s)
-    if not headline:
+    # MyST headings can contain an anchor element. BeautifulSoup's tag.string
+    # becomes None for those headings, even though the visible heading exists.
+    headline = next(
+        (heading for heading in source.find_all(["h1", "h2"])
+         if "Engineering knowledge you can reproduce." in heading.get_text(" ", strip=True)),
+        None,
+    )
+    if headline is None:
         errors.append("Handbook headline is missing")
     if len(source.select(".sc-handbook__route")) != 3:
         errors.append("Expected exactly three handbook starting-point rows")
