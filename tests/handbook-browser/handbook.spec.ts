@@ -155,7 +155,6 @@ test('localized UI Library entry identifies the English-only catalog', async ({ 
   }
 });
 
-<<<<<<< HEAD
 test('localized homepages hydrate without crashing when browser storage throws SecurityError', async ({ page }) => {
   await page.addInitScript(() => {
     const blocked = {
