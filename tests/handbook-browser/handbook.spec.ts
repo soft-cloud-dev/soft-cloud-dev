@@ -13,6 +13,8 @@ const slugs = ['guides', 'notebooks', 'ui-library', 'projects'] as const;
 async function expectVerificationContentFits(page: Page) {
   const card = page.locator('.sc-handbook__verification');
   await expect(card).toBeVisible();
+  const codeWhitespace = await card.locator('pre code').evaluate(el => getComputedStyle(el).whiteSpace);
+  expect(codeWhitespace, 'MyST inline code style must not prevent wrapping').toBe('pre-wrap');
   for (const selector of ['pre', 'p > code']) {
     const element = card.locator(selector).first();
     await expect(element).toBeVisible();
