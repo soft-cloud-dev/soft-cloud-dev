@@ -138,8 +138,14 @@ body:has(.sc-handbook) article.article-grid {
   line-height: 1.75;
 }
 
-/* Allow syntax-highlighted code tokens to wrap without clipping. */
-.sc-handbook__verification pre code,
+/* MyST emits inline white-space:pre on <code>. Override it at tablet
+ * widths as well as mobile, keeping syntax-highlighted tokens wrappable. */
+.sc-handbook__verification pre code {
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word;
+}
+
 .sc-handbook__verification pre code span {
   white-space: inherit;
   overflow-wrap: inherit;
