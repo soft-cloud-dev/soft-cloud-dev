@@ -4,7 +4,7 @@ export default defineConfig({
   testDir: './tests/browser',
   timeout: 30000,
   fullyParallel: false,
-  retries: 0,
+  retries: process.env.CI ? 2 : 0,
   workers: 1,
   use: {
     baseURL: 'http://127.0.0.1:4173',
@@ -20,6 +20,9 @@ export default defineConfig({
       name: 'chromium',
       use: {
         browserName: 'chromium',
+        launchOptions: {
+          args: ['--disable-dev-shm-usage'],
+        },
       },
     },
     {

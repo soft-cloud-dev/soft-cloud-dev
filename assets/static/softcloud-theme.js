@@ -130,35 +130,6 @@
     }
   }
 
-  function moveNodePreservingState(targetParent, node, refNode) {
-    if (!targetParent || !node) return;
-    const reference = refNode === undefined ? null : refNode;
-    if (
-      typeof Element !== 'undefined' &&
-      'moveBefore' in Element.prototype &&
-      typeof targetParent.moveBefore === 'function' &&
-      targetParent.isConnected &&
-      node.isConnected
-    ) {
-      try {
-        targetParent.moveBefore(node, reference);
-        return;
-      } catch (_err) {
-        // Fall back to insertBefore if atomic move is rejected
-      }
-    }
-    targetParent.insertBefore(node, reference);
-  }
-
-  function yieldToMain() {
-    if (typeof window !== 'undefined' && 'scheduler' in window && window.scheduler && 'yield' in window.scheduler) {
-      return window.scheduler.yield();
-    }
-    return new Promise(function (resolve) {
-      setTimeout(resolve, 0);
-    });
-  }
-
   function transformSingleHost(host) {
     if (!host || !host.isConnected) return;
     const metaEl = host.querySelector(':scope > .sc-wa-meta');
@@ -283,19 +254,11 @@
       }
 
       metaEl.remove();
-      el.appendChild(contentDiv);
-      if (host.parentNode) {
-        host.parentNode.insertBefore(el, host);
-        while (host.firstChild) {
-          moveNodePreservingState(contentDiv, host.firstChild, null);
-        }
-        host.remove();
-      } else {
-        while (host.firstChild) {
-          contentDiv.appendChild(host.firstChild);
-        }
-        host.replaceWith(el);
+      while (host.firstChild) {
+        contentDiv.appendChild(host.firstChild);
       }
+      el.appendChild(contentDiv);
+      host.replaceWith(el);
       return;
     }
 
@@ -318,17 +281,10 @@
       }
     }
 
-    // Transfer light DOM children while preserving element state when supported
+    // Transfer light DOM children into detached custom element before connecting to DOM
     metaEl.remove();
-    if (host.parentNode) {
-      host.parentNode.insertBefore(el, host);
-      while (host.firstChild) {
-        moveNodePreservingState(el, host.firstChild, null);
-      }
-    } else {
-      while (host.firstChild) {
-        el.appendChild(host.firstChild);
-      }
+    while (host.firstChild) {
+      el.appendChild(host.firstChild);
     }
 
     // Slot handling for card footer
@@ -340,45 +296,17 @@
       el.setAttribute('with-footer', '');
     }
 
-    if (host.parentNode) {
-      host.remove();
-    } else {
-      host.replaceWith(el);
-    }
-  }
-
-  async function transformRemainingHostsAsync(remainingHosts) {
-    await yieldToMain();
-    const nowFn = typeof performance !== 'undefined' && typeof performance.now === 'function'
-      ? function () { return performance.now(); }
-      : function () { return Date.now(); };
-    let deadline = nowFn() + 50;
-    for (let i = 0; i < remainingHosts.length; i++) {
-      transformSingleHost(remainingHosts[i]);
-      if (nowFn() >= deadline && i + 1 < remainingHosts.length) {
-        await yieldToMain();
-        deadline = nowFn() + 50;
-      }
-    }
+    host.replaceWith(el);
   }
 
   // 2. Client-side Web Awesome placeholder transform (WA-002, WA-003, WA-007)
   function transformHosts(container) {
     const root = container || document;
-    const hosts = root.querySelectorAll ? Array.from(root.querySelectorAll('.sc-wa-host')) : [];
+    const hosts = root.querySelectorAll ? Array.from(root.querySelectorAll('.sc-wa-host')).reverse() : [];
     if (!hosts || hosts.length === 0) return;
-
-    const nowFn = typeof performance !== 'undefined' && typeof performance.now === 'function'
-      ? function () { return performance.now(); }
-      : function () { return Date.now(); };
-    const deadline = nowFn() + 50;
 
     for (let i = 0; i < hosts.length; i++) {
       transformSingleHost(hosts[i]);
-      if (nowFn() >= deadline && i + 1 < hosts.length) {
-        transformRemainingHostsAsync(hosts.slice(i + 1));
-        break;
-      }
     }
   }
 
