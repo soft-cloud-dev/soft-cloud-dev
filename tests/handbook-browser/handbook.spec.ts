@@ -153,3 +153,47 @@ test('localized UI Library entry identifies the English-only catalog', async ({ 
     await expect(page.locator('main')).toContainText(/web[- ]awesome/i);
   }
 });
+
+test('localized homepages hydrate without crashing when browser storage throws SecurityError', async ({ page }) => {
+  await page.addInitScript(() => {
+    const blocked = {
+      get() {
+        throw new DOMException('The operation is insecure.', 'SecurityError');
+      },
+    };
+    Object.defineProperty(window, 'localStorage', blocked);
+    Object.defineProperty(window, 'sessionStorage', blocked);
+  });
+
+  const pageErrors: string[] = [];
+  const consoleErrors: string[] = [];
+  page.on('pageerror', error => pageErrors.push(error.message));
+  page.on('console', msg => {
+    if (msg.type() === 'error') consoleErrors.push(msg.text());
+  });
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const locale of locales.slice(0, 2)) {
+    await page.goto(locale.prefix + '/', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(300);
+    await expect(page.locator('body')).not.toContainText('Unexpected Error Occurred');
+    await expect(page.locator('.sc-handbook')).toBeVisible();
+  }
+
+  await page.reload({ waitUntil: 'networkidle' });
+  await expect(page.locator('body')).not.toContainText('Unexpected Error Occurred');
+  await page.locator('button.myst-theme-button').click();
+  await expect(page.locator('body')).not.toContainText('Unexpected Error Occurred');
+
+  await page.locator('[data-sc-lang-switcher] button').first().click();
+  await page.locator('[data-sc-lang-switcher] a, [data-sc-lang-switcher] button, [data-sc-lang-switcher] [role="menuitem"]')
+    .filter({ hasText: 'English' })
+    .first()
+    .click();
+  await page.waitForLoadState('networkidle');
+  await expect(page).toHaveURL(/^http:\/\/127\.0\.0\.1:4174\/$/);
+  await expect(page.locator('.sc-handbook')).toBeVisible();
+  await expect(page.locator('body')).not.toContainText('Unexpected Error Occurred');
+  expect(pageErrors).toEqual([]);
+  expect(consoleErrors).toEqual([]);
+});

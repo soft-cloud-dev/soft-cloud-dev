@@ -180,6 +180,87 @@ def patch_myst_hydration_and_lang(js_code: str) -> tuple[str, int]:
     return js_code, count
 
 
+def patch_myst_storage_resilience(js_code: str) -> tuple[str, int]:
+    """Guards MyST/Remix browser storage accesses against SecurityError when storage is blocked."""
+    count = 0
+
+    # 1. Theme hook useState read in MyST layout (prevents render crash caught by Root ErrorBoundary)
+    js_code, n = re.subn(
+        r"let ([A-Za-z_$][\w$]*)=([A-Za-z_$][\w$]*)\(\),([A-Za-z_$][\w$]*)=localStorage\.getItem\(([A-Za-z_$][\w$]*)\);",
+        r"let \1=\2(),\3=null;try{\3=localStorage.getItem(\4)}catch{}",
+        js_code,
+    )
+    count += n
+
+    # 2. Theme hook useEffect write in MyST layout
+    js_code, n = re.subn(
+        r"([A-Za-z_$][\w$]*)\(([A-Za-z_$][\w$]*)\)&&\(([A-Za-z_$][\w$]*)\?localStorage\.setItem\(([A-Za-z_$][\w$]*),\2\):([A-Za-z_$][\w$]*)\(\2\)\)",
+        r"\1(\2)&&(\3?(()=>{try{localStorage.setItem(\4,\2)}catch{}})():\5(\2))",
+        js_code,
+    )
+    count += n
+
+    # 3. Pre-paint theme <script> generator (must stay aligned with inline HTML script for hydration)
+    js_code, n = re.subn(
+        r"let ([A-Za-z_$][\w$]*)=`localStorage\.getItem\(\$\{JSON\.stringify\(([A-Za-z_$][\w$]*)\)\}\)`,",
+        r"let \1=`(()=>{try{return localStorage.getItem(${JSON.stringify(\2)})}catch{return null}})()`,",
+        js_code,
+    )
+    count += n
+
+    # 4. Announcement banner localStorage read/write
+    js_code, n = re.subn(
+        r"(?<!return )localStorage\.getItem\(`myst-dismissed-banner-\$\{([A-Za-z_$][\w$]*)\}`\)",
+        r"(()=>{try{return localStorage.getItem(`myst-dismissed-banner-${\1}`)}catch{return null}})()",
+        js_code,
+    )
+    count += n
+
+    js_code, n = re.subn(
+        r'(?<!try\{)localStorage\.setItem\(`myst-dismissed-banner-\$\{([A-Za-z_$][\w$]*)\}`,"true"\)',
+        r'(()=>{try{localStorage.setItem(`myst-dismissed-banner-${\1}`,"true")}catch{}})()',
+        js_code,
+    )
+    count += n
+
+    # 5. Remix ScrollRestoration sessionStorage setItem & catch-block removeItem
+    js_code, n = re.subn(
+        r"(?<!try\{)sessionStorage\.setItem\(([^(),]+),JSON\.stringify\(([^()]+)\)\)",
+        r"(()=>{try{sessionStorage.setItem(\1,JSON.stringify(\2))}catch{}})()",
+        js_code,
+    )
+    count += n
+
+    js_code, n = re.subn(
+        r"catch\(([A-Za-z_$][\w$]*)\)\{console\.error\(\1\),sessionStorage\.removeItem\(([A-Za-z_$][\w$]*)\)\}",
+        r"catch(\1){try{sessionStorage.removeItem(\2)}catch{}}",
+        js_code,
+    )
+    count += n
+
+    return js_code, count
+
+
+def patch_html_storage_resilience(html_code: str) -> tuple[str, int]:
+    """Guards inline MyST/Remix <script> storage calls in static HTML against SecurityError."""
+    count = 0
+
+    theme_target = 'const savedTheme = localStorage.getItem("myst:theme");'
+    theme_repl = 'const savedTheme = (()=>{try{return localStorage.getItem("myst:theme")}catch{return null}})();'
+    if theme_target in html_code:
+        html_code = html_code.replace(theme_target, theme_repl)
+        count += 1
+
+    html_code, n = re.subn(
+        r"catch\(([A-Za-z_$][\w$]*)\)\{console\.error\(\1\),sessionStorage\.removeItem\(([A-Za-z_$][\w$]*)\)\}",
+        r"catch(\1){try{sessionStorage.removeItem(\2)}catch{}}",
+        html_code,
+    )
+    count += n
+
+    return html_code, count
+
+
 def process_thebe(html_dir: str) -> bool:
     """Processes built HTML directory to sanitize thebe debug logs and sourcemap errors."""
     if not os.path.isdir(html_dir):
@@ -220,15 +301,17 @@ def process_thebe(html_dir: str) -> bool:
                     mod_content, dbg_count = strip_thebe_console_debug(content)
                     mod_content, map_count = strip_thebe_sourcemap(mod_content)
                     mod_content, hyd_count = patch_myst_hydration_and_lang(mod_content)
+                    mod_content, str_count = patch_myst_storage_resilience(mod_content)
 
-                    if dbg_count > 0 or map_count > 0 or hyd_count > 0:
+                    if dbg_count > 0 or map_count > 0 or hyd_count > 0 or str_count > 0:
                         with open(fpath, "w", encoding="utf-8") as f:
                             f.write(mod_content)
                         js_patched += 1
                         rel = os.path.relpath(fpath, html_dir)
                         print(
                             f"[OK] Patched {rel} (stripped {dbg_count} debug call(s), "
-                            f"{map_count} sourcemap directive(s), {hyd_count} hydration patch(es))"
+                            f"{map_count} sourcemap directive(s), {hyd_count} hydration patch(es), "
+                            f"{str_count} storage guard(s))"
                         )
 
                 except Exception as e:
@@ -261,6 +344,7 @@ def process_thebe(html_dir: str) -> bool:
                         r"\1\2",
                         content,
                     )
+                    content, _ = patch_html_storage_resilience(content)
 
                     if content != orig_content:
                         with open(fpath, "w", encoding="utf-8") as f:
