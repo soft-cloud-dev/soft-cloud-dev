@@ -43,6 +43,8 @@ jobs:
       - name: Run shared CI verification driver
         env:
           BASE_URL: ""
+          HOST: "127.0.0.1"
+          NODE_OPTIONS: "--dns-result-order=ipv4first"
           SOFTCLOUD_AUDIO_OFFLINE: '1'
         run: |
           . .venv/bin/activate
