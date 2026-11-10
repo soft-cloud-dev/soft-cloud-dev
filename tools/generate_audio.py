@@ -823,8 +823,8 @@ class GeminiClient:
                 # Rate limit / quota / temporary capacity (429, 503)
                 if status in (429, 503):
                     if attempt >= self.max_retries:
-                        if status == 503 and "models/gemini-3.8-flash" in endpoint and ":generateContent" in endpoint:
-                            for fb_text in ("gemini-2.0-flash", "gemini-1.5-flash"):
+                        if status == 503 and "models/gemini-3.8-flash" in endpoint and ":generateContent" in endpoint and "-tts" not in endpoint:
+                            for fb_text in ("gemini-3.5-flash-lite", "gemini-3-flash-preview", "gemini-3.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"):
                                 if f"models/{fb_text}" not in endpoint:
                                     fb_ep = endpoint.replace("models/gemini-3.8-flash", f"models/{fb_text}")
                                     try:
@@ -852,7 +852,7 @@ class GeminiClient:
 
                 if status == 404:
                     if "models/gemini-3.8-flash-tts" in endpoint or "models/gemini-2.5-flash-preview-tts" in endpoint:
-                        for fb_tts in ("gemini-2.5-flash-preview-tts", "gemini-2.0-flash-preview-tts"):
+                        for fb_tts in ("gemini-3.8-flash-lite-tts", "gemini-3.1-flash-tts-preview", "gemini-2.5-flash-preview-tts", "gemini-2.0-flash-preview-tts"):
                             if f"models/{fb_tts}" not in endpoint:
                                 fb_ep = re.sub(r"models/[^/]+-tts", f"models/{fb_tts}", endpoint)
                                 try:
@@ -860,7 +860,7 @@ class GeminiClient:
                                 except Exception:
                                     continue
                     elif "models/gemini-3.8-flash" in endpoint or "models/gemini-2.5-flash" in endpoint:
-                        for fb_text in ("gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"):
+                        for fb_text in ("gemini-3.5-flash-lite", "gemini-3-flash-preview", "gemini-3.5-flash", "gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"):
                             if f"models/{fb_text}" not in endpoint:
                                 fb_ep = re.sub(r"models/gemini-[0-9.]+-flash", f"models/{fb_text}", endpoint)
                                 try:
@@ -876,6 +876,14 @@ class GeminiClient:
                 ) from exc
             except (urllib.error.URLError, TimeoutError) as exc:
                 if attempt >= self.max_retries:
+                    if "models/gemini-3.8-flash" in endpoint and ":generateContent" in endpoint and "-tts" not in endpoint:
+                        for fb_text in ("gemini-3.5-flash-lite", "gemini-3-flash-preview", "gemini-3.5-flash"):
+                            if f"models/{fb_text}" not in endpoint:
+                                fb_ep = endpoint.replace("models/gemini-3.8-flash", f"models/{fb_text}")
+                                try:
+                                    return self._request_json(method, fb_ep, payload)
+                                except Exception:
+                                    continue
                     raise NarrationError(
                         f"Network failure communicating with Gemini API ({endpoint}) after "
                         f"{self.max_retries} retries: {exc}"
@@ -892,7 +900,7 @@ class GeminiClient:
             info = self._request_json("GET", f"models/{model_id}")
         except NarrationError as exc:
             if "404" in str(exc):
-                for fb in ("gemini-2.0-flash", "gemini-1.5-flash"):
+                for fb in ("gemini-3.5-flash-lite", "gemini-3-flash-preview", "gemini-3.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"):
                     try:
                         info = self._request_json("GET", f"models/{fb}")
                         self._verified_models.add(model_id)

@@ -1,0 +1,63 @@
+{
+  "chunks": [
+    {
+      "chunk_hash": "805f0b1dcc5cd5e6978b63b2c7b882bbb52ed07f22ba028509ca72cd33263b91",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "element_ids": [
+        "el-0001-directive"
+      ],
+      "section_anchor": "top",
+      "section_title": "Introduction",
+      "segments": [
+        {
+          "element_id": "el-0001-directive",
+          "is_ai_summary": false,
+          "kind": "directive",
+          "source_hash": "e296e9416a3cb00aadff366ec568eed7313431b960921f5df8dacb784569d0a8",
+          "spoken_text": "THE SOFTCLOUD HANDBOOK. Engineering knowledge you can reproduce. Practical guides, executable notebooks, and reusable UI examples — connected to their source. Start with a guide Browse notebooks. Computational verification. Required execution profile. CPython 3.12.14 · Linux x86-64 · jb2-python. Open verification notebook. Choose a starting point. Publish your first page. Learn the documentation structure, authoring workflow, and publishing model for the SoftCloud handbook. GUIDE. Reproduce an environment check. Run the reference environment verification notebook and understand its controlled execution profile. NOTEBOOK. Find a reusable UI pattern. Explore the Web Awesome catalog, design tokens, and reusable interface examples. UI LIBRARY. Explore SoftCloud projects. SoftCloud Node Linux — Reproducible Linux/Kubernetes node documentation. FreeIPA — Identity, policy, and access management laboratory. Reproducible engineering, accountable results. SoftCloud publishes computational research, cloud architecture, and operational guidance alongside executable references. Unpinned dependencies, divergent binaries, implicit environment state, and unverified runtime kernels can make research difficult to reproduce. Its publication contract uses SHA-256 dependency locking, a canonical CPython 3.12.14 runtime on Linux x86-64, strict preflight verification, and automated CI/CD. See the Architecture & Specification for guarantees and the background and operational scope for context."
+        }
+      ],
+      "speech_input_hash": "e48cbfce2170c7325e56dade14c48b7e2035c888e96821b1389045a999620c10",
+      "text": "THE SOFTCLOUD HANDBOOK. Engineering knowledge you can reproduce. Practical guides, executable notebooks, and reusable UI examples — connected to their source. Start with a guide Browse notebooks. Computational verification. Required execution profile. CPython 3.12.14 · Linux x86-64 · jb2-python. Open verification notebook. Choose a starting point. Publish your first page. Learn the documentation structure, authoring workflow, and publishing model for the SoftCloud handbook. GUIDE. Reproduce an environment check. Run the reference environment verification notebook and understand its controlled execution profile. NOTEBOOK. Find a reusable UI pattern. Explore the Web Awesome catalog, design tokens, and reusable interface examples. UI LIBRARY. Explore SoftCloud projects. SoftCloud Node Linux — Reproducible Linux/Kubernetes node documentation. FreeIPA — Identity, policy, and access management laboratory. Reproducible engineering, accountable results. SoftCloud publishes computational research, cloud architecture, and operational guidance alongside executable references. Unpinned dependencies, divergent binaries, implicit environment state, and unverified runtime kernels can make research difficult to reproduce. Its publication contract uses SHA-256 dependency locking, a canonical CPython 3.12.14 runtime on Linux x86-64, strict preflight verification, and automated CI/CD. See the Architecture & Specification for guarantees and the background and operational scope for context.",
+      "text_sha256": "ff29d78eecfeb4e5a69109252d13969d6efa7719ac0b6f9c97974e8a8147f7bc"
+    }
+  ],
+  "code_summary_hashes": {},
+  "config_hash": "d5baac4fad1f9b181890c898934a905b75aa725dee29a66f520b062347b9bd18",
+  "element_ids": [
+    "el-0001-directive"
+  ],
+  "elements": [
+    {
+      "directive_name": "div",
+      "element_id": "el-0001-directive",
+      "kind": "directive",
+      "section_anchor": "top",
+      "section_title": "Introduction",
+      "source_hash": "e296e9416a3cb00aadff366ec568eed7313431b960921f5df8dacb784569d0a8",
+      "text": "THE SOFTCLOUD HANDBOOK. Engineering knowledge you can reproduce. Practical guides, executable notebooks, and reusable UI examples — connected to their source. Start with a guide Browse notebooks. Computational verification. Required execution profile. CPython 3.12.14 · Linux x86-64 · jb2-python. Open verification notebook. Choose a starting point. Publish your first page. Learn the documentation structure, authoring workflow, and publishing model for the SoftCloud handbook. GUIDE. Reproduce an environment check. Run the reference environment verification notebook and understand its controlled execution profile. NOTEBOOK. Find a reusable UI pattern. Explore the Web Awesome catalog, design tokens, and reusable interface examples. UI LIBRARY. Explore SoftCloud projects. SoftCloud Node Linux — Reproducible Linux/Kubernetes node documentation. FreeIPA — Identity, policy, and access management laboratory. Reproducible engineering, accountable results. SoftCloud publishes computational research, cloud architecture, and operational guidance alongside executable references. Unpinned dependencies, divergent binaries, implicit environment state, and unverified runtime kernels can make research difficult to reproduce. Its publication contract uses SHA-256 dependency locking, a canonical CPython 3.12.14 runtime on Linux x86-64, strict preflight verification, and automated CI/CD. See the Architecture & Specification for guarantees and the background and operational scope for context."
+    }
+  ],
+  "locale": "en",
+  "logical_source_path": "README.md",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "en",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "readme",
+  "page_source_hash": "a72474d9b82987ed386a843e553f56fc0279cdcf61c1357dcc2ded77d20d63cf",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "5a9cbad85020e097eb784846cedd8205ce60a0bb1b5548d1a9e1aaa89d966526",
+  "source_path": "README.md",
+  "transcript_sha256": "bcd546f43792b17172df68157905a078b74d674b3a35251b66d31ba16f089ede"
+}
