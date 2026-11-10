@@ -43,9 +43,9 @@ locales:
       voice_name: "Kore"
       language_instruction: "Write in clear, natural spoken English prose without Markdown formatting, bullet points, or code fences."
     site:
-      title: "SoftCloud — Systems Documentation and Laboratories"
+      title: "SoftCloud — Executable Handbook"
       short_title: "SoftCloud Hub"
-      description: "Project documentation, architecture notes, and laboratory resources for SoftCloud systems."
+      description: "Reproducible engineering guides, executable notebooks, and UI patterns with source-backed documentation."
       toc_titles:
         "Executable Handbook": "Executable Handbook"
         "Systems & Laboratories": "Systems & Laboratories"
@@ -109,9 +109,9 @@ locales:
       voice_name: "Kore"
       language_instruction: "Write in clear, natural spoken Polish (język polski) prose without Markdown formatting, bullet points, or code fences."
     site:
-      title: "SoftCloud — Dokumentacja systemowa i laboratoria"
+      title: "SoftCloud — Podręcznik wykonywalny"
       short_title: "SoftCloud Hub"
-      description: "Dokumentacja projektowa, notatki architektoniczne i zasoby laboratoryjne dla systemów SoftCloud."
+      description: "Powtarzalne poradniki inżynierskie, wykonywalne notatniki i wzorce UI powiązane ze źródłami."
       toc_titles:
         "Executable Handbook": "Podręcznik wykonywalny"
         "Systems & Laboratories": "Systemy i laboratoria"
@@ -175,9 +175,9 @@ locales:
       voice_name: "Kore"
       language_instruction: "Write in clear, natural spoken German (Deutsch) prose without Markdown formatting, bullet points, or code fences."
     site:
-      title: "SoftCloud — Systemdokumentation und Labore"
+      title: "SoftCloud — Ausführbares Handbuch"
       short_title: "SoftCloud Hub"
-      description: "Projektdokumentation, Architekturnotizen und Laborressourcen für SoftCloud-Systeme."
+      description: "Reproduzierbare technische Anleitungen, ausführbare Notebooks und UI-Muster mit überprüfbaren Quellen."
       toc_titles:
         "Executable Handbook": "Ausführbares Handbuch"
         "Systems & Laboratories": "Systeme und Labore"
@@ -241,9 +241,9 @@ locales:
       voice_name: "Kore"
       language_instruction: "Write in clear, natural spoken Spanish (español) prose without Markdown formatting, bullet points, or code fences."
     site:
-      title: "SoftCloud — Documentación de sistemas y laboratorios"
+      title: "SoftCloud — Manual ejecutable"
       short_title: "SoftCloud Hub"
-      description: "Documentación de proyectos, notas de arquitectura y recursos de laboratorio para sistemas SoftCloud."
+      description: "Guías reproducibles, cuadernos ejecutables y patrones de interfaz con documentación vinculada a sus fuentes."
       toc_titles:
         "Executable Handbook": "Manual ejecutable"
         "Systems & Laboratories": "Sistemas y laboratorios"
@@ -307,9 +307,9 @@ locales:
       voice_name: "Kore"
       language_instruction: "Write in clear, natural spoken French (français) prose without Markdown formatting, bullet points, or code fences."
     site:
-      title: "SoftCloud — Documentation système et laboratoires"
+      title: "SoftCloud — Manuel exécutable"
       short_title: "SoftCloud Hub"
-      description: "Documentation de projet, notes d'architecture et ressources de laboratoire pour les systèmes SoftCloud."
+      description: "Guides d'ingénierie reproductibles, notebooks exécutables et modèles d'interface reliés à leurs sources."
       toc_titles:
         "Executable Handbook": "Manuel exécutable"
         "Systems & Laboratories": "Systèmes et laboratoires"

@@ -1,10 +1,10 @@
 version: 1
 project:
   id: hub
-  title: SoftCloud — Systems Documentation and Laboratories
+  title: SoftCloud — Executable Handbook
   short_title: SoftCloud Hub
   description: >-
-    Project documentation, architecture notes, and laboratory resources for SoftCloud systems.
+    Reproducible engineering guides, executable notebooks, interface patterns, and independent systems laboratories.
   github: https://github.com/soft-cloud-dev/soft-cloud-dev
   keywords:
     - SoftCloud
