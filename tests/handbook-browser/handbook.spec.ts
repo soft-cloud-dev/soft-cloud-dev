@@ -24,7 +24,7 @@ for (const locale of locales) {
     await expect(heroHeading).toBeVisible();
     const normalizedHeading = (await heroHeading.innerText())
       .replace(/[\u2018\u2019]/g, "'").replace(/\s+/g, ' ').trim();
-    expect(normalizedHeading).toBe(locale.headline);
+    expect(normalizedHeading).toBe(locale.headline.replace(/[\u2018\u2019]/g, "'"));
     await expect(root.locator('.sc-handbook__route')).toHaveCount(3);
     await expect(root.getByRole('link', { name: locale.cta })).toHaveAttribute('href', locale.prefix + '/guides');
     const nav = page.locator('nav.myst-top-nav-bar');
