@@ -20,6 +20,7 @@ import sys
 import os
 import re
 import json
+from pathlib import Path
 
 VALID_SOURCEMAP_CONTENT = json.dumps({
     "version": 3,
@@ -154,6 +155,13 @@ def patch_myst_hydration_and_lang(js_code: str) -> tuple[str, int]:
         js_code = js_code.replace(theme_target, theme_repl)
         count += 1
 
+    js_code, wa_count = patch_myst_webawesome_hydration(js_code)
+    return js_code, count + wa_count
+
+
+def patch_myst_webawesome_hydration(js_code: str) -> tuple[str, int]:
+    """Align React's placeholder expectations with the server-rendered Web Awesome hosts."""
+    count = 0
     dc_target = 'function Dc(l,t){return l==="textarea"||l==="noscript"||(t&&t.id==="softcloud-lang-switcher-root")'
     dc_target_orig = 'function Dc(l,t){return l==="textarea"||l==="noscript"'
     dc_repl = (
@@ -178,6 +186,23 @@ def patch_myst_hydration_and_lang(js_code: str) -> tuple[str, int]:
         count += 1
 
     return js_code, count
+
+
+def process_webawesome_hydration(html_dir: str) -> bool:
+    """Apply the production component hydration rules without localized layout changes."""
+    root = Path(html_dir)
+    if not root.is_dir():
+        print(f"Missing built fixture directory: {html_dir}", file=sys.stderr)
+        return False
+    patched = 0
+    for bundle in sorted(root.rglob("*.js")):
+        original = bundle.read_text(encoding="utf-8")
+        updated, count = patch_myst_webawesome_hydration(original)
+        if count:
+            bundle.write_text(updated, encoding="utf-8")
+            patched += 1
+    print(f"[OK] Applied production Web Awesome hydration rules to {patched} fixture bundle(s)")
+    return True
 
 
 def patch_myst_storage_resilience(js_code: str) -> tuple[str, int]:
@@ -366,5 +391,9 @@ if __name__ == "__main__":
         print("Usage: fix_thebe.py <html_output_directory>")
         print("Example: fix_thebe.py _build/html")
         sys.exit(1)
-    success = process_thebe(sys.argv[1])
+    success = (
+        process_webawesome_hydration(sys.argv[1])
+        if "--webawesome-only" in sys.argv[2:]
+        else process_thebe(sys.argv[1])
+    )
     sys.exit(0 if success else 1)
