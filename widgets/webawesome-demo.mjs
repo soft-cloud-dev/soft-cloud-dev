@@ -221,7 +221,7 @@ export default {
     style.textContent = [
       '.sc-wa-showcase { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;',
       'padding: 1.25rem; border: 1px solid var(--wa-color-neutral-30,#adb4bf);',
-      'border-radius: 0.6rem; background: var(--wa-color-surface-default,transparent); min-height: 75px; }',
+      'border-radius: 0.6rem; background: var(--wa-color-surface-default,transparent); min-height: 75px; margin-bottom: 1.25rem; }',
       '.sc-wa-showcase > wa-accordion, .sc-wa-showcase > wa-card,',
       '.sc-wa-showcase > wa-carousel, .sc-wa-showcase > wa-split-panel,',
       '.sc-wa-showcase > wa-tab-group, .sc-wa-showcase > wa-tree { width:100%; max-width:100%; }',
@@ -247,7 +247,6 @@ export default {
     frame.className = 'sc-wa-showcase';
     frame.setAttribute('role', 'group');
     frame.setAttribute('aria-label', 'Live component preview');
-    el.style.paddingBlockEnd = '1.25rem';
     el.append(style, message, frame);
     try {
       const names = componentNames(nodes);
