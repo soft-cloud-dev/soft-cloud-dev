@@ -48,6 +48,13 @@ assert sys.version_info[:3] == (3, 12, 14)
 
 ::::::
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "readme",
+  "locale": "de"
+}
+```
+
 ## Einen Einstieg wählen
 
 ::::::{div}

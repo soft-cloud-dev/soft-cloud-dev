@@ -1,5 +1,12 @@
 # Architektura i referencja memorandum
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "architecture",
+  "locale": "pl"
+}
+```
+
 Specyfikacje potoku obliczeniowego Software Cloud, szkieletu repozytorium oraz środowiska budowania.
 
 ---

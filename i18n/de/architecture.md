@@ -1,5 +1,12 @@
 # Architektur & Memorandumsreferenz
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "architecture",
+  "locale": "de"
+}
+```
+
 Spezifikationen der Berechnungs-Pipeline, des Repository-Gerüsts und der Build-Umgebung von Software Cloud.
 
 ---

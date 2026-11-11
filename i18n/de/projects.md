@@ -5,6 +5,13 @@ description: Eigenständige SoftCloud-Entwicklungslabore entdecken.
 
 # Systeme und Labore
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "projects",
+  "locale": "de"
+}
+```
+
 Das Handbuch dient als Einstieg. Jedes Labor verantwortet seine Architektur, seinen Betriebsstatus und geprüfte Veröffentlichungen.
 
 ## Node Linux

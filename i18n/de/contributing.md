@@ -5,6 +5,13 @@ description: "Publikationsvorgänge, Einrichtung der Umgebung, Validierung und �
 
 # Leitfaden für Mitwirkende
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "contributing",
+  "locale": "de"
+}
+```
+
 Dieser Leitfaden regelt den Workflow für Mitwirkende und die Publikationsabläufe. Architektonische Garantien verbleiben in [Architecture & Specification](architecture.md); Web-Awesome-Seitenkonventionen verbleiben im [component authoring guide](components/authoring-guide.md).
 ## Toolchain und Quelle der Wahrheit
 

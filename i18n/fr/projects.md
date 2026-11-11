@@ -5,6 +5,13 @@ description: Découvrez les laboratoires d'ingénierie indépendants de SoftClou
 
 # Systèmes et laboratoires
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "projects",
+  "locale": "fr"
+}
+```
+
 Le manuel sert de portail de découverte. Chaque laboratoire est responsable de son architecture, de son état opérationnel et de ses publications vérifiées.
 
 ## Node Linux
