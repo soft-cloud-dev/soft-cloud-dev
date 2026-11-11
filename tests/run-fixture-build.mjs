@@ -23,6 +23,14 @@ execSync(`"${resolve(venvBin, 'jupyter-book')}" build --html`, {
   stdio: 'inherit',
 });
 
+// Use the same custom-element hydration contract as production. Localized layout
+// patches are excluded because this fixture has no language-switcher markup.
+execSync(`"${resolve(venvBin, 'python')}" "${resolve(rootDir, 'tools/fix_thebe.py')}" "${fixtureBuildDir}" --webawesome-only`, {
+  cwd: rootDir,
+  env,
+  stdio: 'inherit',
+});
+
 // Ensure fixture assets (such as logo.svg) are in place
 const fixtureImagesDir = resolve(fixtureBuildDir, 'images');
 mkdirSync(fixtureImagesDir, { recursive: true });

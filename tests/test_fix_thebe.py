@@ -23,6 +23,37 @@ class TestFixThebeStorageResilience(unittest.TestCase):
         self.tmp_dir = Path(tempfile.mkdtemp(prefix="test_fix_thebe_"))
         self.addCleanup(lambda: shutil.rmtree(self.tmp_dir, ignore_errors=True))
 
+    def test_fixture_component_hydration_matches_hosts_without_changing_layout(self) -> None:
+        bundle = self.tmp_dir / "runtime.js"
+        code = (
+            'const layout={lang:"en"};'
+            'function Dc(l,t){return l==="textarea"||l==="noscript"||typeof t.children==="string"}'
+            'function matches(l,t,n){let a=false;for(let i=0;i<1;i++){'
+            'if(l.nodeName.toLowerCase()!==t.toLowerCase()){if(!a&&(l.nodeName!=="INPUT"||l.type!=="hidden"))break}'
+            'return true}return false}'
+        )
+        bundle.write_text(code, encoding="utf-8")
+        html = self.tmp_dir / "index.html"
+        html.write_text('<html lang="en"><body>Fixture</body></html>', encoding="utf-8")
+        css = self.tmp_dir / "style.css"
+        css.write_text('body{color:red}', encoding="utf-8")
+        command = [sys.executable, str(TOOLS_DIR / "fix_thebe.py"), str(self.tmp_dir), "--webawesome-only"]
+        subprocess.run(command, check=True, capture_output=True, text=True)
+        patched = bundle.read_text(encoding="utf-8")
+        behavior = patched + (
+            ';if(layout.lang!=="en")throw Error("layout changed");'
+            'if(!Dc("div",{className:"sc-wa-host"}))throw Error("placeholder children mismatch");'
+            'if(Dc("div",{}))throw Error("ordinary children accepted");'
+            'if(!matches({nodeName:"WA-CARD"},"div",{className:"sc-wa-host"}))throw Error("component host mismatch");'
+            'if(matches({nodeName:"WA-CARD"},"div",{}))throw Error("unrelated tag accepted");'
+        )
+        result = subprocess.run(["node", "-e", behavior], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(html.read_text(encoding="utf-8"), '<html lang="en"><body>Fixture</body></html>')
+        self.assertEqual(css.read_text(encoding="utf-8"), 'body{color:red}')
+        subprocess.run(command, check=True, capture_output=True, text=True)
+        self.assertEqual(bundle.read_text(encoding="utf-8"), patched)
+
     def test_theme_hook_and_prepaint_script_are_guarded_and_idempotent(self) -> None:
         sample_js = (
             'function gD({ssrTheme:t,useLocalStorage:e}){let[r,n]=ac.default.useState(()=>{'

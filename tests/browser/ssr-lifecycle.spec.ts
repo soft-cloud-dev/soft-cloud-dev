@@ -1,6 +1,55 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('SSR Lifecycle & Dynamic Transform Boundary (WA-007, WA-008)', () => {
+  test('nested dynamic components retain slots and interactions after repeated transforms', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', error => errors.push(error.message));
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.waitForFunction(() => ['wa-card', 'wa-callout', 'wa-button'].every(tag => customElements.get(tag)));
+    expect(errors, 'initial fixture hydration').toEqual([]);
+    await page.evaluate(() => {
+      const placeholder = (component: string, options: Record<string, unknown> = {}) => {
+        const host = document.createElement('div');
+        host.className = 'sc-wa-host';
+        const meta = document.createElement('span');
+        meta.className = 'sc-wa-meta';
+        meta.textContent = JSON.stringify({ component, ...options });
+        host.append(meta);
+        return host;
+      };
+      const container = document.createElement('div');
+      container.id = 'nested-dynamic-test';
+      const card = placeholder('wa-card', { header: 'Nested card', footer: 'Stable footer' });
+      const callout = placeholder('wa-callout', { title: 'Nested callout', icon: 'circle-info' });
+      const button = placeholder('wa-button', { variant: 'brand' });
+      const label = document.createElement('span');
+      label.textContent = 'Run nested action';
+      label.addEventListener('click', () => { container.dataset.clicked = 'true'; });
+      button.append(label);
+      callout.append(button);
+      card.append(callout);
+      container.append(card);
+      document.body.append(container);
+      window.SoftCloudTheme.transformHosts(container);
+      window.SoftCloudTheme.transformHosts(container);
+    });
+    const container = page.locator('#nested-dynamic-test');
+    await expect(container.locator('.sc-wa-host')).toHaveCount(0);
+    await expect(container.locator('wa-card wa-callout wa-button')).toHaveCount(1);
+    await expect(container.locator('wa-card > [slot="header"]')).toHaveText('Nested card');
+    await expect(container.locator('wa-card > [slot="footer"]')).toHaveText('Stable footer');
+    await expect(container.locator('wa-callout > wa-icon[slot="icon"]')).toHaveCount(1);
+    await expect(container.locator('[did-ssr]')).toHaveCount(0);
+    await container.getByRole('button', { name: 'Run nested action' }).click();
+    await expect(container).toHaveAttribute('data-clicked', 'true');
+    for (const theme of ['dark', 'light'] as const) {
+      await page.evaluate(mode => window.SoftCloudTheme.setTheme(mode), theme);
+      await expect(page.locator('html')).toHaveClass(new RegExp(`wa-${theme}`));
+      await expect(container.getByRole('button', { name: 'Run nested action' })).toBeVisible();
+    }
+    expect(errors).toEqual([]);
+  });
+
   test('server-rendered components include valid DSD templates and did-ssr in initial response', async ({
     page,
   }) => {

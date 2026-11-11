@@ -32,6 +32,10 @@ from i18n_utils import (
     load_yaml_file,
     page_slug_from_rel_path,
 )
+from build_locales import (
+    authoritative_github_urls,
+    extract_explicit_frontmatter_slug,
+)
 from translate_sources import (
     build_translation_prompt,
     check_locale_provenance,
@@ -168,6 +172,7 @@ def verify_built_html_artifact(root: Path, build_dir: Path) -> list[str]:
     default_locale = str(locales_cfg.get("default_locale", "en"))
     domain = str(locales_cfg.get("canonical_domain", "https://my.softcloud.dev")).rstrip("/")
     enabled_locales = get_enabled_locales(locales_cfg)
+    base_myst = load_yaml_file(root / "myst.yml")
     docs = discover_source_documents(root)
 
     # 1. Verify route-manifest.json
@@ -252,6 +257,22 @@ def verify_built_html_artifact(root: Path, build_dir: Path) -> list[str]:
                 continue
 
             html_text = found_html.read_text(encoding="utf-8")
+            if "/_build/locales/" in html_text:
+                errors.append(
+                    f"[{code}] Leaked staged workspace path '/_build/locales/' in {found_html.relative_to(build_dir)}"
+                )
+
+            src_doc_path = (root / rel_doc) if code == default_locale else (root / "i18n" / code / rel_doc)
+            src_doc_text = src_doc_path.read_text(encoding="utf-8") if src_doc_path.is_file() else ""
+            has_custom_edit_url = bool(re.search(r"^\s*edit_url\s*:", src_doc_text, re.MULTILINE))
+            expected_edit_url, _ = authoritative_github_urls(
+                base_myst, code, default_locale, info, rel_doc
+            )
+            if not has_custom_edit_url and expected_edit_url not in html_text:
+                errors.append(
+                    f"[{code}] Missing authoritative Edit This Page URL ({expected_edit_url}) in {found_html.relative_to(build_dir)}"
+                )
+
             # Verify <html ... lang="<html_lang>">
             html_tag_match = re.search(r"<html\b([^>]*)>", html_text, flags=re.IGNORECASE)
             if not html_tag_match or f'lang="{html_lang}"' not in html_tag_match.group(1):
@@ -336,6 +357,39 @@ def verify_built_html_artifact(root: Path, build_dir: Path) -> list[str]:
                     errors.append(
                         f"[{code}] Malformed JSON in #softcloud-i18n-manifest in {found_html.relative_to(build_dir)}: {exc}"
                     )
+
+        explicit_slug = extract_explicit_frontmatter_slug(root / rel_doc)
+        if explicit_slug and explicit_slug != active_slug:
+            explicit_html = build_dir / explicit_slug / "index.html"
+            explicit_canonical = canonical_url_for_page(domain, "", explicit_slug)
+            expected_sitemap_locs.add(explicit_canonical)
+            if not explicit_html.is_file():
+                errors.append(
+                    f"[en] Missing explicit frontmatter slug route '{explicit_slug}/index.html' for '{rel_doc}'"
+                )
+            else:
+                exp_text = explicit_html.read_text(encoding="utf-8")
+                if "/_build/locales/" in exp_text:
+                    errors.append(
+                        f"[en] Leaked staged workspace path '/_build/locales/' in {explicit_html.relative_to(build_dir)}"
+                    )
+                exp_can_pattern = rf'<link\b[^>]*rel=["\']canonical["\'][^>]*href=["\']{re.escape(explicit_canonical)}["\']'
+                if not re.search(exp_can_pattern, exp_text, flags=re.IGNORECASE):
+                    errors.append(
+                        f"[en] Missing self-referencing canonical ({explicit_canonical}) in {explicit_html.relative_to(build_dir)}"
+                    )
+
+    for json_file in sorted(build_dir.rglob("*.json")):
+        if "_locales" in json_file.parts:
+            continue
+        try:
+            j_text = json_file.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        if "/_build/locales/" in j_text:
+            errors.append(
+                f"Leaked staged workspace path '/_build/locales/' in JSON artifact {json_file.relative_to(build_dir)}"
+            )
 
     # 4. Verify unified root sitemap.xml and absence of duplicate per-locale sitemaps
     sitemap_path = build_dir / "sitemap.xml"
