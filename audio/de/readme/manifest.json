@@ -25,7 +25,7 @@
   "config_hash": "8e764f1bbc93d18905309a7c8547a196154843383e971c32ef0e0c41b1241f8b",
   "locale": "de",
   "logical_source_path": "README.md",
-  "manifest_sha256": "85a9f399a4d6b7705fcc24badfe6b78105af8aaada9f932503a06204d603e212",
+  "manifest_sha256": "16746c20e049a8235da4334ab29d6f5d2837e0b0ef9ad1c475e648da8d773c5b",
   "narration_config": {
     "audio_format": "mp3",
     "locale": "de",
@@ -42,11 +42,11 @@
   "page_id": "readme",
   "page_source_hash": "ad3393eff913a7f502a865a2869746cc8e5fefaccbe11e35e9fe45e62d234a94",
   "schema_version": "1.0.0",
-  "source_file_sha256": "352cd0a92a4d03d002def85aa04a96ae6dff8d76dc60affc15fb78ea761a8d21",
+  "source_file_sha256": "94a911e85854d6702f87715e214e33efa56f0f3652a9492710ec778d0982a440",
   "source_path": "i18n/de/README.md",
   "status": "complete",
   "total_chunks": 1,
   "total_duration_seconds": 134.496,
   "transcript_file": "transcript.json",
-  "transcript_sha256": "76a1bbf74abca37aee6aa9fc10c1c77fab2a6c4ddc323c19f7facf2fd669f785"
+  "transcript_sha256": "32dd34bc832582a8c14511460b348695adef6dc778d5b73b38b1482eb2646dda"
 }
