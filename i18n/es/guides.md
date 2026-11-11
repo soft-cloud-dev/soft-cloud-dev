@@ -5,6 +5,13 @@ description: Procedimientos prácticos de autoría y publicación.
 
 # Guías
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "guides",
+  "locale": "es"
+}
+```
+
 Publica páginas vinculadas a sus fuentes mediante el proceso gobernado de MyST.
 
 ## Publica tu primera página

@@ -5,6 +5,13 @@ description: "Opérations de publication, configuration de l'environnement, vali
 
 # Guide des contributeurs
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "contributing",
+  "locale": "fr"
+}
+```
+
 Ce guide régit le flux de travail des contributeurs et les opérations de publication. Les garanties architecturales restent dans [Architecture & Specification](architecture.md) ; les conventions des pages Web Awesome restent dans le [component authoring guide](components/authoring-guide.md).
 ## Chaîne d'outils et source de vérité
 

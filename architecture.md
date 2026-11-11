@@ -1,5 +1,11 @@
 # Architecture & Memorandum Reference
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "architecture"
+}
+```
+
 Software Cloud computational pipeline, repository scaffold, and build environment specifications.
 
 ---

@@ -5,6 +5,12 @@ description: Verified computational and UI-integration notebooks.
 
 # Computational Notebooks
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "notebooks"
+}
+```
+
 Notebooks are build-time verification artifacts. The browser does not execute Python in the static handbook.
 
 ## Execution and evidence

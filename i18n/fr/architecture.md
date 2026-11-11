@@ -1,5 +1,12 @@
 # Architecture et référence du mémorandum
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "architecture",
+  "locale": "fr"
+}
+```
+
 Spécifications du pipeline informatique, de l'échafaudage du dépôt et de l'environnement de compilation de Software Cloud.
 
 ---
