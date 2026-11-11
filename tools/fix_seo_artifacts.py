@@ -36,6 +36,7 @@ from i18n_utils import (
     get_enabled_locales,
     load_locales_config,
 )
+from build_locales import rewrite_staged_source_urls_in_dir, rewrite_staged_source_urls_in_text
 
 
 def _infer_locale_and_slug(
@@ -251,10 +252,13 @@ def process_site(domain: str, html_dir: str) -> None:
 
         raw_html = path.read_text(encoding="utf-8")
         raw_html = re.sub(r"https?://localhost:3000/?", f"{domain}/", raw_html)
+        raw_html = rewrite_staged_source_urls_in_text(raw_html, locales_cfg)
         updated_html = _update_html_seo_head(raw_html, html_lang, self_canonical, alternates)
         updated_html = fix_html_accessibility(updated_html, loc_code, loc_info.get("ui"))
         atomic_write_text(path, updated_html)
         updated_pages += 1
+
+    rewrite_staged_source_urls_in_dir(html_root, locales_cfg)
 
     print(
         f"[OK] Updated <html lang>, canonical, hreflang, and button accessibility in {updated_pages} HTML pages"

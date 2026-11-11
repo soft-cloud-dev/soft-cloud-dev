@@ -55,6 +55,199 @@ from i18n_utils import (
 from generate_audio import page_id_from_path
 
 
+FRONTMATTER_BLOCK_RE = re.compile(r"\A---\r?\n(.*?)\r?\n---(?:\r?\n|\Z)", re.DOTALL)
+STAGED_WORKSPACE_GITHUB_URL_RE = re.compile(
+    r"(https://github\.com/[^/\"'\s>]+/[^/\"'\s>]+/(?:edit|blob)/[^/\"'\s>]+)/_build/locales/([a-zA-Z0-9_-]+)/workspace/([^\s\"'<>]+)"
+)
+
+
+def authoritative_repo_rel_path(
+    locale_code: str,
+    default_locale: str,
+    locale_info: dict[str, Any],
+    rel_file: str,
+) -> str:
+    """Return the authoritative repository-relative source path for a TOC entry."""
+    clean_rel = rel_file.lstrip("./")
+    if locale_code == default_locale:
+        return clean_rel
+    source_dir = str(locale_info.get("source_dir", f"i18n/{locale_code}")).strip("/")
+    return f"{source_dir}/{clean_rel}" if source_dir else clean_rel
+
+
+def authoritative_github_urls(
+    base_myst: dict[str, Any],
+    locale_code: str,
+    default_locale: str,
+    locale_info: dict[str, Any],
+    rel_file: str,
+    branch: str = "main",
+) -> tuple[str, str]:
+    """Return (edit_url, source_url) pointing to the real repository source file instead of _build/locales."""
+    github_base = str(
+        base_myst.get("project", {}).get("github", "https://github.com/soft-cloud-dev/soft-cloud-dev")
+    ).rstrip("/")
+    if not github_base.startswith(("http://", "https://")):
+        github_base = f"https://github.com/{github_base.lstrip('/')}"
+    repo_rel = authoritative_repo_rel_path(locale_code, default_locale, locale_info, rel_file)
+    return f"{github_base}/edit/{branch}/{repo_rel}", f"{github_base}/blob/{branch}/{repo_rel}"
+
+
+def inject_authoritative_repo_urls(
+    text_content: str,
+    rel_file: str,
+    edit_url: str,
+    source_url: str,
+) -> str:
+    """Inject authoritative edit_url and source_url into staged Markdown frontmatter or Notebook metadata."""
+    if rel_file.endswith(".ipynb"):
+        try:
+            nb_obj = json.loads(text_content)
+            if isinstance(nb_obj, dict):
+                meta = nb_obj.setdefault("metadata", {})
+                if isinstance(meta, dict):
+                    if not meta.get("edit_url") or "/_build/locales/" in str(meta.get("edit_url")):
+                        meta["edit_url"] = edit_url
+                    if not meta.get("source_url") or "/_build/locales/" in str(meta.get("source_url")):
+                        meta["source_url"] = source_url
+                return json.dumps(nb_obj, ensure_ascii=False, indent=2) + "\n"
+        except Exception:
+            return text_content
+
+    match = FRONTMATTER_BLOCK_RE.match(text_content)
+    if match:
+        fm_body = match.group(1)
+        remainder = text_content[match.end() :]
+        additions: list[str] = []
+        if not re.search(r"^\s*edit_url\s*:", fm_body, re.MULTILINE):
+            additions.append(f"edit_url: {edit_url}")
+        if not re.search(r"^\s*source_url\s*:", fm_body, re.MULTILINE):
+            additions.append(f"source_url: {source_url}")
+        if not additions:
+            return text_content
+        updated_fm = fm_body.rstrip() + "\n" + "\n".join(additions)
+        return f"---\n{updated_fm}\n---\n{remainder}"
+
+    return f"---\nedit_url: {edit_url}\nsource_url: {source_url}\n---\n\n{text_content}"
+
+
+def extract_explicit_frontmatter_slug(md_path: Path) -> str | None:
+    """Extract an explicit `slug:` declaration from a Markdown file's YAML frontmatter, if present."""
+    if not md_path.is_file() or md_path.suffix.lower() != ".md":
+        return None
+    try:
+        text = md_path.read_text(encoding="utf-8")
+    except Exception:
+        return None
+    match = FRONTMATTER_BLOCK_RE.match(text)
+    if not match:
+        return None
+    slug_match = re.search(
+        r"^\s*slug\s*:\s*['\"]?([a-zA-Z0-9_/-]+)['\"]?\s*$",
+        match.group(1),
+        re.MULTILINE,
+    )
+    if not slug_match:
+        return None
+    slug_val = slug_match.group(1).strip("/")
+    return slug_val or None
+
+
+def rewrite_staged_source_urls_in_text(text: str, locales_cfg: dict[str, Any]) -> str:
+    """Rewrite any leaked _build/locales/<locale>/workspace/<path> GitHub URLs back to authoritative repo paths."""
+    if "/_build/locales/" not in text:
+        return text
+    default_locale = str(locales_cfg.get("default_locale", "en"))
+    enabled_locales = get_enabled_locales(locales_cfg)
+
+    def _replace(match: re.Match[str]) -> str:
+        prefix_url, loc_code, rel_path = match.group(1), match.group(2), match.group(3)
+        loc_info = enabled_locales.get(loc_code, {})
+        repo_rel = authoritative_repo_rel_path(loc_code, default_locale, loc_info, rel_path)
+        return f"{prefix_url}/{repo_rel}"
+
+    return STAGED_WORKSPACE_GITHUB_URL_RE.sub(_replace, text)
+
+
+def rewrite_staged_source_urls_in_dir(html_dir: Path, locales_cfg: dict[str, Any]) -> int:
+    """Sanitize any leaked _build/locales/<locale>/workspace/ URLs across built .html and .json files."""
+    rewritten_files = 0
+    for pattern in ("*.html", "*.json"):
+        for file_path in sorted(html_dir.rglob(pattern)):
+            if "_locales" in file_path.parts:
+                continue
+            try:
+                raw = file_path.read_text(encoding="utf-8")
+            except Exception:
+                continue
+            updated = rewrite_staged_source_urls_in_text(raw, locales_cfg)
+            if updated != raw:
+                atomic_write_text(file_path, updated)
+                rewritten_files += 1
+    return rewritten_files
+
+
+def materialize_explicit_slug_routes(
+    root: Path,
+    base_myst: dict[str, Any],
+    output_html_dir: Path,
+    outer_base_url: str = "",
+) -> list[str]:
+    """Materialize built HTML and JSON routes for TOC pages that declare an explicit frontmatter `slug:`
+    when MyST disambiguated their filename-based slug (e.g., components/index.md -> index-1 vs components)."""
+    clean_base = outer_base_url.rstrip("/")
+    toc_files = discover_toc_files(base_myst.get("project", {}).get("toc", []))
+    materialized: list[str] = []
+
+    for rel_file in toc_files:
+        explicit_slug = extract_explicit_frontmatter_slug(root / rel_file)
+        if not explicit_slug:
+            continue
+        raw_slug = page_slug_from_rel_path(rel_file)
+        flat_name = Path(raw_slug).name if raw_slug else ""
+        flat_slug = "index-1" if flat_name.lower() in ("index", "readme") else flat_name
+
+        dst_html = output_html_dir / explicit_slug / "index.html"
+        if dst_html.is_file():
+            continue
+
+        src_html: Path | None = None
+        src_slug: str | None = None
+        for candidate_slug in (flat_slug, raw_slug):
+            if not candidate_slug:
+                continue
+            candidate_html = output_html_dir / candidate_slug / "index.html"
+            if candidate_html.is_file():
+                src_html = candidate_html
+                src_slug = candidate_slug
+                break
+
+        if src_html is None or not src_slug:
+            continue
+
+        html_text = src_html.read_text(encoding="utf-8")
+        src_route = f"{clean_base}/{src_slug}"
+        dst_route = f"{clean_base}/{explicit_slug}"
+        html_text = html_text.replace(f'"url":"{src_route}"', f'"url":"{dst_route}"')
+        html_text = html_text.replace(f'href="{src_route}"', f'href="{dst_route}"')
+        html_text = html_text.replace(f'"slug":"{src_slug}"', f'"slug":"{explicit_slug}"')
+        html_text = html_text.replace(f'data-route="{src_route}"', f'data-route="{dst_route}"')
+        html_text = html_text.replace(f'data-page-slug="{src_slug}"', f'data-page-slug="{explicit_slug}"')
+        dst_html.parent.mkdir(parents=True, exist_ok=True)
+        atomic_write_text(dst_html, html_text)
+
+        src_json = output_html_dir / f"{src_slug}.json"
+        dst_json = output_html_dir / f"{explicit_slug}.json"
+        if src_json.is_file() and not dst_json.is_file():
+            json_text = src_json.read_text(encoding="utf-8")
+            json_text = json_text.replace(f'"slug":"{src_slug}"', f'"slug":"{explicit_slug}"')
+            atomic_write_text(dst_json, json_text)
+
+        materialized.append(explicit_slug)
+
+    return materialized
+
+
 def strip_voice_player_widget(text: str) -> str:
     """Strip MyST {anywidget} blocks referencing voice-player.mjs so un-narrated pages render no audio controls."""
     pattern = re.compile(
@@ -282,6 +475,12 @@ def stage_locale_workspace(
         text_content = src_path.read_text(encoding="utf-8")
         if not is_page_narration_current(root, locale_code, default_locale, rel_file):
             text_content = strip_voice_player_widget(text_content)
+        edit_url, source_url = authoritative_github_urls(
+            base_myst, locale_code, default_locale, locale_info, rel_file
+        )
+        text_content = inject_authoritative_repo_urls(
+            text_content, rel_file, edit_url, source_url
+        )
         atomic_write_text(dst_path, text_content)
         staged_files.add(rel_file)
 
@@ -335,6 +534,7 @@ def generate_mock_html_for_workspace(
     locale_info: dict[str, Any],
     base_myst: dict[str, Any],
     locale_base_url: str,
+    default_locale: str = "en",
 ) -> Path:
     """Generate deterministic static HTML files in ws/_build/html for testing when jupyter CLI is absent."""
     html_out = ws / "_build" / "html"
@@ -352,6 +552,8 @@ def generate_mock_html_for_workspace(
     for rel_file in toc_files:
         slug = page_slug_from_rel_path(rel_file)
         src_path = ws / rel_file
+        if not src_path.is_file():
+            continue
         raw = src_path.read_text(encoding="utf-8")
         if src_path.suffix == ".ipynb":
             try:
@@ -367,6 +569,9 @@ def generate_mock_html_for_workspace(
             md_text = raw
         title_match = re.search(r"^#\s+(.+)$", md_text, re.MULTILINE)
         page_title = title_match.group(1).strip() if title_match else (slug or site_title)
+        edit_url, _ = authoritative_github_urls(
+            base_myst, locale_code, default_locale, locale_info, rel_file
+        )
 
         out_file = (html_out / "index.html") if not slug else (html_out / slug / "index.html")
         out_file.parent.mkdir(parents=True, exist_ok=True)
@@ -397,6 +602,7 @@ def generate_mock_html_for_workspace(
   <main id="main-content">
     <article data-page-slug="{slug}">
       <h1>{page_title}</h1>
+      <a href="{edit_url}" title="Edit This Page" class="myst-fm-edit-link">Edit This Page</a>
     </article>
   </main>
 </body>
@@ -517,6 +723,26 @@ def build_route_manifest(
             aliases[slug_key] = canonical_key
         if flat_slug and flat_slug != canonical_key:
             aliases[flat_slug] = canonical_key
+
+        explicit_slug = extract_explicit_frontmatter_slug(root / rel_file)
+        if explicit_slug and explicit_slug != canonical_key:
+            explicit_translations: dict[str, Any] = {}
+            for code, info in enabled_locales.items():
+                prefix = str(info.get("prefix", ""))
+                is_avail = is_page_translation_current(root, code, default_locale, rel_file, prov_cache)
+                if is_avail:
+                    explicit_translations[code] = {
+                        "available": True,
+                        "route": route_url_for_page(prefix, explicit_slug, base_url=outer_base_url),
+                    }
+                else:
+                    explicit_translations[code] = {
+                        "available": False,
+                    }
+            pages_meta[explicit_slug] = {
+                "slug": explicit_slug,
+                "translations": explicit_translations,
+            }
 
     return {
         "schema_version": "1.0",
@@ -649,6 +875,18 @@ def assemble_combined_html(
     if (root / "CNAME").is_file():
         shutil.copy2(root / "CNAME", output_html_dir / "CNAME")
 
+    # 4.1 Materialize explicit frontmatter slug routes (e.g. components/index.md -> /components)
+    materialized_slugs = materialize_explicit_slug_routes(
+        root, base_myst, output_html_dir, outer_base_url=outer_base_url
+    )
+    if materialized_slugs:
+        print(f"[OK] Materialized explicit slug routes in {output_html_dir}: {materialized_slugs}")
+
+    # 4.2 Sanitize any leaked _build/locales/<locale>/workspace/ GitHub URLs in HTML and JSON artifacts
+    rewritten_urls = rewrite_staged_source_urls_in_dir(output_html_dir, locales_cfg)
+    if rewritten_urls:
+        print(f"[OK] Sanitized staged workspace GitHub URLs in {rewritten_urls} artifact files")
+
     # 5. Write _build/html/i18n/route-manifest.json
     route_manifest = build_route_manifest(
         root, locales_cfg, base_myst, outer_base_url=outer_base_url, output_html_dir=output_html_dir
@@ -739,6 +977,7 @@ def main(argv: list[str] | None = None) -> int:
                 locale_info=enabled_locales[code],
                 base_myst=base_myst,
                 locale_base_url=loc_base_url,
+                default_locale=default_locale,
             )
         else:
             html_out = run_jupyter_book_in_workspace(ws, code, loc_base_url)
