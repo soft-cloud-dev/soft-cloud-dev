@@ -1,4 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 const locales = [
   { code: 'en', prefix: '', headline: 'Engineering knowledge you can reproduce.', nav: ['Guides', 'Notebooks', 'UI Library', 'Projects'], cta: 'Start with a guide' },
@@ -147,7 +149,13 @@ test('introduction and architecture remain reachable in all five locales', async
   }
 });
 
-test('localized UI Library entry identifies the English-only catalog', async ({ page }) => {
+test('localized UI Library entry identifies the English-only catalog', async ({ page, baseURL }) => {
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
+  await page.route('https://my.softcloud.dev/components', route => route.fulfill({
+    status: 302, headers: { location: `${baseURL}/components/` },
+  }));
   const catalogResponse = await page.goto('/components/');
   expect(catalogResponse?.ok(), '/components/ route must return HTTP 200').toBeTruthy();
   await expect(page.locator('main h1').first()).toContainText('Web Awesome — Component Catalog');
@@ -167,7 +175,40 @@ test('localized UI Library entry identifies the English-only catalog', async ({ 
         ? 'https://github.com/soft-cloud-dev/soft-cloud-dev/edit/main/ui-library.md'
         : `https://github.com/soft-cloud-dev/soft-cloud-dev/edit/main/i18n/${locale.code}/ui-library.md`;
     await expect(page.locator('a[title="Edit This Page"]')).toHaveAttribute('href', expectedEditHref);
+    await cta.click();
+    await page.waitForLoadState('networkidle');
+    await expect(page).toHaveURL(`${baseURL}/components/`);
+    await expect(page.locator('main h1').first()).toContainText('Web Awesome — Component Catalog');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.locator('a[title="Edit This Page"]')).toHaveAttribute(
+      'href', 'https://github.com/soft-cloud-dev/soft-cloud-dev/edit/main/components/index.md',
+    );
+    await expect(page.locator('body')).not.toContainText('Unexpected Error Occurred');
   }
+  expect(errors).toEqual([]);
+});
+
+test('all published page payloads point to existing authoritative repository sources', async ({ request }) => {
+  const response = await request.get('/i18n/route-manifest.json');
+  expect(response.ok()).toBeTruthy();
+  const manifest = await response.json();
+  let checked = 0;
+  for (const page of Object.values(manifest.pages) as any[]) {
+    for (const locale of locales) {
+      const translation = page.translations[locale.code];
+      if (!translation?.available) continue;
+      const route = translation.route.replace(/\/$/, '');
+      const payloadResponse = await request.get((route || '') + (page.slug ? '.json' : '/index.json'));
+      expect(payloadResponse.ok(), `${locale.code} ${translation.route}`).toBeTruthy();
+      const payload = await payloadResponse.json();
+      const source = (locale.code === 'en' ? '' : `i18n/${locale.code}/`) + payload.location.replace(/^\//, '');
+      expect(existsSync(resolve(source)), `repository source ${source}`).toBeTruthy();
+      expect(payload.frontmatter.edit_url).toBe(`https://github.com/soft-cloud-dev/soft-cloud-dev/edit/main/${source}`);
+      expect(payload.frontmatter.source_url).toBe(`https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/${source}`);
+      checked++;
+    }
+  }
+  expect(checked).toBeGreaterThan(150);
 });
 
 test('localized homepages hydrate without crashing when browser storage throws SecurityError', async ({ page, baseURL }) => {
