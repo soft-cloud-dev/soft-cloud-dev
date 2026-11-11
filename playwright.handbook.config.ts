@@ -4,7 +4,7 @@ export default defineConfig({
   testDir: './tests/handbook-browser',
   timeout: 30_000,
   fullyParallel: false,
-  retries: 0,
+  retries: process.env.CI ? 2 : 0,
   workers: 1,
   use: {
     baseURL: 'http://127.0.0.1:4174',
@@ -18,7 +18,15 @@ export default defineConfig({
     timeout: 15_000,
   },
   projects: [
-    { name: 'handbook-chromium', use: { browserName: 'chromium' } },
+    {
+      name: 'handbook-chromium',
+      use: {
+        browserName: 'chromium',
+        launchOptions: {
+          args: ['--disable-dev-shm-usage'],
+        },
+      },
+    },
     { name: 'handbook-webkit', use: { browserName: 'webkit' } },
   ],
 });
