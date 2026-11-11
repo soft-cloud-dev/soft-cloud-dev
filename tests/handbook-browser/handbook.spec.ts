@@ -149,11 +149,15 @@ test('introduction and architecture remain reachable in all five locales', async
   }
 });
 
-test('localized UI Library entry identifies the English-only catalog', async ({ page, baseURL }) => {
+test('localized UI Library entry identifies the English-only catalog', async ({ page, baseURL, context }) => {
   const errors: string[] = [];
-  page.on('pageerror', error => errors.push(error.message));
-  page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
-  await page.route('https://my.softcloud.dev/components', route => route.fulfill({
+  const collectErrors = (target: Page) => {
+    target.on('pageerror', error => errors.push(error.message));
+    target.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
+  };
+  collectErrors(page);
+  context.on('page', collectErrors);
+  await context.route('https://my.softcloud.dev/components', route => route.fulfill({
     status: 302, headers: { location: `${baseURL}/components/` },
   }));
   const catalogResponse = await page.goto('/components/');
@@ -175,15 +179,16 @@ test('localized UI Library entry identifies the English-only catalog', async ({ 
         ? 'https://github.com/soft-cloud-dev/soft-cloud-dev/edit/main/ui-library.md'
         : `https://github.com/soft-cloud-dev/soft-cloud-dev/edit/main/i18n/${locale.code}/ui-library.md`;
     await expect(page.locator('a[title="Edit This Page"]')).toHaveAttribute('href', expectedEditHref);
-    await cta.click();
-    await page.waitForLoadState('networkidle');
-    await expect(page).toHaveURL(`${baseURL}/components/`);
-    await expect(page.locator('main h1').first()).toContainText('Web Awesome — Component Catalog');
-    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-    await expect(page.locator('a[title="Edit This Page"]')).toHaveAttribute(
+    const [catalog] = await Promise.all([page.waitForEvent('popup'), cta.click()]);
+    await catalog.waitForLoadState('networkidle');
+    await expect(catalog).toHaveURL(`${baseURL}/components/`);
+    await expect(catalog.locator('main h1').first()).toContainText('Web Awesome — Component Catalog');
+    await expect(catalog.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(catalog.locator('a[title="Edit This Page"]')).toHaveAttribute(
       'href', 'https://github.com/soft-cloud-dev/soft-cloud-dev/edit/main/components/index.md',
     );
-    await expect(page.locator('body')).not.toContainText('Unexpected Error Occurred');
+    await expect(catalog.locator('body')).not.toContainText('Unexpected Error Occurred');
+    await catalog.close();
   }
   expect(errors).toEqual([]);
 });
