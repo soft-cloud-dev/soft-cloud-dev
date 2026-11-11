@@ -531,12 +531,55 @@ class TransientTranslationError(RuntimeError):
     """Retries for a transient provider failure were exhausted."""
 
 
-def _post_json(url: str, payload: dict[str, Any], api_key: str, max_attempts: int = 4) -> dict[str, Any]:
+_ACTIVE_MODEL_FALLBACK: str | None = None
+_FALLBACK_CANDIDATES = (
+    "gemini-3.5-flash-lite",
+    "gemini-3-flash-preview",
+    "gemini-3.5-flash",
+    "gemini-3.8-flash",
+    "gemini-2.0-flash",
+    "gemini-1.5-flash",
+    "gemini-2.5-flash",
+)
+
+
+def _post_json(
+    url: str,
+    payload: dict[str, Any],
+    api_key: str,
+    max_attempts: int = 4,
+    _allow_fallback: bool = True,
+) -> dict[str, Any]:
     """POST with bounded retries; honours Retry-After; fails fast on non-retryable errors."""
     import time
 
+    global _ACTIVE_MODEL_FALLBACK
     if not api_key:
         raise FatalTranslationError("GEMINI_API_KEY is required to generate translations")
+    if _allow_fallback and _ACTIVE_MODEL_FALLBACK and f"models/{_ACTIVE_MODEL_FALLBACK}" not in url:
+        url = re.sub(r"models/[^:]+", f"models/{_ACTIVE_MODEL_FALLBACK}", url)
+
+    def _try_fallbacks() -> dict[str, Any] | None:
+        global _ACTIVE_MODEL_FALLBACK
+        if not _allow_fallback:
+            return None
+        for candidate in _FALLBACK_CANDIDATES:
+            if f"models/{candidate}" not in url:
+                fb_url = re.sub(r"models/[^:]+", f"models/{candidate}", url)
+                try:
+                    res = _post_json(
+                        fb_url,
+                        payload,
+                        api_key,
+                        max_attempts=2,
+                        _allow_fallback=False,
+                    )
+                    _ACTIVE_MODEL_FALLBACK = candidate
+                    return res
+                except (FatalTranslationError, TransientTranslationError):
+                    continue
+        return None
+
     delay = 2.0
     last: Exception | None = None
     for attempt in range(1, max_attempts + 1):
@@ -548,22 +591,13 @@ def _post_json(url: str, payload: dict[str, Any], api_key: str, max_attempts: in
         )
         wait = delay
         try:
-            with urllib.request.urlopen(req, timeout=60) as resp:
+            with urllib.request.urlopen(req, timeout=25) as resp:
                 return json.loads(resp.read().decode("utf-8"))
         except urllib.error.HTTPError as exc:
             if exc.code == 404:
-                for candidate in ("gemini-3.8-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-2.5-flash"):
-                    if f"models/{candidate}" not in url:
-                        fb_url = re.sub(r"models/[^:]+", f"models/{candidate}", url)
-                        try:
-                            return _post_json(
-                                fb_url,
-                                payload,
-                                api_key,
-                                max_attempts=max_attempts,
-                            )
-                        except FatalTranslationError:
-                            continue
+                fb_res = _try_fallbacks()
+                if fb_res is not None:
+                    return fb_res
             if exc.code in (400, 401, 403, 404):
                 raise FatalTranslationError(f"Gemini rejected the request (HTTP {exc.code})") from exc
             if not (exc.code in (408, 429) or exc.code >= 500):
@@ -577,6 +611,9 @@ def _post_json(url: str, payload: dict[str, Any], api_key: str, max_attempts: in
         if attempt < max_attempts:
             time.sleep(wait)
             delay *= 2
+    fb_res = _try_fallbacks()
+    if fb_res is not None:
+        return fb_res
     raise TransientTranslationError(f"Gemini request failed after {max_attempts} attempts: {last}")
 
 
@@ -986,6 +1023,8 @@ def accept_reviewed_translations(
         if only_docs is not None and rel not in only_docs:
             continue
         entry, loc_path, en_path = old_docs.get(rel), loc_dir / rel, root / rel
+        if not loc_path.is_file() and rel.startswith("components/") and only_docs is None:
+            continue
         if not isinstance(entry, dict) or not loc_path.is_file():
             refused[rel] = "no provenance record or localized file"
             continue
