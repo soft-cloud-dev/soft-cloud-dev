@@ -227,6 +227,7 @@ export default {
       '.sc-wa-showcase > wa-tab-group, .sc-wa-showcase > wa-tree { width:100%; max-width:100%; }',
       '.sc-wa-showcase img { display:block; max-width:100%; height:auto; }',
       '.sc-wa-showcase > wa-card { max-width: min(100%, 360px); }',
+      '.sc-wa-showcase > wa-progress-bar { flex: 1 1 100%; min-width: 0; }',
       '.sc-wa-showcase > wa-comparison, .sc-wa-showcase > wa-zoomable-frame { width:100%; }',
       '.sc-wa-showcase wa-carousel-item img { width:100%; aspect-ratio:16/9; object-fit:cover; }',
       '.sc-wa-showcase wa-comparison img { width:100%; height:100%; object-fit:cover; }',
@@ -246,6 +247,7 @@ export default {
     frame.className = 'sc-wa-showcase';
     frame.setAttribute('role', 'group');
     frame.setAttribute('aria-label', 'Live component preview');
+    el.style.paddingBlockEnd = '1.25rem';
     el.append(style, message, frame);
     try {
       const names = componentNames(nodes);
