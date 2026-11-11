@@ -6,6 +6,7 @@ test.describe('SSR Lifecycle & Dynamic Transform Boundary (WA-007, WA-008)', () 
     page.on('pageerror', error => errors.push(error.message));
     await page.goto('/', { waitUntil: 'networkidle' });
     await page.waitForFunction(() => ['wa-card', 'wa-callout', 'wa-button'].every(tag => customElements.get(tag)));
+    expect(errors, 'initial fixture hydration').toEqual([]);
     await page.evaluate(() => {
       const placeholder = (component: string, options: Record<string, unknown> = {}) => {
         const host = document.createElement('div');
