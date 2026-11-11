@@ -16,6 +16,7 @@ const MIME = {
   '.mjs': 'text/javascript',
   '.css': 'text/css',
   '.json': 'application/json',
+  '.mp3': 'audio/mpeg',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.svg': 'image/svg+xml',
@@ -39,9 +40,44 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  const stat = fs.statSync(filePath);
   const ext = path.extname(filePath);
   const contentType = MIME[ext] || 'application/octet-stream';
-  res.writeHead(200, { 'Content-Type': contentType });
+  const range = req.headers.range;
+
+  if (range) {
+    const match = /^bytes=(\d*)-(\d*)$/.exec(range.trim());
+    if (!match) {
+      res.writeHead(416, { 'Content-Range': `bytes */${stat.size}` });
+      res.end();
+      return;
+    }
+    let start = match[1] ? Number(match[1]) : 0;
+    let end = match[2] ? Number(match[2]) : stat.size - 1;
+    if (!match[1] && match[2]) {
+      start = Math.max(0, stat.size - Number(match[2]));
+      end = stat.size - 1;
+    }
+    if (start >= stat.size || end >= stat.size || start > end) {
+      res.writeHead(416, { 'Content-Range': `bytes */${stat.size}` });
+      res.end();
+      return;
+    }
+    res.writeHead(206, {
+      'Content-Type': contentType,
+      'Accept-Ranges': 'bytes',
+      'Content-Range': `bytes ${start}-${end}/${stat.size}`,
+      'Content-Length': end - start + 1,
+    });
+    fs.createReadStream(filePath, { start, end }).pipe(res);
+    return;
+  }
+
+  res.writeHead(200, {
+    'Content-Type': contentType,
+    'Accept-Ranges': 'bytes',
+    'Content-Length': stat.size,
+  });
   fs.createReadStream(filePath).pipe(res);
 });
 

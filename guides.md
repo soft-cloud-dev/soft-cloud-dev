@@ -5,6 +5,12 @@ description: Practical publishing and authoring procedures.
 
 # Guides
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "guides"
+}
+```
+
 Publish source-backed pages through the governed MyST pipeline.
 
 ## Publish your first page

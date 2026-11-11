@@ -5,6 +5,13 @@ description: Lokalisierter Zugang zum Web-Awesome-Referenzkatalog.
 
 # UI-Bibliothek
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "ui-library",
+  "locale": "de"
+}
+```
+
 Finden Sie wiederverwendbare UI-Muster, Design-Tokens und dokumentierte Web-Awesome-Integrationen.
 
 ## Komponentenkatalog

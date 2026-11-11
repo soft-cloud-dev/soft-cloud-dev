@@ -5,6 +5,13 @@ description: Procédures pratiques de rédaction et de publication.
 
 # Guides
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "guides",
+  "locale": "fr"
+}
+```
+
 Publiez des pages reliées à leurs sources avec le pipeline MyST contrôlé.
 
 ## Publier sa première page

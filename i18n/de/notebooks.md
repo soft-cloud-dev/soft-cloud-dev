@@ -5,6 +5,13 @@ description: Verifizierte Rechen- und UI-Integrations-Notebooks.
 
 # Rechen-Notebooks
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "notebooks",
+  "locale": "de"
+}
+```
+
 Notebooks sind bei der Erstellung geprüfte Artefakte. Das statische Handbuch führt Python nicht im Browser aus.
 
 ## Ausführung und Nachweise

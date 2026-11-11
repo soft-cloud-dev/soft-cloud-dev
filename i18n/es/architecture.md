@@ -1,5 +1,12 @@
 # Arquitectura y referencia del memorando
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "architecture",
+  "locale": "es"
+}
+```
+
 Especificaciones de la canalización computacional, la estructura base del repositorio y el entorno de compilación de Software Cloud.
 
 ---
