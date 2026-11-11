@@ -164,7 +164,8 @@ project:
 
 
 site:
-  template: book-theme
+  # Freeze the last validated pre-2.0 MyST book theme (release sha256: f6b6c7822821539e80dde120f6632ad77e7b6c20f5e773b5ca5d818ea529bd78).
+  template: https://github.com/jupyter-book/myst-theme/releases/download/myst-to-react%401.4.1/book-theme.zip
   nav:
     - title: Guides
       url: /guides
