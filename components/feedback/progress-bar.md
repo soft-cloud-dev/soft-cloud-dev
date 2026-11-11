@@ -23,7 +23,9 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
       "value": "64",
       "label": "Deployment progress"
     },
-    "children": []
+    "children": [
+      "64%"
+    ]
   }
 }
 ```
@@ -31,7 +33,7 @@ Uses the existing self-hosted Web Awesome 3.14.0 and MyST anywidget integration.
 ## Markdown code snippet
 
 ```html
-<wa-progress-bar value="64" label="Deployment progress"></wa-progress-bar>
+<wa-progress-bar value="64" label="Deployment progress">64%</wa-progress-bar>
 ```
 
 Use native MyST for documentation layout; interactive Web Awesome previews remain hosted through the existing `{anywidget}` integration when available. 
