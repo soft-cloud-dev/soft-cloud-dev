@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0027-code_block",
+  "generation_config": {
+    "locale": "de",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in German (Deutsch) matching document locale 'de'.",
+    "text_temperature": 0.0
+  },
+  "language": "json",
+  "locale": "de",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "32f81d86bc280881f763694a55f7ea3960fb4e87fbdde007fd0aff984e801046",
+  "text_config_hash": "4001014f9594e916ff526aac8e75616a4608252cbae84f40f815f69394cf4aba",
+  "transcript": "Dieses Jupyter-Notizbuch dient der rechnerischen Verifikation und Laufzeitvalidierung der Umgebung innerhalb der Software Cloud Plattform. Es ist für den Python-Kernel JB2 konfiguriert und setzt voraus, dass die Python-Version exakt 3.12.14 entspricht. Als Eingaben und Abhängigkeiten fungieren das standardmäßige Systemmodul sys sowie die Python-Laufzeitumgebung. Die Kernoperation besteht darin, den aktuellen Python-Pfad und die Versionsnummer auszugeben und diese mithilfe einer Zusicherung zu überprüfen. Als materielle Auswirkung oder Risiko bricht das Notizbuch die Ausführung durch einen AssertionError ab, falls die Laufzeitumgebung von der geforderten Version 3.12.14 abweicht, wodurch sichergestellt wird, dass Berechnungen nur in validierten Umgebungen stattfinden.",
+  "transcript_sha256": "1d323e3bae1543f3040887a9f19a596cd4fb91ce1aebc5524edb2b14904ad000"
+}
