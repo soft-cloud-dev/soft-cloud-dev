@@ -157,9 +157,10 @@ test('localized UI Library entry identifies the English-only catalog', async ({ 
   };
   collectErrors(page);
   context.on('page', collectErrors);
-  await context.route('https://my.softcloud.dev/components', route => route.fulfill({
-    status: 302, headers: { location: `${baseURL}/components/` },
-  }));
+  await context.route('https://my.softcloud.dev/components', async route => {
+    const response = await route.fetch({ url: `${baseURL}/components/` });
+    await route.fulfill({ response });
+  });
   const catalogResponse = await page.goto('/components/');
   expect(catalogResponse?.ok(), '/components/ route must return HTTP 200').toBeTruthy();
   await expect(page.locator('main h1').first()).toContainText('Web Awesome — Component Catalog');
@@ -181,7 +182,7 @@ test('localized UI Library entry identifies the English-only catalog', async ({ 
     await expect(page.locator('a[title="Edit This Page"]')).toHaveAttribute('href', expectedEditHref);
     const [catalog] = await Promise.all([page.waitForEvent('popup'), cta.click()]);
     await catalog.waitForLoadState('networkidle');
-    await expect(catalog).toHaveURL(`${baseURL}/components/`);
+    await expect(catalog).toHaveURL('https://my.softcloud.dev/components');
     await expect(catalog.locator('main h1').first()).toContainText('Web Awesome — Component Catalog');
     await expect(catalog.locator('html')).toHaveAttribute('lang', 'en');
     await expect(catalog.locator('a[title="Edit This Page"]')).toHaveAttribute(
