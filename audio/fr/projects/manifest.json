@@ -73,7 +73,7 @@
   "config_hash": "699663dab374726886e538e3564c70a1712d5e0736b0e01565f579a19f9afcfa",
   "locale": "fr",
   "logical_source_path": "projects.md",
-  "manifest_sha256": "05101fc1671f45778296ca68bf36437df9d50afca42bfd25f792d930493629f0",
+  "manifest_sha256": "4a3f065d770b01c241438bd02e025141737298e07dc6d309671e1fd06819fdcd",
   "narration_config": {
     "audio_format": "mp3",
     "locale": "fr",
@@ -90,11 +90,11 @@
   "page_id": "projects",
   "page_source_hash": "8fde81a8b7473e01c2480c541273ad8d4d24eaba73ffcdaeed4bee93b90396a1",
   "schema_version": "1.0.0",
-  "source_file_sha256": "5f983af8361185d9299983a34e19b60fcf992d408e86e02b5f9525e8a00613fc",
+  "source_file_sha256": "99f3517bd38952e8b2236a0883da796998bac7bd4234482744c08e35a393c860",
   "source_path": "i18n/fr/projects.md",
   "status": "complete",
   "total_chunks": 3,
   "total_duration_seconds": 37.56,
   "transcript_file": "transcript.json",
-  "transcript_sha256": "61e1cce4e293fb88cd6b44150ec9dc713c24eb4b1cc6bf71ac0a7d17cc859357"
+  "transcript_sha256": "4744ebe74fe2f5dcce6e4b59b307463f0b855de95c6dccdf7a520c621f03809f"
 }
