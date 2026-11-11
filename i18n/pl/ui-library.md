@@ -5,6 +5,13 @@ description: Polski punkt wejścia do katalogu referencyjnego Web Awesome.
 
 # Biblioteka UI
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "ui-library",
+  "locale": "pl"
+}
+```
+
 Znajdź wzorce interfejsów, tokeny projektowe i udokumentowane integracje Web Awesome.
 
 ## Katalog komponentów

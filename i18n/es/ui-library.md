@@ -5,6 +5,13 @@ description: Entrada localizada al catálogo de referencia de Web Awesome.
 
 # Biblioteca UI
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "ui-library",
+  "locale": "es"
+}
+```
+
 Encuentra patrones reutilizables, tokens de diseño e integraciones documentadas de Web Awesome.
 
 ## Catálogo de componentes

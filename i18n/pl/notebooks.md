@@ -5,6 +5,13 @@ description: Zweryfikowane notatniki obliczeniowe i integracji UI.
 
 # Notatniki obliczeniowe
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "notebooks",
+  "locale": "pl"
+}
+```
+
 Notatniki są artefaktami weryfikowanymi podczas kompilacji. Statyczny podręcznik nie uruchamia Pythona w przeglądarce.
 
 ## Wykonanie i dowody

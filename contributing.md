@@ -5,6 +5,12 @@ description: Publication operations, environment setup, validation, and review w
 
 # Contributor Guide
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "contributing"
+}
+```
+
 This guide owns contributor workflow and publication operations. Architectural guarantees remain in [Architecture & Specification](architecture.md); Web Awesome page conventions remain in the [component authoring guide](components/authoring-guide.md).
 
 ## Toolchain and source of truth

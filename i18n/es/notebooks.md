@@ -5,6 +5,13 @@ description: Cuadernos verificados de cómputo e integración de interfaz.
 
 # Cuadernos computacionales
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "notebooks",
+  "locale": "es"
+}
+```
+
 Los cuadernos son artefactos comprobados durante la compilación. El manual estático no ejecuta Python en el navegador.
 
 ## Ejecución y evidencias

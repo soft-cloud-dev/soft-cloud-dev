@@ -5,6 +5,13 @@ description: Praktische Abläufe für Autorenschaft und Veröffentlichung.
 
 # Anleitungen
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "guides",
+  "locale": "de"
+}
+```
+
 Veröffentlichen Sie quellengestützte Seiten über die kontrollierte MyST-Pipeline.
 
 ## Erste Seite veröffentlichen
