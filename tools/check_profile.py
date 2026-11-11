@@ -60,7 +60,7 @@ require(not project.get("exclude"), "Project exclusions are not accepted")
 toc = project.get("toc")
 require(isinstance(toc, list) and toc, "Explicit nonempty project.toc required")
 site = config.get("site", {})
-require(site.get("template") == "book-theme", "Expected book-theme selector")
+require(site.get("template") == "https://github.com/jupyter-book/myst-theme/releases/download/myst-to-react%401.4.1/book-theme.zip", "Expected pinned book-theme 1.4.1 release")
 local_file(site.get("options", {}).get("logo"))
 files = []
 
