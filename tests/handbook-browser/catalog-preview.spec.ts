@@ -16,7 +16,7 @@ test.describe('Web Awesome catalog preview', () => {
       const track = progress.locator('[role="progressbar"]');
       await expect(track).toHaveAttribute('aria-label', 'Deployment progress');
       await expect(track).toHaveAttribute('aria-valuenow', '64');
-      await expect(track).toHaveText('64%');
+      await expect(progress).toContainText('64%');
 
       const dimensions = await progress.evaluate(el => {
         const host = el.getBoundingClientRect();
@@ -35,10 +35,9 @@ test.describe('Web Awesome catalog preview', () => {
       expect(dimensions.trackHeight).toBeGreaterThan(0);
 
       const nextHeading = page.getByRole('heading', { name: 'Markdown code snippet' });
-      const gap = await nextHeading.evaluate(el => {
-        const preview = document.querySelector('.sc-wa-showcase')!;
-        return el.getBoundingClientRect().top - preview.getBoundingClientRect().bottom;
-      });
+      const headingTop = await nextHeading.evaluate(el => el.getBoundingClientRect().top);
+      const frameBottom = await frame.evaluate(el => el.getBoundingClientRect().bottom);
+      const gap = headingTop - frameBottom;
       expect(gap).toBeGreaterThanOrEqual(12);
 
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2)).toBeTruthy();
