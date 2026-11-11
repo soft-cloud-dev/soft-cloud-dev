@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0014-code_block",
+  "generation_config": {
+    "locale": "es",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in Spanish (español) matching document locale 'es'.",
+    "text_temperature": 0.0
+  },
+  "language": "text",
+  "locale": "es",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "3f0dd9ba2fdcdd6c538bc825275097866429fc0f059ff4f82e63bb747c5fdc75",
+  "text_config_hash": "0ae7c213c19fa3769f2d0eb3191e42fb2c5d0d4339b800b6a5bd864decd76d60",
+  "transcript": "Este bloque de texto corresponde a la licencia de código abierto BSD de dos cláusulas, establecida para el año 2026 por los colaboradores del proyecto. Su propósito es definir los términos legales bajo los cuales los usuarios y desarrolladores pueden redistribuir y utilizar el software, tanto en su forma de código fuente como en formato binario, con o sin modificaciones. Como entradas y dependencias, este documento no procesa datos ni requiere bibliotecas externas, ya que opera estrictamente como un aviso legal integrado en el repositorio. Las operaciones principales consisten en establecer las condiciones obligatorias para la redistribución: conservar el aviso de copyright original, la lista de condiciones y la exención de responsabilidad en cualquier copia del código fuente o de la documentación en formato binario. En cuanto a los efectos y limitaciones, la decisión de implementación más importante es la inclusión de una cláusula de exención total de garantías y limitación de daños. Esto significa que los titulares del copyright y los colaboradores proporcionan el software tal cual es, sin asumir ninguna responsabilidad legal por daños directos, indirectos, incidentales o consecuentes derivados del uso del software, incluso si se les ha advertido sobre la posibilidad de dichos daños.",
+  "transcript_sha256": "c537c9ce73ba307b4e547050b5abbb888c70787d5b92fdcd8611898d6382a581"
+}

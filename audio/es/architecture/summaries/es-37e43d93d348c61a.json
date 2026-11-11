@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0009-code_block",
+  "generation_config": {
+    "locale": "es",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in Spanish (español) matching document locale 'es'.",
+    "text_temperature": 0.0
+  },
+  "language": "text",
+  "locale": "es",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "639ccca0c527a0cd165d8881cb4a48394a383317efd9762eeccdcd6d09a98a99",
+  "text_config_hash": "0ae7c213c19fa3769f2d0eb3191e42fb2c5d0d4339b800b6a5bd864decd76d60",
+  "transcript": "Este bloque de código describe la estructura completa del proyecto soft-cloud-dev dentro de la plataforma Software Cloud. Su propósito es organizar un repositorio basado en Jupyter Book 2 para la documentación y publicación técnica, integrando automatización de despliegue mediante flujos de trabajo de GitHub Actions, recursos gráficos e iconos, cuadernos computacionales ejecutados en CPython 3.12.14, y herramientas personalizadas para la compilación hermética y la gestión criptográfica de dependencias mediante un archivo de bloqueo derivado de ruedas. Como entradas y dependencias, el sistema utiliza declaraciones de requisitos de alto nivel en requirements.in para generar dependencias bloqueadas en requirements.lock, además de archivos de configuración como myst.yml para Jupyter Book, especificaciones de arquitectura y un dominio personalizado asignado a través de CNAME. Las operaciones principales incluyen la ejecución de scripts de construcción ubicados en el directorio tools para validar perfiles de cumplimiento, resolver hashes de archivos wheel y empaquetar la publicación final. Entre las decisiones de implementación destaca el uso de un entorno hermético y validaciones de integridad estrictas. Como riesgos y limitaciones, cualquier alteración manual en los archivos de bloqueo o en la estructura de dependencias puede interrumpir tanto el proceso automatizado de integración y despliegue continuo en GitHub como la correcta compilación de los artefactos de la plataforma.",
+  "transcript_sha256": "3adb75228c43645d695150e52db1a97ea1868dd5c64f39288d5b8cfa64c1e217"
+}

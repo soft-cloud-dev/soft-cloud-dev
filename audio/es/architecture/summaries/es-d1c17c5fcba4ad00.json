@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0017-code_block",
+  "generation_config": {
+    "locale": "es",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in Spanish (español) matching document locale 'es'.",
+    "text_temperature": 0.0
+  },
+  "language": "text",
+  "locale": "es",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "3f8956f886cce465c69be1efaee1b3739497996f8b8de5ea107e874bad6cc6be",
+  "text_config_hash": "0ae7c213c19fa3769f2d0eb3191e42fb2c5d0d4339b800b6a5bd864decd76d60",
+  "transcript": "Este bloque de texto muestra una lista de exclusión estándar para entornos de desarrollo en Python, típicamente utilizada en archivos de configuración como punto git ignore o para filtros de sincronización. Su propósito principal es definir directorios locales temporales, cachés y entornos virtuales que no deben ser rastreados por sistemas de control de versiones ni incluidos en paquetes de despliegue. El contenido identifica rutas como el directorio del entorno virtual principal y de bloqueo, almacenes locales de paquetes para compilación, directorios de construcción y caché de Python, así como puntos de control para cuadernos interactivos de Jupyter. Estos elementos son generados automáticamente por herramientas de desarrollo y su omisión optimiza el almacenamiento y previene conflictos en los repositorios compartidos. No existen dependencias de ejecución, entradas ni salidas programáticas, ya que se trata estrictamente de un patrón declarativo de exclusión de rutas. Como decisión de diseño, agrupa los artefactos transitorios más comunes para mantener limpio el espacio de trabajo del proyecto en la plataforma Software Cloud.",
+  "transcript_sha256": "b0043e5af080c304d4b2db25cd5d5822e3410b93c0fc20a4804fec0966e9ffcb"
+}
