@@ -8,7 +8,6 @@
       "localized_code_fingerprint_sha256": "ea703053c1c22c311d7e87f64368491feb9f15ecec56c065abe2da88b45e5fbf",
       "localized_path": "i18n/pl/README.md",
       "policy_sha256": "bf4115911eca60f7a480990ca224e61e1b3501d0b0dc74019bd5bc9c11408775",
-      "review_method": "AI-assisted editorial QA; human maintainer review required before merge",
       "revision_state": "reviewed",
       "sections": [
         {
@@ -21,16 +20,16 @@
         {
           "index": "0",
           "source_heading": "__preamble__",
-          "source_sha256": "88edf05cfa4a2c2d4ec5792f0d09a7c07081df83869d42c2f107164bb72e1cef",
+          "source_sha256": "c337a2efe8c9e40eb7053d8bb38b1b034b61836e3ef6f6f0f76634a9e7751652",
           "translated_heading": "__preamble__",
-          "translated_sha256": "b0fa3b0c55a94e80566adb6c961e49ed3e580f0d89d8ee07d1e8ce9530e3af31"
+          "translated_sha256": "d0eb08fc130e119fd9f62b72738f6e372b7799de129939752b0a664e2ef29974"
         }
       ],
-      "source_commit": "f37aee849eeff5481939cc59441ce73fec2c52e0",
+      "source_commit": "46dbc3fd63ba64f15b6eef10a9599b9362ee1b28",
       "source_path": "README.md",
-      "source_sha256": "5a9cbad85020e097eb784846cedd8205ce60a0bb1b5548d1a9e1aaa89d966526",
-      "translated_sha256": "5eb3cc525510fcff1e8dbd93ede10d865520690c438f2f6e1760e0fe7ecb7798",
-      "translation_model": "openai-gpt-6"
+      "source_sha256": "587b763fb082bbc5bd585a99d821db0f4aec189852a8bb48ed05d69c7115a8b6",
+      "translated_sha256": "f8733985f9199553b3aa781c5cbefe988712113ff82d1dc6347e9246f8ab0dd7",
+      "translation_model": "gemini-2.5-flash"
     },
     "architecture.md": {
       "code_block_count": 11,
@@ -45,9 +44,9 @@
         {
           "index": "0",
           "source_heading": "Architecture & Memorandum Reference",
-          "source_sha256": "4fe9ecbb07c5f302a739e9d3853e25c00ac03dbb153cc0d64e0a215d16efafad",
+          "source_sha256": "8492fd75970e07778733d6f3a25ecebb72aef069d6db7f8c99fb76749c14fb27",
           "translated_heading": "Architektura i referencja memorandum",
-          "translated_sha256": "3c339e4ab479764a3e7807f072074451927d0c9bd6508c913abcb3cf7ee2722b"
+          "translated_sha256": "e205b5461429d0dfdc7fc672aacc16e325c342fe91274a0f80a6df4dad426878"
         },
         {
           "index": "1",
@@ -155,14 +154,13 @@
           "translated_sha256": "cced284827088ccc7903d8a3a6b6bce44f115890191bb8adf2928cd4ec5a4beb"
         }
       ],
-      "source_commit": "d6884008eda9ef4cd996b72a2061a67e4e5386f0",
+      "source_commit": "46dbc3fd63ba64f15b6eef10a9599b9362ee1b28",
       "source_path": "architecture.md",
-      "source_sha256": "6d98c29d1a8379e828a6ad5251a352f7b66c4251519995eb493fe1cc0fbd7f3d",
-      "translated_sha256": "db3554376c1b5d1fcd0e28b56b27e5cd88df4fe9dc67954c2697d3f7c8eaf00e",
+      "source_sha256": "c3900cbebb67d81d307f9c45e5cb55a4a992975b1fe7380f9668c9b3230bbb71",
+      "translated_sha256": "4f1daea97290b87a3460350f2d22f11c1eed970d23fddf15bea7753e78d073c2",
       "translation_model": "gemini-2.5-flash"
     },
     "contributing.md": {
-      "accepted_from": "human_edit",
       "code_block_count": 1,
       "code_fingerprint_sha256": "831e984de9d7fcfd40235f8964264159a920e73c0e8ece3b0513206c5ba1c97c",
       "dependency_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
@@ -189,9 +187,9 @@
         {
           "index": "1",
           "source_heading": "Contributor Guide",
-          "source_sha256": "0a7146854e3b2a911cb071fb9df2fd3a03ca6a013acb0749402bb5fbd3294f11",
+          "source_sha256": "62d20dde8588dc2d4a86f4e91a3c1411c680f6ed5911245fcaebe5875f544be1",
           "translated_heading": "Przewodnik dla współtwórców",
-          "translated_sha256": "562c038231ebc97d56473d89deea465ea0ced436a5f724699ee164abeec60db9"
+          "translated_sha256": "777e18388b49ebc4af25c7195b34bb223f7ca54711a9b1f2b7ab829d10e358a8"
         },
         {
           "index": "2",
@@ -222,10 +220,10 @@
           "translated_sha256": "c693bd0422573a63d0ef4e98d05e912688d18876bc22270c8b0cbbde85acb9b9"
         }
       ],
-      "source_commit": "e5f63d7112d050ab36c51c598eac405c6244dd45",
+      "source_commit": "46dbc3fd63ba64f15b6eef10a9599b9362ee1b28",
       "source_path": "contributing.md",
-      "source_sha256": "063e0c8b208b5dac7fb921b054a4d7fb9e65b23518fd0b84f72b75434686a301",
-      "translated_sha256": "f2216b6847688a654c3cc1b89f28f3f082e9fa8b60236d50049ccdc67f5bb165",
+      "source_sha256": "ad2e228338aefadfaf826af45a544b244aae595a4074373e91be294fd0ef2f10",
+      "translated_sha256": "260e88cc9c923e8cdde83037631c1fba11d9b4e186c7900d01e6863bf99b6bef",
       "translation_model": "gemini-2.5-flash"
     },
     "guides.md": {
@@ -236,7 +234,6 @@
       "localized_code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "localized_path": "i18n/pl/guides.md",
       "policy_sha256": "bf4115911eca60f7a480990ca224e61e1b3501d0b0dc74019bd5bc9c11408775",
-      "review_method": "AI-assisted editorial QA; human maintainer review required before merge",
       "revision_state": "reviewed",
       "sections": [
         {
@@ -256,9 +253,9 @@
         {
           "index": "1",
           "source_heading": "Guides",
-          "source_sha256": "23fdd9a87e4ef2828cc02579edc5de879e9fae03b19a18fe4905c29d1f7ca10e",
+          "source_sha256": "9521c092c0bff3246d65567e81ceafce82d36fb2329f6d5c034926eca62ef4e7",
           "translated_heading": "Poradniki",
-          "translated_sha256": "cd302f5b0c38500c84f4843066f901bb1981bb6f6ace99fafc4cec849ca05d72"
+          "translated_sha256": "22e814b598df41acf57ada2e0ca02eef7151846137c32ecbc04c0dfaba71bebb"
         },
         {
           "index": "2",
@@ -275,11 +272,11 @@
           "translated_sha256": "9a0cc7e0641c0432f2ad2144b0b7983e444ce5a664ff523a848af16e2d2c7f6b"
         }
       ],
-      "source_commit": "f37aee849eeff5481939cc59441ce73fec2c52e0",
+      "source_commit": "46dbc3fd63ba64f15b6eef10a9599b9362ee1b28",
       "source_path": "guides.md",
-      "source_sha256": "8696934e16950519ab028f4233e536d53cae19c1fb43e64fe0d3d9728539b927",
-      "translated_sha256": "72b717d1b477338bce4471601e69aa0c2c5d5aa7bc69bfbf90afd270b01cee5f",
-      "translation_model": "openai-gpt-6"
+      "source_sha256": "17a8b0fc317f31e515d4235361d310f0657eaf4f242d8a9b89ac4ea14cca0a3b",
+      "translated_sha256": "e8a497802bde7ad6e05ced5a4b74e2e357b95a2f100e5ca591134161fc1445d5",
+      "translation_model": "gemini-2.5-flash"
     },
     "introduction.md": {
       "code_block_count": 0,
@@ -334,7 +331,6 @@
       "localized_code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "localized_path": "i18n/pl/notebooks.md",
       "policy_sha256": "bf4115911eca60f7a480990ca224e61e1b3501d0b0dc74019bd5bc9c11408775",
-      "review_method": "AI-assisted editorial QA; human maintainer review required before merge",
       "revision_state": "reviewed",
       "sections": [
         {
@@ -354,9 +350,9 @@
         {
           "index": "1",
           "source_heading": "Computational Notebooks",
-          "source_sha256": "74e66ab858c8f39363e5b016de3a46c35d5a7fd029d83fcde7e6c7b7305b6194",
+          "source_sha256": "91afb383f77808c2629307662d623ed40184874ed7ff2f1cd30161c958e8c09c",
           "translated_heading": "Notatniki obliczeniowe",
-          "translated_sha256": "c4103033bfbabd3cacfa00db358c0535b1f14e883dd19fad4e8d06896df9aeae"
+          "translated_sha256": "00f7d0e1463aa4640fe190717a68d2ccc558c1475d159038c3159e72f26d5cbf"
         },
         {
           "index": "2",
@@ -366,11 +362,11 @@
           "translated_sha256": "e7b8dde3d3ca695252a13d81c2c163a5e4a4c0c5be0018229e41c757d2a93445"
         }
       ],
-      "source_commit": "f37aee849eeff5481939cc59441ce73fec2c52e0",
+      "source_commit": "46dbc3fd63ba64f15b6eef10a9599b9362ee1b28",
       "source_path": "notebooks.md",
-      "source_sha256": "8981bf9e85037d4560d5ee0e6f5313ce453ec43762bc1f0bf8aef3e3339fd615",
-      "translated_sha256": "be3d0d1a544a54d8b4cc4adcd0377d0aa3e602a10a0289ca9cf4bb6840157946",
-      "translation_model": "openai-gpt-6"
+      "source_sha256": "a309e1c212fcdda03cffd73512874f35e5ffb0912bdb9f629186e723defffc4c",
+      "translated_sha256": "89b5735003b6298622361409f2d63a5e55f8b86832c6e4b5c9276c5d61973497",
+      "translation_model": "gemini-2.5-flash"
     },
     "notebooks/experiment.ipynb": {
       "code_block_count": 1,
@@ -610,7 +606,6 @@
       "localized_code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "localized_path": "i18n/pl/projects.md",
       "policy_sha256": "bf4115911eca60f7a480990ca224e61e1b3501d0b0dc74019bd5bc9c11408775",
-      "review_method": "AI-assisted editorial QA; human maintainer review required before merge",
       "revision_state": "reviewed",
       "sections": [
         {
@@ -630,9 +625,9 @@
         {
           "index": "1",
           "source_heading": "Systems & Laboratories",
-          "source_sha256": "8b8ffa756595f9be3a2f91524928585314f870100bac8fc4af1c1d4d239ea4f4",
+          "source_sha256": "ee7089c578f32c344d588a3728b67709f68b057a39989c2852f3ede6ce1a49c8",
           "translated_heading": "Systemy i laboratoria",
-          "translated_sha256": "849bdefd5e8dfe50b0057ecf5bf2a5e3cf3e2ae9b71fc44a619ed934054e1a71"
+          "translated_sha256": "10da3874ca2b86f8c191e0e3013c710cff15eb78df192e966c52937565dbabeb"
         },
         {
           "index": "2",
@@ -649,11 +644,11 @@
           "translated_sha256": "397d96cac329e4333a682fc0bf1d4f518dd7c4a342c1431e05362016e47ebe7a"
         }
       ],
-      "source_commit": "f37aee849eeff5481939cc59441ce73fec2c52e0",
+      "source_commit": "46dbc3fd63ba64f15b6eef10a9599b9362ee1b28",
       "source_path": "projects.md",
-      "source_sha256": "563646cfd58fc7355df7345b78a5bf31e40893ec4accc3013fd32f2d4de04331",
-      "translated_sha256": "b867fb3ce80a2ed431b9ba641dbe3e045cbb04a0bf0ea9d769f10f5aa37f0fe0",
-      "translation_model": "openai-gpt-6"
+      "source_sha256": "36d83b6cfab55f63572de53401b93bf6e35cc8deb68aacb1f003cd1934b641f8",
+      "translated_sha256": "4986dd541d4b16fb514eeb8c5053d0c9b9937b0620e8592020ca6af2d965bf4a",
+      "translation_model": "gemini-2.5-flash"
     },
     "projects/freeipa.md": {
       "accepted_from": "human_edit",
@@ -761,7 +756,6 @@
       "localized_code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "localized_path": "i18n/pl/ui-library.md",
       "policy_sha256": "bf4115911eca60f7a480990ca224e61e1b3501d0b0dc74019bd5bc9c11408775",
-      "review_method": "AI-assisted editorial QA; human maintainer review required before merge",
       "revision_state": "reviewed",
       "sections": [
         {
@@ -781,9 +775,9 @@
         {
           "index": "1",
           "source_heading": "UI Library",
-          "source_sha256": "2c73250dc934c39127e1496235cfa13a5cf8f7d42ac63816e32ceb7744640b9f",
+          "source_sha256": "118171ac4f2a34c78a5997cb12aedc1bbc93dd8a4a9448d3f2a602a210626fc5",
           "translated_heading": "Biblioteka UI",
-          "translated_sha256": "872d94447c7340e0d611a5c2d51768851ef36845f3781bf41f57019c4f0e8b88"
+          "translated_sha256": "e8dd92bdbf6ae39f5cd8298217c96badb19016b653bdb34776ca2c45d1dc5306"
         },
         {
           "index": "2",
@@ -800,16 +794,16 @@
           "translated_sha256": "01c27baa7b4abd23e06ad221cdaf6ef3dfc84662b6e8d59e0ea3a8ea53bfbb45"
         }
       ],
-      "source_commit": "f37aee849eeff5481939cc59441ce73fec2c52e0",
+      "source_commit": "46dbc3fd63ba64f15b6eef10a9599b9362ee1b28",
       "source_path": "ui-library.md",
-      "source_sha256": "d890938df93a97d2a68d687e8d56551f2824d7e2d96c2b5020347320c78c7791",
-      "translated_sha256": "a353867dee905eea9fc5c47e16e74accf399d377dccf501c4b5fd46bbc704b27",
-      "translation_model": "openai-gpt-6"
+      "source_sha256": "00af2df8584c79677c32d0e21be597faea909ee40c6bdafde0be60f3cdb79c25",
+      "translated_sha256": "4f1cc467a102657563efe51422bd0457c7cb040f1f1d87c8ff5a59089e4fe006",
+      "translation_model": "gemini-2.5-flash"
     }
   },
   "glossary_sha256": "49d88d6d5cc4d25bd538b6e7621497026343e7944687c1c6758b3f91848eadc4",
   "locale": "pl",
-  "provenance_sha256": "586b6188d3c3835f8f7198f0a732a95a17b4fa3fd724cc5cafa8c020150c9459",
+  "provenance_sha256": "2f4d52d0d676158e7a454994f7a11ff182fb59eac3c7cc65d9b95e8fa76fd60f",
   "schema_version": "1.0",
   "source_locale": "en"
 }

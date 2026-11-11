@@ -5,6 +5,13 @@ description: Descubre laboratorios de ingeniería independientes de SoftCloud.
 
 # Sistemas y laboratorios
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "projects",
+  "locale": "es"
+}
+```
+
 El manual facilita el descubrimiento. Cada laboratorio mantiene su arquitectura detallada, estado operativo y evidencias de publicación verificadas.
 
 ## Node Linux
