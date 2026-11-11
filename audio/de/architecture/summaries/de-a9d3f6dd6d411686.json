@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0009-code_block",
+  "generation_config": {
+    "locale": "de",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in German (Deutsch) matching document locale 'de'.",
+    "text_temperature": 0.0
+  },
+  "language": "text",
+  "locale": "de",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "639ccca0c527a0cd165d8881cb4a48394a383317efd9762eeccdcd6d09a98a99",
+  "text_config_hash": "4001014f9594e916ff526aac8e75616a4608252cbae84f40f815f69394cf4aba",
+  "transcript": "Die Verzeichnisstruktur des Repositories soft-cloud-dev organisiert die Kernkomponenten der Software Cloud Plattform. Das Projekt verwendet Jupyter Book 2, konfiguriert über die Datei myst.yml, und bindet eine benutzerdefinierte Domain über die CNAME-Datei unter my.softcloud.dev an. Die Dokumentation und Projektbeschreibungen stützen sich auf Markdown-Dateien wie README.md, introduction.md und architecture.md, während rechtliche Rahmenbedingungen durch die BSD 2-Clause Lizenz in LICENSE festgelegt sind. Im Unterverzeichnis images befinden sich plattformrelevante visuelle Ressourcen, darunter Favicons in verschiedenen Auflösungen sowie skalierbare Vektor-Logos für den Standard- und Dark-Mode. Der Ordner notebooks enthält mit experiment.ipynb ein verifiziertes CPython Rechennotizbuch. Für die Build- und Entwicklungsinfrastruktur stellt das Verzeichnis tools essenzielle Skripte bereit: build.sh fungiert als hermetischer Publikations-Build-Runner, check_profile.py validiert die Profilkonformität und Integrität, und lock_from_wheels.py dient als Hash-Resolver sowie Lockfile-Generator für Python-Pakete. Die Abhängigkeiten werden über requirements.in deklariert und in requirements.lock kryptografisch festgeschrieben. Die automatisierte CI/CD-Bereitstellung wird über die GitHub Actions Workflow-Datei unter .github/workflows/deploy.yml abgewickelt. Eine .gitignore-Datei schließt temporäre Artefakte und virtuelle Umgebungen von der Versionskontrolle aus. Als signifikante Einschränkung ist zu beachten, dass das System stark an CPython 3.12.14 gebunden ist und eine strikte Einhaltung der kryptografisch fixierten Abhängigkeiten im Build-Prozess erfordert.",
+  "transcript_sha256": "f7ffa91189fa8a7a53b4baee0582b8bc409c026bf34bce589a2de07fca003387"
+}

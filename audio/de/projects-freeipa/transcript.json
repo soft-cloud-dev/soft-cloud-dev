@@ -1,0 +1,163 @@
+{
+  "chunks": [
+    {
+      "chunk_hash": "77fa7bbb8744b8af02c3988a066b13d2d6583944397ebfad6df4966bc0c1af2e",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph",
+        "el-0003-paragraph"
+      ],
+      "section_anchor": "freeipa-identitat-verzeichnis",
+      "section_title": "FreeIPA-Identität & Verzeichnis",
+      "segments": [
+        {
+          "element_id": "el-0001-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "8299da68e0fa15b1fcbf79e260db8bf4806bfd6e4cf5d6443e9aa05f28d48934",
+          "spoken_text": "FreeIPA-Identität & Verzeichnis"
+        },
+        {
+          "element_id": "el-0002-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "5a43facc2ddfe928b04b49b130b2ebb9edc238b32687b795a3372096d6728d32",
+          "spoken_text": "FreeIPA ist das SoftCloud-Labor, das sich auf Identität, Verzeichnisdienste, Authentifizierung und Zugriffsrichtlinien konzentriert."
+        },
+        {
+          "element_id": "el-0003-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "0b0c263aaceba214475aa69831bb4c8938c91983480c82afc737e097ac706de6",
+          "spoken_text": "Diese Seite ist ein Entdeckungs-Einstiegspunkt und keine Kopie der technischen Dokumentation des Labors. Implementierungsdetails, Betriebsstatus, Konfigurationsanweisungen und Freigabenachweise gehören in die dedizierte Publikation."
+        }
+      ],
+      "speech_input_hash": "bed49d48debfd91303b769d7090f1078eeb3093cac95fcb5d8772584652e9970",
+      "text": "FreeIPA-Identität & Verzeichnis.\n\nFreeIPA ist das SoftCloud-Labor, das sich auf Identität, Verzeichnisdienste, Authentifizierung und Zugriffsrichtlinien konzentriert.\n\nDiese Seite ist ein Entdeckungs-Einstiegspunkt und keine Kopie der technischen Dokumentation des Labors. Implementierungsdetails, Betriebsstatus, Konfigurationsanweisungen und Freigabenachweise gehören in die dedizierte Publikation.",
+      "text_sha256": "31c7146188d21ae30003d971654ffeebb03aeb2220c5cfa84fc4a3b3e3c2967b"
+    },
+    {
+      "chunk_hash": "e0811687a349c4a30843def50a60e6f3d8b1f22239825d9166a63584fdc89eab",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "element_ids": [
+        "el-0004-heading",
+        "el-0005-list",
+        "el-0006-paragraph"
+      ],
+      "section_anchor": "start-hier",
+      "section_title": "Start hier",
+      "segments": [
+        {
+          "element_id": "el-0004-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "67ea71ecd1f0ee17c2960a59f72248d4586824e6becf8597411ca823f4540c12",
+          "spoken_text": "Start hier"
+        },
+        {
+          "element_id": "el-0005-list",
+          "is_ai_summary": false,
+          "kind": "list",
+          "source_hash": "384397b9bfd938bd7a23ab29c9efe28cb1fd268c21a6187a7adce019fbcc708f",
+          "spoken_text": "FreeIPA-Dokumentation öffnen. Zurück zu allen Projekten."
+        },
+        {
+          "element_id": "el-0006-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "ab30c487da2b2970e15bb4e76e60e4afd48b2a87ae5b3a2d212253e0fb9bb3c3",
+          "spoken_text": "Das Ziel ist eine eigenständige Website; die Verfügbarkeit wird unabhängig vom Handbuch-Build überprüft."
+        }
+      ],
+      "speech_input_hash": "7413283389a8e29a520a5122cfb0e14d6584b753bdd6b7de6cc2d8068c478d8d",
+      "text": "Start hier.\n\nFreeIPA-Dokumentation öffnen. Zurück zu allen Projekten.\n\nDas Ziel ist eine eigenständige Website; die Verfügbarkeit wird unabhängig vom Handbuch-Build überprüft.",
+      "text_sha256": "18527bab072dfd7d68b0a256b468836179f029e2a2fd33749d71294a18ababd3"
+    }
+  ],
+  "code_summary_hashes": {},
+  "config_hash": "8e764f1bbc93d18905309a7c8547a196154843383e971c32ef0e0c41b1241f8b",
+  "element_ids": [
+    "el-0001-heading",
+    "el-0002-paragraph",
+    "el-0003-paragraph",
+    "el-0004-heading",
+    "el-0005-list",
+    "el-0006-paragraph"
+  ],
+  "elements": [
+    {
+      "element_id": "el-0001-heading",
+      "heading_level": 1,
+      "kind": "heading",
+      "section_anchor": "freeipa-identitat-verzeichnis",
+      "section_title": "FreeIPA-Identität & Verzeichnis",
+      "source_hash": "8299da68e0fa15b1fcbf79e260db8bf4806bfd6e4cf5d6443e9aa05f28d48934",
+      "text": "FreeIPA-Identität & Verzeichnis"
+    },
+    {
+      "element_id": "el-0002-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "freeipa-identitat-verzeichnis",
+      "section_title": "FreeIPA-Identität & Verzeichnis",
+      "source_hash": "5a43facc2ddfe928b04b49b130b2ebb9edc238b32687b795a3372096d6728d32",
+      "text": "FreeIPA ist das SoftCloud-Labor, das sich auf Identität, Verzeichnisdienste, Authentifizierung und Zugriffsrichtlinien konzentriert."
+    },
+    {
+      "element_id": "el-0003-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "freeipa-identitat-verzeichnis",
+      "section_title": "FreeIPA-Identität & Verzeichnis",
+      "source_hash": "0b0c263aaceba214475aa69831bb4c8938c91983480c82afc737e097ac706de6",
+      "text": "Diese Seite ist ein Entdeckungs-Einstiegspunkt und keine Kopie der technischen Dokumentation des Labors. Implementierungsdetails, Betriebsstatus, Konfigurationsanweisungen und Freigabenachweise gehören in die dedizierte Publikation."
+    },
+    {
+      "element_id": "el-0004-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "start-hier",
+      "section_title": "Start hier",
+      "source_hash": "67ea71ecd1f0ee17c2960a59f72248d4586824e6becf8597411ca823f4540c12",
+      "text": "Start hier"
+    },
+    {
+      "element_id": "el-0005-list",
+      "kind": "list",
+      "section_anchor": "start-hier",
+      "section_title": "Start hier",
+      "source_hash": "384397b9bfd938bd7a23ab29c9efe28cb1fd268c21a6187a7adce019fbcc708f",
+      "text": "FreeIPA-Dokumentation öffnen. Zurück zu allen Projekten."
+    },
+    {
+      "element_id": "el-0006-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "start-hier",
+      "section_title": "Start hier",
+      "source_hash": "ab30c487da2b2970e15bb4e76e60e4afd48b2a87ae5b3a2d212253e0fb9bb3c3",
+      "text": "Das Ziel ist eine eigenständige Website; die Verfügbarkeit wird unabhängig vom Handbuch-Build überprüft."
+    }
+  ],
+  "locale": "de",
+  "logical_source_path": "projects/freeipa.md",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "de",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in German (Deutsch) matching document locale 'de'.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "projects-freeipa",
+  "page_source_hash": "b2bf3620851cd7c701a147eac992b15614015605e0008027a7f51242cd096b4e",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "216d09c8139e3c9906d9703de5308010d24cc44386f808bc109f2fb3d203776c",
+  "source_path": "i18n/de/projects/freeipa.md",
+  "transcript_sha256": "335231c71b7b3f40b042ecd8759b6b7dd748f9b01640cbd6f9741fb925f5435a"
+}
