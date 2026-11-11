@@ -189,7 +189,8 @@ class UpdateTests(Base):
     def test_english_change_elsewhere_keeps_human_edit_and_flags_it(self) -> None:
         loc = self.root / "i18n/fr/architecture.md"
         lines = loc.read_text(encoding="utf-8").split("\n")
-        lines[2] += " (corrigé par un humain)"
+        prose_idx = next(idx for idx, line in enumerate(lines) if line.startswith("Spécifications"))
+        lines[prose_idx] += " (corrigé par un humain)"
         loc.write_text("\n".join(lines), encoding="utf-8")
         self.append(self.root / "architecture.md", "\nEnglish tail.\n")
         _, report, _ = self.run_update()
@@ -204,7 +205,7 @@ class UpdateTests(Base):
     def test_code_change_in_english_reaches_translation_unmodified(self) -> None:
         en = self.root / "architecture.md"
         text = en.read_text(encoding="utf-8")
-        marker = "```"
+        marker = "```text"
         i = text.index(marker)
         j = text.index("\n", i) + 1
         en.write_text(text[:j] + "echo CHANGED_BY_TEST\n" + text[j:], encoding="utf-8")
@@ -319,7 +320,7 @@ class AcceptReviewedTests(Base):
     def test_accept_refused_when_edit_breaks_code(self) -> None:
         loc = self.root / "i18n/fr/architecture.md"
         text = loc.read_text(encoding="utf-8")
-        i = text.index("```")
+        i = text.index("```text")
         j = text.index("\n", i) + 1
         loc.write_text(text[:j] + "tampered\n" + text[j:], encoding="utf-8")
         res = ts.accept_reviewed_translations(self.root, "fr", self.docs)

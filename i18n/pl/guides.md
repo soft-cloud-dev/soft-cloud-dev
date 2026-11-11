@@ -5,6 +5,13 @@ description: Praktyczne procedury tworzenia treści i publikowania.
 
 # Poradniki
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "guides",
+  "locale": "pl"
+}
+```
+
 Publikuj strony powiązane ze źródłami w kontrolowanym potoku MyST.
 
 ## Opublikuj pierwszą stronę

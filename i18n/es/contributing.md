@@ -5,6 +5,13 @@ description: "Operaciones de publicación, configuración del entorno, validaci�
 
 # Guía de colaboradores
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "contributing",
+  "locale": "es"
+}
+```
+
 Esta guía regula el flujo de trabajo de los colaboradores y las operaciones de publicación. Las garantías arquitectónicas se mantienen en [Architecture & Specification](architecture.md); las convenciones de las páginas de Web Awesome se mantienen en la [component authoring guide](components/authoring-guide.md).
 ## Cadena de herramientas y fuente de la verdad
 

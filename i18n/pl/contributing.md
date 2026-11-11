@@ -5,6 +5,13 @@ description: "Operacje publikacyjne, konfiguracja środowiska, walidacja i przep
 
 # Przewodnik dla współtwórców
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "contributing",
+  "locale": "pl"
+}
+```
+
 Niniejszy przewodnik reguluje przepływ pracy współtwórców oraz operacje publikacyjne. Gwarancje architektoniczne pozostają w [Architecture & Specification](architecture.md); konwencje stron Web Awesome pozostają w [component authoring guide](components/authoring-guide.md).
 ## Narzędzia i źródło prawdy
 

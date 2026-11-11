@@ -5,6 +5,12 @@ description: Discover separate SoftCloud engineering laboratories.
 
 # Systems & Laboratories
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "projects"
+}
+```
+
 The handbook is the discovery portal. Each laboratory owns its detailed architecture, operational status, and verified release evidence.
 
 ## Node Linux

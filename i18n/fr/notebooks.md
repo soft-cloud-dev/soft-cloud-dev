@@ -5,6 +5,13 @@ description: Notebooks de calcul et d'intégration UI vérifiés.
 
 # Notebooks de calcul
 
+```{anywidget} ./widgets/voice-player.mjs
+{
+  "page": "notebooks",
+  "locale": "fr"
+}
+```
+
 Les notebooks sont des artefacts vérifiés lors de la compilation. Le manuel statique n'exécute pas Python dans le navigateur.
 
 ## Exécution et preuves
