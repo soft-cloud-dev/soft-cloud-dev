@@ -1,4 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 const locales = [
   { code: 'en', prefix: '', headline: 'Engineering knowledge you can reproduce.', nav: ['Guides', 'Notebooks', 'UI Library', 'Projects'], cta: 'Start with a guide' },
@@ -147,15 +149,80 @@ test('introduction and architecture remain reachable in all five locales', async
   }
 });
 
-test('localized UI Library entry identifies the English-only catalog', async ({ page }) => {
-  for (const locale of locales.slice(1)) {
-    await page.goto(locale.prefix + '/ui-library/');
-    await expect(page.locator('main a[href="https://my.softcloud.dev/components"]').first()).toBeVisible();
+test('localized UI Library entry identifies the English-only catalog', async ({ page, baseURL, context }) => {
+  const errors: string[] = [];
+  const failedResources: string[] = [];
+  const collectErrors = (target: Page) => {
+    target.on('pageerror', error => errors.push(error.message));
+    target.on('response', response => {
+      if (response.status() >= 400) failedResources.push(`${response.status()} ${response.url()}`);
+    });
+  };
+  collectErrors(page);
+  context.on('page', collectErrors);
+  await context.route('https://my.softcloud.dev/components', async route => {
+    const response = await route.fetch({ url: `${baseURL}/components/` });
+    await route.fulfill({ response });
+  });
+  const catalogResponse = await page.goto('/components/');
+  expect(catalogResponse?.ok(), '/components/ route must return HTTP 200').toBeTruthy();
+  await expect(page.locator('main h1').first()).toContainText('Web Awesome — Component Catalog');
+  await expect(page.locator('a[title="Edit This Page"]')).toHaveAttribute(
+    'href',
+    'https://github.com/soft-cloud-dev/soft-cloud-dev/edit/main/components/index.md',
+  );
+
+  for (const locale of locales) {
+    const response = await page.goto(locale.prefix + '/ui-library/');
+    expect(response?.ok(), locale.code + ' /ui-library/').toBeTruthy();
+    const cta = page.locator('main a[href="https://my.softcloud.dev/components"]').first();
+    await expect(cta).toBeVisible();
     await expect(page.locator('main')).toContainText(/web[- ]awesome/i);
+    const expectedEditHref =
+      locale.code === 'en'
+        ? 'https://github.com/soft-cloud-dev/soft-cloud-dev/edit/main/ui-library.md'
+        : `https://github.com/soft-cloud-dev/soft-cloud-dev/edit/main/i18n/${locale.code}/ui-library.md`;
+    await expect(page.locator('a[title="Edit This Page"]')).toHaveAttribute('href', expectedEditHref);
+    const [catalog] = await Promise.all([page.waitForEvent('popup'), cta.click()]);
+    await catalog.waitForLoadState('networkidle');
+    await expect(catalog).toHaveURL('https://my.softcloud.dev/components');
+    await expect(catalog.locator('main h1').first()).toContainText('Web Awesome — Component Catalog');
+    await expect(catalog.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(catalog.locator('a[title="Edit This Page"]')).toHaveAttribute(
+      'href', 'https://github.com/soft-cloud-dev/soft-cloud-dev/edit/main/components/index.md',
+    );
+    await expect(catalog.locator('body')).not.toContainText('Unexpected Error Occurred');
+    await catalog.close();
   }
+  expect(errors).toEqual([]);
+  expect(failedResources.filter(url => url.includes('127.0.0.1:4174'))).toEqual([]);
 });
 
-test('localized homepages hydrate without crashing when browser storage throws SecurityError', async ({ page }) => {
+test('all published page payloads point to existing authoritative repository sources', async ({ request }) => {
+  const response = await request.get('/i18n/route-manifest.json');
+  expect(response.ok()).toBeTruthy();
+  const manifest = await response.json();
+  let checked = 0;
+  for (const page of Object.values(manifest.pages) as any[]) {
+    for (const locale of locales) {
+      const translation = page.translations[locale.code];
+      if (!translation?.available) continue;
+      const route = translation.route.replace(/\/$/, '');
+      const payloadResponse = await request.get((route || '') + (page.slug ? '.json' : '/index.json'));
+      expect(payloadResponse.ok(), `${locale.code} ${translation.route}`).toBeTruthy();
+      const payload = await payloadResponse.json();
+      const source = (locale.code === 'en' ? '' : `i18n/${locale.code}/`) + payload.location.replace(/^\//, '');
+      expect(existsSync(resolve(source)), `repository source ${source}`).toBeTruthy();
+      expect(payload.frontmatter.edit_url).toBe(`https://github.com/soft-cloud-dev/soft-cloud-dev/edit/main/${source}`);
+      expect(payload.frontmatter.source_url).toBe(`https://github.com/soft-cloud-dev/soft-cloud-dev/blob/main/${source}`);
+      checked++;
+    }
+  }
+  expect(checked).toBeGreaterThan(150);
+});
+
+test('localized homepages hydrate without crashing when browser storage throws SecurityError', async ({ page, baseURL }) => {
+  const origin = (baseURL ?? 'http://127.0.0.1:4174').replace(/\/+$/, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   await page.addInitScript(() => {
     const blocked = {
       get() {
@@ -192,7 +259,7 @@ test('localized homepages hydrate without crashing when browser storage throws S
     .first()
     .click();
   await page.waitForLoadState('networkidle');
-  await expect(page).toHaveURL(/^http:\/\/127\.0\.0\.1:4174\/$/);
+  await expect(page).toHaveURL(new RegExp('^' + origin + '/$'));
   await expect(page.locator('.sc-handbook')).toBeVisible();
   await expect(page.locator('body')).not.toContainText('Unexpected Error Occurred');
   expect(pageErrors).toEqual([]);
