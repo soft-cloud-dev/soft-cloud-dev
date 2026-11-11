@@ -151,9 +151,12 @@ test('introduction and architecture remain reachable in all five locales', async
 
 test('localized UI Library entry identifies the English-only catalog', async ({ page, baseURL, context }) => {
   const errors: string[] = [];
+  const failedResources: string[] = [];
   const collectErrors = (target: Page) => {
     target.on('pageerror', error => errors.push(error.message));
-    target.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
+    target.on('response', response => {
+      if (response.status() >= 400) failedResources.push(`${response.status()} ${response.url()}`);
+    });
   };
   collectErrors(page);
   context.on('page', collectErrors);
@@ -192,6 +195,7 @@ test('localized UI Library entry identifies the English-only catalog', async ({ 
     await catalog.close();
   }
   expect(errors).toEqual([]);
+  expect(failedResources.filter(url => url.includes('127.0.0.1:4174'))).toEqual([]);
 });
 
 test('all published page payloads point to existing authoritative repository sources', async ({ request }) => {
