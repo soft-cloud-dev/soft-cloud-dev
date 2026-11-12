@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0020-code_block",
+  "generation_config": {
+    "locale": "en",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.",
+    "text_temperature": 0.0
+  },
+  "language": "text",
+  "locale": "en",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "4f0d0f387c2afc9b43a1096e6328699c8bb9d1b2a83b5b564e12ac5c488280ed",
+  "text_config_hash": "0846589af99b00b22e275b48d758bb57230fc775dcd68efcb9d596640d7aec2a",
+  "transcript": "This text configuration file specifies the exact Python package dependencies required for building documentation within the Software Cloud platform using Jupyter Book. It declares three core packages with pinned versions: jupyter-book version 2.1.7, ipykernel version 7.3.0, and PyYAML version 6.0.3. This file is typically consumed by package managers like pip to provision a consistent build environment, ensuring that the documentation compiler, the interactive Python execution kernel, and the YAML parser operate with mutually compatible versions. While this guarantees reproducible documentation builds, deployment systems must ensure these specific package versions are compatible with the broader host environment to prevent dependency conflicts.",
+  "transcript_sha256": "8f437c6cd7b1d9da2141a022c3639284476bf01538974bc6263336074c63d5e1"
+}
