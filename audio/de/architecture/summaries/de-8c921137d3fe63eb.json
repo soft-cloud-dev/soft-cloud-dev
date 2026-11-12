@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0037-code_block",
+  "generation_config": {
+    "locale": "de",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in German (Deutsch) matching document locale 'de'.",
+    "text_temperature": 0.0
+  },
+  "language": "sh",
+  "locale": "de",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "e18a46abd68e4fb603c06533c176a3d147c7af53080358c490f09b1c973f201d",
+  "text_config_hash": "4001014f9594e916ff526aac8e75616a4608252cbae84f40f815f69394cf4aba",
+  "transcript": "Dieses Shell-Skriptexekutiert eine vollständige Validierung und Erstellung einer Jupyter Book-Dokumentation im Rahmen der Software-Cloud-Plattform. Der Zweck des Skripts besteht darin, eine saubere Build-Umgebung zu erzwingen, Systemabhängigkeiten zu überprüfen, benutzerdefinierte Profilprüfungen auszuführen und die HTML-Ausgabe strikt zu generieren. Das Skript ist so konfiguriert, dass es bei jedem unvorhergesehenen Fehler sofort abbricht und den Zugriff auf globale Node-Umgebungen einschränkt. Es setzt voraus, dass grundlegende Werkzeuge wie Node.js, npm, Python, pip und Jupyter Book in der Laufzeitumgebung installiert und über den Systempfad verfügbar sind. Zu den wichtigsten Operationen gehört die Deaktivierung von nodeenv via Umgebungsvariable, gefolgt von Versionsabfragen zur Umgebungsdiagnostik. Anschließend wird ein benutzerdefiniertes Python-Skript zur Profilprüfung ausgeführt. Im Kern des Build-Prozesses wird das Jupyter Book vollständig bereinigt, im strikten Modus als HTML-Dokumentation neu erstellt und abschließend durch einen Test verifiziert, der sicherstellt, dass die Haupt-HTML-Datei existiert und nicht leer ist. Zu den potenziellen Risiken gehören Fehlschläge beim Build, falls eine der abhängigen Binärversionen inkompatibel ist oder das Python-Prüfskript fehlschlägt. Da das Skript im strikten Modus arbeitet, führt jeder Warnhinweis oder Fehler beim Erstellen des Jupyter Books zu einem sofortigen Abbruch der Ausführung.",
+  "transcript_sha256": "e131ada850a04ed3d178760a33c298b588a8c95580435e0e37288544747c83a2"
+}

@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0040-code_block",
+  "generation_config": {
+    "locale": "de",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in German (Deutsch) matching document locale 'de'.",
+    "text_temperature": 0.0
+  },
+  "language": "yaml",
+  "locale": "de",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "f419e5b35c2868a2e9b0f19bb6851b9a6eaff942ea79e1cbfe87411389dcce6e",
+  "text_config_hash": "4001014f9594e916ff526aac8e75616a4608252cbae84f40f815f69394cf4aba",
+  "transcript": "Dieser GitHub Actions Workflow automatisiert die Erstellung und Veröffentlichung eines Jupyter Books auf GitHub Pages. Ausgelöst wird der Ablauf bei jedem Push auf den Hauptzweig sowie manuell über ein Dispatch-Ereignis. Eine definierte Nebenläufigkeitsgruppe stellt dabei sicher, dass aufeinanderfolgende Bereitstellungen geordnet nacheinander ablaufen und aktive Vorgänge nicht abgebrochen werden. Der Ablauf gliedert sich in zwei aufeinanderfolgende Jobs: Build und Deploy. Der Build-Job verwendet Ubuntu 24.04 und setzt auf maximale Reproduzierbarkeit und Sicherheit. Alle externen GitHub Actions sind über exakte Commit-Hashes fixiert, und das Speichern von Git-Anmeldedaten ist deaktiviert. Nach der Einrichtung von Python in der fest definierten Version 3.12.14 wird die CPython-Laufzeitumgebung explizit verifiziert und eine isolierte virtuelle Umgebung erstellt. Die Abhängigkeiten werden deterministisch aus einer Lockdatei bezogen, wobei zwingend kryptografische Prüfsummen und reine Binärpakete verlangt werden. Nach der Überprüfung der Paketkonsistenz registriert der Job einen IPython-Kernel und führt das Build-Skript im Ordner tools aus. Dabei wird der Basispfad von GitHub Pages als Umgebungsvariable übergeben. Das resultierende HTML-Verzeichnis wird anschließend als Pages-Artefakt hochgeladen. Im nachgelagerten Deploy-Job wird dieses Artefakt über die offizielle GitHub-Pages-Aktion in der Zielumgebung veröffentlicht, wozu gezielt Schreibrechte für Pages und ID-Tokens vergeben werden. Als wesentliche Einschränkung und Voraussetzung gilt, dass die Pipeline strikt von der exakten Python-Patchversion, der Validität der Hash-Werte in der Lockdatei sowie der Existenz und Fehlerfreiheit des Skripts tools build punkt sh abhängt. Weicht die Umgebung ab oder schlägt die Hash-Prüfung fehl, bricht der Workflow kontrolliert ab.",
+  "transcript_sha256": "0eca9a5ebeafd78b270e784c7f6065797111c45c9e7b044159dd3bed8396b338"
+}

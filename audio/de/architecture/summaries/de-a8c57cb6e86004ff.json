@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0034-code_block",
+  "generation_config": {
+    "locale": "de",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in German (Deutsch) matching document locale 'de'.",
+    "text_temperature": 0.0
+  },
+  "language": "python",
+  "locale": "de",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "a30e9c2499e0b7150b674adf92a78dedc58a96d96eea6573a4910290f3651d78",
+  "text_config_hash": "4001014f9594e916ff526aac8e75616a4608252cbae84f40f815f69394cf4aba",
+  "transcript": "Das vorliegende Skript dient als strikter Validierungs- und Preflight-Prüfstand für Jupyter-Book-Projekte, bevor diese kompiliert oder veröffentlicht werden. Es stellt sicher, dass die Umgebung, die Bibliotheksversionen, die Konfiguration sowie alle referenzierten Projektdateien exakten Vorgaben entsprechen. Als wesentliche Eingaben liest das Skript Umgebungsvariablen wie die Basis-URL, die Konfigurationsdatei myst.yml sowie die im Inhaltsverzeichnis definierten Markdown- und Notebook-Dateien ein. Als Ausgabe liefert es im Erfolgsfall eine Bestätigungsmeldung in der Konsole oder bricht den Prozess bei Abweichungen sofort mit einem Systemabbruch ab. Das Skript hängt von Standardmodulen sowie externen Bibliotheken wie PyYAML und Jupyter-Client ab. Es validiert zu Beginn die Python-Version, das CPython-Laufzeitumfeld und zwingt zur Nutzung einer aktiven Virtuellen Umgebung. Zudem werden exakte Versionsnummern für Pakete wie jupyter-book und ipykernel erzwungen. Konfigurationsseitig prüft es die myst.yml auf Versionseinhaltung, das Vorhandensein eines gültigen Inhaltsverzeichnisses sowie das Verbot von unerlaubten Überschreibungen, Legacy-Dateien oder bestimmten Umgebungsvariablen. Ein zentraler Bestandteil ist die rekursive Validierung des Inhaltsverzeichnisses. Das Skript stellt sicher, dass alle referenzierten Dateien innerhalb des Projektstamms liegen, keine doppelten Einträge existieren und alle Notebooks im Verzeichnis tatsächlich im Inhaltsverzeichnis registriert sind. Darüber hinaus werden Notebooks und Markdown-Dateien rekursiv auf verbotene Ausführungssteuerungen, Blockaden wie übersprungene Ausführungen und unerlaubte Tags untersucht. Bei rechenintensiven oder ausführbaren Inhalten wird zudem geprüft, ob konsistent der korrekte Jupyter-Kernel verwendet wird. Das Skript hat weitreichende Seiteneffekte in Form von Laufzeitabbrüchen, sollte eine der strengen Sicherheits- oder Integritätsbedingungen verletzt werden, und schützt somit vor Fehlkonfigurationen in Dokumentations-Pipelines.",
+  "transcript_sha256": "14aaf4424bf3648e0b5cd3fee0ac590d1f550be02df59fe0919ab96317e394ea"
+}
