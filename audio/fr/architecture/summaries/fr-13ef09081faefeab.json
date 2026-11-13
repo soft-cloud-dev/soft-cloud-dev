@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0014-code_block",
+  "generation_config": {
+    "locale": "fr",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in French (français) matching document locale 'fr'.",
+    "text_temperature": 0.0
+  },
+  "language": "text",
+  "locale": "fr",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "3f0dd9ba2fdcdd6c538bc825275097866429fc0f059ff4f82e63bb747c5fdc75",
+  "text_config_hash": "4714c98f9b38cf8df7f86efa85c71af3e422ea6753297c5c66a1f16e5138bf9b",
+  "transcript": "Ce bloc de texte définit la licence BSD standard à deux clauses, un accord juridique open source qui régit l'utilisation, la modification et la redistribution du logiciel de la plateforme Software Cloud. Son objectif principal est de formaliser les conditions d'utilisation tout en protégeant les détenteurs des droits d'auteur et les contributeurs contre toute responsabilité légale. Le document ne comporte pas d'entrées, de sorties ou de dépendances techniques, car il s'agit d'un avis juridique textuel. Sur le plan des opérations, il impose aux utilisateurs de conserver l'avis de copyright et l'avertissement de non-responsabilité lors de toute redistribution du code source ou des binaires. Concernant les risques et limitations, la clause clé stipule que le logiciel est fourni en l'état, sans aucune garantie implicite ou explicite de qualité marchande ou d'adéquation à un usage particulier, et dégage entièrement les contributeurs de toute responsabilité en cas de dommages directs ou indirects liés à son utilisation.",
+  "transcript_sha256": "0237930fca64c92440679fcb85ec917417e6e9ee31f3ffeabea67de589169d28"
+}
