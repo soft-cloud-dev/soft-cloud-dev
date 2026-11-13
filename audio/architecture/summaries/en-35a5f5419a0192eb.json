@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0031-code_block",
+  "generation_config": {
+    "locale": "en",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.",
+    "text_temperature": 0.0
+  },
+  "language": "python",
+  "locale": "en",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "6b6f125996ff3ccb429429effd6d015edff9fcf7b65358c5516417c27f5cb033",
+  "text_config_hash": "0846589af99b00b22e275b48d758bb57230fc775dcd68efcb9d596640d7aec2a",
+  "transcript": "This Python script generates a Pip-compatible requirements file with cryptographic hashes from a directory of pre-downloaded wheel files. It accepts two command-line arguments representing the input wheelhouse directory and the output requirements file path, depending on standard libraries including zipfile, hashlib, and email. The script validates that the output file does not already exist to prevent accidental overwrites, ensures the input directory contains exclusively wheel files, and verifies that each wheel contains unambiguous metadata. It parses the package name and version from each wheel's METADATA file, standardizes the distribution name, checks for duplicate packages, and computes a SHA-256 file digest for integrity verification. Finally, it writes sorted, pinned requirement strings containing the package name, version, and hash to the output file using exclusive creation mode. Potential risks include runtime termination via SystemExit if any validation checks fail, such as missing wheels, unexpected directory contents, ambiguous metadata, or duplicate distributions.",
+  "transcript_sha256": "214088ac5abda828525bcd595fb70c986ef2adb161beed4e5432aa478e3c7ca5"
+}
