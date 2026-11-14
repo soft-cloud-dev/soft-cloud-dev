@@ -1,0 +1,195 @@
+{
+  "chunks": [
+    {
+      "chunk_hash": "7288bd436ca61d8bbe1edbc23cb098a43f12cd5abdbf639c7956bfb676054b51",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph"
+      ],
+      "section_anchor": "ui-bibliothek",
+      "section_title": "UI-Bibliothek",
+      "segments": [
+        {
+          "element_id": "el-0001-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "6d62c522f53afe9d088d9f665f39db79b45aa045e27e617be3c9b38371cf6a8f",
+          "spoken_text": "UI-Bibliothek"
+        },
+        {
+          "element_id": "el-0002-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "ebba0a3b49f1ee2851104eee45ce5ae0c49387f05a5f3bdde31ac21fe3c61563",
+          "spoken_text": "Finden Sie wiederverwendbare UI-Muster, Design-Tokens und dokumentierte Web-Awesome-Integrationen."
+        }
+      ],
+      "speech_input_hash": "d64a7072db1fa838cd90838e0d8dc5907de8c21e66315757ad7cd8bf8239383b",
+      "text": "UI-Bibliothek.\n\nFinden Sie wiederverwendbare UI-Muster, Design-Tokens und dokumentierte Web-Awesome-Integrationen.",
+      "text_sha256": "7f723682a3672fe4ebb54be4d4dab509fbf1e55018350e1d2bfc6d8c0ece46d2"
+    },
+    {
+      "chunk_hash": "a4dd4682bbd4bacdd237b91e5dadbe4f2bdfe1e713a28faabb919913d514cef3",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "element_ids": [
+        "el-0003-heading",
+        "el-0004-paragraph",
+        "el-0005-list"
+      ],
+      "section_anchor": "komponentenkatalog",
+      "section_title": "Komponentenkatalog",
+      "segments": [
+        {
+          "element_id": "el-0003-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "d9100df79732ca2b891baad9c0ec62b60e609ce3cef225ed966b6983c9a60f05",
+          "spoken_text": "Komponentenkatalog"
+        },
+        {
+          "element_id": "el-0004-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "3b8d197f777de3a215cbe42a8c23ef944b74f5a1c1f63222c17d57e044aec575",
+          "spoken_text": "Der vollständige Komponentenkatalog wird derzeit auf Englisch gepflegt. Der folgende Link führt ausdrücklich zur englischen Ausgabe; die Detailseiten gelten nicht als übersetzt."
+        },
+        {
+          "element_id": "el-0005-list",
+          "is_ai_summary": false,
+          "kind": "list",
+          "source_hash": "f3d0d3fa3e3e104dc6babc8f031204272d772294fd90100e5eb5442495a46340",
+          "spoken_text": "Vollständigen Komponentenkatalog öffnen (Englisch). Design-Tokens entdecken (Englisch)."
+        }
+      ],
+      "speech_input_hash": "6d793b2667c245de7fc8db5d62c3d5b6ac62eb894dfde1445f199b7759db6ed9",
+      "text": "Komponentenkatalog.\n\nDer vollständige Komponentenkatalog wird derzeit auf Englisch gepflegt. Der folgende Link führt ausdrücklich zur englischen Ausgabe; die Detailseiten gelten nicht als übersetzt.\n\nVollständigen Komponentenkatalog öffnen (Englisch). Design-Tokens entdecken (Englisch).",
+      "text_sha256": "fb77ee3854a92436af16504969228788e790454ad48408209ccb9bfa4974082a"
+    },
+    {
+      "chunk_hash": "a22fa20f532eb7ecf8f3a69b16b0b462cf4d0d2cd3ed447889db1f620c414ebe",
+      "chunk_id": "chunk-003",
+      "chunk_index": 3,
+      "element_ids": [
+        "el-0006-heading",
+        "el-0007-paragraph"
+      ],
+      "section_anchor": "in-ihrer-sprache-fortfahren",
+      "section_title": "In Ihrer Sprache fortfahren",
+      "segments": [
+        {
+          "element_id": "el-0006-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "14a239fd73cf43d4625d5977ae540ecccb62b59a3e47b34015b3a07089fab1af",
+          "spoken_text": "In Ihrer Sprache fortfahren"
+        },
+        {
+          "element_id": "el-0007-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "f648c6b31cb5f8ab106b7560e49d79744b703c1dc78878d3d81c7079603398eb",
+          "spoken_text": "Anleitungen · Rechen-Notebooks."
+        }
+      ],
+      "speech_input_hash": "37384b7d4141505348a2399de355ed2a81c6e8fbe1715e931cb3d1bedc8874e4",
+      "text": "In Ihrer Sprache fortfahren.\n\nAnleitungen · Rechen-Notebooks.",
+      "text_sha256": "e1c5b68dd4e0482e7bc6742da2c51de8fa0050f278e832e18029e53eecc484fa"
+    }
+  ],
+  "code_summary_hashes": {},
+  "config_hash": "8e764f1bbc93d18905309a7c8547a196154843383e971c32ef0e0c41b1241f8b",
+  "element_ids": [
+    "el-0001-heading",
+    "el-0002-paragraph",
+    "el-0003-heading",
+    "el-0004-paragraph",
+    "el-0005-list",
+    "el-0006-heading",
+    "el-0007-paragraph"
+  ],
+  "elements": [
+    {
+      "element_id": "el-0001-heading",
+      "heading_level": 1,
+      "kind": "heading",
+      "section_anchor": "ui-bibliothek",
+      "section_title": "UI-Bibliothek",
+      "source_hash": "6d62c522f53afe9d088d9f665f39db79b45aa045e27e617be3c9b38371cf6a8f",
+      "text": "UI-Bibliothek"
+    },
+    {
+      "element_id": "el-0002-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "ui-bibliothek",
+      "section_title": "UI-Bibliothek",
+      "source_hash": "ebba0a3b49f1ee2851104eee45ce5ae0c49387f05a5f3bdde31ac21fe3c61563",
+      "text": "Finden Sie wiederverwendbare UI-Muster, Design-Tokens und dokumentierte Web-Awesome-Integrationen."
+    },
+    {
+      "element_id": "el-0003-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "komponentenkatalog",
+      "section_title": "Komponentenkatalog",
+      "source_hash": "d9100df79732ca2b891baad9c0ec62b60e609ce3cef225ed966b6983c9a60f05",
+      "text": "Komponentenkatalog"
+    },
+    {
+      "element_id": "el-0004-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "komponentenkatalog",
+      "section_title": "Komponentenkatalog",
+      "source_hash": "3b8d197f777de3a215cbe42a8c23ef944b74f5a1c1f63222c17d57e044aec575",
+      "text": "Der vollständige Komponentenkatalog wird derzeit auf Englisch gepflegt. Der folgende Link führt ausdrücklich zur englischen Ausgabe; die Detailseiten gelten nicht als übersetzt."
+    },
+    {
+      "element_id": "el-0005-list",
+      "kind": "list",
+      "section_anchor": "komponentenkatalog",
+      "section_title": "Komponentenkatalog",
+      "source_hash": "f3d0d3fa3e3e104dc6babc8f031204272d772294fd90100e5eb5442495a46340",
+      "text": "Vollständigen Komponentenkatalog öffnen (Englisch). Design-Tokens entdecken (Englisch)."
+    },
+    {
+      "element_id": "el-0006-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "in-ihrer-sprache-fortfahren",
+      "section_title": "In Ihrer Sprache fortfahren",
+      "source_hash": "14a239fd73cf43d4625d5977ae540ecccb62b59a3e47b34015b3a07089fab1af",
+      "text": "In Ihrer Sprache fortfahren"
+    },
+    {
+      "element_id": "el-0007-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "in-ihrer-sprache-fortfahren",
+      "section_title": "In Ihrer Sprache fortfahren",
+      "source_hash": "f648c6b31cb5f8ab106b7560e49d79744b703c1dc78878d3d81c7079603398eb",
+      "text": "Anleitungen · Rechen-Notebooks."
+    }
+  ],
+  "locale": "de",
+  "logical_source_path": "ui-library.md",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "de",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in German (Deutsch) matching document locale 'de'.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "ui-library",
+  "page_source_hash": "d3fa5be2fd22485a861addb5e10e3fb7c3ed5ee86ec422ed4cbc3a8bc16bb67c",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "0aa46e0710a0f6d0a0b6d8c3c49244d696aa46ea73394df96da35126ee603488",
+  "source_path": "i18n/de/ui-library.md",
+  "transcript_sha256": "812cae9819269060210733de04a2fad1336ff0fcfbc453a899278355489f4e85"
+}

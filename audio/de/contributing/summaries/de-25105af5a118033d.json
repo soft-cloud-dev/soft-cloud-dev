@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0008-code_block",
+  "generation_config": {
+    "locale": "de",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in German (Deutsch) matching document locale 'de'.",
+    "text_temperature": 0.0
+  },
+  "language": "sh",
+  "locale": "de",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "e135e0599dc3a6eef2c796e270076af3dcd24a30269d4271e795d14e7759aa8e",
+  "text_config_hash": "4001014f9594e916ff526aac8e75616a4608252cbae84f40f815f69394cf4aba",
+  "transcript": "Das voranstehende Skript führt einen standardisierten Build-Prozess für die Software Cloud Plattform aus. Zunächst wird der Befehl npm ci ausgeführt, um die projektabhängigen Node-Module basierend auf der Lock-Datei sauber und deterministisch zu installieren. Anschließend prüft das Node-Skript check-node-dependencies.mjs, ob die lokalen Node-Umgebung und die Abhängigkeiten den geforderten Standards entsprechen. Schließlich wird das Shell-Skript build.sh im Verzeichnis tools aufgerufen, wobei die Umgebungsvariable BASE_URL explizit auf einen leeren String gesetzt wird. Das Skript setzt voraus, dass Node.js und npm in der Umgebung vorhanden sind, und modifiziert das Dateisystem durch die Installation von Paketen sowie die Erstellung von Build-Artefakten.",
+  "transcript_sha256": "a22c4e863d8a2a9608ab4aa12988a0c062ec2e1066aca5ea9a05d4d2550c672d"
+}

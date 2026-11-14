@@ -1,0 +1,77 @@
+{
+  "chunks": [
+    {
+      "audio_file": "chunk-001-b1cf79645432.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "20f56c1bf113a6a9328f6d546263203ae8a93f724752a10d2e6dc1291b03c88e",
+      "chunk_hash": "b1cf7964543295dcb3070b5f9a5166e4c3e8e09dd1ff01e5fae00eea65381399",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "duration_seconds": 9.888,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph"
+      ],
+      "locale": "de",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "rechen-notebooks",
+      "section_title": "Rechen-Notebooks",
+      "size_bytes": 79104,
+      "speech_input_hash": "1cd31c759522b03c55baf2bf74d8cd115ff8dfb850ed9f537d6fba93d5005055",
+      "text_sha256": "9dc04567983c0794c328bcbbd8c5913c8e728a64aa0f8f460ef87877f8a73081",
+      "tts_config_hash": "0f2ac04ed22b2b68f46a6c45ad6875ea89c14b2174b198454c422bb37ee07ebd",
+      "voice": "Kore"
+    },
+    {
+      "audio_file": "chunk-002-c0f06d75bb67.mp3",
+      "audio_format": "mp3",
+      "audio_sha256": "c6d346d70b2dd5b8967515bbecc599c601e9afbcdc8a9a8b9e7633b66296194e",
+      "chunk_hash": "c0f06d75bb67de1555e79261b9d9f6d20812a9d6015136fe79e1cdb4166d567d",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "duration_seconds": 26.976,
+      "element_ids": [
+        "el-0003-heading",
+        "el-0004-paragraph",
+        "el-0005-list",
+        "el-0006-paragraph"
+      ],
+      "locale": "de",
+      "model": "gemini-3.8-flash-tts",
+      "section_anchor": "ausfuhrung-und-nachweise",
+      "section_title": "Ausführung und Nachweise",
+      "size_bytes": 215808,
+      "speech_input_hash": "4774af4be694c7444f257392efc4c7d9e3c35c0e3640eb4eac05a66ba57f1389",
+      "text_sha256": "6556544cc6ac4d032b1c69066755b5fb6b255540b0fec886277148bc62c0860b",
+      "tts_config_hash": "0f2ac04ed22b2b68f46a6c45ad6875ea89c14b2174b198454c422bb37ee07ebd",
+      "voice": "Kore"
+    }
+  ],
+  "config_hash": "8e764f1bbc93d18905309a7c8547a196154843383e971c32ef0e0c41b1241f8b",
+  "locale": "de",
+  "logical_source_path": "notebooks.md",
+  "manifest_sha256": "3d4217a91f06d2dc5bae57a776e86f31e35a485d2d22c84fbe93397c1ff903e0",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "de",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in German (Deutsch) matching document locale 'de'.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "notebooks",
+  "page_source_hash": "f588e7e49a85f43015e47bc49b8dee27d3e36c37bddbc99e88560fc30cd7bfae",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "84de9c3f9e4c2e09561f3f0bbdab60c3c72fc720856320647ec1279e98a63eb8",
+  "source_path": "i18n/de/notebooks.md",
+  "status": "complete",
+  "total_chunks": 2,
+  "total_duration_seconds": 36.864,
+  "transcript_file": "transcript.json",
+  "transcript_sha256": "1dfe59daacfd4f2ce8d13b5e48ca78ede291d4ca223687a7ffdbc292fd20ab32"
+}
