@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0037-code_block",
+  "generation_config": {
+    "locale": "en",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.",
+    "text_temperature": 0.0
+  },
+  "language": "sh",
+  "locale": "en",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "e18a46abd68e4fb603c06533c176a3d147c7af53080358c490f09b1c973f201d",
+  "text_config_hash": "0846589af99b00b22e275b48d758bb57230fc775dcd68efcb9d596640d7aec2a",
+  "transcript": "This POSIX shell script automates the validation, building, and verification process for a Jupyter Book project within the Software Cloud platform. It operates under strict error-handling rules, exiting immediately on any command failure or unbound variable usage, and explicitly disables external Node environment management via the JB_ALLOW_NODEENV environment variable. The script begins by verifying that essential runtime dependencies are installed and accessible in the system path, specifically checking Node.js, npm, Python, and the Python package manager pip. It then executes a custom Python profile validation script located in the tools directory, checks the installed Jupyter Book version, and performs a clean build of the documentation. During the build phase, it executes notebooks in strict mode to catch runtime errors within the documentation source files. Finally, the script validates the output by asserting that the primary HTML index file is successfully generated and non-empty. The primary material side effects include modifying the local filesystem by clearing previous build artifacts, executing potentially untrusted notebook code during the build process, and generating a new set of static HTML files in the local directory.",
+  "transcript_sha256": "a708380b6f1df62109caa8bccbafd6f2036e7131e85e0f72fef6b2f52367acbc"
+}

@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0034-code_block",
+  "generation_config": {
+    "locale": "en",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.",
+    "text_temperature": 0.0
+  },
+  "language": "python",
+  "locale": "en",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "a30e9c2499e0b7150b674adf92a78dedc58a96d96eea6573a4910290f3651d78",
+  "text_config_hash": "0846589af99b00b22e275b48d758bb57230fc775dcd68efcb9d596640d7aec2a",
+  "transcript": "This Python script performs a strict preflight validation check for a Jupyter Book project configured with a MyST Markdown structure. Its purpose is to ensure the execution environment, package dependencies, environment variables, configuration files, table of contents, and notebooks strictly adhere to required specifications before building the documentation. The script relies on standard libraries such as json, os, re, sys, and pathlib, alongside external dependencies including PyYAML and the Jupyter Client package. It begins by validating that the runtime is CPython version 3.12.14, running inside an active virtual environment, and that specific core packages like jupyter-book and ipykernel match exact version pins. It enforces clean environment variables by rejecting unexpected overrides like Jupyter tokens or base URLs, while requiring an explicit and securely formatted BASE_URL. Next, the script checks the local Jupyter kernel registration to ensure it targets the correct Python interpreter and is not shadowed by an external spec. It then parses the myst.yml configuration file, confirming version one compliance, ensuring no unauthorized inheritance, plugins, or exclusions are present, and validating that a nonempty table of contents and the correct book-theme selector are defined. The script recursively walks the table of contents to verify that every entry references a valid local file safely contained within the working directory, with no duplicate files allowed. It also ensures that all notebook files located on disk are explicitly accounted for within the table of contents. Finally, the script inspects both the configuration and all referenced notebooks and Markdown files for banned execution controls, such as skipped executions, raised exceptions, or restricted tags. It validates that any computational notebook or document containing executable directives correctly binds to the required jupyter kernel named jb2-python. It also rejects legacy configuration files like underscore config or underscore toc yaml. The primary side effect of this script is that it terminates execution via a system exit call with a descriptive error message if any validation constraint fails, preventing misconfigured builds. Upon successful completion, it outputs a success message indicating the total number of verified table of contents files.",
+  "transcript_sha256": "deebc015e9875ce63f8816e8709dd92eb4f969178176f0276134fcab190a18f1"
+}
