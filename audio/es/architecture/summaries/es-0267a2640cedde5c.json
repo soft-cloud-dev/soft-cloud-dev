@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0020-code_block",
+  "generation_config": {
+    "locale": "es",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in Spanish (español) matching document locale 'es'.",
+    "text_temperature": 0.0
+  },
+  "language": "text",
+  "locale": "es",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "4f0d0f387c2afc9b43a1096e6328699c8bb9d1b2a83b5b564e12ac5c488280ed",
+  "text_config_hash": "0ae7c213c19fa3769f2d0eb3191e42fb2c5d0d4339b800b6a5bd864decd76d60",
+  "transcript": "Este fragmento de texto representa un archivo de especificación de dependencias de Python, comúnmente utilizado por herramientas como pip para configurar entornos de ejecución reproducibles. Su propósito principal es declarar las bibliotecas necesarias para compilar y ejecutar proyectos de documentación interactiva basados en Jupyter Book. El archivo define tres componentes clave: la herramienta de publicación jupyter-book, el paquete ipykernel que permite ejecutar código interactivo en cuadernos de Python, y PyYAML para el procesamiento de archivos de configuración estructurados. La decisión técnica de fijar versiones exactas mediante el operador de doble igualdad asegura compilaciones idénticas y predecibles en los entornos de desarrollo e integración continua. No obstante, esta restricción estricta presenta el riesgo de impedir la adopción automática de parches de seguridad y puede generar conflictos de compatibilidad si el proyecto se combina con otros paquetes que requieran versiones distintas de estas mismas dependencias.",
+  "transcript_sha256": "8a683c66ad983395c5a1c6e0ca665ab095643b631aace328d3d0b988d80044d6"
+}
