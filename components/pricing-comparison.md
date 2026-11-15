@@ -314,9 +314,9 @@ When a pricing or comparison view lets users adjust billing cadence, compute cap
 (sec-pricing-code-snippets)=
 ## 5. Markdown & HTML code snippets
 
-:::::{tab-set}
+:::::::{tab-set}
 
-::::{tab-item} MyST + Lit SSR Authoring
+::::::{tab-item} MyST + Lit SSR Authoring
 ````markdown
 :::::{grid} 1 1 2 3
 :gutter: 3
@@ -339,9 +339,9 @@ Provision Production HA
 ::::
 :::::
 ````
-::::
+::::::
 
-::::{tab-item} Standalone Web Awesome HTML
+::::::{tab-item} Standalone Web Awesome HTML
 ```html
 <wa-radio-group label="Billing cadence" name="billing-cadence" value="annual">
   <wa-radio value="monthly">Monthly</wa-radio>
@@ -364,6 +364,6 @@ Provision Production HA
   Export Sizing Manifest
 </wa-button>
 ```
-::::
+::::::
 
-:::::
+:::::::
