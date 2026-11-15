@@ -155,6 +155,34 @@ export function parsePathnameRoute(pathname, localesMap = DEFAULT_LOCALES, expli
   return { baseUrl: cleanBase, locale: "en", pageSlug: defaultSlug };
 }
 
+function decodeComponentSafe(value) {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
+function sanitizeRelativeHref(rawHref) {
+  const input = String(rawHref || "/");
+  const hashIdx = input.indexOf("#");
+  const rawBeforeHash = hashIdx === -1 ? input : input.slice(0, hashIdx);
+  const rawFrag = hashIdx === -1 ? "" : input.slice(hashIdx + 1);
+  const hadTrailingSlash = rawBeforeHash.endsWith("/");
+  const segments = rawBeforeHash
+    .split("/")
+    .filter((seg) => seg !== "" && seg !== "." && seg !== "..")
+    .map((seg) => encodeURIComponent(decodeComponentSafe(seg)));
+  let cleanPath = segments.length > 0 ? `/${segments.join("/")}` : "/";
+  if (cleanPath !== "/" && hadTrailingSlash) {
+    cleanPath += "/";
+  }
+  const cleanFrag = rawFrag
+    ? `#${encodeURIComponent(decodeComponentSafe(rawFrag))}`
+    : "";
+  return `${cleanPath}${cleanFrag}`;
+}
+
 /**
  * Build a fallback localized URL from locale prefix and pageSlug.
  */
@@ -166,7 +194,7 @@ export function buildLocalizedRouteUrl(localeInfo, pageSlug, baseUrl = "", hash 
     ? `${cleanBase}${cleanPrefix}/${cleanSlug}`
     : `${cleanBase}${cleanPrefix}/`;
   if (!path.startsWith("/")) path = `/${path}`;
-  return `${path}${hash || ""}`;
+  return sanitizeRelativeHref(`${path}${hash || ""}`);
 }
 
 /**
@@ -300,7 +328,7 @@ export function resolveTranslationUrl(
     if (cleanBase && path !== cleanBase && !path.startsWith(`${cleanBase}/`)) {
       path = path === "/" ? `${cleanBase}/` : `${cleanBase}${path}`;
     }
-    return `${path}${hash || ""}`;
+    return sanitizeRelativeHref(`${path}${hash || ""}`);
   }
   return buildLocalizedRouteUrl(localeInfo, pageSlug, cleanBase, hash);
 }
@@ -1129,8 +1157,9 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
     const isCurrent = code === currentLocaleCode;
     const targetUrl = resolveOptionTargetUrl(code, locInfo);
     const homeUrl =
-      (typeof locInfo.base_route === "string" && locInfo.base_route) ||
-      buildLocalizedRouteUrl(locInfo, "", parsed.baseUrl, "");
+      typeof locInfo.base_route === "string" && locInfo.base_route
+        ? sanitizeRelativeHref(locInfo.base_route)
+        : buildLocalizedRouteUrl(locInfo, "", parsed.baseUrl, "");
 
     const item = doc.createElement(available ? "a" : "button");
     item.className = "sc-lang-option";
