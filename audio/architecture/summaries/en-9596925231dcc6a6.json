@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0040-code_block",
+  "generation_config": {
+    "locale": "en",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.",
+    "text_temperature": 0.0
+  },
+  "language": "yaml",
+  "locale": "en",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "f419e5b35c2868a2e9b0f19bb6851b9a6eaff942ea79e1cbfe87411389dcce6e",
+  "text_config_hash": "0846589af99b00b22e275b48d758bb57230fc775dcd68efcb9d596640d7aec2a",
+  "transcript": "This GitHub Actions workflow automates the building and deployment of a Jupyter Book to GitHub Pages. It triggers automatically on pushes to the main branch or via manual workflow dispatch, running exclusively on the main branch to secure the production environment. The configuration consists of two sequential jobs. The build job runs on Ubuntu 24.04 and requires read permissions for repository contents and pages. It checks out the repository, configures GitHub Pages, and sets up CPython version 3.12.14. It then creates a virtual environment and securely installs dependencies from a requirements.lock file using strict hash checking and binary-only constraints. It registers an IPython kernel and executes a custom build script located at tools/build.sh, which outputs HTML files into the underscore build html directory. Finally, it uploads this directory as a GitHub Pages build artifact. The deploy job depends directly on the successful completion of the build job. Running with write permissions for pages and identity tokens, it publishes the uploaded artifact to the GitHub Pages environment, making the site publicly accessible at the generated deployment URL. Concurrency is configured to group page deployments and prevent overlapping cancellations.",
+  "transcript_sha256": "863617b5f96a28677afbe2e6ea84b1ef22acba3241b2ac6f4d6ca9298818aa0f"
+}

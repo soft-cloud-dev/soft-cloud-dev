@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0043-code_block",
+  "generation_config": {
+    "locale": "en",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.",
+    "text_temperature": 0.0
+  },
+  "language": "sh",
+  "locale": "en",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "06b6c004774a049cc73c3135071ef3626dd308960b8f637bf2f19468200b9863",
+  "text_config_hash": "0846589af99b00b22e275b48d758bb57230fc775dcd68efcb9d596640d7aec2a",
+  "transcript": "This shell script automates the generation of a reproducible dependency lock file for Python projects within the Software Cloud platform. Its primary purpose is to pre-download binary wheels for all requirements specified in requirements.in and transform them into a pinned lock file without installing them into the host environment. The execution begins by creating a temporary Python 3.12 virtual environment named dot-lock-venv and a temporary directory named dot-wheelhouse. It then invokes pip within the virtual environment to download strictly pre-compiled binary packages for everything listed in requirements.in, saving the resulting wheels to the wheelhouse directory. Following the download phase, a custom utility script located at tools/lock_from_wheels.py parses the local wheelhouse to generate a deterministic requirements.lock file. Finally, the script performs a cleanup operation, recursively removing both the temporary virtual environment and the wheelhouse directory. Significant inputs include the requirements.in configuration file and the lock_from_wheels.py parsing tool, while the primary output is the generated requirements.lock file. Key dependencies are Python 3.12, the pip package manager, and network access to retrieve the packages. A notable implementation decision is the use of an isolated virtual environment and the strict enforcement of binary-only downloads, ensuring consistency across different deployment architectures. Material side effects are limited to the creation and subsequent deletion of temporary local directories and files during the build process. A potential risk is that the script will fail if network access is unavailable, if packages lack compatible pre-compiled binary wheels, or if Python 3.12 is not present in the execution environment.",
+  "transcript_sha256": "8e59c006df64df8363ee2956cf6a57d2b6b6ff12c3f3bacbcb97b81f780c7fe0"
+}

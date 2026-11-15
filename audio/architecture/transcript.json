@@ -1,0 +1,1095 @@
+{
+  "chunks": [
+    {
+      "chunk_hash": "7f7fb998f07f7e36d751545b414468e4a71bd845bf4c8276607f56e245b5d06b",
+      "chunk_id": "chunk-001",
+      "chunk_index": 1,
+      "element_ids": [
+        "el-0001-heading",
+        "el-0002-paragraph"
+      ],
+      "section_anchor": "architecture-memorandum-reference",
+      "section_title": "Architecture & Memorandum Reference",
+      "segments": [
+        {
+          "element_id": "el-0001-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "4865ab8010b3718074d3ab8784dd1dc40dc73c97753ad470640a597a94d3eb3b",
+          "spoken_text": "Architecture & Memorandum Reference"
+        },
+        {
+          "element_id": "el-0002-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "661d89692e3ea574b795b02ff88de05fe8393f2272cf1027302a8a7afadc2571",
+          "spoken_text": "Software Cloud computational pipeline, repository scaffold, and build environment specifications."
+        }
+      ],
+      "speech_input_hash": "5720009685d5fed964d3d601befdf8f323ca824a839435d3a5d905b0a3675261",
+      "text": "Architecture & Memorandum Reference.\n\nSoftware Cloud computational pipeline, repository scaffold, and build environment specifications.",
+      "text_sha256": "6ec630100a2c6c18568de0c08c992769d021f56ccc7acbb36df3a606212fdc25"
+    },
+    {
+      "chunk_hash": "77d4917e89d84295ea91e89784b103479b9151cba45e22f91f94bf4553560d21",
+      "chunk_id": "chunk-002",
+      "chunk_index": 2,
+      "element_ids": [
+        "el-0003-heading",
+        "el-0004-paragraph"
+      ],
+      "section_anchor": "1-overview-and-design-principles",
+      "section_title": "1. Overview and Design Principles",
+      "segments": [
+        {
+          "element_id": "el-0003-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "9bd655deed7be69430a25c3fce5940675cf45ac1e436467dc84ee97e968baead",
+          "spoken_text": "1. Overview and Design Principles"
+        },
+        {
+          "element_id": "el-0004-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "a698922713d6b19f9477a5e040502826f46cf50159c7f5775f70dac4e5ca5c18",
+          "spoken_text": "The Software Cloud publishing platform is engineered around strict computational determinism, reproducibility, and security. Built upon Jupyter Book 2 (JB2) and the MyST Markdown ecosystem, every component—from environment dependency resolution to static HTML artifact generation—is verified before deployment."
+        }
+      ],
+      "speech_input_hash": "add08b1a79cbfc7591668b0bbc4504995c9eae5cac0bca7b8039b2d40440285e",
+      "text": "1. Overview and Design Principles.\n\nThe Software Cloud publishing platform is engineered around strict computational determinism, reproducibility, and security. Built upon Jupyter Book 2 (JB2) and the MyST Markdown ecosystem, every component—from environment dependency resolution to static HTML artifact generation—is verified before deployment.",
+      "text_sha256": "7cb197a03864c054d8c5b22fa51325448d2626a1997f3fd1b486e5efd04ec614"
+    },
+    {
+      "chunk_hash": "15adec9bbf49ca73131474753dbae866f1809e31479fe1a95b76c6554193678b",
+      "chunk_id": "chunk-003",
+      "chunk_index": 3,
+      "element_ids": [
+        "el-0005-heading",
+        "el-0006-list"
+      ],
+      "section_anchor": "core-architectural-tenants",
+      "section_title": "Core Architectural Tenants",
+      "segments": [
+        {
+          "element_id": "el-0005-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "c2089fdbbcc682176c620f191f43b1b536f185411aa2433c08788bb975d98952",
+          "spoken_text": "Core Architectural Tenants"
+        },
+        {
+          "element_id": "el-0006-list",
+          "is_ai_summary": false,
+          "kind": "list",
+          "source_hash": "c559fada3479d20fdbf7a440d1ae1903e83da9d9724cbcd155af01a1a3696368",
+          "spoken_text": "Deterministic Dependency Locking: All runtime Python distributions and their transitive dependencies are pinned with exact versions and cryptographic SHA-256 digests (--require-hashes, --only-binary=:all:). Canonical Execution Environment: Builds and notebook executions target CPython 3.12.14 on Linux x86-64, isolating execution state and preventing architecture drift. Explicit Profile Validation: A standalone preflight validator (tools/check_profile.py) enforces schema integrity, kernelspec registration, TOC exhaustiveness, and execution control compliance prior to artifact compilation. Reproducible Continuous Delivery: GitHub Actions runs the verified pipeline in an isolated runner, builds the static publication artifact under --strict mode, and deploys to my.softcloud.dev."
+        }
+      ],
+      "speech_input_hash": "ff91270e7bd760b98b5505daab4d6a15ff3bb51879e020c4a092b2a96b324762",
+      "text": "Core Architectural Tenants.\n\nDeterministic Dependency Locking: All runtime Python distributions and their transitive dependencies are pinned with exact versions and cryptographic SHA-256 digests (--require-hashes, --only-binary=:all:). Canonical Execution Environment: Builds and notebook executions target CPython 3.12.14 on Linux x86-64, isolating execution state and preventing architecture drift. Explicit Profile Validation: A standalone preflight validator (tools/check_profile.py) enforces schema integrity, kernelspec registration, TOC exhaustiveness, and execution control compliance prior to artifact compilation. Reproducible Continuous Delivery: GitHub Actions runs the verified pipeline in an isolated runner, builds the static publication artifact under --strict mode, and deploys to my.softcloud.dev.",
+      "text_sha256": "9b7b8c064a14d3a4e27435e7feb03c601bf63d771b1ed5117041407978c46791"
+    },
+    {
+      "chunk_hash": "4460cf8055c626ce824c3adaaae70c6915eca6c49fa1612e2d1cc7a9577dc8de",
+      "chunk_id": "chunk-004",
+      "chunk_index": 4,
+      "element_ids": [
+        "el-0007-heading",
+        "el-0008-paragraph",
+        "el-0009-code_block"
+      ],
+      "section_anchor": "2-repository-layout-topology",
+      "section_title": "2. Repository Layout & Topology",
+      "segments": [
+        {
+          "element_id": "el-0007-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "bbc102807fe2fc60f733545701b58540d99f5d2b2bc77ab8944fe1c6dc19fac6",
+          "spoken_text": "2. Repository Layout & Topology"
+        },
+        {
+          "element_id": "el-0008-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "b4769550a1424d3038fe64b36f2e539ed59c9f3e665d89ee42d76f9e21355b39",
+          "spoken_text": "The repository follows a clean, minimal directory topology designed for auditability:"
+        },
+        {
+          "code_summary_hash": "dd0050f21a56dc4638a2da7c40acdf923a2f14f412ad51622110db6ca6a6caa5",
+          "element_id": "el-0009-code_block",
+          "is_ai_summary": true,
+          "kind": "code_block",
+          "source_hash": "639ccca0c527a0cd165d8881cb4a48394a383317efd9762eeccdcd6d09a98a99",
+          "spoken_text": "This file tree outlines the project structure for the soft-cloud-dev repository, establishing a standardized environment for documentation publishing, dependency management, and automated continuous integration. The root directory contains configuration files for a Jupyter Book 2 project, driven by the myst.yml configuration and the top-level introduction and architecture Markdown files, alongside custom domain mapping and BSD 2-Clause licensing. Core functionality and tooling reside in the tools directory, featuring a hermetic publication build runner shell script, a profile compliance and integrity validator, and a wheelhouse hash resolver that generates cryptographically pinned lockfiles from requirements.in to requirements.lock. Computational elements are isolated within the notebooks directory through a verified CPython 3.12.14 experiment notebook, while branding assets like favicons and scalable vector graphics logos are maintained in the images directory to support both light and dark display modes. Automated delivery is managed by a GitHub Actions workflow in the dot github workflows directory, handling CI/CD deployment. Implementation decisions emphasize reproducibility and security through strict dependency pinning, hermetic builds, and artifact exclusions via gitignore. Potential risks include build failures if the pinned wheelhouse hashes drift from the top-level dependency declarations or if the CPython execution environment within the notebook falls out of sync with the locked package versions."
+        }
+      ],
+      "speech_input_hash": "8a98e15265a56b953a6dfec86f4111aa3c42c8f3b011e260759d6fc2bee3825d",
+      "text": "2. Repository Layout & Topology.\n\nThe repository follows a clean, minimal directory topology designed for auditability:\n\nThis file tree outlines the project structure for the soft-cloud-dev repository, establishing a standardized environment for documentation publishing, dependency management, and automated continuous integration. The root directory contains configuration files for a Jupyter Book 2 project, driven by the myst.yml configuration and the top-level introduction and architecture Markdown files, alongside custom domain mapping and BSD 2-Clause licensing. Core functionality and tooling reside in the tools directory, featuring a hermetic publication build runner shell script, a profile compliance and integrity validator, and a wheelhouse hash resolver that generates cryptographically pinned lockfiles from requirements.in to requirements.lock. Computational elements are isolated within the notebooks directory through a verified CPython 3.12.14 experiment notebook, while branding assets like favicons and scalable vector graphics logos are maintained in the images directory to support both light and dark display modes. Automated delivery is managed by a GitHub Actions workflow in the dot github workflows directory, handling CI/CD deployment. Implementation decisions emphasize reproducibility and security through strict dependency pinning, hermetic builds, and artifact exclusions via gitignore. Potential risks include build failures if the pinned wheelhouse hashes drift from the top-level dependency declarations or if the CPython execution environment within the notebook falls out of sync with the locked package versions.",
+      "text_sha256": "1197fcef8c0b7a097b869d0f6f88ef572f09f2de8dd2e0633d85cd48844e1c64"
+    },
+    {
+      "chunk_hash": "5b3351647bcbb616089f6baa7904daf511bafc77ba2c3f6174a7eb7c517c2ea3",
+      "chunk_id": "chunk-005",
+      "chunk_index": 5,
+      "element_ids": [
+        "el-0010-heading",
+        "el-0011-paragraph"
+      ],
+      "section_anchor": "3-memorandum-scaffold-specifications",
+      "section_title": "3. Memorandum Scaffold Specifications",
+      "segments": [
+        {
+          "element_id": "el-0010-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "f4fa03cc930552f03384c43b2b95bc20db3828d7c3eb275ec9101100011efd71",
+          "spoken_text": "3. Memorandum Scaffold Specifications"
+        },
+        {
+          "element_id": "el-0011-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "e9e5becd959f667a905d284fd084b3c72ed8ffc9d2de0519ce6a1b24c1b50604",
+          "spoken_text": "The following sections document the verbatim scaffold files and specifications defined in the repository memorandum."
+        }
+      ],
+      "speech_input_hash": "536ab5f40b1b85d2f637b2439f8d0f467a987029e6a7a88a57bff44c5be6a188",
+      "text": "3. Memorandum Scaffold Specifications.\n\nThe following sections document the verbatim scaffold files and specifications defined in the repository memorandum.",
+      "text_sha256": "f6d7828e14df7f38d0fc5a26cc6823c80ed1e05c0cd141d18cc14ba36ea84602"
+    },
+    {
+      "chunk_hash": "b89ffd5964c08409d93c91516a5bb3612fea7182055528c7d28b484a0eacf05a",
+      "chunk_id": "chunk-006",
+      "chunk_index": 6,
+      "element_ids": [
+        "el-0012-heading",
+        "el-0013-paragraph",
+        "el-0014-code_block"
+      ],
+      "section_anchor": "3-1-license",
+      "section_title": "3.1. LICENSE",
+      "segments": [
+        {
+          "element_id": "el-0012-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "10acb1852a7ef2bc67d681d534bb63ce3bd42ee9ed9c4bb15c669b5307f2446f",
+          "spoken_text": "3.1. LICENSE"
+        },
+        {
+          "element_id": "el-0013-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "fa3d2b554bb43be78e67f1e4dfd9e0555af46c9da6206f8b97ffcfc1cfe4f649",
+          "spoken_text": "The repository is distributed under the open-source BSD 2-Clause License:"
+        },
+        {
+          "code_summary_hash": "81d0a594d0fb99f24f46657d43be64a73df227821ab7ae5d825ddda34da9adfa",
+          "element_id": "el-0014-code_block",
+          "is_ai_summary": true,
+          "kind": "code_block",
+          "source_hash": "3f0dd9ba2fdcdd6c538bc825275097866429fc0f059ff4f82e63bb747c5fdc75",
+          "spoken_text": "This text represents a standard BSD Two-Clause License, establishing the legal governance framework for the distribution and use of the associated software project. While it contains no executable logic, it serves as a critical regulatory artifact for the platform, dictating compliance requirements for all downstream developers, package managers, and consumers. The terms grant broad permissions to redistribute and modify the software in both source and binary forms, subject to two explicit requirements. Source distributions must retain the full copyright notice, list of conditions, and disclaimer. Binary distributions must reproduce these same notices within the accompanying documentation or distribution artifacts. Crucially, the license defines the software as provided on an as-is basis. It explicitly disclaims all express or implied warranties, including merchantability and fitness for a particular purpose, while shielding the contributors from liability for any direct, indirect, or consequential damages resulting from the use of the code."
+        }
+      ],
+      "speech_input_hash": "7cc4917219d17db30d9a2f65e42011eadd5a16b276df0accb9678aaccb0a06ed",
+      "text": "3.1. LICENSE.\n\nThe repository is distributed under the open-source BSD 2-Clause License:\n\nThis text represents a standard BSD Two-Clause License, establishing the legal governance framework for the distribution and use of the associated software project. While it contains no executable logic, it serves as a critical regulatory artifact for the platform, dictating compliance requirements for all downstream developers, package managers, and consumers. The terms grant broad permissions to redistribute and modify the software in both source and binary forms, subject to two explicit requirements. Source distributions must retain the full copyright notice, list of conditions, and disclaimer. Binary distributions must reproduce these same notices within the accompanying documentation or distribution artifacts. Crucially, the license defines the software as provided on an as-is basis. It explicitly disclaims all express or implied warranties, including merchantability and fitness for a particular purpose, while shielding the contributors from liability for any direct, indirect, or consequential damages resulting from the use of the code.",
+      "text_sha256": "c152a38d2ba6bfc4ade70250d0359a2fb57fa28edbc2e30c3bba7a302acd9ff0"
+    },
+    {
+      "chunk_hash": "af53b8bb1dc198c67712fa436a2564dc2787ace61da639137cf0ab3edbe1569d",
+      "chunk_id": "chunk-007",
+      "chunk_index": 7,
+      "element_ids": [
+        "el-0015-heading",
+        "el-0016-paragraph",
+        "el-0017-code_block"
+      ],
+      "section_anchor": "3-2-gitignore",
+      "section_title": "3.2. .gitignore",
+      "segments": [
+        {
+          "element_id": "el-0015-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "3d0aaaf2764324f9a5a8f28239e075eb86ccc297fc85d713451f1376d2f25fd5",
+          "spoken_text": "3.2. .gitignore"
+        },
+        {
+          "element_id": "el-0016-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "ca7bd210d5ddf24678672cdcd24846979c2c05bb3673906aaeab5c4dfb96217f",
+          "spoken_text": "Strict exclusion rules keep local cache artifacts, wheelhouses, and virtual environments outside source control:"
+        },
+        {
+          "code_summary_hash": "e1a32ab733a8d1abd2d45df9823ff02799134b9b671ae5662a3532f41820043b",
+          "element_id": "el-0017-code_block",
+          "is_ai_summary": true,
+          "kind": "code_block",
+          "source_hash": "3f8956f886cce465c69be1efaee1b3739497996f8b8de5ea107e874bad6cc6be",
+          "spoken_text": "This text block defines a standard ignore file configuration, such as a Gitignore file, for a Python-based Software Cloud project. Its primary purpose is to specify local development directories, virtual environments, build artifacts, and cache folders that should be excluded from version control. The configuration lists common transient directories, including local virtual environments under point venv and point lock venv, local package wheelhouse archives, documentation or source build outputs under underscore build, Python bytecode caches under double underscore pycache double underscore, and Jupyter Notebook checkpoint directories. By excluding these paths, the configuration prevents environment-specific binaries, temporary cache files, and local build states from being tracked or committed to the repository. The implementation relies on pattern matching against standard Python and Jupyter tooling directories. The primary side effect of applying these rules is that local development dependencies and compiled caches will not be shared across environments, ensuring clean, reproducible deployments while requiring developers to regenerate virtual environments and build assets locally."
+        }
+      ],
+      "speech_input_hash": "59fd320f4d2f0b3a0d1d888f09fccf0e60062b374d21b3f9a59f403ea24abc23",
+      "text": "3.2. .gitignore.\n\nStrict exclusion rules keep local cache artifacts, wheelhouses, and virtual environments outside source control:\n\nThis text block defines a standard ignore file configuration, such as a Gitignore file, for a Python-based Software Cloud project. Its primary purpose is to specify local development directories, virtual environments, build artifacts, and cache folders that should be excluded from version control. The configuration lists common transient directories, including local virtual environments under point venv and point lock venv, local package wheelhouse archives, documentation or source build outputs under underscore build, Python bytecode caches under double underscore pycache double underscore, and Jupyter Notebook checkpoint directories. By excluding these paths, the configuration prevents environment-specific binaries, temporary cache files, and local build states from being tracked or committed to the repository. The implementation relies on pattern matching against standard Python and Jupyter tooling directories. The primary side effect of applying these rules is that local development dependencies and compiled caches will not be shared across environments, ensuring clean, reproducible deployments while requiring developers to regenerate virtual environments and build assets locally.",
+      "text_sha256": "28fb17843ef96529b38ae615e26d2faf15e1a742ea7abf618ebc4224f2f21fc9"
+    },
+    {
+      "chunk_hash": "90fd27703d54606093400d1e5a8da49d660d7aa9da2413fb086754fbecdd2add",
+      "chunk_id": "chunk-008",
+      "chunk_index": 8,
+      "element_ids": [
+        "el-0018-heading",
+        "el-0019-paragraph",
+        "el-0020-code_block"
+      ],
+      "section_anchor": "3-3-requirements-in",
+      "section_title": "3.3. requirements.in",
+      "segments": [
+        {
+          "element_id": "el-0018-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "9df1bc8ce8f7c8eaab41839114a2c0eaa87f5f5f107dcfdd2a6c8e5082e43391",
+          "spoken_text": "3.3. requirements.in"
+        },
+        {
+          "element_id": "el-0019-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "514ffef6ea6b66d58aba884c0f46007f50ec532eff68d21532add14480bf1370",
+          "spoken_text": "Direct, unpinned top-level requirements defining the computational runtime tooling:"
+        },
+        {
+          "code_summary_hash": "8f437c6cd7b1d9da2141a022c3639284476bf01538974bc6263336074c63d5e1",
+          "element_id": "el-0020-code_block",
+          "is_ai_summary": true,
+          "kind": "code_block",
+          "source_hash": "4f0d0f387c2afc9b43a1096e6328699c8bb9d1b2a83b5b564e12ac5c488280ed",
+          "spoken_text": "This text configuration file specifies the exact Python package dependencies required for building documentation within the Software Cloud platform using Jupyter Book. It declares three core packages with pinned versions: jupyter-book version 2.1.7, ipykernel version 7.3.0, and PyYAML version 6.0.3. This file is typically consumed by package managers like pip to provision a consistent build environment, ensuring that the documentation compiler, the interactive Python execution kernel, and the YAML parser operate with mutually compatible versions. While this guarantees reproducible documentation builds, deployment systems must ensure these specific package versions are compatible with the broader host environment to prevent dependency conflicts."
+        }
+      ],
+      "speech_input_hash": "e6d661e078bf3358f9f48b04a56becaa5e2dc5d1d36459f8f41f93372cb2f199",
+      "text": "3.3. requirements.in.\n\nDirect, unpinned top-level requirements defining the computational runtime tooling:\n\nThis text configuration file specifies the exact Python package dependencies required for building documentation within the Software Cloud platform using Jupyter Book. It declares three core packages with pinned versions: jupyter-book version 2.1.7, ipykernel version 7.3.0, and PyYAML version 6.0.3. This file is typically consumed by package managers like pip to provision a consistent build environment, ensuring that the documentation compiler, the interactive Python execution kernel, and the YAML parser operate with mutually compatible versions. While this guarantees reproducible documentation builds, deployment systems must ensure these specific package versions are compatible with the broader host environment to prevent dependency conflicts.",
+      "text_sha256": "0dc06c6ed544a8cf8f555d449e73845153b103bd177059fc27681595d3a0c82e"
+    },
+    {
+      "chunk_hash": "083a6579bf8fa1b7593142bbf75111374d269622b327423a88153123b3708f76",
+      "chunk_id": "chunk-009",
+      "chunk_index": 9,
+      "element_ids": [
+        "el-0021-heading",
+        "el-0022-paragraph",
+        "el-0023-code_block",
+        "el-0024-paragraph"
+      ],
+      "section_anchor": "3-4-myst-yml",
+      "section_title": "3.4. myst.yml",
+      "segments": [
+        {
+          "element_id": "el-0021-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "d8a21e1a26ce944db10008ed524d6f45c52450d3e65871269a1bc68c0f20d35a",
+          "spoken_text": "3.4. myst.yml"
+        },
+        {
+          "element_id": "el-0022-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "119e57283cb1b84b45a44ab9dec490c94da450490b849907fdfab7243a594c2c",
+          "spoken_text": "The configuration file governing book structure, metadata, branding, and table of contents:"
+        },
+        {
+          "code_summary_hash": "c9d172d061d7734bd2e8958e02751eccfef1c96f9f96324a28715cc995a22197",
+          "element_id": "el-0023-code_block",
+          "is_ai_summary": true,
+          "kind": "code_block",
+          "source_hash": "b6b80fb5a3dda40062a14794bfba074f70b654f85cf20e1ed9354eacad0d8b8e",
+          "spoken_text": "This YAML configuration file defines the documentation structure and site generation parameters for the Software Cloud platform project. Operating under version one of the configuration schema, the project block establishes core metadata including the title, description, and GitHub repository URL, while defining the table of contents hierarchy. The documentation sequence explicitly incorporates Markdown files such as the README, introduction, and architecture guides, alongside a nested section for computational notebooks referencing a specific Jupyter notebook. The site block determines the presentation layer by assigning the book theme and configuring visual assets, specifically defining standard and dark mode logos as well as the browser favicon. As a static configuration manifest, it has no direct runtime side effects, execution dependencies, or programmatic limitations, serving strictly as an input blueprint for the platform documentation build system."
+        },
+        {
+          "element_id": "el-0024-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "4da395b0923057aa0e5c6f14219d82054e1fb5508d9b8c4f8d1ceb2358483a09",
+          "spoken_text": "(Note: The foundational memorandum originally scaffolded title as Research Book and repository as https://github.com/OWNER/REPOSITORY; this was updated to match the active Software Cloud deployment and custom domain.)"
+        }
+      ],
+      "speech_input_hash": "6bf9f50bbe74dfd7ba3ab9e9eb834debcb8946257c7ae198a38afbcc74791cc3",
+      "text": "3.4. myst.yml.\n\nThe configuration file governing book structure, metadata, branding, and table of contents:\n\nThis YAML configuration file defines the documentation structure and site generation parameters for the Software Cloud platform project. Operating under version one of the configuration schema, the project block establishes core metadata including the title, description, and GitHub repository URL, while defining the table of contents hierarchy. The documentation sequence explicitly incorporates Markdown files such as the README, introduction, and architecture guides, alongside a nested section for computational notebooks referencing a specific Jupyter notebook. The site block determines the presentation layer by assigning the book theme and configuring visual assets, specifically defining standard and dark mode logos as well as the browser favicon. As a static configuration manifest, it has no direct runtime side effects, execution dependencies, or programmatic limitations, serving strictly as an input blueprint for the platform documentation build system.\n\n(Note: The foundational memorandum originally scaffolded title as Research Book and repository as https://github.com/OWNER/REPOSITORY; this was updated to match the active Software Cloud deployment and custom domain.).",
+      "text_sha256": "7d34bff5c9e3ebdfc12c0def458202a265a085ecba5d7390c1f4ff721c5deab4"
+    },
+    {
+      "chunk_hash": "aa60592246c25721e81e0a3769e45e3df54e72c840ceec7318928d2fcb111ebc",
+      "chunk_id": "chunk-010",
+      "chunk_index": 10,
+      "element_ids": [
+        "el-0025-heading",
+        "el-0026-paragraph",
+        "el-0027-code_block"
+      ],
+      "section_anchor": "3-5-computational-notebook-notebooks-experiment-ipynb",
+      "section_title": "3.5. Computational Notebook: notebooks/experiment.ipynb",
+      "segments": [
+        {
+          "element_id": "el-0025-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "f3c0bd8193e77b34486e1a7e0b7dce091acc9b99198383f841902ea5e3718ab9",
+          "spoken_text": "3.5. Computational Notebook: notebooks/experiment.ipynb"
+        },
+        {
+          "element_id": "el-0026-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "c0b90e09ed0b7d0f9ba88ffecdf39b380d7cc2c6c0ed67cc3c52c2614064495b",
+          "spoken_text": "An executable verification notebook executed by Jupyter Book during the build process to guarantee runtime environment health:"
+        },
+        {
+          "code_summary_hash": "8438e3d3ba6e51bfec252583d11ecdbc19cafc92c1ad8f52515dacf73d28144f",
+          "element_id": "el-0027-code_block",
+          "is_ai_summary": true,
+          "kind": "code_block",
+          "source_hash": "32f81d86bc280881f763694a55f7ea3960fb4e87fbdde007fd0aff984e801046",
+          "spoken_text": "This JSON document defines a Jupyter notebook structured for computational verification and environment runtime validation on the Software Cloud platform. Operating under format version four point five, the notebook targets a specific Python kernel designated as jb2-python, matching version three point twelve point fourteen. The notebook contains two cells: an introductory markdown cell outlining the verification purpose, and a single code cell dependent on the sys module. The code cell outputs the current Python executable path and full version string to standard out, and includes an explicit assertion checking that the active interpreter matches version three point twelve point fourteen precisely. A limitation of this implementation is that the hardcoded version assertion will trigger an AssertionError and halt execution if run in any environment other than the exact specified patch release."
+        }
+      ],
+      "speech_input_hash": "24281c570f0406d75893c40030bf39973f2f0e47937bb5daa1db072aef77859c",
+      "text": "3.5. Computational Notebook: notebooks/experiment.ipynb.\n\nAn executable verification notebook executed by Jupyter Book during the build process to guarantee runtime environment health:\n\nThis JSON document defines a Jupyter notebook structured for computational verification and environment runtime validation on the Software Cloud platform. Operating under format version four point five, the notebook targets a specific Python kernel designated as jb2-python, matching version three point twelve point fourteen. The notebook contains two cells: an introductory markdown cell outlining the verification purpose, and a single code cell dependent on the sys module. The code cell outputs the current Python executable path and full version string to standard out, and includes an explicit assertion checking that the active interpreter matches version three point twelve point fourteen precisely. A limitation of this implementation is that the hardcoded version assertion will trigger an AssertionError and halt execution if run in any environment other than the exact specified patch release.",
+      "text_sha256": "cd1d54e1ab0aad1673f1783783ff568c951f5ba2b3854003e8ffcec263e20593"
+    },
+    {
+      "chunk_hash": "3e2d6e90cc0eb91b51c8929b0fd02800dd944c871524d731cbd0f668ccb104bc",
+      "chunk_id": "chunk-011",
+      "chunk_index": 11,
+      "element_ids": [
+        "el-0028-heading"
+      ],
+      "section_anchor": "4-build-maintenance-toolchain",
+      "section_title": "4. Build & Maintenance Toolchain",
+      "segments": [
+        {
+          "element_id": "el-0028-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "2496ddc6470e562d4ae7b924bb3336e71b6d899ed42b19dba20d3f2dbe778457",
+          "spoken_text": "4. Build & Maintenance Toolchain"
+        }
+      ],
+      "speech_input_hash": "c2b23e9587a1f7e2ca121652e9ebc6ac681ffba7eaff35d59a089feb5d9fc94c",
+      "text": "4. Build & Maintenance Toolchain.",
+      "text_sha256": "dff28977aa8bbffffc8e3e03a074a67aecfafbcca47b95e8272f9763ac15b39e"
+    },
+    {
+      "chunk_hash": "4ff2235b5aee3b95f864572f40645f82e54b677950019bd515859c3313735033",
+      "chunk_id": "chunk-012",
+      "chunk_index": 12,
+      "element_ids": [
+        "el-0029-heading",
+        "el-0030-paragraph",
+        "el-0031-code_block"
+      ],
+      "section_anchor": "4-1-lockfile-generator-tools-lockfromwheels-py",
+      "section_title": "4.1. Lockfile Generator: tools/lock_from_wheels.py",
+      "segments": [
+        {
+          "element_id": "el-0029-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "8916caa3e7660e85786deea8d9d9f27173150e1c715f3fad0346b1e8411059f2",
+          "spoken_text": "4.1. Lockfile Generator: tools/lock_from_wheels.py"
+        },
+        {
+          "element_id": "el-0030-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "fc4dda6561016c6aca085263ec56d9c6d91dcf51ea1cb6352635c3ec3da704f3",
+          "spoken_text": "This maintenance utility resolves wheel archives in .wheelhouse/, extracts their normalized distribution metadata, computes their SHA-256 checksums, and produces a strictly pinned requirements.lock:"
+        },
+        {
+          "code_summary_hash": "214088ac5abda828525bcd595fb70c986ef2adb161beed4e5432aa478e3c7ca5",
+          "element_id": "el-0031-code_block",
+          "is_ai_summary": true,
+          "kind": "code_block",
+          "source_hash": "6b6f125996ff3ccb429429effd6d015edff9fcf7b65358c5516417c27f5cb033",
+          "spoken_text": "This Python script generates a Pip-compatible requirements file with cryptographic hashes from a directory of pre-downloaded wheel files. It accepts two command-line arguments representing the input wheelhouse directory and the output requirements file path, depending on standard libraries including zipfile, hashlib, and email. The script validates that the output file does not already exist to prevent accidental overwrites, ensures the input directory contains exclusively wheel files, and verifies that each wheel contains unambiguous metadata. It parses the package name and version from each wheel's METADATA file, standardizes the distribution name, checks for duplicate packages, and computes a SHA-256 file digest for integrity verification. Finally, it writes sorted, pinned requirement strings containing the package name, version, and hash to the output file using exclusive creation mode. Potential risks include runtime termination via SystemExit if any validation checks fail, such as missing wheels, unexpected directory contents, ambiguous metadata, or duplicate distributions."
+        }
+      ],
+      "speech_input_hash": "cc953d168f065cfa2744338fc019783c57f28c439998a93bf3dc92d0037b9ce5",
+      "text": "4.1. Lockfile Generator: tools/lock_from_wheels.py.\n\nThis maintenance utility resolves wheel archives in .wheelhouse/, extracts their normalized distribution metadata, computes their SHA-256 checksums, and produces a strictly pinned requirements.lock:\n\nThis Python script generates a Pip-compatible requirements file with cryptographic hashes from a directory of pre-downloaded wheel files. It accepts two command-line arguments representing the input wheelhouse directory and the output requirements file path, depending on standard libraries including zipfile, hashlib, and email. The script validates that the output file does not already exist to prevent accidental overwrites, ensures the input directory contains exclusively wheel files, and verifies that each wheel contains unambiguous metadata. It parses the package name and version from each wheel's METADATA file, standardizes the distribution name, checks for duplicate packages, and computes a SHA-256 file digest for integrity verification. Finally, it writes sorted, pinned requirement strings containing the package name, version, and hash to the output file using exclusive creation mode. Potential risks include runtime termination via SystemExit if any validation checks fail, such as missing wheels, unexpected directory contents, ambiguous metadata, or duplicate distributions.",
+      "text_sha256": "0a9c3cfa706a33d75244facdb27bb9bbfb635d95ea61dd5bb5b07f37db111e94"
+    },
+    {
+      "chunk_hash": "3934becd1956d37d465740e88e7a623bfd4652cb46edba9d9abf70bfcfdc4b7f",
+      "chunk_id": "chunk-013",
+      "chunk_index": 13,
+      "element_ids": [
+        "el-0032-heading",
+        "el-0033-paragraph"
+      ],
+      "section_anchor": "4-2-profile-preflight-validator-tools-checkprofile-py",
+      "section_title": "4.2. Profile Preflight Validator: tools/check_profile.py",
+      "segments": [
+        {
+          "element_id": "el-0032-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "8132831399d093ea919ac1ec13c8ff8f0f4f380913bf96066de1696d933984ee",
+          "spoken_text": "4.2. Profile Preflight Validator: tools/check_profile.py"
+        },
+        {
+          "element_id": "el-0033-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "97c72a163413768fce9a608a5a9c52164366a7028a832eadea0b3bb88459de2c",
+          "spoken_text": "The validation engine guarantees profile purity and strict adherence to the publication contract:"
+        }
+      ],
+      "speech_input_hash": "cbcdad25588e7127450dbd84e4e74422f434b1d836ba2902a7528679e8396935",
+      "text": "4.2. Profile Preflight Validator: tools/check_profile.py.\n\nThe validation engine guarantees profile purity and strict adherence to the publication contract:",
+      "text_sha256": "7d932623ad91044747ba6b048f1456ec9aae1bacb4d50bb0082b3ee3a14940d1"
+    },
+    {
+      "chunk_hash": "5982e3862bcd2648ad1920844101eb11385d199338cd97d12594e109eb044240",
+      "chunk_id": "chunk-014",
+      "chunk_index": 14,
+      "element_ids": [
+        "el-0034-code_block"
+      ],
+      "section_anchor": "4-2-profile-preflight-validator-tools-checkprofile-py",
+      "section_title": "4.2. Profile Preflight Validator: tools/check_profile.py",
+      "segments": [
+        {
+          "code_summary_hash": "deebc015e9875ce63f8816e8709dd92eb4f969178176f0276134fcab190a18f1",
+          "element_id": "el-0034-code_block",
+          "is_ai_summary": true,
+          "kind": "code_block",
+          "source_hash": "a30e9c2499e0b7150b674adf92a78dedc58a96d96eea6573a4910290f3651d78",
+          "spoken_text": "This Python script performs a strict preflight validation check for a Jupyter Book project configured with a MyST Markdown structure. Its purpose is to ensure the execution environment, package dependencies, environment variables, configuration files, table of contents, and notebooks strictly adhere to required specifications before building the documentation. The script relies on standard libraries such as json, os, re, sys, and pathlib, alongside external dependencies including PyYAML and the Jupyter Client package. It begins by validating that the runtime is CPython version 3.12.14, running inside an active virtual environment, and that specific core packages like jupyter-book and ipykernel match exact version pins. It enforces clean environment variables by rejecting unexpected overrides like Jupyter tokens or base URLs, while requiring an explicit and securely formatted BASE_URL. Next, the script checks the local Jupyter kernel registration to ensure it targets the correct Python interpreter and is not shadowed by an external spec. It then parses the myst.yml configuration file, confirming version one compliance, ensuring no unauthorized inheritance, plugins, or exclusions are present, and validating that a nonempty table of contents and the correct book-theme selector are defined. The script recursively walks the table of contents to verify that every entry references a valid local file safely contained within the working directory, with no duplicate files allowed. It also ensures that all notebook files located on disk are explicitly accounted for within the table of contents. Finally, the script inspects both the configuration and all referenced notebooks and Markdown files for banned execution controls, such as skipped executions, raised exceptions, or restricted tags. It validates that any computational notebook or document containing executable directives correctly binds to the required jupyter kernel named jb2-python. It also rejects legacy configuration files like underscore config or underscore toc yaml. The primary side effect of this script is that it terminates execution via a system exit call with a descriptive error message if any validation constraint fails, preventing misconfigured builds. Upon successful completion, it outputs a success message indicating the total number of verified table of contents files."
+        }
+      ],
+      "speech_input_hash": "caf2096661904b52ededd0f7a2df1ccdc39cd8a44186e9dc78b47e9d491e5d29",
+      "text": "This Python script performs a strict preflight validation check for a Jupyter Book project configured with a MyST Markdown structure. Its purpose is to ensure the execution environment, package dependencies, environment variables, configuration files, table of contents, and notebooks strictly adhere to required specifications before building the documentation. The script relies on standard libraries such as json, os, re, sys, and pathlib, alongside external dependencies including PyYAML and the Jupyter Client package. It begins by validating that the runtime is CPython version 3.12.14, running inside an active virtual environment, and that specific core packages like jupyter-book and ipykernel match exact version pins. It enforces clean environment variables by rejecting unexpected overrides like Jupyter tokens or base URLs, while requiring an explicit and securely formatted BASE_URL. Next, the script checks the local Jupyter kernel registration to ensure it targets the correct Python interpreter and is not shadowed by an external spec. It then parses the myst.yml configuration file, confirming version one compliance, ensuring no unauthorized inheritance, plugins, or exclusions are present, and validating that a nonempty table of contents and the correct book-theme selector are defined. The script recursively walks the table of contents to verify that every entry references a valid local file safely contained within the working directory, with no duplicate files allowed. It also ensures that all notebook files located on disk are explicitly accounted for within the table of contents. Finally, the script inspects both the configuration and all referenced notebooks and Markdown files for banned execution controls, such as skipped executions, raised exceptions, or restricted tags. It validates that any computational notebook or document containing executable directives correctly binds to the required jupyter kernel named jb2-python. It also rejects legacy configuration files like underscore config or underscore toc yaml. The primary side effect of this script is that it terminates execution via a system exit call with a descriptive error message if any validation constraint fails, preventing misconfigured builds. Upon successful completion, it outputs a success message indicating the total number of verified table of contents files.",
+      "text_sha256": "deebc015e9875ce63f8816e8709dd92eb4f969178176f0276134fcab190a18f1"
+    },
+    {
+      "chunk_hash": "6c2c108647db7daba50835524218a33705bbb530adb21bf4261a54a7b264f584",
+      "chunk_id": "chunk-015",
+      "chunk_index": 15,
+      "element_ids": [
+        "el-0035-heading",
+        "el-0036-paragraph",
+        "el-0037-code_block"
+      ],
+      "section_anchor": "4-3-hermetic-build-runner-tools-build-sh",
+      "section_title": "4.3. Hermetic Build Runner: tools/build.sh",
+      "segments": [
+        {
+          "element_id": "el-0035-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "6bb6302965bfc670cd8248fb40a51887fec5bc9a5eec8ef40e7df13963372b4e",
+          "spoken_text": "4.3. Hermetic Build Runner: tools/build.sh"
+        },
+        {
+          "element_id": "el-0036-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "31913a5ef51a1f853de13b88dae4d7efd397194fb2ca34e83fe228ce7c78d636",
+          "spoken_text": "The shell script orchestrating preflight validation, cache purging, and strict compilation:"
+        },
+        {
+          "code_summary_hash": "a708380b6f1df62109caa8bccbafd6f2036e7131e85e0f72fef6b2f52367acbc",
+          "element_id": "el-0037-code_block",
+          "is_ai_summary": true,
+          "kind": "code_block",
+          "source_hash": "e18a46abd68e4fb603c06533c176a3d147c7af53080358c490f09b1c973f201d",
+          "spoken_text": "This POSIX shell script automates the validation, building, and verification process for a Jupyter Book project within the Software Cloud platform. It operates under strict error-handling rules, exiting immediately on any command failure or unbound variable usage, and explicitly disables external Node environment management via the JB_ALLOW_NODEENV environment variable. The script begins by verifying that essential runtime dependencies are installed and accessible in the system path, specifically checking Node.js, npm, Python, and the Python package manager pip. It then executes a custom Python profile validation script located in the tools directory, checks the installed Jupyter Book version, and performs a clean build of the documentation. During the build phase, it executes notebooks in strict mode to catch runtime errors within the documentation source files. Finally, the script validates the output by asserting that the primary HTML index file is successfully generated and non-empty. The primary material side effects include modifying the local filesystem by clearing previous build artifacts, executing potentially untrusted notebook code during the build process, and generating a new set of static HTML files in the local directory."
+        }
+      ],
+      "speech_input_hash": "ef4a4f3f9692d19d9ee2b0bd3ccfbde92c3cfaba86c3e98c5394087a78b08cbf",
+      "text": "4.3. Hermetic Build Runner: tools/build.sh.\n\nThe shell script orchestrating preflight validation, cache purging, and strict compilation:\n\nThis POSIX shell script automates the validation, building, and verification process for a Jupyter Book project within the Software Cloud platform. It operates under strict error-handling rules, exiting immediately on any command failure or unbound variable usage, and explicitly disables external Node environment management via the JB_ALLOW_NODEENV environment variable. The script begins by verifying that essential runtime dependencies are installed and accessible in the system path, specifically checking Node.js, npm, Python, and the Python package manager pip. It then executes a custom Python profile validation script located in the tools directory, checks the installed Jupyter Book version, and performs a clean build of the documentation. During the build phase, it executes notebooks in strict mode to catch runtime errors within the documentation source files. Finally, the script validates the output by asserting that the primary HTML index file is successfully generated and non-empty. The primary material side effects include modifying the local filesystem by clearing previous build artifacts, executing potentially untrusted notebook code during the build process, and generating a new set of static HTML files in the local directory.",
+      "text_sha256": "8d807d932e2f657ba66ef659cbfb08dd0222c466e2c34e5f225e6f5a27ba1750"
+    },
+    {
+      "chunk_hash": "047c8e3148258b6230fa6bb9e552aef9f6a50722986cd788fffcbee44a262f79",
+      "chunk_id": "chunk-016",
+      "chunk_index": 16,
+      "element_ids": [
+        "el-0038-heading",
+        "el-0039-paragraph",
+        "el-0040-code_block"
+      ],
+      "section_anchor": "5-continuous-deployment-github-workflows-deploy-yml",
+      "section_title": "5. Continuous Deployment: .github/workflows/deploy.yml",
+      "segments": [
+        {
+          "element_id": "el-0038-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "51c4a8778deec77ac4108e16cb50fbd07980a7dc5c5369e072a2c1d6bc1d900b",
+          "spoken_text": "5. Continuous Deployment: .github/workflows/deploy.yml"
+        },
+        {
+          "element_id": "el-0039-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "ac5c00138024264a9aadfd8c30602a94ea938320b11e7f82cf665eaa48641ffe",
+          "spoken_text": "The CI/CD pipeline deploys the publication to GitHub Pages on every push to main:"
+        },
+        {
+          "code_summary_hash": "863617b5f96a28677afbe2e6ea84b1ef22acba3241b2ac6f4d6ca9298818aa0f",
+          "element_id": "el-0040-code_block",
+          "is_ai_summary": true,
+          "kind": "code_block",
+          "source_hash": "f419e5b35c2868a2e9b0f19bb6851b9a6eaff942ea79e1cbfe87411389dcce6e",
+          "spoken_text": "This GitHub Actions workflow automates the building and deployment of a Jupyter Book to GitHub Pages. It triggers automatically on pushes to the main branch or via manual workflow dispatch, running exclusively on the main branch to secure the production environment. The configuration consists of two sequential jobs. The build job runs on Ubuntu 24.04 and requires read permissions for repository contents and pages. It checks out the repository, configures GitHub Pages, and sets up CPython version 3.12.14. It then creates a virtual environment and securely installs dependencies from a requirements.lock file using strict hash checking and binary-only constraints. It registers an IPython kernel and executes a custom build script located at tools/build.sh, which outputs HTML files into the underscore build html directory. Finally, it uploads this directory as a GitHub Pages build artifact. The deploy job depends directly on the successful completion of the build job. Running with write permissions for pages and identity tokens, it publishes the uploaded artifact to the GitHub Pages environment, making the site publicly accessible at the generated deployment URL. Concurrency is configured to group page deployments and prevent overlapping cancellations."
+        }
+      ],
+      "speech_input_hash": "6e4e3f85bce322931421761d4265afc650b5dff7ba50ec4f4157f4e4366e9bff",
+      "text": "5. Continuous Deployment: .github/workflows/deploy.yml.\n\nThe CI/CD pipeline deploys the publication to GitHub Pages on every push to main:\n\nThis GitHub Actions workflow automates the building and deployment of a Jupyter Book to GitHub Pages. It triggers automatically on pushes to the main branch or via manual workflow dispatch, running exclusively on the main branch to secure the production environment. The configuration consists of two sequential jobs. The build job runs on Ubuntu 24.04 and requires read permissions for repository contents and pages. It checks out the repository, configures GitHub Pages, and sets up CPython version 3.12.14. It then creates a virtual environment and securely installs dependencies from a requirements.lock file using strict hash checking and binary-only constraints. It registers an IPython kernel and executes a custom build script located at tools/build.sh, which outputs HTML files into the underscore build html directory. Finally, it uploads this directory as a GitHub Pages build artifact. The deploy job depends directly on the successful completion of the build job. Running with write permissions for pages and identity tokens, it publishes the uploaded artifact to the GitHub Pages environment, making the site publicly accessible at the generated deployment URL. Concurrency is configured to group page deployments and prevent overlapping cancellations.",
+      "text_sha256": "47023b5704444e0f310e0d987176c8db119565fb3fb3877486092b3b7d1122fd"
+    },
+    {
+      "chunk_hash": "42c0c3df471b95ab5587af7090d563be5d4d63a97679f730cee0db9950942f74",
+      "chunk_id": "chunk-017",
+      "chunk_index": 17,
+      "element_ids": [
+        "el-0041-heading",
+        "el-0042-paragraph"
+      ],
+      "section_anchor": "6-deterministic-dependency-resolution",
+      "section_title": "6. Deterministic Dependency Resolution",
+      "segments": [
+        {
+          "element_id": "el-0041-heading",
+          "is_ai_summary": false,
+          "kind": "heading",
+          "source_hash": "7ef081a7fb35b85898fc4eca39bbb89e15da5ac5a78f01d2d1c36bc79cca46e0",
+          "spoken_text": "6. Deterministic Dependency Resolution"
+        },
+        {
+          "element_id": "el-0042-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "1f8f876149111373c01da81273ed0e026cee490ef4fd8382b09f9aa14ad85538",
+          "spoken_text": "To guarantee binary compatibility with the Ubuntu CI runner, requirements.lock was generated inside a Linux/x86-64 container hosting CPython 3.12.14:"
+        }
+      ],
+      "speech_input_hash": "0bab07239ab68bc2f249093594d3b1293f7a95b37d98e4b5de4b34fd292b7fff",
+      "text": "6. Deterministic Dependency Resolution.\n\nTo guarantee binary compatibility with the Ubuntu CI runner, requirements.lock was generated inside a Linux/x86-64 container hosting CPython 3.12.14:",
+      "text_sha256": "2ef7829486e95c93eb8121a24134dc09249d69424f3e50827b070a3a4ff070a9"
+    },
+    {
+      "chunk_hash": "b26342cf49d0c128b2044acfd963aa4f5a7dba49a8dcae8a59d3ea5ad34dd57c",
+      "chunk_id": "chunk-018",
+      "chunk_index": 18,
+      "element_ids": [
+        "el-0043-code_block"
+      ],
+      "section_anchor": "6-deterministic-dependency-resolution",
+      "section_title": "6. Deterministic Dependency Resolution",
+      "segments": [
+        {
+          "code_summary_hash": "8e59c006df64df8363ee2956cf6a57d2b6b6ff12c3f3bacbcb97b81f780c7fe0",
+          "element_id": "el-0043-code_block",
+          "is_ai_summary": true,
+          "kind": "code_block",
+          "source_hash": "06b6c004774a049cc73c3135071ef3626dd308960b8f637bf2f19468200b9863",
+          "spoken_text": "This shell script automates the generation of a reproducible dependency lock file for Python projects within the Software Cloud platform. Its primary purpose is to pre-download binary wheels for all requirements specified in requirements.in and transform them into a pinned lock file without installing them into the host environment. The execution begins by creating a temporary Python 3.12 virtual environment named dot-lock-venv and a temporary directory named dot-wheelhouse. It then invokes pip within the virtual environment to download strictly pre-compiled binary packages for everything listed in requirements.in, saving the resulting wheels to the wheelhouse directory. Following the download phase, a custom utility script located at tools/lock_from_wheels.py parses the local wheelhouse to generate a deterministic requirements.lock file. Finally, the script performs a cleanup operation, recursively removing both the temporary virtual environment and the wheelhouse directory. Significant inputs include the requirements.in configuration file and the lock_from_wheels.py parsing tool, while the primary output is the generated requirements.lock file. Key dependencies are Python 3.12, the pip package manager, and network access to retrieve the packages. A notable implementation decision is the use of an isolated virtual environment and the strict enforcement of binary-only downloads, ensuring consistency across different deployment architectures. Material side effects are limited to the creation and subsequent deletion of temporary local directories and files during the build process. A potential risk is that the script will fail if network access is unavailable, if packages lack compatible pre-compiled binary wheels, or if Python 3.12 is not present in the execution environment."
+        }
+      ],
+      "speech_input_hash": "f6eff805085ae8757a8955931091d3136dee125e3e18d4dfedf4cff3b299a7c3",
+      "text": "This shell script automates the generation of a reproducible dependency lock file for Python projects within the Software Cloud platform. Its primary purpose is to pre-download binary wheels for all requirements specified in requirements.in and transform them into a pinned lock file without installing them into the host environment. The execution begins by creating a temporary Python 3.12 virtual environment named dot-lock-venv and a temporary directory named dot-wheelhouse. It then invokes pip within the virtual environment to download strictly pre-compiled binary packages for everything listed in requirements.in, saving the resulting wheels to the wheelhouse directory. Following the download phase, a custom utility script located at tools/lock_from_wheels.py parses the local wheelhouse to generate a deterministic requirements.lock file. Finally, the script performs a cleanup operation, recursively removing both the temporary virtual environment and the wheelhouse directory. Significant inputs include the requirements.in configuration file and the lock_from_wheels.py parsing tool, while the primary output is the generated requirements.lock file. Key dependencies are Python 3.12, the pip package manager, and network access to retrieve the packages. A notable implementation decision is the use of an isolated virtual environment and the strict enforcement of binary-only downloads, ensuring consistency across different deployment architectures. Material side effects are limited to the creation and subsequent deletion of temporary local directories and files during the build process. A potential risk is that the script will fail if network access is unavailable, if packages lack compatible pre-compiled binary wheels, or if Python 3.12 is not present in the execution environment.",
+      "text_sha256": "8e59c006df64df8363ee2956cf6a57d2b6b6ff12c3f3bacbcb97b81f780c7fe0"
+    },
+    {
+      "chunk_hash": "cf12878c0934bafaeacf9733c9734f6c968a8ca1d5d52ee45d96bcb7d391ff17",
+      "chunk_id": "chunk-019",
+      "chunk_index": 19,
+      "element_ids": [
+        "el-0044-paragraph"
+      ],
+      "section_anchor": "6-deterministic-dependency-resolution",
+      "section_title": "6. Deterministic Dependency Resolution",
+      "segments": [
+        {
+          "element_id": "el-0044-paragraph",
+          "is_ai_summary": false,
+          "kind": "paragraph",
+          "source_hash": "89f7cfdbbef7ce8222b44add1265a848ca587f0af70b58ebdb665c84bb063cf4",
+          "spoken_text": "The resulting lockfile pins all 77 binary distributions with SHA-256 hashes, ensuring that every build step is completely isolated and reproducible."
+        }
+      ],
+      "speech_input_hash": "6d6efe819890a047fbf31f8e2fb49783ac2623468d44ee94d55ad84b0cb75361",
+      "text": "The resulting lockfile pins all 77 binary distributions with SHA-256 hashes, ensuring that every build step is completely isolated and reproducible.",
+      "text_sha256": "734057c40184f7c6c68b3851b1e0463d5f0f07e664d243d4d0cd3f6e2afc3bb8"
+    }
+  ],
+  "code_summary_hashes": {
+    "el-0009-code_block": "dd0050f21a56dc4638a2da7c40acdf923a2f14f412ad51622110db6ca6a6caa5",
+    "el-0014-code_block": "81d0a594d0fb99f24f46657d43be64a73df227821ab7ae5d825ddda34da9adfa",
+    "el-0017-code_block": "e1a32ab733a8d1abd2d45df9823ff02799134b9b671ae5662a3532f41820043b",
+    "el-0020-code_block": "8f437c6cd7b1d9da2141a022c3639284476bf01538974bc6263336074c63d5e1",
+    "el-0023-code_block": "c9d172d061d7734bd2e8958e02751eccfef1c96f9f96324a28715cc995a22197",
+    "el-0027-code_block": "8438e3d3ba6e51bfec252583d11ecdbc19cafc92c1ad8f52515dacf73d28144f",
+    "el-0031-code_block": "214088ac5abda828525bcd595fb70c986ef2adb161beed4e5432aa478e3c7ca5",
+    "el-0034-code_block": "deebc015e9875ce63f8816e8709dd92eb4f969178176f0276134fcab190a18f1",
+    "el-0037-code_block": "a708380b6f1df62109caa8bccbafd6f2036e7131e85e0f72fef6b2f52367acbc",
+    "el-0040-code_block": "863617b5f96a28677afbe2e6ea84b1ef22acba3241b2ac6f4d6ca9298818aa0f",
+    "el-0043-code_block": "8e59c006df64df8363ee2956cf6a57d2b6b6ff12c3f3bacbcb97b81f780c7fe0"
+  },
+  "config_hash": "d5baac4fad1f9b181890c898934a905b75aa725dee29a66f520b062347b9bd18",
+  "element_ids": [
+    "el-0001-heading",
+    "el-0002-paragraph",
+    "el-0003-heading",
+    "el-0004-paragraph",
+    "el-0005-heading",
+    "el-0006-list",
+    "el-0007-heading",
+    "el-0008-paragraph",
+    "el-0009-code_block",
+    "el-0010-heading",
+    "el-0011-paragraph",
+    "el-0012-heading",
+    "el-0013-paragraph",
+    "el-0014-code_block",
+    "el-0015-heading",
+    "el-0016-paragraph",
+    "el-0017-code_block",
+    "el-0018-heading",
+    "el-0019-paragraph",
+    "el-0020-code_block",
+    "el-0021-heading",
+    "el-0022-paragraph",
+    "el-0023-code_block",
+    "el-0024-paragraph",
+    "el-0025-heading",
+    "el-0026-paragraph",
+    "el-0027-code_block",
+    "el-0028-heading",
+    "el-0029-heading",
+    "el-0030-paragraph",
+    "el-0031-code_block",
+    "el-0032-heading",
+    "el-0033-paragraph",
+    "el-0034-code_block",
+    "el-0035-heading",
+    "el-0036-paragraph",
+    "el-0037-code_block",
+    "el-0038-heading",
+    "el-0039-paragraph",
+    "el-0040-code_block",
+    "el-0041-heading",
+    "el-0042-paragraph",
+    "el-0043-code_block",
+    "el-0044-paragraph"
+  ],
+  "elements": [
+    {
+      "element_id": "el-0001-heading",
+      "heading_level": 1,
+      "kind": "heading",
+      "section_anchor": "architecture-memorandum-reference",
+      "section_title": "Architecture & Memorandum Reference",
+      "source_hash": "4865ab8010b3718074d3ab8784dd1dc40dc73c97753ad470640a597a94d3eb3b",
+      "text": "Architecture & Memorandum Reference"
+    },
+    {
+      "element_id": "el-0002-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "architecture-memorandum-reference",
+      "section_title": "Architecture & Memorandum Reference",
+      "source_hash": "661d89692e3ea574b795b02ff88de05fe8393f2272cf1027302a8a7afadc2571",
+      "text": "Software Cloud computational pipeline, repository scaffold, and build environment specifications."
+    },
+    {
+      "element_id": "el-0003-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "1-overview-and-design-principles",
+      "section_title": "1. Overview and Design Principles",
+      "source_hash": "9bd655deed7be69430a25c3fce5940675cf45ac1e436467dc84ee97e968baead",
+      "text": "1. Overview and Design Principles"
+    },
+    {
+      "element_id": "el-0004-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "1-overview-and-design-principles",
+      "section_title": "1. Overview and Design Principles",
+      "source_hash": "a698922713d6b19f9477a5e040502826f46cf50159c7f5775f70dac4e5ca5c18",
+      "text": "The Software Cloud publishing platform is engineered around strict computational determinism, reproducibility, and security. Built upon Jupyter Book 2 (JB2) and the MyST Markdown ecosystem, every component—from environment dependency resolution to static HTML artifact generation—is verified before deployment."
+    },
+    {
+      "element_id": "el-0005-heading",
+      "heading_level": 3,
+      "kind": "heading",
+      "section_anchor": "core-architectural-tenants",
+      "section_title": "Core Architectural Tenants",
+      "source_hash": "c2089fdbbcc682176c620f191f43b1b536f185411aa2433c08788bb975d98952",
+      "text": "Core Architectural Tenants"
+    },
+    {
+      "element_id": "el-0006-list",
+      "kind": "list",
+      "section_anchor": "core-architectural-tenants",
+      "section_title": "Core Architectural Tenants",
+      "source_hash": "c559fada3479d20fdbf7a440d1ae1903e83da9d9724cbcd155af01a1a3696368",
+      "text": "Deterministic Dependency Locking: All runtime Python distributions and their transitive dependencies are pinned with exact versions and cryptographic SHA-256 digests (--require-hashes, --only-binary=:all:). Canonical Execution Environment: Builds and notebook executions target CPython 3.12.14 on Linux x86-64, isolating execution state and preventing architecture drift. Explicit Profile Validation: A standalone preflight validator (tools/check_profile.py) enforces schema integrity, kernelspec registration, TOC exhaustiveness, and execution control compliance prior to artifact compilation. Reproducible Continuous Delivery: GitHub Actions runs the verified pipeline in an isolated runner, builds the static publication artifact under --strict mode, and deploys to my.softcloud.dev."
+    },
+    {
+      "element_id": "el-0007-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "2-repository-layout-topology",
+      "section_title": "2. Repository Layout & Topology",
+      "source_hash": "bbc102807fe2fc60f733545701b58540d99f5d2b2bc77ab8944fe1c6dc19fac6",
+      "text": "2. Repository Layout & Topology"
+    },
+    {
+      "element_id": "el-0008-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "2-repository-layout-topology",
+      "section_title": "2. Repository Layout & Topology",
+      "source_hash": "b4769550a1424d3038fe64b36f2e539ed59c9f3e665d89ee42d76f9e21355b39",
+      "text": "The repository follows a clean, minimal directory topology designed for auditability:"
+    },
+    {
+      "element_id": "el-0009-code_block",
+      "kind": "code_block",
+      "language": "text",
+      "section_anchor": "2-repository-layout-topology",
+      "section_title": "2. Repository Layout & Topology",
+      "source_hash": "639ccca0c527a0cd165d8881cb4a48394a383317efd9762eeccdcd6d09a98a99",
+      "text": "soft-cloud-dev/\n├── .github/\n│   └── workflows/\n│       └── deploy.yml            # Automated CI/CD deployment workflow\n├── images/\n│   ├── favicon.ico               # Multi-resolution browser icon\n│   ├── favicon-32x32.png         # Standard desktop browser favicon\n│   ├── favicon-192x192.png       # High-DPI web app icon\n│   ├── logo.svg                  # Primary horizontal brand lockup\n│   ├── logo-dark.svg             # Contrast-adapted dark mode lockup\n│   ├── logo-mark.svg             # Minimal icon mark\n│   └── logo-mark-dark.svg        # Dark mode icon mark\n├── notebooks/\n│   └── experiment.ipynb          # Verified CPython 3.12.14 computational notebook\n├── tools/\n│   ├── build.sh                  # Hermetic publication build runner\n│   ├── check_profile.py          # Profile compliance & integrity validator\n│   └── lock_from_wheels.py       # Wheelhouse hash resolver & lockfile generator\n├── .gitignore                    # Artifact & virtual environment exclusions\n├── architecture.md               # Architecture reference & memorandum specifications\n├── CNAME                         # Custom domain mapping (my.softcloud.dev)\n├── introduction.md               # Project background and operational scope\n├── LICENSE                       # BSD 2-Clause License\n├── myst.yml                      # Jupyter Book 2 project configuration\n├── README.md                     # Platform overview and landing page\n├── requirements.in               # Top-level dependency declarations\n└── requirements.lock             # Cryptographically pinned wheel lockfile"
+    },
+    {
+      "element_id": "el-0010-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "3-memorandum-scaffold-specifications",
+      "section_title": "3. Memorandum Scaffold Specifications",
+      "source_hash": "f4fa03cc930552f03384c43b2b95bc20db3828d7c3eb275ec9101100011efd71",
+      "text": "3. Memorandum Scaffold Specifications"
+    },
+    {
+      "element_id": "el-0011-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "3-memorandum-scaffold-specifications",
+      "section_title": "3. Memorandum Scaffold Specifications",
+      "source_hash": "e9e5becd959f667a905d284fd084b3c72ed8ffc9d2de0519ce6a1b24c1b50604",
+      "text": "The following sections document the verbatim scaffold files and specifications defined in the repository memorandum."
+    },
+    {
+      "element_id": "el-0012-heading",
+      "heading_level": 3,
+      "kind": "heading",
+      "section_anchor": "3-1-license",
+      "section_title": "3.1. LICENSE",
+      "source_hash": "10acb1852a7ef2bc67d681d534bb63ce3bd42ee9ed9c4bb15c669b5307f2446f",
+      "text": "3.1. LICENSE"
+    },
+    {
+      "element_id": "el-0013-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "3-1-license",
+      "section_title": "3.1. LICENSE",
+      "source_hash": "fa3d2b554bb43be78e67f1e4dfd9e0555af46c9da6206f8b97ffcfc1cfe4f649",
+      "text": "The repository is distributed under the open-source BSD 2-Clause License:"
+    },
+    {
+      "element_id": "el-0014-code_block",
+      "kind": "code_block",
+      "language": "text",
+      "section_anchor": "3-1-license",
+      "section_title": "3.1. LICENSE",
+      "source_hash": "3f0dd9ba2fdcdd6c538bc825275097866429fc0f059ff4f82e63bb747c5fdc75",
+      "text": "Copyright (c) 2026, Project Contributors\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions are met:\n\n1. Redistributions of source code must retain the above copyright notice, this\n   list of conditions and the following disclaimer.\n\n2. Redistributions in binary form must reproduce the above copyright notice,\n   this list of conditions and the following disclaimer in the documentation\n   and/or other materials provided with the distribution.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\"\nAND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE\nIMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\nDISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE\nFOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL\nDAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR\nSERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER\nCAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,\nOR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\nOF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+    },
+    {
+      "element_id": "el-0015-heading",
+      "heading_level": 3,
+      "kind": "heading",
+      "section_anchor": "3-2-gitignore",
+      "section_title": "3.2. .gitignore",
+      "source_hash": "3d0aaaf2764324f9a5a8f28239e075eb86ccc297fc85d713451f1376d2f25fd5",
+      "text": "3.2. .gitignore"
+    },
+    {
+      "element_id": "el-0016-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "3-2-gitignore",
+      "section_title": "3.2. .gitignore",
+      "source_hash": "ca7bd210d5ddf24678672cdcd24846979c2c05bb3673906aaeab5c4dfb96217f",
+      "text": "Strict exclusion rules keep local cache artifacts, wheelhouses, and virtual environments outside source control:"
+    },
+    {
+      "element_id": "el-0017-code_block",
+      "kind": "code_block",
+      "language": "text",
+      "section_anchor": "3-2-gitignore",
+      "section_title": "3.2. .gitignore",
+      "source_hash": "3f8956f886cce465c69be1efaee1b3739497996f8b8de5ea107e874bad6cc6be",
+      "text": ".venv/\n.lock-venv/\n.wheelhouse/\n_build/\n__pycache__/\n.ipynb_checkpoints/"
+    },
+    {
+      "element_id": "el-0018-heading",
+      "heading_level": 3,
+      "kind": "heading",
+      "section_anchor": "3-3-requirements-in",
+      "section_title": "3.3. requirements.in",
+      "source_hash": "9df1bc8ce8f7c8eaab41839114a2c0eaa87f5f5f107dcfdd2a6c8e5082e43391",
+      "text": "3.3. requirements.in"
+    },
+    {
+      "element_id": "el-0019-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "3-3-requirements-in",
+      "section_title": "3.3. requirements.in",
+      "source_hash": "514ffef6ea6b66d58aba884c0f46007f50ec532eff68d21532add14480bf1370",
+      "text": "Direct, unpinned top-level requirements defining the computational runtime tooling:"
+    },
+    {
+      "element_id": "el-0020-code_block",
+      "kind": "code_block",
+      "language": "text",
+      "section_anchor": "3-3-requirements-in",
+      "section_title": "3.3. requirements.in",
+      "source_hash": "4f0d0f387c2afc9b43a1096e6328699c8bb9d1b2a83b5b564e12ac5c488280ed",
+      "text": "jupyter-book==2.1.7\nipykernel==7.3.0\nPyYAML==6.0.3"
+    },
+    {
+      "element_id": "el-0021-heading",
+      "heading_level": 3,
+      "kind": "heading",
+      "section_anchor": "3-4-myst-yml",
+      "section_title": "3.4. myst.yml",
+      "source_hash": "d8a21e1a26ce944db10008ed524d6f45c52450d3e65871269a1bc68c0f20d35a",
+      "text": "3.4. myst.yml"
+    },
+    {
+      "element_id": "el-0022-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "3-4-myst-yml",
+      "section_title": "3.4. myst.yml",
+      "source_hash": "119e57283cb1b84b45a44ab9dec490c94da450490b849907fdfab7243a594c2c",
+      "text": "The configuration file governing book structure, metadata, branding, and table of contents:"
+    },
+    {
+      "element_id": "el-0023-code_block",
+      "kind": "code_block",
+      "language": "yaml",
+      "section_anchor": "3-4-myst-yml",
+      "section_title": "3.4. myst.yml",
+      "source_hash": "b6b80fb5a3dda40062a14794bfba074f70b654f85cf20e1ed9354eacad0d8b8e",
+      "text": "version: 1\nproject:\n  title: Software Cloud\n  description: Computational publication and research platform for Software Cloud.\n  github: https://github.com/soft-cloud-dev/soft-cloud-dev\n  toc:\n    - file: README.md\n    - file: introduction.md\n    - file: architecture.md\n    - title: Computational Notebooks\n      children:\n        - file: notebooks/experiment.ipynb\nsite:\n  template: book-theme\n  options:\n    logo: images/logo.svg\n    logo_dark: images/logo-dark.svg\n    favicon: images/favicon.ico"
+    },
+    {
+      "element_id": "el-0024-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "3-4-myst-yml",
+      "section_title": "3.4. myst.yml",
+      "source_hash": "4da395b0923057aa0e5c6f14219d82054e1fb5508d9b8c4f8d1ceb2358483a09",
+      "text": "(Note: The foundational memorandum originally scaffolded title as Research Book and repository as https://github.com/OWNER/REPOSITORY; this was updated to match the active Software Cloud deployment and custom domain.)"
+    },
+    {
+      "element_id": "el-0025-heading",
+      "heading_level": 3,
+      "kind": "heading",
+      "section_anchor": "3-5-computational-notebook-notebooks-experiment-ipynb",
+      "section_title": "3.5. Computational Notebook: notebooks/experiment.ipynb",
+      "source_hash": "f3c0bd8193e77b34486e1a7e0b7dce091acc9b99198383f841902ea5e3718ab9",
+      "text": "3.5. Computational Notebook: notebooks/experiment.ipynb"
+    },
+    {
+      "element_id": "el-0026-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "3-5-computational-notebook-notebooks-experiment-ipynb",
+      "section_title": "3.5. Computational Notebook: notebooks/experiment.ipynb",
+      "source_hash": "c0b90e09ed0b7d0f9ba88ffecdf39b380d7cc2c6c0ed67cc3c52c2614064495b",
+      "text": "An executable verification notebook executed by Jupyter Book during the build process to guarantee runtime environment health:"
+    },
+    {
+      "element_id": "el-0027-code_block",
+      "kind": "code_block",
+      "language": "json",
+      "section_anchor": "3-5-computational-notebook-notebooks-experiment-ipynb",
+      "section_title": "3.5. Computational Notebook: notebooks/experiment.ipynb",
+      "source_hash": "32f81d86bc280881f763694a55f7ea3960fb4e87fbdde007fd0aff984e801046",
+      "text": "{\n \"cells\": [\n  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [\n    \"# Computational Verification\\n\",\n    \"Environment runtime validation notebook.\"\n   ]\n  },\n  {\n   \"cell_type\": \"code\",\n   \"execution_count\": null,\n   \"metadata\": {},\n   \"outputs\": [],\n   \"source\": [\n    \"import sys\\n\",\n    \"print(\\\"Executable:\\\", sys.executable)\\n\",\n    \"print(\\\"Version:\\\", sys.version)\\n\",\n    \"assert sys.version_info[:3] == (3, 12, 14)\"\n   ]\n  }\n ],\n \"metadata\": {\n  \"kernelspec\": {\n   \"display_name\": \"Python (JB2)\",\n   \"language\": \"python\",\n   \"name\": \"jb2-python\"\n  },\n  \"language_info\": {\n   \"name\": \"python\",\n   \"version\": \"3.12.14\"\n  }\n },\n \"nbformat\": 4,\n \"nbformat_minor\": 5\n}"
+    },
+    {
+      "element_id": "el-0028-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "4-build-maintenance-toolchain",
+      "section_title": "4. Build & Maintenance Toolchain",
+      "source_hash": "2496ddc6470e562d4ae7b924bb3336e71b6d899ed42b19dba20d3f2dbe778457",
+      "text": "4. Build & Maintenance Toolchain"
+    },
+    {
+      "element_id": "el-0029-heading",
+      "heading_level": 3,
+      "kind": "heading",
+      "section_anchor": "4-1-lockfile-generator-tools-lockfromwheels-py",
+      "section_title": "4.1. Lockfile Generator: tools/lock_from_wheels.py",
+      "source_hash": "8916caa3e7660e85786deea8d9d9f27173150e1c715f3fad0346b1e8411059f2",
+      "text": "4.1. Lockfile Generator: tools/lock_from_wheels.py"
+    },
+    {
+      "element_id": "el-0030-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "4-1-lockfile-generator-tools-lockfromwheels-py",
+      "section_title": "4.1. Lockfile Generator: tools/lock_from_wheels.py",
+      "source_hash": "fc4dda6561016c6aca085263ec56d9c6d91dcf51ea1cb6352635c3ec3da704f3",
+      "text": "This maintenance utility resolves wheel archives in .wheelhouse/, extracts their normalized distribution metadata, computes their SHA-256 checksums, and produces a strictly pinned requirements.lock:"
+    },
+    {
+      "element_id": "el-0031-code_block",
+      "kind": "code_block",
+      "language": "python",
+      "section_anchor": "4-1-lockfile-generator-tools-lockfromwheels-py",
+      "section_title": "4.1. Lockfile Generator: tools/lock_from_wheels.py",
+      "source_hash": "6b6f125996ff3ccb429429effd6d015edff9fcf7b65358c5516417c27f5cb033",
+      "text": "import email\nimport hashlib\nimport re\nimport sys\nimport zipfile\nfrom pathlib import Path\n\nwheelhouse, output = map(Path, sys.argv[1:])\nif output.exists():\n    raise SystemExit(f\"Refusing to overwrite {output}; review a new candidate\")\nwheels = sorted(wheelhouse.glob(\"*.whl\"))\nif not wheels:\n    raise SystemExit(\"No wheels found\")\nif any(p.suffix != \".whl\" for p in wheelhouse.iterdir()):\n    raise SystemExit(\"Wheel directory contains unexpected entries\")\nrecords = {}\nfor wheel in wheels:\n    with zipfile.ZipFile(wheel) as archive:\n        names = [n for n in archive.namelist() if n.endswith(\".dist-info/METADATA\")]\n        if len(names) != 1:\n            raise SystemExit(f\"Ambiguous metadata: {wheel.name}\")\n        metadata = email.message_from_bytes(archive.read(names[0]))\n    name = re.sub(r\"[-_.]+\", \"-\", metadata[\"Name\"]).lower()\n    version = metadata[\"Version\"]\n    if name in records:\n        raise SystemExit(f\"Duplicate distribution: {name}\")\n    with wheel.open(\"rb\") as stream:\n        digest = hashlib.file_digest(stream, \"sha256\").hexdigest()\n    records[name] = f\"{name}=={version} --hash=sha256:{digest}\"\nwith output.open(\"x\", encoding=\"utf-8\") as stream:\n    stream.write(\"\\n\".join(records[n] for n in sorted(records)) + \"\\n\")\nprint(f\"Wrote {len(records)} pinned wheel requirements to {output}\")"
+    },
+    {
+      "element_id": "el-0032-heading",
+      "heading_level": 3,
+      "kind": "heading",
+      "section_anchor": "4-2-profile-preflight-validator-tools-checkprofile-py",
+      "section_title": "4.2. Profile Preflight Validator: tools/check_profile.py",
+      "source_hash": "8132831399d093ea919ac1ec13c8ff8f0f4f380913bf96066de1696d933984ee",
+      "text": "4.2. Profile Preflight Validator: tools/check_profile.py"
+    },
+    {
+      "element_id": "el-0033-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "4-2-profile-preflight-validator-tools-checkprofile-py",
+      "section_title": "4.2. Profile Preflight Validator: tools/check_profile.py",
+      "source_hash": "97c72a163413768fce9a608a5a9c52164366a7028a832eadea0b3bb88459de2c",
+      "text": "The validation engine guarantees profile purity and strict adherence to the publication contract:"
+    },
+    {
+      "element_id": "el-0034-code_block",
+      "kind": "code_block",
+      "language": "python",
+      "section_anchor": "4-2-profile-preflight-validator-tools-checkprofile-py",
+      "section_title": "4.2. Profile Preflight Validator: tools/check_profile.py",
+      "source_hash": "a30e9c2499e0b7150b674adf92a78dedc58a96d96eea6573a4910290f3651d78",
+      "text": "import json\nimport os\nimport re\nimport sys\nfrom importlib.metadata import version\nfrom pathlib import Path\n\nimport yaml\nfrom jupyter_client.kernelspec import KernelSpecManager\n\ndef require(condition, message):\n    if not condition:\n        raise SystemExit(message)\n\nroot = Path.cwd().resolve()\nrequire(sys.implementation.name == \"cpython\", \"CPython required\")\nrequire(sys.version_info[:3] == (3, 12, 14), \"Python 3.12.14 required\")\nrequire(sys.prefix != sys.base_prefix, \"Activate the project virtualenv\")\nfor package, expected in {\n    \"jupyter-book\": \"2.1.7\", \"ipykernel\": \"7.3.0\", \"PyYAML\": \"6.0.3\"\n}.items():\n    require(version(package) == expected, f\"Wrong version: {package}\")\nrequire(version(\"jupyter-server\"), \"Jupyter Server required\")\nfor name in (\"JUPYTER_BASE_URL\", \"JUPYTER_TOKEN\", \"READTHEDOCS_CANONICAL_URL\"):\n    require(not os.environ.get(name), f\"Unexpected environment override: {name}\")\nrequire(\"BASE_URL\" in os.environ, \"Set BASE_URL explicitly; empty is valid\")\nbase = os.environ[\"BASE_URL\"]\nrequire(base == \"\" or (base.startswith(\"/\") and not base.startswith(\"//\")\n        and not base.endswith(\"/\") and not any(c in base for c in \"?#\\n\\r\")),\n        \"BASE_URL must be empty or a path prefix such as /docs\")\n\nkernel_dir = Path(sys.prefix) / \"share/jupyter/kernels/jb2-python\"\nspec = json.loads((kernel_dir / \"kernel.json\").read_text())\nrequire(Path(spec[\"argv\"][0]).absolute() == Path(sys.executable).absolute(),\n        \"Kernel does not launch this environment's Python\")\nresolved = KernelSpecManager().get_kernel_spec(\"jb2-python\")\nrequire(Path(resolved.resource_dir).resolve() == kernel_dir.resolve(),\n        \"Another kernelspec overrides the project kernel\")\n\ndef local_file(value):\n    require(isinstance(value, str), \"Source path must be a string\")\n    path = root / value\n    require(not Path(value).is_absolute(), f\"Absolute source path: {value}\")\n    require(path.resolve().is_relative_to(root), f\"External path: {value}\")\n    require(path.is_file(), f\"Missing source or asset: {value}\")\n    return path\n\nconfig = yaml.safe_load(Path(\"myst.yml\").read_text())\nrequire(isinstance(config, dict) and config.get(\"version\") == 1,\n        \"Expected myst.yml version: 1\")\nrequire(\"extends\" not in config, \"Configuration inheritance needs a profile extension\")\nproject = config.get(\"project\", {})\nrequire(not project.get(\"plugins\"), \"Custom plugins need a profile extension\")\nrequire(not project.get(\"exclude\"), \"Project exclusions are not accepted\")\ntoc = project.get(\"toc\")\nrequire(isinstance(toc, list) and toc, \"Explicit nonempty project.toc required\")\nsite = config.get(\"site\", {})\nrequire(site.get(\"template\") == \"book-theme\", \"Expected book-theme selector\")\nlocal_file(site.get(\"options\", {}).get(\"logo\"))\nfiles = []\n\ndef walk(entries):\n    require(isinstance(entries, list), \"TOC children must be a list\")\n    for entry in entries:\n        require(isinstance(entry, dict), \"TOC entry must be a mapping\")\n        require(set(entry) <= {\"file\", \"title\", \"children\"},\n                \"Unsupported TOC entry; use file/title/children\")\n        require(\"file\" in entry or entry.get(\"children\"), \"Empty TOC entry\")\n        if \"file\" in entry:\n            files.append(local_file(entry[\"file\"]))\n        if \"children\" in entry:\n            walk(entry[\"children\"])\n\nwalk(toc)\nrequire(len({p.resolve() for p in files}) == len(files), \"Duplicate TOC file\")\nfor path in Path(\"notebooks\").rglob(\"*.ipynb\"):\n    if \".ipynb_checkpoints\" not in path.parts:\n        require(path.resolve() in {p.resolve() for p in files},\n                f\"Notebook absent from TOC: {path}\")\n\nbanned = {\"skip-execution\", \"raises-exception\"}\n\ndef check_controls(value, label):\n    if isinstance(value, dict):\n        execute = value.get(\"execute\")\n        if isinstance(execute, dict):\n            require(execute.get(\"skip\") in (None, False), f\"Execution skipped: {label}\")\n        tags = value.get(\"tags\", [])\n        if isinstance(tags, (list, str)):\n            require(not any(tag in tags for tag in banned), f\"Forbidden tag: {label}\")\n        for child in value.values():\n            check_controls(child, label)\n    elif isinstance(value, list):\n        for child in value:\n            check_controls(child, label)\n\ndef check_kernel(metadata, label):\n    expected = {\"name\": \"jb2-python\", \"display_name\": \"Python (JB2)\", \"language\": \"python\"}\n    actual = metadata.get(\"kernelspec\", {})\n    require(all(actual.get(k) == v for k, v in expected.items()),\n            f\"Wrong or absent kernelspec: {label}\")\n\ncheck_controls(config, \"myst.yml\")\nfor path in files:\n    if path.suffix == \".ipynb\":\n        notebook = json.loads(path.read_text())\n        check_controls(notebook.get(\"metadata\", {}), path)\n        cells = notebook.get(\"cells\", [])\n        for cell in cells:\n            check_controls(cell.get(\"metadata\", {}), path)\n        computational = any(c.get(\"cell_type\") == \"code\" for c in cells)\n        computational = computational or any(\n            \"{ev\" \"al}\" in \"\".join(c.get(\"source\", []))\n            or \"{code-\" \"cell}\" in \"\".join(c.get(\"source\", []))\n            for c in cells if c.get(\"cell_type\") == \"markdown\")\n        if computational:\n            check_kernel(notebook.get(\"metadata\", {}), path)\n    elif path.suffix == \".md\":\n        text = path.read_text()\n        front = re.match(r\"\\A---\\r?\\n(.*?)\\r?\\n---(?:\\r?\\n|\\Z)\", text, re.S)\n        metadata = yaml.safe_load(front.group(1)) or {} if front else {}\n        require(isinstance(metadata, dict), f\"Invalid frontmatter: {path}\")\n        check_controls(metadata, path)\n        if \"{code-\" \"cell}\" in text or \"{ev\" \"al}\" in text:\n            check_kernel(metadata, path)\n            require(not any(tag in text for tag in banned),\n                    f\"Review executable Markdown execution controls: {path}\")\nrequire(not Path(\"_config.yml\").exists() and not Path(\"_toc.yml\").exists(),\n        \"Remove legacy configuration from this profile\")\nprint(f\"Preflight passed for {len(files)} TOC files\")"
+    },
+    {
+      "element_id": "el-0035-heading",
+      "heading_level": 3,
+      "kind": "heading",
+      "section_anchor": "4-3-hermetic-build-runner-tools-build-sh",
+      "section_title": "4.3. Hermetic Build Runner: tools/build.sh",
+      "source_hash": "6bb6302965bfc670cd8248fb40a51887fec5bc9a5eec8ef40e7df13963372b4e",
+      "text": "4.3. Hermetic Build Runner: tools/build.sh"
+    },
+    {
+      "element_id": "el-0036-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "4-3-hermetic-build-runner-tools-build-sh",
+      "section_title": "4.3. Hermetic Build Runner: tools/build.sh",
+      "source_hash": "31913a5ef51a1f853de13b88dae4d7efd397194fb2ca34e83fe228ce7c78d636",
+      "text": "The shell script orchestrating preflight validation, cache purging, and strict compilation:"
+    },
+    {
+      "element_id": "el-0037-code_block",
+      "kind": "code_block",
+      "language": "sh",
+      "section_anchor": "4-3-hermetic-build-runner-tools-build-sh",
+      "section_title": "4.3. Hermetic Build Runner: tools/build.sh",
+      "source_hash": "e18a46abd68e4fb603c06533c176a3d147c7af53080358c490f09b1c973f201d",
+      "text": "#!/bin/sh\nset -eu\nexport JB_ALLOW_NODEENV=0\ncommand -v node\ncommand -v npm\nnode --version\nnpm --version\npython --version\npython -m pip --version\npython tools/check_profile.py\njupyter book --version\njupyter book clean --all --execute -y\njupyter book build --html --strict --execute\ntest -s _build/html/index.html"
+    },
+    {
+      "element_id": "el-0038-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "5-continuous-deployment-github-workflows-deploy-yml",
+      "section_title": "5. Continuous Deployment: .github/workflows/deploy.yml",
+      "source_hash": "51c4a8778deec77ac4108e16cb50fbd07980a7dc5c5369e072a2c1d6bc1d900b",
+      "text": "5. Continuous Deployment: .github/workflows/deploy.yml"
+    },
+    {
+      "element_id": "el-0039-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "5-continuous-deployment-github-workflows-deploy-yml",
+      "section_title": "5. Continuous Deployment: .github/workflows/deploy.yml",
+      "source_hash": "ac5c00138024264a9aadfd8c30602a94ea938320b11e7f82cf665eaa48641ffe",
+      "text": "The CI/CD pipeline deploys the publication to GitHub Pages on every push to main:"
+    },
+    {
+      "element_id": "el-0040-code_block",
+      "kind": "code_block",
+      "language": "yaml",
+      "section_anchor": "5-continuous-deployment-github-workflows-deploy-yml",
+      "section_title": "5. Continuous Deployment: .github/workflows/deploy.yml",
+      "source_hash": "f419e5b35c2868a2e9b0f19bb6851b9a6eaff942ea79e1cbfe87411389dcce6e",
+      "text": "name: Jupyter Book Pages\n\non:\n  push:\n    branches: [main]\n  workflow_dispatch:\n\npermissions:\n  contents: read\n\nconcurrency:\n  group: pages\n  cancel-in-progress: false\n\njobs:\n  build:\n    if: github.ref == 'refs/heads/main'\n    runs-on: ubuntu-24.04\n    permissions:\n      contents: read\n      pages: read\n    timeout-minutes: 30\n    defaults:\n      run:\n        shell: bash\n    steps:\n      - name: Checkout\n        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1\n        with:\n          persist-credentials: false\n\n      - name: Configure Pages\n        id: pages\n        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d\n\n      - name: Configure Python\n        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97\n        with:\n          python-version: '3.12.14'\n          architecture: x64\n\n      - name: Install locked environment\n        run: |\n          python -c 'import sys; assert sys.implementation.name == \"cpython\" and sys.version_info[:3] == (3, 12, 14), sys.version'\n          python -m venv .venv\n          .venv/bin/python -m pip --version\n          .venv/bin/python -m pip install \\\n            --require-hashes \\\n            --only-binary=:all: \\\n            -r requirements.lock\n          .venv/bin/python -m pip check\n          .venv/bin/python -m ipykernel install \\\n            --sys-prefix \\\n            --name jb2-python \\\n            --display-name 'Python (JB2)'\n\n      - name: Validate and build publication artifact\n        env:\n          BASE_URL: ${{ steps.pages.outputs.base_path }}\n          JB_ALLOW_NODEENV: '0'\n        run: |\n          . .venv/bin/activate\n          sh tools/build.sh\n\n      - name: Upload Pages artifact\n        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9\n        with:\n          path: ./_build/html\n\n  deploy:\n    needs: build\n    runs-on: ubuntu-24.04\n    permissions:\n      pages: write\n      id-token: write\n    environment:\n      name: github-pages\n      url: ${{ steps.deployment.outputs.page_url }}\n    steps:\n      - name: Deploy accepted artifact\n        id: deployment\n        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346"
+    },
+    {
+      "element_id": "el-0041-heading",
+      "heading_level": 2,
+      "kind": "heading",
+      "section_anchor": "6-deterministic-dependency-resolution",
+      "section_title": "6. Deterministic Dependency Resolution",
+      "source_hash": "7ef081a7fb35b85898fc4eca39bbb89e15da5ac5a78f01d2d1c36bc79cca46e0",
+      "text": "6. Deterministic Dependency Resolution"
+    },
+    {
+      "element_id": "el-0042-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "6-deterministic-dependency-resolution",
+      "section_title": "6. Deterministic Dependency Resolution",
+      "source_hash": "1f8f876149111373c01da81273ed0e026cee490ef4fd8382b09f9aa14ad85538",
+      "text": "To guarantee binary compatibility with the Ubuntu CI runner, requirements.lock was generated inside a Linux/x86-64 container hosting CPython 3.12.14:"
+    },
+    {
+      "element_id": "el-0043-code_block",
+      "kind": "code_block",
+      "language": "sh",
+      "section_anchor": "6-deterministic-dependency-resolution",
+      "section_title": "6. Deterministic Dependency Resolution",
+      "source_hash": "06b6c004774a049cc73c3135071ef3626dd308960b8f637bf2f19468200b9863",
+      "text": "python3.12 -m venv .lock-venv\nmkdir .wheelhouse\n.lock-venv/bin/python -m pip download \\\n    --only-binary=:all: \\\n    --dest .wheelhouse \\\n    -r requirements.in\n.lock-venv/bin/python tools/lock_from_wheels.py .wheelhouse requirements.lock\nrm -rf .lock-venv .wheelhouse"
+    },
+    {
+      "element_id": "el-0044-paragraph",
+      "kind": "paragraph",
+      "section_anchor": "6-deterministic-dependency-resolution",
+      "section_title": "6. Deterministic Dependency Resolution",
+      "source_hash": "89f7cfdbbef7ce8222b44add1265a848ca587f0af70b58ebdb665c84bb063cf4",
+      "text": "The resulting lockfile pins all 77 binary distributions with SHA-256 hashes, ensuring that every build step is completely isolated and reproducible."
+    }
+  ],
+  "locale": "en",
+  "logical_source_path": "architecture.md",
+  "narration_config": {
+    "audio_format": "mp3",
+    "locale": "en",
+    "max_chunk_chars": 1800,
+    "mp3_bitrate": "64k",
+    "sample_rate": 24000,
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.",
+    "text_temperature": 0.0,
+    "tts_model": "gemini-3.8-flash-tts",
+    "voice_name": "Kore"
+  },
+  "page_id": "architecture",
+  "page_source_hash": "2eb15ab48e6298da4e42a2f6c556e5d45407d6fd54513a27116ed9ba3bc42156",
+  "schema_version": "1.0.0",
+  "source_file_sha256": "c3900cbebb67d81d307f9c45e5cb55a4a992975b1fe7380f9668c9b3230bbb71",
+  "source_path": "architecture.md",
+  "transcript_sha256": "587be2be6bde5dc13b0a3a67e5491f861b610c5f858758f5aaab6d69e9f87fcd"
+}
