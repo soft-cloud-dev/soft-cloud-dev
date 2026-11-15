@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0023-code_block",
+  "generation_config": {
+    "locale": "es",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in Spanish (español) matching document locale 'es'.",
+    "text_temperature": 0.0
+  },
+  "language": "yaml",
+  "locale": "es",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "b6b80fb5a3dda40062a14794bfba074f70b654f85cf20e1ed9354eacad0d8b8e",
+  "text_config_hash": "0ae7c213c19fa3769f2d0eb3191e42fb2c5d0d4339b800b6a5bd864decd76d60",
+  "transcript": "Este bloque de código YAML define la configuración de compilación y los metadatos estructurales para una publicación o documentación en la plataforma Software Cloud, utilizando la versión uno del esquema. Su propósito principal es estructurar la tabla de contenido, vincular el repositorio de GitHub y establecer la identidad visual del sitio mediante plantillas y recursos gráficos como logotipos y favicons. Como entradas significativas, procesa referencias a archivos locales en formato Markdown y Jupyter Notebook, además de rutas de recursos estáticos. La salida es un sitio web generado a partir del tema del libro configurado. Las operaciones clave incluyen la organización jerárquica de la tabla de contenido, que agrupa la documentación introductoria y de arquitectura junto con cuadernos computacionales especializados, y la asignación de elementos de marca para modos claros y oscuros. No presenta dependencias de ejecución complejas más allá de la estructura del sistema de archivos referenciada, ni genera efectos secundarios materiales más allá de la lectura de archivos de configuración. Como limitación, depende estrictamente de que las rutas de los archivos y recursos declarados existan en el repositorio para evitar errores de compilación en el sitio.",
+  "transcript_sha256": "4debb28ee2e890540d044d7806e434b5c838a130ff6bc5884b22992af41b0397"
+}
