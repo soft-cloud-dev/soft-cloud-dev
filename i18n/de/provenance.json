@@ -291,9 +291,9 @@
         {
           "index": "0",
           "source_heading": "Introduction",
-          "source_sha256": "f1ddd1a463fa2ac2b17633380a6aa100228e6441144e39f5b9895b9a4d6ebedc",
+          "source_sha256": "f2bf467258531294d20a020de814b115f618956e6d7ca4a8df3aabb445c820b1",
           "translated_heading": "Einführung",
-          "translated_sha256": "5455f3beed96bd8d399ad7f8e8a3ff3806a9cca5a91d0d0e4bbc47fc0add1902"
+          "translated_sha256": "df79612264b18e63a6c68699beb7d34a418eb96c1512200c44844cc41b116cd0"
         },
         {
           "index": "1",
@@ -317,10 +317,10 @@
           "translated_sha256": "6466915cb456c007007e4f8cf87aa669d5d48aa11ae1420bf94493a40069031c"
         }
       ],
-      "source_commit": "d6884008eda9ef4cd996b72a2061a67e4e5386f0",
+      "source_commit": "7b425385d4fa616934c0af712cea68b4d26dbe56",
       "source_path": "introduction.md",
-      "source_sha256": "d27451030aa96a3853c1cdbcf99697e64c7ecd6909c0dafdce35e7ae04320682",
-      "translated_sha256": "a61e595b9e1cafcd612097f5260e030bde96abeac2e06e2e3027bd8ee3755eb9",
+      "source_sha256": "d0195cf0f53e04fd1041bbfac2fd7d570e61c15e9921701f806c0a7ca50d8d6e",
+      "translated_sha256": "07e9e5a9de1211f5de427c0779e08da0126fb1d13ec965f2c134524573135cdc",
       "translation_model": "gemini-2.5-flash"
     },
     "notebooks.md": {
@@ -802,7 +802,7 @@
   },
   "glossary_sha256": "49d88d6d5cc4d25bd538b6e7621497026343e7944687c1c6758b3f91848eadc4",
   "locale": "de",
-  "provenance_sha256": "07f0d14148e9619777f2a939fd9ba1d7abd1ec4867708d2e1e0e2f02588d9bcd",
+  "provenance_sha256": "3a8976e35c19fad19e5c71b9eff967690547f7f1019aec56a73d6f6d52c2fbbd",
   "schema_version": "1.0",
   "source_locale": "en"
 }

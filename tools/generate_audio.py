@@ -391,8 +391,8 @@ def clean_inline_markdown(text: str) -> str:
     """Preserve original textual content and inline code identifiers while stripping structural Markdown."""
     # Remove HTML comments
     s = re.sub(r"<!--.*?-->", "", text, flags=re.S)
-    # Replace image syntax ![alt](url) -> alt
-    s = re.sub(r"!\[([^\]]*)\]\([^)]+\)", r"\1", s)
+    # Image alt text describes visual media; it is not spoken article content.
+    s = re.sub(r"!\[[^\]]*\]\([^)]+\)", "", s)
     # Replace hyperlinks [label](url) -> label (handling nested bold/code inside label)
     s = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", s)
     # Replace MyST roles {role}`content` -> content
@@ -419,7 +419,10 @@ def render_inline_ast_children(children: list[dict[str, Any]]) -> str:
             parts.append(node.get("raw", ""))
         elif ntype == "codespan":
             parts.append(node.get("raw", ""))
-        elif ntype in ("strong", "emphasis", "link", "image"):
+        elif ntype == "image":
+            # Ignore image-only content so visual edits do not invalidate narration.
+            continue
+        elif ntype in ("strong", "emphasis", "link"):
             parts.append(render_inline_ast_children(node.get("children", [])))
         elif ntype in ("softbreak", "linebreak"):
             parts.append(" ")
