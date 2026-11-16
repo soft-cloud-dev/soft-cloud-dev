@@ -211,6 +211,12 @@ class TestLanguageSwitcherAlignment(unittest.TestCase):
         self.assertEqual(re_patched.count('aria-label="Search"'), 1)
         self.assertEqual(re_patched.count('<span class="sr-only">Search</span>'), 1)
 
+    def test_language_switcher_tracks_hashchange_and_live_fragment(self) -> None:
+        """Language switcher must preserve live URL fragments across hashchange and panel open."""
+        self.assertIn('window.addEventListener("hashchange", syncIfNeeded)', self.content)
+        self.assertIn("currentHash !== lastHash", self.content)
+        self.assertIn("syncOptionUrls()", self.content)
+
 
 if __name__ == "__main__":
     unittest.main()

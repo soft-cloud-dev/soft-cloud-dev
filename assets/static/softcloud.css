@@ -303,18 +303,20 @@ pre {
 
   .myst-home-link {
     margin-left: 0.25rem !important;
-    min-width: 0 !important;
+    flex-shrink: 0;
   }
 
   .myst-home-link-logo {
     margin-right: 0 !important;
+    flex-shrink: 0;
   }
 
   .myst-home-link-logo img {
-    max-width: 118px;
     width: auto;
-    height: auto;
+    height: 1.75rem;
+    max-width: 118px;
     max-height: 2rem;
+    object-fit: contain;
   }
 
   .myst-home-link > span {
@@ -368,6 +370,8 @@ pre {
   }
 
   .myst-home-link-logo img {
+    width: auto;
+    height: 1.45rem;
     max-width: 96px;
     max-height: 1.75rem;
   }

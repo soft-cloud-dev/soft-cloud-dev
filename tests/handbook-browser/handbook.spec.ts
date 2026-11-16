@@ -339,3 +339,83 @@ test('handbook badges, links, and eyebrow meet WCAG AA contrast in light and dar
   }
   await page.screenshot({ path: testInfo.outputPath('handbook-en-dark-desktop.png'), fullPage: true });
 });
+
+test('non-handbook mobile navbar keeps visible clickable SoftCloud logo on /linux/', async ({ page }) => {
+  for (const width of [390, 320]) {
+    await page.setViewportSize({ width, height: 844 });
+    const response = await page.goto('/linux/', { waitUntil: 'networkidle' });
+    expect(response?.ok()).toBeTruthy();
+
+    const linkBox = await page.locator('nav.myst-top-nav-bar .myst-home-link').boundingBox();
+    expect(linkBox).not.toBeNull();
+    expect(linkBox!.width, `Home link width at ${width}px`).toBeGreaterThanOrEqual(50);
+    expect(linkBox!.height, `Home link height at ${width}px`).toBeGreaterThanOrEqual(16);
+
+    const visibleLogo = await page.locator('nav.myst-top-nav-bar img[alt="SoftCloud"]').evaluateAll(images =>
+      images.some(element => {
+        const img = element as HTMLImageElement;
+        const rect = img.getBoundingClientRect();
+        return img.complete && img.naturalWidth > 0 &&
+          rect.width >= 50 && rect.height >= 16 &&
+          rect.right > 0 && rect.left < window.innerWidth &&
+          getComputedStyle(img).visibility === 'visible';
+      })
+    );
+    expect(visibleLogo, `Visible SoftCloud logo on /linux/ at ${width}px`).toBe(true);
+  }
+});
+
+test('pricing comparison code snippet tabs render both tabs without fence truncation', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  const response = await page.goto('/pricing-comparison/#sec-pricing-code-snippets', { waitUntil: 'networkidle' });
+  expect(response?.ok()).toBeTruthy();
+
+  const tabSet = page.locator('#sec-pricing-code-snippets + .myst-tab-set');
+  const headers = tabSet.locator('.myst-tab-item-header');
+  await expect(headers).toHaveCount(2);
+  await expect(headers.nth(0)).toHaveText('MyST + Lit SSR Authoring');
+  await expect(headers.nth(1)).toHaveText('Standalone Web Awesome HTML');
+
+  const articleText = await page.locator('article').innerText();
+  expect(articleText).not.toContain('::::{tab-item}');
+
+  const firstTabCode = await tabSet.locator('pre code:visible').first().innerText();
+  expect(firstTabCode).toContain(':::::{grid}');
+  expect(firstTabCode.trim()).toMatch(/:::::$/);
+
+  await headers.nth(1).click();
+  const secondTabCode = await tabSet.locator('pre code:visible').first().innerText();
+  expect(secondTabCode).toContain('<wa-radio-group');
+  expect(secondTabCode).toContain('Export Sizing Manifest');
+});
+
+test('webawesome-docs Interface Parity table has clean copyable code and language switcher preserves fragment', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  for (const route of ['/webawesome-docs/', '/pl/webawesome-docs/']) {
+    const response = await page.goto(route, { waitUntil: 'networkidle' });
+    expect(response?.ok()).toBeTruthy();
+
+    const paritySection = page.locator('#interface-parity-python-api-vs-myst-directives');
+    await expect(paritySection).toBeVisible();
+    const tableText = await page.locator('#interface-parity-python-api-vs-myst-directives ~ figure table').first().innerText();
+    expect(tableText).not.toContain('&nbsp;');
+    expect(tableText).not.toContain('<br/>');
+    expect(tableText).not.toContain('````');
+    expect(tableText).toContain('UI.callout_text(');
+    expect(tableText).toContain('{wa-callout} Title');
+  }
+
+  await page.goto('/webawesome-docs/', { waitUntil: 'networkidle' });
+  await page.locator('nav a', { hasText: /Interface Parity/i }).first().click();
+  await expect(page).toHaveURL(/#interface-parity-python-api-vs-myst-directives$/);
+
+  await page.locator('.sc-lang-trigger').click();
+  const plOption = page.locator('.sc-lang-option[data-locale-code="pl"]');
+  await expect(plOption).toHaveAttribute('href', '/pl/webawesome-docs#interface-parity-python-api-vs-myst-directives');
+
+  await Promise.all([
+    page.waitForURL(/\/pl\/webawesome-docs\/?#interface-parity-python-api-vs-myst-directives$/),
+    plOption.click(),
+  ]);
+  await expect(page).toHaveURL(/\/pl\/webawesome-docs\/?#interface-parity-python-api-vs-myst-directives$/);
+});
