@@ -527,3 +527,95 @@ body:has(.sc-handbook) article.article-grid {
     transition: none !important;
   }
 }
+
+/* Modal navigation drawer behavior for mobile and tablet layouts across all pages. */
+.myst-navigation-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  touch-action: none;
+}
+
+.myst-primary-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 60px;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--myst-color-border, #e4e6ec);
+  background-color: var(--myst-color-bg, #ffffff);
+  color: var(--myst-color-text, #11182c);
+  flex-shrink: 0;
+}
+
+.myst-primary-sidebar-title {
+  font-size: 0.9375rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.myst-drawer-close-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  border: 1px solid var(--myst-color-border-strong, #cbd5e1);
+  border-radius: 0.5rem;
+  background-color: var(--myst-color-bg-secondary, transparent);
+  color: var(--myst-color-text-secondary, #475569);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.myst-drawer-close-button:hover {
+  background-color: var(--myst-color-surface, #f1f5f9);
+  color: var(--myst-color-text, #0f172a);
+}
+
+.myst-drawer-close-button:focus-visible,
+.myst-top-nav-menu-button:focus-visible {
+  outline: 2px solid var(--myst-color-focus-outline, #2458ae);
+  outline-offset: 2px;
+}
+
+@media not all and (min-width: 1280px) {
+  .myst-primary-sidebar[data-sc-drawer-open="true"] {
+    z-index: 50 !important;
+    top: 0 !important;
+    height: 100vh;
+    height: 100svh;
+    max-height: 100svh;
+    max-width: min(85vw, 350px);
+    overscroll-behavior: contain;
+  }
+
+  .myst-primary-sidebar[data-sc-drawer-open="true"] .myst-primary-sidebar-pointer {
+    height: 100%;
+    max-height: 100%;
+    background-color: var(--myst-color-bg, #ffffff);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.16), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  }
+
+  .myst-primary-sidebar[data-sc-drawer-open="true"] .myst-primary-sidebar-nav {
+    overscroll-behavior: contain;
+    padding-top: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .myst-drawer-close-button {
+    transition: none !important;
+  }
+}
+
+@media print {
+  .myst-navigation-overlay,
+  .myst-primary-sidebar-header {
+    display: none !important;
+  }
+}

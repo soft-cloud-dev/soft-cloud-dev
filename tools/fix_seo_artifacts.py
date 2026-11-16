@@ -30,6 +30,7 @@ if str(TOOLS_DIR) not in sys.path:
     sys.path.insert(0, str(TOOLS_DIR))
 
 from i18n_utils import (
+    MENU_OPEN_LABELS,
     SEARCH_LABELS,
     atomic_write_text,
     canonical_url_for_page,
@@ -195,10 +196,85 @@ def fix_html_accessibility(
         return f"{open_tag}{inner}{close_tag}"
 
     button_re = re.compile(
-        r'(<button\b[^>]*\bclass="[^"]*\bmyst-search-bar\b[^"]*"[^>]*>)(.*?)(</button>)',
+        r'(<button\b[^>]*\bclass="[^"]*(?<![-\w])myst-search-bar(?![-\w])[^"]*"[^>]*>)(.*?)(</button>)',
         re.DOTALL | re.IGNORECASE,
     )
-    return button_re.sub(_patch_search_button, html_text)
+    html_text = button_re.sub(_patch_search_button, html_text)
+
+    open_menu_label = str((ui and ui.get("open_menu")) or MENU_OPEN_LABELS.get(loc_code, "Open Menu"))
+
+    def _patch_menu_button(match: re.Match[str]) -> str:
+        open_tag = match.group(1)
+        inner = match.group(2)
+        close_tag = match.group(3)
+
+        if not re.search(r'\btype\s*=', open_tag, re.IGNORECASE):
+            open_tag = re.sub(r'(<button\b)', r'\1 type="button"', open_tag, count=1)
+
+        if re.search(r'\baria-expanded\s*=', open_tag, re.IGNORECASE):
+            open_tag = re.sub(
+                r'\baria-expanded\s*=\s*["\'][^"\']*["\']',
+                'aria-expanded="false"',
+                open_tag,
+                count=1,
+                flags=re.IGNORECASE,
+            )
+        else:
+            open_tag = re.sub(r'(<button\b)', r'\1 aria-expanded="false"', open_tag, count=1)
+
+        if re.search(r'\baria-controls\s*=', open_tag, re.IGNORECASE):
+            open_tag = re.sub(
+                r'\baria-controls\s*=\s*["\'][^"\']*["\']',
+                'aria-controls="myst-primary-sidebar"',
+                open_tag,
+                count=1,
+                flags=re.IGNORECASE,
+            )
+        else:
+            open_tag = re.sub(
+                r'(<button\b)',
+                r'\1 aria-controls="myst-primary-sidebar"',
+                open_tag,
+                count=1,
+            )
+
+        sr_span = f'<span class="sr-only">{open_menu_label}</span>'
+        if re.search(r'<span\b[^>]*\bclass="[^"]*\bsr-only\b[^"]*"[^>]*>.*?</span>', inner, re.IGNORECASE | re.DOTALL):
+            inner = re.sub(
+                r'<span\b[^>]*\bclass="[^"]*\bsr-only\b[^"]*"[^>]*>.*?</span>',
+                sr_span,
+                inner,
+                count=1,
+                flags=re.IGNORECASE | re.DOTALL,
+            )
+        else:
+            inner = inner + sr_span
+
+        return f"{open_tag}{inner}{close_tag}"
+
+    menu_btn_re = re.compile(
+        r'(<button\b[^>]*\bclass="[^"]*(?<![-\w])myst-top-nav-menu-button(?![-\w])[^"]*"[^>]*>)(.*?)(</button>)',
+        re.DOTALL | re.IGNORECASE,
+    )
+    html_text = menu_btn_re.sub(_patch_menu_button, html_text)
+
+    def _patch_primary_sidebar(match: re.Match[str]) -> str:
+        tag = match.group(0)
+        if not re.search(r'\bid\s*=', tag, re.IGNORECASE):
+            tag = re.sub(r'(<div\b)', r'\1 id="myst-primary-sidebar"', tag, count=1)
+        if not re.search(r'\bdata-sc-drawer-open\s*=', tag, re.IGNORECASE):
+            tag = re.sub(r'(<div\b)', r'\1 data-sc-drawer-open="false"', tag, count=1)
+        if not re.search(r'\bdata-sc-hide-toc\s*=', tag, re.IGNORECASE):
+            has_lg_hidden = bool(re.search(r'(?<![-\w])lg:hidden(?![-\w])', tag))
+            hide_toc_val = "true" if has_lg_hidden else "false"
+            tag = re.sub(r'(<div\b)', rf'\1 data-sc-hide-toc="{hide_toc_val}"', tag, count=1)
+        return tag
+
+    sidebar_re = re.compile(
+        r'<div\b[^>]*\bclass="[^"]*(?<![-\w])myst-primary-sidebar(?![-\w])[^"]*"[^>]*>',
+        re.IGNORECASE,
+    )
+    return sidebar_re.sub(_patch_primary_sidebar, html_text)
 
 
 def process_site(domain: str, html_dir: str) -> None:
