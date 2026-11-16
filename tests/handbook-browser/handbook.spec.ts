@@ -419,3 +419,185 @@ test('webawesome-docs Interface Parity table has clean copyable code and languag
   ]);
   await expect(page).toHaveURL(/\/pl\/webawesome-docs\/?#interface-parity-python-api-vs-myst-directives$/);
 });
+
+test('mobile and tablet homepage navigation drawer supports close button, backdrop dismiss, Escape, focus return, and scroll containment', async ({ page }) => {
+  const pageErrors: string[] = [];
+  const consoleErrors: string[] = [];
+  page.on('pageerror', error => pageErrors.push(error.message));
+  page.on('console', msg => {
+    if (msg.type() === 'error') consoleErrors.push(msg.text());
+  });
+
+  const viewports = [
+    { name: 'mobile', width: 390, height: 844 },
+    { name: 'tablet-portrait', width: 768, height: 1024 },
+    { name: 'tablet-landscape-compact', width: 980, height: 768 },
+  ];
+
+  for (const vp of viewports) {
+    await page.setViewportSize({ width: vp.width, height: vp.height });
+    const response = await page.goto('/', { waitUntil: 'networkidle' });
+    expect(response?.ok()).toBeTruthy();
+
+    const menuButton = page.locator('button.myst-top-nav-menu-button');
+    const drawer = page.locator('#myst-primary-sidebar');
+    const closeButton = drawer.locator('.myst-drawer-close-button');
+    const backdrop = page.locator('.myst-navigation-overlay');
+
+    await expect(menuButton).toBeVisible();
+    await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
+    await expect(menuButton).toHaveAttribute('aria-controls', 'myst-primary-sidebar');
+    await expect(drawer).toBeHidden();
+
+    // 1. Open drawer and verify modal semantics, close button, inertness, bounds, and scroll containment
+    await menuButton.click();
+    await expect(drawer).toBeVisible();
+    await expect(drawer).toHaveAttribute('role', 'dialog');
+    await expect(drawer).toHaveAttribute('aria-modal', 'true');
+    await expect(drawer).toHaveAttribute('aria-label', 'Navigation menu');
+    await expect(menuButton).toHaveAttribute('aria-expanded', 'true');
+    await expect(backdrop).toBeVisible();
+    await expect(closeButton).toBeVisible();
+
+    const drawerBox = await drawer.boundingBox();
+    expect(drawerBox).not.toBeNull();
+    expect(drawerBox!.x).toBeGreaterThanOrEqual(0);
+    expect(drawerBox!.y).toBeGreaterThanOrEqual(0);
+    expect(drawerBox!.x + drawerBox!.width).toBeLessThanOrEqual(vp.width);
+    expect(drawerBox!.y + drawerBox!.height).toBeLessThanOrEqual(vp.height + 1);
+
+    const closeBox = await closeButton.boundingBox();
+    expect(closeBox).not.toBeNull();
+    expect(closeBox!.width).toBeGreaterThanOrEqual(40);
+    expect(closeBox!.height).toBeGreaterThanOrEqual(40);
+    const closeCenterHit = await page.evaluate(({ x, y }) => {
+      const hit = document.elementFromPoint(x, y);
+      return Boolean(hit && hit.closest('.myst-drawer-close-button'));
+    }, { x: closeBox!.x + closeBox!.width / 2, y: closeBox!.y + closeBox!.height / 2 });
+    expect(closeCenterHit, `Close button must not be obscured at ${vp.name}`).toBe(true);
+
+    await expect.poll(async () => page.evaluate(() =>
+      document.activeElement?.classList.contains('myst-drawer-close-button') ?? false
+    )).toBe(true);
+
+    const modalInvariants = await page.evaluate(() => {
+      const main = document.querySelector('main');
+      const topNav = document.querySelector('.myst-top-nav');
+      const htmlStyle = getComputedStyle(document.documentElement);
+      const bodyStyle = getComputedStyle(document.body);
+      return {
+        mainInert: Boolean(main?.inert),
+        topNavInert: Boolean(topNav?.inert),
+        htmlOverflow: htmlStyle.overflow,
+        bodyOverflow: bodyStyle.overflow,
+        bodyPosition: bodyStyle.position,
+      };
+    });
+    expect(modalInvariants.mainInert).toBe(true);
+    expect(modalInvariants.topNavInert).toBe(true);
+    expect(modalInvariants.htmlOverflow).not.toBe('hidden');
+    expect(modalInvariants.bodyOverflow).not.toBe('hidden');
+    expect(modalInvariants.bodyPosition).not.toBe('fixed');
+
+    // Background page must not scroll while modal drawer is open
+    await page.mouse.move(vp.width - 30, Math.floor(vp.height / 2));
+    await page.mouse.wheel(0, 400);
+    await page.waitForTimeout(150);
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+
+    // 2. Clicking outside the drawer closes it without reload and returns focus to hamburger
+    const initialUrl = page.url();
+    await page.mouse.click(vp.width - 30, Math.floor(vp.height / 2));
+    await expect(drawer).toBeHidden();
+    await expect(backdrop).toHaveCount(0);
+    await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
+    expect(page.url()).toBe(initialUrl);
+    expect(await page.evaluate(() => ({
+      mainInert: Boolean(document.querySelector('main')?.inert),
+      topNavInert: Boolean(document.querySelector('.myst-top-nav')?.inert),
+      focusedHamburger: document.activeElement?.classList.contains('myst-top-nav-menu-button') ?? false,
+    }))).toEqual({ mainInert: false, topNavInert: false, focusedHamburger: true });
+
+    // 3. Reopen and dismiss via visible close button -> returns focus to hamburger
+    await menuButton.click();
+    await expect(drawer).toBeVisible();
+    await closeButton.click();
+    await expect(drawer).toBeHidden();
+    await expect.poll(async () => page.evaluate(() =>
+      document.activeElement?.classList.contains('myst-top-nav-menu-button') ?? false
+    )).toBe(true);
+
+    // 4. Reopen and dismiss via Escape -> returns focus to hamburger
+    await menuButton.click();
+    await expect(drawer).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(drawer).toBeHidden();
+    await expect.poll(async () => page.evaluate(() =>
+      document.activeElement?.classList.contains('myst-top-nav-menu-button') ?? false
+    )).toBe(true);
+
+    // 5. Reopen and click a navigation link inside the drawer -> closes drawer & navigates cleanly
+    await menuButton.click();
+    await expect(drawer).toBeVisible();
+    await drawer.locator('.myst-primary-sidebar-topnav').getByRole('link', { name: 'Guides', exact: true }).click();
+    await expect(page).toHaveURL(/\/guides\/?$/);
+    await expect(drawer).toBeHidden();
+    expect(await page.evaluate(() => Boolean(document.querySelector('main')?.inert))).toBe(false);
+  }
+
+  expect(pageErrors).toEqual([]);
+  expect(consoleErrors.filter(e => !e.includes('favicon'))).toEqual([]);
+});
+
+test('tablet landscape subpages (1024x768, 1180x820), breakpoint resize, and localized /pl/ drawer work cleanly', async ({ page }) => {
+  const pageErrors: string[] = [];
+  const consoleErrors: string[] = [];
+  page.on('pageerror', error => pageErrors.push(error.message));
+  page.on('console', msg => {
+    if (msg.type() === 'error') consoleErrors.push(msg.text());
+  });
+
+  // 1. iPad landscape subpage (/guides/) where hamburger is visible up to 1279px
+  for (const vp of [{ width: 1024, height: 768 }, { width: 1180, height: 820 }]) {
+    await page.setViewportSize(vp);
+    await page.goto('/guides/', { waitUntil: 'networkidle' });
+    const menuButton = page.locator('button.myst-top-nav-menu-button');
+    const drawer = page.locator('#myst-primary-sidebar');
+    const closeButton = drawer.locator('.myst-drawer-close-button');
+    await expect(menuButton).toBeVisible();
+    await menuButton.click();
+    await expect(drawer).toBeVisible();
+    await expect(closeButton).toBeVisible();
+
+    // Outside click restores page and returns focus
+    await page.mouse.click(vp.width - 40, Math.floor(vp.height / 2));
+    await expect(drawer).toBeHidden();
+    await expect.poll(async () => page.evaluate(() =>
+      document.activeElement?.classList.contains('myst-top-nav-menu-button') ?? false
+    )).toBe(true);
+  }
+
+  // 2. Breakpoint resize from tablet drawer -> desktop closes drawer and clears inert
+  await page.setViewportSize({ width: 980, height: 768 });
+  await page.goto('/', { waitUntil: 'networkidle' });
+  await page.locator('button.myst-top-nav-menu-button').click();
+  await expect(page.locator('#myst-primary-sidebar')).toBeVisible();
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await expect(page.locator('#myst-primary-sidebar')).toBeHidden();
+  expect(await page.evaluate(() => Boolean(document.querySelector('main')?.inert))).toBe(false);
+
+  // 3. Localized Polish homepage drawer labels and route navigation
+  await page.setViewportSize({ width: 980, height: 768 });
+  await page.goto('/pl/', { waitUntil: 'networkidle' });
+  await page.locator('button.myst-top-nav-menu-button').click();
+  const plDrawer = page.locator('#myst-primary-sidebar');
+  await expect(plDrawer).toBeVisible();
+  await expect(plDrawer).toHaveAttribute('aria-label', 'Menu nawigacji');
+  await expect(plDrawer.locator('.myst-drawer-close-button')).toHaveAttribute('aria-label', 'Zamknij menu');
+  await plDrawer.locator('.myst-primary-sidebar-topnav').getByRole('link', { name: 'Poradniki', exact: true }).click();
+  await expect(page).toHaveURL(/\/pl\/guides\/?$/);
+  await expect(plDrawer).toBeHidden();
+
+  expect(pageErrors).toEqual([]);
+  expect(consoleErrors.filter(e => !e.includes('favicon'))).toEqual([]);
+});
