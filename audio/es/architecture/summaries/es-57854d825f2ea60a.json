@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0027-code_block",
+  "generation_config": {
+    "locale": "es",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in Spanish (español) matching document locale 'es'.",
+    "text_temperature": 0.0
+  },
+  "language": "json",
+  "locale": "es",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "32f81d86bc280881f763694a55f7ea3960fb4e87fbdde007fd0aff984e801046",
+  "text_config_hash": "0ae7c213c19fa3769f2d0eb3191e42fb2c5d0d4339b800b6a5bd864decd76d60",
+  "transcript": "Este documento JSON define un cuaderno interactivo de Jupyter titulado Verificación Computacional, diseñado para la validación del entorno de ejecución. El cuaderno consta de una celda de texto descriptivo y una celda de código en Python que depende del módulo estándar sys. Su funcionalidad principal es inspeccionar el entorno imprimiendo la ruta del ejecutable de Python y la versión actual del intérprete, además de aplicar una aserción estricta para garantizar que la versión sea exactamente la tres punto doce punto catorce. Como limitaciones y riesgos operativos, si la versión del entorno en ejecución difiere de la especificada, la aserción fallará y detendrá la ejecución del cuaderno. No presenta efectos secundarios materiales más allá de la salida estándar en consola.",
+  "transcript_sha256": "f376bd5cccf9afd4381245b2d492b0c937f1ee622a40126f2aafaf3f5b4f4e9b"
+}
