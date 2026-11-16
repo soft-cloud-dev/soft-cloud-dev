@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+<title id="title">SoftCloud animated campaign</title>
+<desc id="desc">A black dancing silhouette moves on a vibrant pink background while the SoftCloud logo and Build Deploy Scale slogan appear.</desc>
+<defs><linearGradient id="pink" x2="1" y2="1"><stop stop-color="#ff248f"/><stop offset="1" stop-color="#e90079"/></linearGradient></defs>
+<rect width="960" height="540" fill="url(#pink)"/>
+<g fill="#09070b" transform="translate(285 280)">
+<g><animateTransform attributeName="transform" type="rotate" values="-7;7;-7" dur="1.2s" repeatCount="indefinite"/>
+<ellipse cx="0" cy="-126" rx="53" ry="67"/>
+<path d="M-38-185Q-95-169-84-95L-57-65Q-100-115-115-160Q-88-214-38-185Z"/>
+<path d="M-49-69Q-76-29-70 79L-106 244H-23L-4 92 20 245H105L67 57Q74-28 44-72Z"/>
+<path d="M-46-58Q-105-74-134-14L-189 76-163 93-97 18-60 7Z"><animateTransform attributeName="transform" type="rotate" values="-14;15;-14" dur=".6s" repeatCount="indefinite"/></path>
+<path d="M35-59Q91-84 122-23L173-94 197-75 148 16Q114 54 67 4Z"><animateTransform attributeName="transform" type="rotate" values="12;-12;12" dur=".6s" repeatCount="indefinite"/></path>
+</g></g>
+<g stroke="white" fill="none" stroke-width="5" stroke-linecap="round"><path d="M294 148Q308 228 361 274Q413 310 451 239"><animate attributeName="d" values="M294 148Q308 228 361 274Q413 310 451 239;M294 148Q350 225 340 280Q410 330 451 239;M294 148Q308 228 361 274Q413 310 451 239" dur="1.2s" repeatCount="indefinite"/></path><circle cx="294" cy="148" r="5" fill="white"/></g>
+<g fill="#fff" font-family="Arial,Helvetica,sans-serif">
+<g transform="translate(640 148)"><path d="M-40 37h91a27 27 0 0 0 0-54 45 45 0 0 0-84-9 32 32 0 0 0-7 63Z" fill="none" stroke="#fff" stroke-width="9" stroke-linejoin="round"/></g>
+<text x="605" y="244" font-size="46" font-weight="800" letter-spacing="-2">softcloud.dev</text>
+<text x="608" y="325" font-size="31" font-weight="700">Build.</text><text x="608" y="365" font-size="31" font-weight="700">Deploy.</text><text x="608" y="405" font-size="31" font-weight="700">Scale.</text>
+</g>
+<g><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;.2;.5;1" dur="2.4s" repeatCount="indefinite"/></g>
+</svg>
