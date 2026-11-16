@@ -160,8 +160,10 @@ test('localized UI Library entry identifies the English-only catalog', async ({ 
   };
   collectErrors(page);
   context.on('page', collectErrors);
-  await context.route('https://my.softcloud.dev/components', async route => {
-    const response = await route.fetch({ url: `${baseURL}/components/` });
+  await context.route('https://my.softcloud.dev/**', async route => {
+    const reqUrl = new URL(route.request().url());
+    const pathname = reqUrl.pathname === '/components' ? '/components/' : reqUrl.pathname;
+    const response = await route.fetch({ url: `${baseURL}${pathname}${reqUrl.search}` });
     await route.fulfill({ response });
   });
   const catalogResponse = await page.goto('/components/');

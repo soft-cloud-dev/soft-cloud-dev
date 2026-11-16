@@ -74,6 +74,7 @@ def verify_locales_configuration(root: Path) -> list[str]:
         "next_section",
         "playback_rate",
         "narration_unavailable",
+        "breadcrumbs_label",
     }
 
     for code, info in enabled.items():
@@ -181,7 +182,7 @@ def verify_built_html_artifact(root: Path, build_dir: Path) -> list[str]:
         errors.append(f"Missing route manifest in built artifact: {route_manifest_path.relative_to(root)}")
 
     # 2. Verify widgets exist in built artifact
-    for wname in ("language-switcher.mjs", "voice-player.mjs"):
+    for wname in ("language-switcher.mjs", "voice-player.mjs", "breadcrumbs.mjs"):
         if not (build_dir / "widgets" / wname).is_file():
             errors.append(f"Missing widget in built artifact: _build/html/widgets/{wname}")
 
@@ -307,6 +308,25 @@ def verify_built_html_artifact(root: Path, build_dir: Path) -> list[str]:
                 errors.append(
                     f"[{code}] Missing language-switcher.mjs mount initializer in {found_html.relative_to(build_dir)}"
                 )
+
+            if "breadcrumbs.mjs" not in html_text or "initSiteBreadcrumbs(" not in html_text:
+                errors.append(
+                    f"[{code}] Missing breadcrumbs.mjs SPA initializer in {found_html.relative_to(build_dir)}"
+                )
+            if not active_slug:
+                if 'id="softcloud-breadcrumbs-root"' in html_text:
+                    errors.append(
+                        f"[{code}] Homepage {found_html.relative_to(build_dir)} must omit breadcrumb navigation"
+                    )
+            else:
+                if (
+                    'id="softcloud-breadcrumbs-root"' not in html_text
+                    or 'class="sc-breadcrumbs' not in html_text
+                    or 'aria-current="page"' not in html_text
+                ):
+                    errors.append(
+                        f"[{code}] Subpage {found_html.relative_to(build_dir)} missing server-rendered breadcrumb trail"
+                    )
 
             # Verify button accessibility: all buttons (especially myst-search-bar) must have discernible text
             search_btn_match = re.search(

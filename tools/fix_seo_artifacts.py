@@ -35,43 +35,12 @@ from i18n_utils import (
     atomic_write_text,
     canonical_url_for_page,
     get_enabled_locales,
+    infer_locale_and_slug,
     load_locales_config,
 )
 from build_locales import rewrite_staged_source_urls_in_dir, rewrite_staged_source_urls_in_text
 
-
-def _infer_locale_and_slug(
-    rel_html_path: str,
-    enabled_locales: dict[str, dict[str, Any]],
-    default_locale: str,
-) -> tuple[str, str]:
-    """Infer (locale_code, page_slug) from a path relative to _build/html."""
-    norm = Path(rel_html_path).as_posix().lstrip("./")
-    parts = norm.split("/")
-
-    matched_locale = default_locale
-    remainder_parts = parts
-    if parts:
-        first = parts[0]
-        for code, info in enabled_locales.items():
-            if code == default_locale:
-                continue
-            prefix = str(info.get("prefix", f"/{code}")).strip("/")
-            if first == prefix:
-                matched_locale = code
-                remainder_parts = parts[1:]
-                break
-
-    rem = "/".join(remainder_parts)
-    if rem in ("", "index.html"):
-        slug = ""
-    elif rem.endswith("/index.html"):
-        slug = rem[: -len("/index.html")]
-    elif rem.endswith(".html"):
-        slug = rem[: -len(".html")]
-    else:
-        slug = rem
-    return matched_locale, slug
+_infer_locale_and_slug = infer_locale_and_slug
 
 
 def _update_html_seo_head(
