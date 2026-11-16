@@ -8,6 +8,8 @@
 
 **Software Cloud** provides an open, reproducible framework for computational research, architectural documentation, and cloud software engineering.
 
+![Animated black silhouette of a dancer wearing earphones against a bright pink background](assets/static/animations/softcloud-introduction.gif)
+
 ---
 
 ## The Challenge of Computational Reproducibility
