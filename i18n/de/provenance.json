@@ -291,33 +291,26 @@
         {
           "index": "0",
           "source_heading": "Introduction",
-          "source_sha256": "1be94f8cabcedb8439199ef8bd174b4be610821e01a14590d258a589cd999ec6",
+          "source_sha256": "f1ddd1a463fa2ac2b17633380a6aa100228e6441144e39f5b9895b9a4d6ebedc",
           "translated_heading": "Einführung",
-          "translated_sha256": "ae9db6378c6d8e8c1ac73ed0cf369c86c331a394bfc26dcecf1cc9865c056892"
+          "translated_sha256": "5455f3beed96bd8d399ad7f8e8a3ff3806a9cca5a91d0d0e4bbc47fc0add1902"
         },
         {
           "index": "1",
-          "source_heading": "SoftCloud in Motion",
-          "source_sha256": "9e253aea3d34b1427091b51d626e109a7477566dfb06ee3ebc2ef98dd032f9f7",
-          "translated_heading": "SoftCloud in Bewegung",
-          "translated_sha256": "19b165c49b5c42e8ff793d6833d611caf2330a32b965cdf1978d25bc95d23aac"
-        },
-        {
-          "index": "2",
           "source_heading": "The Challenge of Computational Reproducibility",
           "source_sha256": "c7bd60b20a1e762d11a3ae649e803d439ee1b9db026c8a31de6602dfc078aa5e",
           "translated_heading": "Die Herausforderung der rechnerischen Reproduzierbarkeit",
           "translated_sha256": "bd68e4f5a7de0ef3d2252f57c3ce764d9ef68a464d49c9a9ccdc15a23e1c545b"
         },
         {
-          "index": "3",
+          "index": "2",
           "source_heading": "Operational Scope",
           "source_sha256": "8f44539a9d8ce774252c1a6fa6537813f17849f8c7eff06cc0fde1f131ec1216",
           "translated_heading": "Operativer Umfang",
           "translated_sha256": "e1252bbaa8f68453024501bd8290692eb1c4a60d5031da3ceb77a7fb9b015d0b"
         },
         {
-          "index": "4",
+          "index": "3",
           "source_heading": "Next Steps",
           "source_sha256": "f628e7fe00a850edd15ac1fe40afa42e08d8065cf7f3cc3d62f9a20299aeff2c",
           "translated_heading": "Nächste Schritte",
@@ -326,8 +319,8 @@
       ],
       "source_commit": "d6884008eda9ef4cd996b72a2061a67e4e5386f0",
       "source_path": "introduction.md",
-      "source_sha256": "662d04de7a6dfd1e3e5c681b3eeeea0a5da525b6f3e3bb25913847251b4c30d6",
-      "translated_sha256": "7fd1ba26f14ea80b5f8b3dca0b99b4a49bb4c32d855b2492e97b8408cd0f9efb",
+      "source_sha256": "d27451030aa96a3853c1cdbcf99697e64c7ecd6909c0dafdce35e7ae04320682",
+      "translated_sha256": "a61e595b9e1cafcd612097f5260e030bde96abeac2e06e2e3027bd8ee3755eb9",
       "translation_model": "gemini-2.5-flash"
     },
     "notebooks.md": {
@@ -809,7 +802,7 @@
   },
   "glossary_sha256": "49d88d6d5cc4d25bd538b6e7621497026343e7944687c1c6758b3f91848eadc4",
   "locale": "de",
+  "provenance_sha256": "07f0d14148e9619777f2a939fd9ba1d7abd1ec4867708d2e1e0e2f02588d9bcd",
   "schema_version": "1.0",
-  "source_locale": "en",
-  "provenance_sha256": "9425de40858eb5bdcd6f2b81698a5b4c02e569d079380b02475b1d27764ce5dc"
+  "source_locale": "en"
 }
