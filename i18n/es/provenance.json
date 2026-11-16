@@ -291,9 +291,9 @@
         {
           "index": "0",
           "source_heading": "Introduction",
-          "source_sha256": "f1ddd1a463fa2ac2b17633380a6aa100228e6441144e39f5b9895b9a4d6ebedc",
+          "source_sha256": "f2bf467258531294d20a020de814b115f618956e6d7ca4a8df3aabb445c820b1",
           "translated_heading": "Introducción",
-          "translated_sha256": "0fdf8d45415bd61e050139edd2461644946cbf5ce74039f3492659a50266287e"
+          "translated_sha256": "5c1996d39a9dfbe118507405e7945239c41ac534e0ac7ad7d3a65a5bed0a4929"
         },
         {
           "index": "1",
@@ -317,10 +317,10 @@
           "translated_sha256": "871a7c8d4d49bad5fc862548ecec494be25559502b9a9cc79182db433aa2bb29"
         }
       ],
-      "source_commit": "d6884008eda9ef4cd996b72a2061a67e4e5386f0",
+      "source_commit": "7b425385d4fa616934c0af712cea68b4d26dbe56",
       "source_path": "introduction.md",
-      "source_sha256": "d27451030aa96a3853c1cdbcf99697e64c7ecd6909c0dafdce35e7ae04320682",
-      "translated_sha256": "58399381980620132a19914aecde810845ac36de701a8bbee321fcf1ffb28de3",
+      "source_sha256": "d0195cf0f53e04fd1041bbfac2fd7d570e61c15e9921701f806c0a7ca50d8d6e",
+      "translated_sha256": "377de1d969465b24b6963f355d8750f8e51891b7f2577567ebe3d4192d0da09c",
       "translation_model": "gemini-2.5-flash"
     },
     "notebooks.md": {
@@ -802,7 +802,7 @@
   },
   "glossary_sha256": "49d88d6d5cc4d25bd538b6e7621497026343e7944687c1c6758b3f91848eadc4",
   "locale": "es",
-  "provenance_sha256": "0788b804cfd4c3bfb144915b8551aa207967872e6f657b20136ba92eca4b4ec5",
+  "provenance_sha256": "77a9b8fbade55a46a7536879222e4a2b8e437204fdf0fda84309cb88aedc677b",
   "schema_version": "1.0",
   "source_locale": "en"
 }

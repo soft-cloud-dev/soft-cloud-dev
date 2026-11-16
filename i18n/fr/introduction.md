@@ -9,6 +9,8 @@
 
 **Software Cloud** fournit un cadre ouvert et reproductible pour la recherche informatique, la documentation architecturale et l'ingénierie logicielle cloud.
 
+![Silhouette noire animée d’une personne dansant avec des écouteurs sur un fond rose vif](assets/static/animations/softcloud-introduction.gif)
+
 ---
 
 ## Le défi de la reproductibilité informatique

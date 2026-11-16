@@ -9,6 +9,8 @@
 
 **Software Cloud** zapewnia otwarte, powtarzalne środowisko dla badań obliczeniowych, dokumentacji architektonicznej oraz inżynierii oprogramowania chmurowego.
 
+![Animowana czarna sylwetka osoby tańczącej ze słuchawkami na jasnoróżowym tle](assets/static/animations/softcloud-introduction.gif)
+
 ---
 
 ## Wyzwanie powtarzalności obliczeniowej

@@ -9,6 +9,8 @@
 
 **Software Cloud** proporciona un marco abierto y reproducible para la investigación computacional, la documentación arquitectónica y la ingeniería de software en la nube.
 
+![Silueta negra animada de una persona bailando con auriculares sobre un fondo rosa intenso](assets/static/animations/softcloud-introduction.gif)
+
 ---
 
 ## El desafío de la reproducibilidad computacional
