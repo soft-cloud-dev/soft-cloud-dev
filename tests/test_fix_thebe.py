@@ -214,6 +214,67 @@ class TestFixThebeStorageResilience(unittest.TestCase):
         self.assertEqual(str_again, 0)
         self.assertEqual(again, patched)
 
+    def test_nav_drawer_patches_are_valid_and_idempotent(self) -> None:
+        sample_bundle = (
+            'function HQ({hideToc:t,hideSearch:e}){let[n,o]=Oa();'
+            'return(0,ft.jsxs)("button",{className:"myst-top-nav-menu-button flex items-center",onClick:()=>{o(!n)},'
+            'children:[(0,ft.jsx)(W_,{width:"1.5rem",height:"1.5rem"}),(0,ft.jsx)("span",{className:"sr-only",children:"Open Menu"})]})}'
+            'function qQ({item:t}){var o,i,s;let e=zt();if(!((o=t.children)!=null&&o.length))'
+            'return(0,fr.jsx)(tc,{nav:!0,to:(i=Ct(t.url,e))!=null?i:"",className:(0,Si.default)("myst-primary-sidebar-item-short","p-2"),children:t.title});'
+            'let[r,n]=Js.default.useState(!1);return(0,fr.jsxs)(Vd,{className:"w-full",open:r,onOpenChange:n,children:['
+            '(0,fr.jsxs)("div",{className:"myst-primary-sidebar-item",children:[(0,fr.jsx)(tc,{nav:!0,to:(s=Ct(t.url,e))!=null?s:"",className:"myst-primary-sidebar-item-title",onClick:()=>n(!r),children:t.title})]}),'
+            '(0,fr.jsx)(Gd,{children:t.children.map(a=>(0,fr.jsx)(tc,{nav:!0,to:Ct(a.url,e)||"",className:"myst-primary-sidebar-item-link",children:a.title},a.url))})]})}'
+            'var MS=({sidebarRef:t,nav:e,footer:r,navbarEnd:n,headings:o,hide_toc:i,mobileOnly:s})=>{let a=qi(),[p]=Oa(),g=Pr();'
+            'return(0,Js.useEffect)(()=>{setTimeout(()=>{f.current&&(f.current.style.opacity="1")},500)},[f]),'
+            'g?(0,fr.jsx)("div",{ref:t,className:(0,Si.default)("myst-primary-sidebar",{"lg:hidden":e&&i}),style:{top:a},children:(0,fr.jsxs)("div",{className:(0,Si.default)("myst-primary-sidebar-pointer"),children:[(0,fr.jsxs)("div",{className:"myst-primary-sidebar-nav flex-grow"})]})}):null};'
+            'var sD=({nav:o,headings:i,mobileOnly:n})=>{let[c,u]=Oa(),f=qi();'
+            'return(0,ss.jsxs)(ss.Fragment,{children:[c&&!n&&i&&(0,ss.jsx)("div",{className:"myst-navigation-overlay fixed inset-0",style:{marginTop:f},onClick:()=>u(!1)}),(0,ss.jsx)(MS,{})]})};'
+        )
+        patched, count = ft.patch_myst_nav_drawer(sample_bundle)
+        self.assertEqual(count, 4)
+        self.assertIn('"aria-controls":"myst-primary-sidebar"', patched)
+        self.assertIn('c&&!n&&(o||i)&&', patched)
+        self.assertIn('data-sc-drawer-open', patched)
+        self.assertIn('myst-drawer-close-button', patched)
+        self.assertIn('window.__scNavDrawerDismiss("navigation")', patched)
+
+        patched_path = self.tmp_dir / "patched_nav.js"
+        patched_path.write_text(patched, encoding="utf-8")
+        node_check = subprocess.run(
+            ["node", "--check", str(patched_path)],
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(node_check.returncode, 0, node_check.stderr)
+
+        reparsed, second_count = ft.patch_myst_nav_drawer(patched)
+        self.assertEqual(second_count, 0)
+        self.assertEqual(reparsed, patched)
+
+    def test_fix_seo_artifacts_patches_menu_button_and_sidebar_attributes(self) -> None:
+        from fix_seo_artifacts import fix_html_accessibility
+
+        sample_html = (
+            '<div class="myst-top-nav"><nav class="myst-top-nav-bar">'
+            '<button class="myst-top-nav-menu-button w-10 h-10"><svg></svg><span class="sr-only">Open Menu</span></button>'
+            '</nav></div>'
+            '<div class="myst-primary-sidebar fixed lg:hidden hidden z-10">'
+            '<div class="myst-primary-sidebar-pointer"><div class="myst-primary-sidebar-nav"></div></div>'
+            '</div>'
+        )
+        patched_pl = fix_html_accessibility(sample_html, loc_code="pl")
+        self.assertIn('type="button"', patched_pl)
+        self.assertIn('aria-expanded="false"', patched_pl)
+        self.assertIn('aria-controls="myst-primary-sidebar"', patched_pl)
+        self.assertIn('<span class="sr-only">Otwórz menu</span>', patched_pl)
+        self.assertEqual(patched_pl.count('id="myst-primary-sidebar"'), 1)
+        self.assertEqual(patched_pl.count('data-sc-drawer-open="false"'), 1)
+        self.assertIn('data-sc-hide-toc="true"', patched_pl)
+        self.assertIn('<div class="myst-primary-sidebar-pointer">', patched_pl)
+
+        re_patched = fix_html_accessibility(patched_pl, loc_code="pl")
+        self.assertEqual(re_patched, patched_pl)
+
 
 if __name__ == "__main__":
     unittest.main()

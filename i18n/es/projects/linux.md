@@ -5,6 +5,13 @@ description: Arquitectura de nodos Linux y documentación de compilación para F
 
 # SoftCloud Node Linux
 
+```{anywidget} ../widgets/voice-player.mjs
+{
+  "page": "projects-linux",
+  "locale": "es"
+}
+```
+
 SoftCloud Node Linux explora nodos de Kubernetes con Linux ejecutándose como máquinas virtuales bajo FreeBSD bhyve. La documentación del proyecto cubre el proceso de compilación de imágenes, la arquitectura de arranque, el entorno de ejecución de contenedores, las redes y el trabajo de validación.
 
 ## Comience aquí

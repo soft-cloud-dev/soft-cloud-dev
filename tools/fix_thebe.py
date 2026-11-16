@@ -163,7 +163,133 @@ def patch_myst_hydration_and_lang(js_code: str) -> tuple[str, int]:
         count += n
 
     js_code, wa_count = patch_myst_webawesome_hydration(js_code)
-    return js_code, count + wa_count
+    js_code, nav_count = patch_myst_nav_drawer(js_code)
+    return js_code, count + wa_count + nav_count
+
+
+def patch_myst_nav_drawer(js_code: str) -> tuple[str, int]:
+    """Patches MyST book-theme navigation drawer for modal dismissal, close button, route reset, and ARIA."""
+    count = 0
+
+    # 1. TopNav menu button: add type="button", aria-expanded, aria-controls, and hydration-safe localized label
+    if 'aria-controls:"myst-primary-sidebar"' not in js_code:
+        menu_btn_pat = re.compile(
+            r'\(0,([A-Za-z_$][\w$]*)\.jsxs\)\((["`])button\2,\{'
+            r'className:\2myst-top-nav-menu-button([^\2]*)\2,'
+            r'onClick:\(\)=>\{([A-Za-z_$][\w$]*)\(!([A-Za-z_$][\w$]*)\)\},'
+            r'children:\[(.*?),\(0,\1\.jsx\)\(\2span\2,\{className:\2sr-only\2,children:\2Open Menu\2\}\)\]\}\)'
+        )
+        js_code, n = menu_btn_pat.subn(
+            lambda m: (
+                f'(0,{m.group(1)}.jsxs)("button",{{type:"button",className:"myst-top-nav-menu-button{m.group(3)}",'
+                f'"aria-expanded":{m.group(5)}?"true":"false","aria-controls":"myst-primary-sidebar",'
+                f'onClick:()=>{{{m.group(4)}(!{m.group(5)})}},children:[{m.group(6)},'
+                f'(0,{m.group(1)}.jsx)("span",{{className:"sr-only",children:(typeof document!="undefined"&&'
+                f'document.querySelector(".myst-top-nav-menu-button .sr-only")?.textContent)||"Open Menu"}})]}})'
+            ),
+            js_code,
+        )
+        count += n
+
+    # 2. Navigation overlay (sD): render backdrop even when hide_toc=true clears headings when nav is present
+    if 'window.__scNavDrawerDismiss("backdrop")' not in js_code:
+        sd_sig = re.search(
+            r'nav:([A-Za-z_$][\w$]*),headings:([A-Za-z_$][\w$]*),footer:[^}]+\}\)=>\{let\[([A-Za-z_$][\w$]*),([A-Za-z_$][\w$]*)\]=([A-Za-z_$][\w$]*)\(\)',
+            js_code,
+        )
+        nav_var = sd_sig.group(1) if sd_sig else "o"
+        overlay_pat = re.compile(
+            r'(\(0,([A-Za-z_$][\w$]*)\.jsxs\)\(\2\.Fragment,\{children:\[)'
+            r'([A-Za-z_$][\w$]*)&&!([A-Za-z_$][\w$]*)&&([A-Za-z_$][\w$]*)&&'
+            r'\(0,\2\.jsx\)\((["`])div\6,\{className:\6(myst-navigation-overlay[^\6]*)\6,style:\{marginTop:([A-Za-z_$][\w$]*)\},onClick:\(\)=>([A-Za-z_$][\w$]*)\(!1\)\}\)'
+        )
+        js_code, n = overlay_pat.subn(
+            lambda m: (
+                f'{m.group(1)}{m.group(3)}&&!{m.group(4)}&&({nav_var}||{m.group(5)})&&'
+                f'(0,{m.group(2)}.jsx)("div",{{className:"{m.group(7)}","aria-hidden":"true",'
+                f'style:{{marginTop:{m.group(8)}}},onClick:()=>{{typeof window!="undefined"&&window.__scNavDrawerDismiss?'
+                f'window.__scNavDrawerDismiss("backdrop"):{m.group(9)}(!1)}}}})'
+            ),
+            js_code,
+        )
+        count += n
+
+    # 3. PrimarySidebar (MS): add id, modal dialog ARIA while open, visible close button header, and state bridge
+    oa_fn = None
+    if 'data-sc-drawer-open' not in js_code:
+        ms_pat = re.compile(
+            r'(var\s+[A-Za-z_$][\w$]*=\(\{sidebarRef:([A-Za-z_$][\w$]*),nav:([A-Za-z_$][\w$]*),footer:[^,]+,navbarEnd:[^,]+,headings:[^,]+,hide_toc:([A-Za-z_$][\w$]*),mobileOnly:[^}]+\}\)=>\{.*?)'
+            r'\[([A-Za-z_$][\w$]*)\]=([A-Za-z_$][\w$]*)\(\)'
+            r'(.*?return)'
+            r'(\(0,([A-Za-z_$][\w$]*)\.useEffect\)\(\(\)=>\{setTimeout\(\(\)=>\{[^}]+\},500\)\},\[[^\]]+\]\),)'
+            r'([A-Za-z_$][\w$]*\?\(0,([A-Za-z_$][\w$]*)\.jsx\)\((["`])div\12,\{ref:\2,)'
+            r'(.*?myst-primary-sidebar-pointer.*?children:\[)'
+            r'(\(0,\11\.jsxs\)\(\12div\12,\{className:\12myst-primary-sidebar-nav )'
+        )
+        m_ms = ms_pat.search(js_code)
+        if m_ms:
+            oa_fn = m_ms.group(6)
+            open_v = m_ms.group(5)
+            nav_v = m_ms.group(3)
+            hidetoc_v = m_ms.group(4)
+            react_ns = m_ms.group(9)
+            jsx_ns = m_ms.group(11)
+
+            def _repl_ms(m: re.Match[str]) -> str:
+                effects = (
+                    f'(0,{react_ns}.useEffect)(()=>{{if(typeof window==="undefined")return;'
+                    f'window.__scSetNavDrawerOpen=__scSetOpen;'
+                    f'return()=>{{if(window.__scSetNavDrawerOpen===__scSetOpen)delete window.__scSetNavDrawerOpen}}}},[__scSetOpen]),'
+                    f'(0,{react_ns}.useEffect)(()=>{{if(typeof window==="undefined")return;'
+                    f'window.dispatchEvent(new CustomEvent("sc:nav-drawer-state",{{detail:{{open:{open_v}}}}}))}},[{open_v}]),'
+                )
+                sidebar_attrs = (
+                    f'id:"myst-primary-sidebar","data-sc-drawer-open":{open_v}?"true":"false",'
+                    f'"data-sc-hide-toc":{nav_v}&&{hidetoc_v}?"true":"false",'
+                    f'role:{open_v}?"dialog":void 0,"aria-modal":{open_v}?"true":void 0,'
+                    f'"aria-label":{open_v}?(typeof window!="undefined"&&window.__scGetNavDrawerLabel?window.__scGetNavDrawerLabel("drawer"):"Navigation menu"):void 0,'
+                    f'tabIndex:{open_v}?-1:void 0,'
+                )
+                header = (
+                    f'{open_v}&&(0,{jsx_ns}.jsxs)("div",{{className:"myst-primary-sidebar-header flex items-center justify-between px-4 py-3 border-b border-myst-border shrink-0 xl:hidden",'
+                    f'children:[(0,{jsx_ns}.jsx)("span",{{className:"myst-primary-sidebar-title text-sm font-semibold text-myst-text",'
+                    f'children:typeof window!="undefined"&&window.__scGetNavDrawerLabel?window.__scGetNavDrawerLabel("title"):"Menu"}}),'
+                    f'(0,{jsx_ns}.jsx)("button",{{type:"button",className:"myst-drawer-close-button flex items-center justify-center w-10 h-10 rounded-lg text-myst-text-secondary hover:text-myst-text hover:bg-myst-surface focus-visible:outline outline-myst-focus-outline outline-2",'
+                    f'"aria-label":typeof window!="undefined"&&window.__scGetNavDrawerLabel?window.__scGetNavDrawerLabel("close"):"Close menu",'
+                    f'title:typeof window!="undefined"&&window.__scGetNavDrawerLabel?window.__scGetNavDrawerLabel("close"):"Close menu",'
+                    f'onClick:()=>{{typeof window!="undefined"&&window.__scNavDrawerDismiss?window.__scNavDrawerDismiss("close-button"):__scSetOpen(!1)}},'
+                    f'children:(0,{jsx_ns}.jsx)("svg",{{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round","aria-hidden":"true",width:"1.25rem",height:"1.25rem",children:(0,{jsx_ns}.jsx)("path",{{d:"M6 6L18 18M18 6L6 18"}})}})}})]}}),'
+                )
+                return f'{m.group(1)}[{open_v},__scSetOpen]={oa_fn}(){m.group(7)}{m.group(8)}{effects}{m.group(10)}{sidebar_attrs}{m.group(13)}{header}{m.group(14)}'
+
+            js_code, n = ms_pat.subn(_repl_ms, js_code, count=1)
+            count += n
+
+    # 4. PrimarySidebar topnav items (qQ): close drawer when clicking any navigation link
+    if 'window.__scNavDrawerDismiss("navigation")' not in js_code:
+        if not oa_fn:
+            m_oa = re.search(r'let\[[A-Za-z_$][\w$]*,[A-Za-z_$][\w$]*\]=([A-Za-z_$][\w$]*)\(\)', js_code)
+            oa_fn = m_oa.group(1) if m_oa else "Oa"
+        qq_pat = re.compile(
+            r'(function\s+[A-Za-z_$][\w$]*\(\{item:([A-Za-z_$][\w$]*)\}\)\{var\s+[^;]+;let\s+([A-Za-z_$][\w$]*)=[A-Za-z_$][\w$]*\(\);)'
+            r'(.*?myst-primary-sidebar-item-short.*?)(children:\2\.title\}\);)'
+            r'(let\[([A-Za-z_$][\w$]*),([A-Za-z_$][\w$]*)\]=.*?myst-primary-sidebar-item-title.*?)'
+            r'(onClick:\(\)=>\8\(!\7\))'
+            r'(.*?myst-primary-sidebar-item-link.*?)(children:\w+\.title\})'
+        )
+        js_code, n = qq_pat.subn(
+            lambda m: (
+                f'{m.group(1)[:-1]},[,__scCloseNav]={oa_fn}();'
+                f'{m.group(4)}onClick:()=>{{typeof window!="undefined"&&window.__scNavDrawerDismiss?window.__scNavDrawerDismiss("navigation"):__scCloseNav(!1)}},{m.group(5)}'
+                f'{m.group(6)}onClick:()=>{{{m.group(8)}(!{m.group(7)}),{m.group(2)}.url&&(typeof window!="undefined"&&window.__scNavDrawerDismiss?window.__scNavDrawerDismiss("navigation"):__scCloseNav(!1))}}'
+                f'{m.group(10)}onClick:()=>{{typeof window!="undefined"&&window.__scNavDrawerDismiss?window.__scNavDrawerDismiss("navigation"):__scCloseNav(!1)}},{m.group(11)}'
+            ),
+            js_code,
+            count=1,
+        )
+        count += n
+
+    return js_code, count
 
 
 def patch_myst_webawesome_hydration(js_code: str) -> tuple[str, int]:

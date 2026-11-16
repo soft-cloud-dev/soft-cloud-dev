@@ -318,6 +318,14 @@ SEARCH_LABELS: dict[str, str] = {
     "fr": "Rechercher",
 }
 
+MENU_OPEN_LABELS: dict[str, str] = {
+    "en": "Open Menu",
+    "pl": "Otwórz menu",
+    "de": "Menü öffnen",
+    "es": "Abrir menú",
+    "fr": "Ouvrir le menu",
+}
+
 SWITCHER_UI_KEYS: frozenset[str] = frozenset(
     {
         "language_label",

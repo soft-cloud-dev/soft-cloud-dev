@@ -763,6 +763,7 @@ def inject_language_switcher_into_html(
     """Inject the language switcher host element, route manifest, and module initializer into built HTML files."""
     clean_base = outer_base_url.rstrip("/")
     widget_src = f"{clean_base}/widgets/language-switcher.mjs"
+    nav_drawer_src = f"{clean_base}/widgets/nav-drawer.mjs"
     manifest_json = json.dumps(route_manifest, ensure_ascii=False, separators=(",", ":"))
     host_markup = (
         f'<div id="softcloud-lang-switcher-root" data-sc-lang-switcher="1" '
@@ -772,6 +773,7 @@ def inject_language_switcher_into_html(
         f'<script id="softcloud-i18n-manifest" type="application/json">{manifest_json}</script>\n'
         f'<script type="module" data-softcloud-lang-switcher="1">\n'
         f'import {{ mountLanguageSwitcher, ensureLanguageSwitcherHost, loadEmbeddedRouteManifest, installNavigationSync }} from "{widget_src}";\n'
+        f'import {{ initNavDrawer }} from "{nav_drawer_src}";\n'
         f'const manifest = loadEmbeddedRouteManifest(document);\n'
         f'const baseUrl = {json.dumps(clean_base)};\n'
         f'window.__SC_ROUTE_MANIFEST__ = manifest;\n'
@@ -781,6 +783,7 @@ def inject_language_switcher_into_html(
         f'  mountLanguageSwitcher(hostEl, {{ routeManifest: manifest, baseUrl }});\n'
         f'}}\n'
         f'installNavigationSync({{ routeManifest: manifest, baseUrl }});\n'
+        f'initNavDrawer();\n'
         f'</script>\n'
     )
 

@@ -10,6 +10,12 @@ keywords:
 
 # Web Awesome — Component Catalog
 
+```{anywidget} ../widgets/voice-player.mjs
+{
+  "page": "components-index"
+}
+```
+
 The complete component catalog is split into one self-contained MyST Markdown file per component. It covers **87 components listed in the official public directory** plus three source-only experimental components (`wa-stepper`, `wa-step`, `wa-tag-input`). The installed Web Awesome version is pinned in `package.json`; the inventory is maintained in `components/catalog.json`.
 
 :::{note} Rendering strategy
