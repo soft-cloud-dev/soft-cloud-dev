@@ -9,6 +9,15 @@
 
 **Software Cloud** zapewnia otwarte, powtarzalne środowisko dla badań obliczeniowych, dokumentacji architektonicznej oraz inżynierii oprogramowania chmurowego.
 
+## SoftCloud w ruchu
+
+:::{figure} assets/static/softcloud-campaign.svg
+:alt: Animowana reklama Software Cloud: oryginalna czarna sylwetka tańczy na różowym tle z białym przewodem słuchawek obok logo softcloud.dev i hasła Build. Deploy. Scale.
+:width: 100%
+
+Twórz. Wdrażaj. Skaluj. — [softcloud.dev](https://softcloud.dev/)
+:::
+
 ---
 
 ## Wyzwanie powtarzalności obliczeniowej
