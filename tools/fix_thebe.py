@@ -128,32 +128,39 @@ def strip_thebe_sourcemap(js_code: str) -> tuple[str, int]:
 def patch_myst_hydration_and_lang(js_code: str) -> tuple[str, int]:
     """Aligns compiled MyST React bundles with localized <html lang>, search .sr-only, and switcher host."""
     count = 0
-    lang_target = 'lang:"en"'
     lang_repl = 'lang:(typeof document!="undefined"&&document.documentElement.getAttribute("lang"))||"en"'
-    if lang_target in js_code:
-        js_code = js_code.replace(lang_target, lang_repl)
-        count += 1
+    js_code, n = re.subn(r'lang:(?:"en"|`en`)', lang_repl, js_code)
+    count += n
 
-    search_target = '(0,$e.jsx)("span",{className:"myst-search-text-placeholder hidden sm:block grow",children:"Search"})'
-    search_repl = (
-        '(0,$e.jsx)("span",{className:"sr-only",children:(typeof document!="undefined"&&'
-        'document.querySelector(".myst-search-bar .sr-only")?.textContent)||"Search"}),'
-        + search_target
-    )
-    if search_target in js_code and 'document.querySelector(".myst-search-bar .sr-only")' not in js_code:
-        js_code = js_code.replace(search_target, search_repl)
-        count += 1
+    if 'document.querySelector(".myst-search-bar .sr-only")' not in js_code:
+        search_pat = re.compile(
+            r'\(0,([A-Za-z_$][\w$]*)\.jsx\)\((["`])span\2,'
+            r'\{className:\2myst-search-text-placeholder hidden sm:block grow\2,children:\2Search\2\}\)'
+        )
+        js_code, n = search_pat.subn(
+            lambda m: (
+                f'(0,{m.group(1)}.jsx)("span",{{className:"sr-only",children:(typeof document!="undefined"&&'
+                f'document.querySelector(".myst-search-bar .sr-only")?.textContent)||"Search"}}),'
+                + m.group(0)
+            ),
+            js_code,
+        )
+        count += n
 
-    theme_target = '(0,ft.jsx)(c4,{className:"w-8 h-8 ml-3"})'
-    theme_repl = (
-        '(0,ft.jsx)("div",{id:"softcloud-lang-switcher-root","data-sc-lang-switcher":"1",'
-        '"data-sc-base-url":(typeof document!="undefined"&&'
-        'document.getElementById("softcloud-lang-switcher-root")?.getAttribute("data-sc-base-url"))||""}),'
-        + theme_target
-    )
-    if theme_target in js_code and 'id:"softcloud-lang-switcher-root"' not in js_code:
-        js_code = js_code.replace(theme_target, theme_repl)
-        count += 1
+    if 'id:"softcloud-lang-switcher-root"' not in js_code:
+        theme_pat = re.compile(
+            r'\(0,([A-Za-z_$][\w$]*)\.jsx\)\(([A-Za-z_$][\w$]*),\{className:(["`])w-8 h-8 ml-3\3\}\)'
+        )
+        js_code, n = theme_pat.subn(
+            lambda m: (
+                f'(0,{m.group(1)}.jsx)("div",{{id:"softcloud-lang-switcher-root","data-sc-lang-switcher":"1",'
+                f'"data-sc-base-url":(typeof document!="undefined"&&'
+                f'document.getElementById("softcloud-lang-switcher-root")?.getAttribute("data-sc-base-url"))||""}}),'
+                + m.group(0)
+            ),
+            js_code,
+        )
+        count += n
 
     js_code, wa_count = patch_myst_webawesome_hydration(js_code)
     return js_code, count + wa_count
@@ -174,6 +181,21 @@ def patch_myst_webawesome_hydration(js_code: str) -> tuple[str, int]:
     elif dc_target_orig in js_code and 't.id==="softcloud-lang-switcher-root"' not in js_code:
         js_code = js_code.replace(dc_target_orig, dc_repl)
         count += 1
+    elif 'sc-wa-host' not in js_code:
+        ud_pat = re.compile(
+            r'function ([A-Za-z_$][\w$]*)\(([A-Za-z_$][\w$]*),([A-Za-z_$][\w$]*)\)'
+            r'\{return \2===(["`])textarea\4\|\|\2===\4noscript\4(?!\|\|\()'
+        )
+        js_code, n = ud_pat.subn(
+            lambda m: (
+                f'function {m.group(1)}({m.group(2)},{m.group(3)}){{return '
+                f'{m.group(2)}==={m.group(4)}textarea{m.group(4)}||{m.group(2)}==={m.group(4)}noscript{m.group(4)}||'
+                f'({m.group(3)}&&({m.group(3)}.id==="softcloud-lang-switcher-root"||'
+                f'(typeof {m.group(3)}.className=="string"&&{m.group(3)}.className.includes("sc-wa-host"))))'
+            ),
+            js_code,
+        )
+        count += n
 
     lh_target = 'if(l.nodeName.toLowerCase()!==t.toLowerCase()){if(!a&&(l.nodeName!=="INPUT"||l.type!=="hidden"))break}'
     lh_repl = (
@@ -184,6 +206,26 @@ def patch_myst_webawesome_hydration(js_code: str) -> tuple[str, int]:
     if lh_target in js_code and 'l.nodeName.startsWith("WA-")' not in js_code:
         js_code = js_code.replace(lh_target, lh_repl)
         count += 1
+    elif '.nodeName.startsWith("WA-")' not in js_code:
+        tf_pat = re.compile(
+            r'function ([A-Za-z_$][\w$]*)\(([A-Za-z_$][\w$]*),([A-Za-z_$][\w$]*),([A-Za-z_$][\w$]*),([A-Za-z_$][\w$]*)\)'
+            r'\{for\(;\2\.nodeType===1;\)\{var ([A-Za-z_$][\w$]*)=\4;'
+            r'if\(\2\.nodeName\.toLowerCase\(\)!==\3\.toLowerCase\(\)\)'
+            r'\{if\(!\5&&\(\2\.nodeName!==(["`])INPUT\7\|\|\2\.type!==\7hidden\7\)\)break\}'
+        )
+        js_code, n = tf_pat.subn(
+            lambda m: (
+                f'function {m.group(1)}({m.group(2)},{m.group(3)},{m.group(4)},{m.group(5)})'
+                f'{{for(;{m.group(2)}.nodeType===1;){{var {m.group(6)}={m.group(4)};'
+                f'if({m.group(2)}.nodeName.toLowerCase()!=={m.group(3)}.toLowerCase()&&'
+                f'!({m.group(4)}&&typeof {m.group(4)}.className=="string"&&'
+                f'{m.group(4)}.className.includes("sc-wa-host")&&{m.group(2)}.nodeName.startsWith("WA-"))){{'
+                f'if(!{m.group(5)}&&({m.group(2)}.nodeName!=={m.group(7)}INPUT{m.group(7)}||'
+                f'{m.group(2)}.type!=={m.group(7)}hidden{m.group(7)}))break}}'
+            ),
+            js_code,
+        )
+        count += n
 
     return js_code, count
 
@@ -225,10 +267,39 @@ def patch_myst_storage_resilience(js_code: str) -> tuple[str, int]:
     )
     count += n
 
+    # 1b. Storage helper & theme hook in Vite / React Router v7 book-theme (Hi/Ui)
+    js_code, n = re.subn(
+        r'function ([A-Za-z_$][\w$]*)\(([A-Za-z_$][\w$]*)\)\{if\(typeof window==(["`])object\3\)return \2\?window\.localStorage:window\.sessionStorage\}',
+        r'function \1(\2){try{if(typeof window=="object")return \2?window.localStorage:window.sessionStorage}catch{}}',
+        js_code,
+    )
+    count += n
+
+    js_code, n = re.subn(
+        r'(let ([A-Za-z_$][\w$]*)=[A-Za-z_$][\w$]*\([A-Za-z_$][\w$]*\),([A-Za-z_$][\w$]*)=)([A-Za-z_$][\w$]*)\.getItem\(([A-Za-z_$][\w$]*)\)',
+        r'\1(()=>{try{return \4.getItem(\5)}catch{return null}})()',
+        js_code,
+    )
+    count += n
+
+    js_code, n = re.subn(
+        r'([A-Za-z_$][\w$]*\(([A-Za-z_$][\w$]*)\)&&)([A-Za-z_$][\w$]*)\.setItem\(([A-Za-z_$][\w$]*),\2\)',
+        r'\1(()=>{try{\3.setItem(\4,\2)}catch{}})()',
+        js_code,
+    )
+    count += n
+
     # 3. Pre-paint theme <script> generator (must stay aligned with inline HTML script for hydration)
     js_code, n = re.subn(
         r"let ([A-Za-z_$][\w$]*)=`localStorage\.getItem\(\$\{JSON\.stringify\(([A-Za-z_$][\w$]*)\)\}\)`,",
         r"let \1=`(()=>{try{return localStorage.getItem(${JSON.stringify(\2)})}catch{return null}})()`,",
+        js_code,
+    )
+    count += n
+
+    js_code, n = re.subn(
+        r"([A-Za-z_$][\w$]*)=`sessionStorage\.getItem\(\$\{JSON\.stringify\(([A-Za-z_$][\w$]*)\)\}\)`",
+        r"\1=`(()=>{try{return sessionStorage.getItem(${JSON.stringify(\2)})}catch{return null}})()`",
         js_code,
     )
     count += n
@@ -242,7 +313,7 @@ def patch_myst_storage_resilience(js_code: str) -> tuple[str, int]:
     count += n
 
     js_code, n = re.subn(
-        r'(?<!try\{)localStorage\.setItem\(`myst-dismissed-banner-\$\{([A-Za-z_$][\w$]*)\}`,"true"\)',
+        r'(?<!try\{)localStorage\.setItem\(`myst-dismissed-banner-\$\{([A-Za-z_$][\w$]*)\}`,(["`])true\2\)',
         r'(()=>{try{localStorage.setItem(`myst-dismissed-banner-${\1}`,"true")}catch{}})()',
         js_code,
     )
@@ -250,7 +321,7 @@ def patch_myst_storage_resilience(js_code: str) -> tuple[str, int]:
 
     # 5. Remix ScrollRestoration sessionStorage setItem & catch-block removeItem
     js_code, n = re.subn(
-        r"(?<!try\{)sessionStorage\.setItem\(([^(),]+),JSON\.stringify\(([^()]+)\)\)",
+        r"(?<!try\{)(?<!\.)sessionStorage\.setItem\(([^(),]+),JSON\.stringify\(([^()]+)\)\)",
         r"(()=>{try{sessionStorage.setItem(\1,JSON.stringify(\2))}catch{}})()",
         js_code,
     )
@@ -270,11 +341,14 @@ def patch_html_storage_resilience(html_code: str) -> tuple[str, int]:
     """Guards inline MyST/Remix <script> storage calls in static HTML against SecurityError."""
     count = 0
 
-    theme_target = 'const savedTheme = localStorage.getItem("myst:theme");'
-    theme_repl = 'const savedTheme = (()=>{try{return localStorage.getItem("myst:theme")}catch{return null}})();'
-    if theme_target in html_code:
-        html_code = html_code.replace(theme_target, theme_repl)
-        count += 1
+    for storage_obj in ("localStorage", "sessionStorage"):
+        theme_target = f'const savedTheme = {storage_obj}.getItem("myst:theme");'
+        theme_repl = (
+            f'const savedTheme = (()=>{{try{{return {storage_obj}.getItem("myst:theme")}}catch{{return null}}}})();'
+        )
+        if theme_target in html_code:
+            html_code = html_code.replace(theme_target, theme_repl)
+            count += 1
 
     html_code, n = re.subn(
         r"catch\(([A-Za-z_$][\w$]*)\)\{console\.error\(\1\),sessionStorage\.removeItem\(([A-Za-z_$][\w$]*)\)\}",

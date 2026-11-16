@@ -174,6 +174,46 @@ class TestFixThebeStorageResilience(unittest.TestCase):
         self.assertIn("try{s=localStorage.getItem(k0)}catch{}", chunk.read_text(encoding="utf-8"))
         self.assertIn("try{return localStorage.getItem(\"myst:theme\")}catch{return null}", html_file.read_text(encoding="utf-8"))
 
+    def test_property_access_session_storage_is_not_corrupted(self) -> None:
+        sample_js = "try{e.sessionStorage.setItem(wt,JSON.stringify(n))}catch(e){}"
+        patched, count = ft.patch_myst_storage_resilience(sample_js)
+        self.assertEqual(count, 0)
+        self.assertEqual(patched, sample_js)
+
+    def test_vite_react_router_v7_hydration_and_storage_patches_are_idempotent(self) -> None:
+        bundle = (
+            '(0,Z.jsxs)(`html`,{lang:`en`});'
+            '[(0,import_jsx_runtime.jsx)(`span`,{className:`myst-search-text-placeholder hidden sm:block grow`,children:`Search`})];'
+            '[(0,import_jsx_runtime.jsx)(ThemeButton,{className:`w-8 h-8 ml-3`})];'
+            'function Ud(e,t){return e===`textarea`||e===`noscript`}'
+            'function tf(e,t,n,r){for(;e.nodeType===1;){var i=n;if(e.nodeName.toLowerCase()!==t.toLowerCase()){if(!r&&(e.nodeName!==`INPUT`||e.type!==`hidden`))break}}}'
+            'function Hi(e){if(typeof window==`object`)return e?window.localStorage:window.sessionStorage}'
+            'let r=Bi(e),i=n.getItem(zi);Ae(r)&&n.setItem(zi,r);'
+            'n=`sessionStorage.getItem(${JSON.stringify(zi)})`;'
+            'localStorage.setItem(`myst-dismissed-banner-${n}`,`true`);'
+        )
+        patched, hyd_count = ft.patch_myst_hydration_and_lang(bundle)
+        self.assertEqual(hyd_count, 5)
+        self.assertIn('document.documentElement.getAttribute("lang")', patched)
+        self.assertIn('document.querySelector(".myst-search-bar .sr-only")', patched)
+        self.assertIn('id:"softcloud-lang-switcher-root"', patched)
+        self.assertIn('sc-wa-host', patched)
+        self.assertIn('e.nodeName.startsWith("WA-")', patched)
+
+        patched, str_count = ft.patch_myst_storage_resilience(patched)
+        self.assertEqual(str_count, 5)
+        self.assertIn('try{if(typeof window=="object")return e?window.localStorage:window.sessionStorage}catch{}', patched)
+        self.assertIn('(()=>{try{return n.getItem(zi)}catch{return null}})()', patched)
+        self.assertIn('(()=>{try{n.setItem(zi,r)}catch{}})()', patched)
+        self.assertIn('sessionStorage.getItem(${JSON.stringify(zi)})}catch{return null}', patched)
+        self.assertIn('(()=>{try{localStorage.setItem(`myst-dismissed-banner-${n}`,"true")}catch{}})()', patched)
+
+        again, hyd_again = ft.patch_myst_hydration_and_lang(patched)
+        again, str_again = ft.patch_myst_storage_resilience(again)
+        self.assertEqual(hyd_again, 0)
+        self.assertEqual(str_again, 0)
+        self.assertEqual(again, patched)
+
 
 if __name__ == "__main__":
     unittest.main()

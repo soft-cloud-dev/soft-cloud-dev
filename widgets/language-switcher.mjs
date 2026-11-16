@@ -155,6 +155,34 @@ export function parsePathnameRoute(pathname, localesMap = DEFAULT_LOCALES, expli
   return { baseUrl: cleanBase, locale: "en", pageSlug: defaultSlug };
 }
 
+function decodeComponentSafe(value) {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
+function sanitizeRelativeHref(rawHref) {
+  const input = String(rawHref || "/");
+  const hashIdx = input.indexOf("#");
+  const rawBeforeHash = hashIdx === -1 ? input : input.slice(0, hashIdx);
+  const rawFrag = hashIdx === -1 ? "" : input.slice(hashIdx + 1);
+  const hadTrailingSlash = rawBeforeHash.endsWith("/");
+  const segments = rawBeforeHash
+    .split("/")
+    .filter((seg) => seg !== "" && seg !== "." && seg !== "..")
+    .map((seg) => encodeURIComponent(decodeComponentSafe(seg)));
+  let cleanPath = segments.length > 0 ? `/${segments.join("/")}` : "/";
+  if (cleanPath !== "/" && hadTrailingSlash) {
+    cleanPath += "/";
+  }
+  const cleanFrag = rawFrag
+    ? `#${encodeURIComponent(decodeComponentSafe(rawFrag))}`
+    : "";
+  return `${cleanPath}${cleanFrag}`;
+}
+
 /**
  * Build a fallback localized URL from locale prefix and pageSlug.
  */
@@ -166,7 +194,7 @@ export function buildLocalizedRouteUrl(localeInfo, pageSlug, baseUrl = "", hash 
     ? `${cleanBase}${cleanPrefix}/${cleanSlug}`
     : `${cleanBase}${cleanPrefix}/`;
   if (!path.startsWith("/")) path = `/${path}`;
-  return `${path}${hash || ""}`;
+  return sanitizeRelativeHref(`${path}${hash || ""}`);
 }
 
 /**
@@ -300,7 +328,7 @@ export function resolveTranslationUrl(
     if (cleanBase && path !== cleanBase && !path.startsWith(`${cleanBase}/`)) {
       path = path === "/" ? `${cleanBase}/` : `${cleanBase}${path}`;
     }
-    return `${path}${hash || ""}`;
+    return sanitizeRelativeHref(`${path}${hash || ""}`);
   }
   return buildLocalizedRouteUrl(localeInfo, pageSlug, cleanBase, hash);
 }
@@ -869,16 +897,18 @@ const SWITCHER_STYLES = `
     }
     .myst-home-link {
       margin-left: 0.25rem !important;
-      min-width: 0 !important;
+      flex-shrink: 0;
     }
     .myst-home-link-logo {
       margin-right: 0 !important;
+      flex-shrink: 0;
     }
     .myst-home-link-logo img {
-      max-width: 118px;
       width: auto;
-      height: auto;
+      height: 1.75rem;
+      max-width: 118px;
       max-height: 2rem;
+      object-fit: contain;
     }
     .myst-home-link > span {
       display: none !important;
@@ -946,6 +976,8 @@ const SWITCHER_STYLES = `
       padding-right: 0.375rem !important;
     }
     .myst-home-link-logo img {
+      width: auto;
+      height: 1.45rem;
       max-width: 96px;
       max-height: 1.75rem;
     }
@@ -1095,26 +1127,39 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
   noticeBox.hidden = true;
 
   const optionEls = [];
+  const optionRecords = [];
 
-  for (const [code, locInfo] of Object.entries(localesMap)) {
-    const lookup = lookupPageTranslation(routeManifest, code, currentPageSlug);
-    const available = lookup.available;
-    const isCurrent = code === currentLocaleCode;
-    const hash =
-      options.hash !== undefined
-        ? options.hash
-        : (typeof window !== "undefined" && window.location?.hash) || "";
-    const targetUrl = resolveTranslationUrl(
+  const getActiveHash = () =>
+    options.hash !== undefined
+      ? options.hash
+      : (typeof window !== "undefined" && window.location?.hash) || "";
+
+  const resolveOptionTargetUrl = (code, locInfo) =>
+    resolveTranslationUrl(
       routeManifest,
       code,
       locInfo,
       currentPageSlug,
       parsed.baseUrl,
-      hash
+      getActiveHash()
     );
+
+  const syncOptionUrls = () => {
+    for (const rec of optionRecords) {
+      if (!rec.available) continue;
+      rec.item.setAttribute("href", resolveOptionTargetUrl(rec.code, rec.locInfo));
+    }
+  };
+
+  for (const [code, locInfo] of Object.entries(localesMap)) {
+    const lookup = lookupPageTranslation(routeManifest, code, currentPageSlug);
+    const available = lookup.available;
+    const isCurrent = code === currentLocaleCode;
+    const targetUrl = resolveOptionTargetUrl(code, locInfo);
     const homeUrl =
-      (typeof locInfo.base_route === "string" && locInfo.base_route) ||
-      buildLocalizedRouteUrl(locInfo, "", parsed.baseUrl, "");
+      typeof locInfo.base_route === "string" && locInfo.base_route
+        ? sanitizeRelativeHref(locInfo.base_route)
+        : buildLocalizedRouteUrl(locInfo, "", parsed.baseUrl, "");
 
     const item = doc.createElement(available ? "a" : "button");
     item.className = "sc-lang-option";
@@ -1195,9 +1240,11 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
         noticeBox.hidden = false;
         return;
       }
+      const liveUrl = resolveOptionTargetUrl(code, locInfo);
+      item.setAttribute("href", liveUrl);
       if (typeof options.onNavigate === "function") {
         e.preventDefault();
-        options.onNavigate({ locale: code, url: targetUrl, pageSlug: currentPageSlug });
+        options.onNavigate({ locale: code, url: liveUrl, pageSlug: currentPageSlug });
         setOpen(false);
       } else {
         setOpen(false);
@@ -1206,6 +1253,7 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
 
     panel.appendChild(item);
     optionEls.push(item);
+    optionRecords.push({ item, code, locInfo, available });
   }
 
   panel.appendChild(noticeBox);
@@ -1279,6 +1327,9 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
 
   function setOpen(open) {
     isOpen = Boolean(open);
+    if (isOpen) {
+      syncOptionUrls();
+    }
     panel.hidden = !isOpen;
     triggerBtn.setAttribute("aria-expanded", String(isOpen));
     if (!isOpen) {
@@ -1363,8 +1414,12 @@ export function mountLanguageSwitcher(hostEl, options = {}) {
     if (hostEl._scCleanup === cleanup) {
       delete hostEl._scCleanup;
     }
+    if (hostEl._scSyncUrls === syncOptionUrls) {
+      delete hostEl._scSyncUrls;
+    }
   };
   hostEl._scCleanup = cleanup;
+  hostEl._scSyncUrls = syncOptionUrls;
   return cleanup;
 }
 
@@ -1401,22 +1456,33 @@ export function installNavigationSync(options = {}) {
   window.__SC_LANG_NAV_SYNC_INSTALLED__ = true;
 
   let lastPathname = window.location?.pathname || "/";
+  let lastHash = window.location?.hash || "";
 
   const syncIfNeeded = () => {
     ensureAccessibleControls(document);
     const currentPathname = window.location?.pathname || "/";
+    const currentHash = window.location?.hash || "";
     const hostEl = document.querySelector("[data-sc-lang-switcher]");
     const mountedSwitcher = hostEl?.querySelector(".sc-lang-switcher");
     const themeToggle = findThemeToggle(document);
     const adjacent = themeToggle && hostEl ? isAdjacent(hostEl, themeToggle) : true;
     if (!hostEl || !mountedSwitcher || !adjacent || currentPathname !== lastPathname) {
       lastPathname = currentPathname;
+      lastHash = currentHash;
       ensureLanguageSwitcherHost(document);
       initSiteLanguageSwitcher(options);
+    } else if (currentHash !== lastHash) {
+      lastHash = currentHash;
+      if (typeof hostEl._scSyncUrls === "function") {
+        hostEl._scSyncUrls();
+      } else {
+        initSiteLanguageSwitcher(options);
+      }
     }
   };
 
   window.addEventListener("popstate", syncIfNeeded);
+  window.addEventListener("hashchange", syncIfNeeded);
 
   if (window.history) {
     for (const method of ["pushState", "replaceState"]) {
