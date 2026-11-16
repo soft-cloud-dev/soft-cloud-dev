@@ -91,7 +91,7 @@
   "config_hash": "8e764f1bbc93d18905309a7c8547a196154843383e971c32ef0e0c41b1241f8b",
   "locale": "de",
   "logical_source_path": "introduction.md",
-  "manifest_sha256": "bba1e93150444f0efded023683c3646454e06279aa8ef728112202b0dc8725aa",
+  "manifest_sha256": "d54d9070cd820051164f377c75c6e25845523c351a0e989ec6678ee2569c4bda",
   "narration_config": {
     "audio_format": "mp3",
     "locale": "de",
@@ -108,11 +108,11 @@
   "page_id": "introduction",
   "page_source_hash": "80caf72332d687dc761a5ac6e77d5c8344b2b8a5eeef4585bc083662a4456cdc",
   "schema_version": "1.0.0",
-  "source_file_sha256": "a61e595b9e1cafcd612097f5260e030bde96abeac2e06e2e3027bd8ee3755eb9",
+  "source_file_sha256": "07e9e5a9de1211f5de427c0779e08da0126fb1d13ec965f2c134524573135cdc",
   "source_path": "i18n/de/introduction.md",
   "status": "complete",
   "total_chunks": 4,
   "total_duration_seconds": 131.88,
   "transcript_file": "transcript.json",
-  "transcript_sha256": "93a823a0f60fa7d0a141879cf43b6c868d5ed279e0b6760e1aa446cbfa422323"
+  "transcript_sha256": "8021f873a7ab295e7983bbc0e3d22a03c95642d6e4f72ba1993402c4e51a0f6e"
 }

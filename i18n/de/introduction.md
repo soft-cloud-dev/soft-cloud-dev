@@ -9,6 +9,8 @@
 
 **Software Cloud** bietet ein offenes, reproduzierbares Framework für computergestützte Forschung, Architekturdokumentation und Cloud-Software-Engineering.
 
+![Animierte schwarze Silhouette einer tanzenden Person mit Kopfhörern vor leuchtend rosa Hintergrund](assets/static/animations/softcloud-introduction.gif)
+
 ---
 
 ## Die Herausforderung der rechnerischen Reproduzierbarkeit
