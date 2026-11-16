@@ -127,6 +127,31 @@ locales:
         h_diff_text = ga.compute_speech_input_hash("en", t2_sha, cfg.tts_config_hash())
         self.assertNotEqual(h1, h_diff_text)
 
+    def test_visual_images_do_not_change_spoken_content(self) -> None:
+        """Adding standalone or inline images must not invalidate audio chunks."""
+        page = self.tmp_dir / "media.md"
+        plain = "# Introduction\\n\\nThe content stays the same.\\n\\n## Next\\n\\nContinue reading.\\n"
+        with_standalone_image = plain.replace(
+            "The content stays the same.\\n\\n",
+            "The content stays the same.\\n\\n"
+            "![Animated silhouette with earphones](assets/static/animations/softcloud-introduction.gif)\\n\\n",
+        )
+        with_inline_image = plain.replace(
+            "The content stays the same.",
+            "The content ![decorative image](assets/image.gif) stays the same.",
+        )
+
+        page.write_text(plain, encoding="utf-8")
+        original = ga.extract_document(page, self.tmp_dir)
+        original_elements = [e.to_dict() for e in original.elements]
+
+        for updated in (with_standalone_image, with_inline_image):
+            page.write_text(updated, encoding="utf-8")
+            after = ga.extract_document(page, self.tmp_dir)
+            self.assertEqual([e.to_dict() for e in after.elements], original_elements)
+            self.assertEqual(after.page_source_hash, original.page_source_hash)
+            self.assertNotEqual(after.source_file_sha256, original.source_file_sha256)
+
     def test_speech_reuse_when_chunks_shift(self) -> None:
         """When an earlier section is added or modified, subsequent chunks shift position
 
