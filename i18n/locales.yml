@@ -94,6 +94,7 @@ locales:
       sec_unit: "sec"
       narration_unavailable: "Narration assets unavailable"
       playback_failed: "Playback failed"
+      breadcrumbs_label: "Breadcrumbs"
 
   pl:
     code: "pl"
@@ -163,6 +164,7 @@ locales:
       sec_unit: "sek"
       narration_unavailable: "Zasoby narracji są niedostępne"
       playback_failed: "Błąd odtwarzania"
+      breadcrumbs_label: "Nawigacja okruszkowa"
 
   de:
     code: "de"
@@ -229,6 +231,7 @@ locales:
       sec_unit: "Sek"
       narration_unavailable: "Narrations-Assets nicht verfügbar"
       playback_failed: "Wiedergabe fehlgeschlagen"
+      breadcrumbs_label: "Brotkrümelnavigation"
 
   es:
     code: "es"
@@ -295,6 +298,7 @@ locales:
       sec_unit: "s"
       narration_unavailable: "Recursos de narración no disponibles"
       playback_failed: "Error de reproducción"
+      breadcrumbs_label: "Migas de pan"
 
   fr:
     code: "fr"
@@ -361,3 +365,4 @@ locales:
       sec_unit: "s"
       narration_unavailable: "Ressources de narration indisponibles"
       playback_failed: "Échec de la lecture"
+      breadcrumbs_label: "Fil d'Ariane"

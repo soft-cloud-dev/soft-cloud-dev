@@ -162,6 +162,26 @@ def patch_myst_hydration_and_lang(js_code: str) -> tuple[str, int]:
         )
         count += n
 
+    if 'id:"softcloud-breadcrumbs-root"' not in js_code:
+        bc_pat = re.compile(
+            r'children:\[(!([A-Za-z_$][\w$]*)&&\(0,([A-Za-z_$][\w$]*)\.jsx\)\(([A-Za-z_$][\w$]*),'
+            r'\{kind:([A-Za-z_$][\w$]*)\.kind,frontmatter:\{\.\.\.\5\.frontmatter,downloads:[A-Za-z_$][\w$]*\},'
+            r'className:(["`])mb-8 pt-9\6)'
+        )
+        js_code, n = bc_pat.subn(
+            lambda m: (
+                f'children:[{m.group(5)}.slug&&{m.group(5)}.slug!=="index"&&'
+                f'(0,{m.group(3)}.jsx)("div",{{id:"softcloud-breadcrumbs-root",className:"sc-breadcrumbs-host",'
+                f'"data-sc-breadcrumbs":"1","data-sc-page-slug":{m.group(5)}.slug,'
+                f'"data-sc-base-url":(typeof document!="undefined"&&'
+                f'document.getElementById("softcloud-breadcrumbs-root")?.getAttribute("data-sc-base-url"))||'
+                f'(typeof window!="undefined"&&window.__SC_ROOT_BASE_URL__)||""}}),'
+                + m.group(1)
+            ),
+            js_code,
+        )
+        count += n
+
     js_code, wa_count = patch_myst_webawesome_hydration(js_code)
     js_code, nav_count = patch_myst_nav_drawer(js_code)
     return js_code, count + wa_count + nav_count
@@ -299,7 +319,8 @@ def patch_myst_webawesome_hydration(js_code: str) -> tuple[str, int]:
     dc_target_orig = 'function Dc(l,t){return l==="textarea"||l==="noscript"'
     dc_repl = (
         'function Dc(l,t){return l==="textarea"||l==="noscript"||'
-        '(t&&(t.id==="softcloud-lang-switcher-root"||(typeof t.className=="string"&&t.className.includes("sc-wa-host"))))'
+        '(t&&(t.id==="softcloud-lang-switcher-root"||t.id==="softcloud-breadcrumbs-root"||'
+        '(typeof t.className=="string"&&t.className.includes("sc-wa-host"))))'
     )
     if dc_target in js_code and 'sc-wa-host' not in js_code:
         js_code = js_code.replace(dc_target, dc_repl)
@@ -317,6 +338,7 @@ def patch_myst_webawesome_hydration(js_code: str) -> tuple[str, int]:
                 f'function {m.group(1)}({m.group(2)},{m.group(3)}){{return '
                 f'{m.group(2)}==={m.group(4)}textarea{m.group(4)}||{m.group(2)}==={m.group(4)}noscript{m.group(4)}||'
                 f'({m.group(3)}&&({m.group(3)}.id==="softcloud-lang-switcher-root"||'
+                f'{m.group(3)}.id==="softcloud-breadcrumbs-root"||'
                 f'(typeof {m.group(3)}.className=="string"&&{m.group(3)}.className.includes("sc-wa-host"))))'
             ),
             js_code,
