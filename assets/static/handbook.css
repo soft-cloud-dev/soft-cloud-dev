@@ -522,7 +522,10 @@ body:has(.sc-handbook) article.article-grid {
 @media (prefers-reduced-motion: reduce) {
   .sc-handbook *,
   .sc-handbook *::before,
-  .sc-handbook *::after {
+  .sc-handbook *::after,
+  .sc-breadcrumbs *,
+  .sc-breadcrumbs *::before,
+  .sc-breadcrumbs *::after {
     scroll-behavior: auto !important;
     transition: none !important;
   }
@@ -613,9 +616,170 @@ body:has(.sc-handbook) article.article-grid {
   }
 }
 
+/* Site-wide page breadcrumb navigation (omitted on the homepage). */
+.sc-breadcrumbs-host {
+  --sc-bc-link: #1d4ed8;
+  --sc-bc-link-hover: #1e3a8a;
+  --sc-bc-label: #475569;
+  --sc-bc-sep: #64748b;
+  --sc-bc-current: #0f172a;
+  --sc-bc-focus: #1d4ed8;
+  --sc-bc-hover-bg: #f1f5f9;
+  grid-column: body;
+  min-width: 0;
+  padding-top: 1.5rem;
+  padding-bottom: 0;
+}
+
+.sc-breadcrumbs-host[hidden] {
+  display: none !important;
+}
+
+.sc-breadcrumbs-host:not([hidden]) + .myst-fm-block {
+  padding-top: 0.75rem !important;
+}
+
+:root.dark .sc-breadcrumbs-host,
+:root.wa-dark .sc-breadcrumbs-host,
+:root[data-theme="dark"] .sc-breadcrumbs-host {
+  --sc-bc-link: #7cb3ff;
+  --sc-bc-link-hover: #bfdbfe;
+  --sc-bc-label: #cbd5e1;
+  --sc-bc-sep: #94a3b8;
+  --sc-bc-current: #f8fafc;
+  --sc-bc-focus: #60a5fa;
+  --sc-bc-hover-bg: rgba(148, 163, 184, 0.16);
+}
+
+.sc-breadcrumbs {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--sc-bc-label);
+}
+
+.sc-breadcrumbs__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.45rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sc-breadcrumbs__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.sc-breadcrumbs__item + .sc-breadcrumbs__item::before {
+  content: "/";
+  content: "/" / "";
+  color: var(--sc-bc-sep);
+  font-weight: 400;
+  user-select: none;
+  flex: none;
+}
+
+.sc-breadcrumbs__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  max-width: 100%;
+  padding: 0.125rem 0.25rem;
+  border-radius: 4px;
+  color: var(--sc-bc-link);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  overflow-wrap: break-word;
+  /* Transition hover background only so theme switches hit WCAG AA link contrast immediately. */
+  transition: background-color 0.12s ease;
+}
+
+.sc-breadcrumbs__link:hover {
+  color: var(--sc-bc-link-hover);
+  background-color: var(--sc-bc-hover-bg);
+}
+
+.sc-breadcrumbs__link:focus-visible {
+  outline: 2px solid var(--sc-bc-focus);
+  outline-offset: 2px;
+  position: relative;
+  z-index: 1;
+}
+
+.sc-breadcrumbs__link[aria-current="page"] {
+  color: var(--sc-bc-current);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.sc-breadcrumbs__link[aria-current="page"]:hover,
+.sc-breadcrumbs__link[aria-current="page"]:focus-visible {
+  color: var(--sc-bc-current);
+  text-decoration: underline;
+}
+
+.sc-breadcrumbs__label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  max-width: 100%;
+  padding: 0.125rem 0.1rem;
+  color: var(--sc-bc-label);
+  font-weight: 500;
+  overflow-wrap: break-word;
+}
+
+@media (pointer: coarse) {
+  .sc-breadcrumbs__link {
+    min-height: 36px;
+    padding-block: 0.25rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .sc-breadcrumbs-host {
+    padding-top: 1rem;
+  }
+  .sc-breadcrumbs {
+    font-size: 0.8125rem;
+  }
+  .sc-breadcrumbs__link,
+  .sc-breadcrumbs__label {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (forced-colors: active) {
+  .sc-breadcrumbs__link {
+    color: LinkText;
+  }
+  .sc-breadcrumbs__link[aria-current="page"] {
+    color: CanvasText;
+    text-decoration: underline;
+    font-weight: 700;
+  }
+  .sc-breadcrumbs__link:focus-visible {
+    outline: 2px solid Highlight;
+  }
+  .sc-breadcrumbs__label,
+  .sc-breadcrumbs__item + .sc-breadcrumbs__item::before {
+    color: CanvasText;
+  }
+}
+
 @media print {
   .myst-navigation-overlay,
-  .myst-primary-sidebar-header {
+  .myst-primary-sidebar-header,
+  .sc-breadcrumbs-host {
     display: none !important;
   }
 }
