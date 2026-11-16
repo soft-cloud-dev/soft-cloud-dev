@@ -1136,6 +1136,33 @@ function render({ model, el }) {
   expandedBody.append(metaRow, sectionHeading, scrubberContainer, controlsRow);
   container.append(headerRow, errorBanner, expandedBody);
   el.append(styleEl, container);
+
+  // The introduction campaign is presentational and deliberately not part of
+  // the narrated Markdown corpus (whose audio manifests are content-addressed).
+  let campaignFigure = null;
+  if (model && typeof model.get === "function" && model.get("page") === "introduction") {
+    const figure = document.createElement("figure");
+    figure.className = "sc-intro-campaign";
+    figure.style.cssText = "display:block;max-width:960px;margin:1rem auto 1.5rem;";
+    const campaignImage = document.createElement("img");
+    campaignImage.src = "/assets/static/softcloud-campaign.svg";
+    campaignImage.alt = "Animated Software Cloud advertisement with the original dancing silhouette and white earphone cables, a pink background, the softcloud.dev logo, and the words Build. Deploy. Scale.";
+    campaignImage.width = 1600;
+    campaignImage.height = 900;
+    campaignImage.loading = "lazy";
+    campaignImage.decoding = "async";
+    campaignImage.style.cssText = "display:block;width:100%;height:auto;border-radius:12px;";
+    const caption = document.createElement("figcaption");
+    caption.style.cssText = "font:inherit;text-align:center;opacity:0.8;margin:0.5rem auto;";
+    caption.append(document.createTextNode("Build. Deploy. Scale. — "));
+    const brandLink = document.createElement("a");
+    brandLink.href = "https://softcloud.dev/";
+    brandLink.textContent = "softcloud.dev";
+    caption.append(brandLink);
+    figure.append(campaignImage, caption);
+    el.append(figure);
+    campaignFigure = figure;
+  }
   syncTheme();
   if (typeof requestAnimationFrame === "function") {
     requestAnimationFrame(() => syncTheme());
@@ -1508,6 +1535,7 @@ function render({ model, el }) {
     audio.removeAttribute("src");
     audio.load();
     container.remove();
+    campaignFigure?.remove();
     styleEl.remove();
   };
 }
