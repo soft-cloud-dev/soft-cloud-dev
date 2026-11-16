@@ -8,6 +8,14 @@
 
 **Software Cloud** provides an open, reproducible framework for computational research, architectural documentation, and cloud software engineering.
 
+
+## SoftCloud in Motion
+
+<figure style="max-width: 960px; margin: 1.5rem auto;">
+  <img src="./assets/static/softcloud-campaign.svg" alt="Animated SoftCloud campaign: a dancing silhouette against a pink background, with the words Build. Deploy. Scale." width="960" height="540" loading="lazy" style="display:block;width:100%;height:auto;border-radius:12px;" />
+  <figcaption>Build. Deploy. Scale. — <a href="https://softcloud.dev/">softcloud.dev</a></figcaption>
+</figure>
+
 ---
 
 ## The Challenge of Computational Reproducibility
