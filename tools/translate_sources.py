@@ -641,14 +641,26 @@ def translate_section_with_gemini(
     return translated + "\n"
 
 
+VOICE_PLAYER_WIDGET_BLOCK_RE = re.compile(
+    r"(```\{anywidget\}\s+[^\n]*voice-player\.mjs[^\n]*\n)(.*?)(\n```)",
+    re.DOTALL,
+)
 WIDGET_LOCALE_RE = re.compile(
-    r'("page"\s*:\s*"introduction"\s*)(?:,\s*"locale"\s*:\s*"[a-zA-Z_-]+")?'
+    r'("page"\s*:\s*"[a-zA-Z0-9_-]+")(?:\s*,\s*"locale"\s*:\s*"[a-zA-Z_-]+")?'
 )
 
 
 def localize_widget_blocks(text: str, target_locale: str) -> str:
     """Deterministically set the `{anywidget}` `"locale"` property (never delegated to the model)."""
-    return WIDGET_LOCALE_RE.sub(rf'\1,\n  "locale": "{target_locale}"', text)
+    def _replace_block(match: re.Match[str]) -> str:
+        prefix, body, suffix = match.group(1), match.group(2), match.group(3)
+        updated_body = WIDGET_LOCALE_RE.sub(
+            rf'\1,\n  "locale": "{target_locale}"',
+            body,
+        )
+        return f"{prefix}{updated_body}{suffix}"
+
+    return VOICE_PLAYER_WIDGET_BLOCK_RE.sub(_replace_block, text)
 
 
 def _load_existing_provenance(prov_path: Path) -> dict[str, Any]:

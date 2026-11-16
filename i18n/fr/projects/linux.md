@@ -5,6 +5,13 @@ description: Architecture de nœuds Linux et documentation de compilation pour F
 
 # SoftCloud Node Linux
 
+```{anywidget} ../widgets/voice-player.mjs
+{
+  "page": "projects-linux",
+  "locale": "fr"
+}
+```
+
 SoftCloud Node Linux explore l'exécution de nœuds Kubernetes sous Linux en tant que machines virtuelles sous l'hyperviseur FreeBSD bhyve. La documentation du projet couvre le processus de construction d'images, l'architecture de démarrage, l'environnement d'exécution des conteneurs, la mise en réseau et les travaux de validation.
 
 ## Commencer ici

@@ -186,16 +186,163 @@ locales:
         self.assertTrue((audio_root / "sample" / chunk3_v2["audio_file"]).is_file())
 
     def test_plan_needed_discovery(self) -> None:
-        pages = ga.discover_enabled_pages(
+        import plan_localization as pl
+
+        # Polish was upgraded to 128k + style/language_code, so existing audio/pl/introduction
+        # is pending CI regeneration alongside un-narrated pages.
+        pl_pages = ga.discover_enabled_pages(
             root=ROOT,
             locale="pl",
             plan_needed_only=True,
         )
-        # Introduction is already narrated on main; README, architecture, projects/linux need narration
-        page_names = [p.name for p in pages]
-        self.assertNotIn("introduction.md", page_names)
-        self.assertIn("README.md", page_names)
-        self.assertIn("architecture.md", page_names)
+        pl_names = [p.name for p in pl_pages]
+        self.assertIn("introduction.md", pl_names)
+        self.assertIn("README.md", pl_names)
+        self.assertIn("architecture.md", pl_names)
+
+        pl_plan = pl.build_plan(ROOT, only_locale="pl")["locales"]["pl"]["documents"]
+        expected_pl = {
+            item["document"]
+            for item in pl_plan
+            if "narrate" in item["actions"]
+        }
+        pl_rels = {p.relative_to(ROOT / "i18n" / "pl").as_posix() for p in pl_pages}
+        self.assertEqual(pl_rels, expected_pl)
+
+        # German remains on the baseline 64k config, so current introduction.md is skipped.
+        de_pages = ga.discover_enabled_pages(
+            root=ROOT,
+            locale="de",
+            plan_needed_only=True,
+        )
+        de_names = [p.name for p in de_pages]
+        self.assertNotIn("introduction.md", de_names)
+        self.assertIn("README.md", de_names)
+        self.assertIn("architecture.md", de_names)
+
+    def test_locale_tts_quality_config_and_hash_compatibility(self) -> None:
+        import json
+
+        en_cfg = ga.resolve_locale_narration_config(ROOT, "en")
+        self.assertEqual(en_cfg.tts_model, "gemini-3.8-flash-tts")
+        self.assertEqual(en_cfg.mp3_bitrate, "128k")
+        self.assertEqual(en_cfg.sample_rate, 24000)
+        self.assertEqual(en_cfg.language_code, "en-US")
+        self.assertTrue(en_cfg.speech_style)
+
+        pl_cfg = ga.resolve_locale_narration_config(ROOT, "pl")
+        self.assertEqual(pl_cfg.tts_model, "gemini-3.8-flash-tts")
+        self.assertEqual(pl_cfg.mp3_bitrate, "128k")
+        self.assertEqual(pl_cfg.sample_rate, 24000)
+        self.assertEqual(pl_cfg.language_code, "pl-PL")
+        self.assertTrue(pl_cfg.speech_style)
+
+        # Unchanged locales preserve exact baseline config hash so existing audio stays valid.
+        de_cfg = ga.resolve_locale_narration_config(ROOT, "de")
+        self.assertEqual(de_cfg.mp3_bitrate, "64k")
+        self.assertEqual(de_cfg.language_code, "")
+        self.assertEqual(de_cfg.speech_style, "")
+        self.assertNotIn("language_code", de_cfg.tts_config_dict())
+        self.assertNotIn("speech_style", de_cfg.tts_config_dict())
+        manifest = json.loads((ROOT / "audio/de/introduction/manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(manifest["chunks"][0]["tts_config_hash"], de_cfg.tts_config_hash())
+
+    def test_synthesize_speech_sends_style_and_language_code(self) -> None:
+        import base64
+        from unittest import mock
+
+        en_cfg = ga.resolve_locale_narration_config(ROOT, "en")
+        de_cfg = ga.resolve_locale_narration_config(ROOT, "de")
+        client = ga.GeminiClient(api_key="AIzaSyDummyKeyForUnitTesting123456")
+
+        recorded: list[tuple[str, str, dict | None]] = []
+
+        def fake_request(method: str, endpoint: str, payload: dict | None = None) -> dict:
+            recorded.append((method, endpoint, payload))
+            if method == "GET":
+                return {
+                    "name": f"models/{en_cfg.tts_model}",
+                    "supportedGenerationMethods": ["generateContent"],
+                }
+            return {
+                "candidates": [
+                    {
+                        "content": {
+                            "parts": [
+                                {
+                                    "inlineData": {
+                                        "data": base64.b64encode(b"RIFFdemo").decode("ascii"),
+                                        "mimeType": "audio/wav",
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+
+        with mock.patch.object(client, "_request_json", side_effect=fake_request):
+            audio_en, mime_en = client.synthesize_speech("SoftCloud overview.", en_cfg)
+            self.assertEqual(audio_en, b"RIFFdemo")
+            self.assertEqual(mime_en, "audio/wav")
+
+            audio_de, _ = client.synthesize_speech("SoftCloud Überblick.", de_cfg)
+            self.assertEqual(audio_de, b"RIFFdemo")
+
+        post_calls = [p for m, _, p in recorded if m == "POST"]
+        self.assertEqual(len(post_calls), 2)
+        en_payload, de_payload = post_calls
+        self.assertEqual(en_payload["contents"][0]["role"], "user")
+        self.assertEqual(
+            en_payload["contents"][0]["parts"][0]["speechMetadata"],
+            {"style": en_cfg.speech_style},
+        )
+        self.assertEqual(
+            en_payload["generationConfig"]["speechConfig"]["languageCode"],
+            "en-US",
+        )
+        self.assertEqual(
+            en_payload["generationConfig"]["speechConfig"]["voiceConfig"]["prebuiltVoiceConfig"]["voiceName"],
+            en_cfg.voice_name,
+        )
+        self.assertNotIn("speechMetadata", de_payload["contents"][0]["parts"][0])
+        self.assertNotIn("languageCode", de_payload["generationConfig"]["speechConfig"])
+
+    def test_tts_model_404_fails_closed_without_fallback(self) -> None:
+        import io
+        import urllib.error
+        from unittest import mock
+
+        client = ga.GeminiClient(api_key="AIzaSyDummyKeyForUnitTesting123456", max_retries=0)
+
+        def make_404(*args, **kwargs):
+            raise urllib.error.HTTPError(
+                url="https://example.invalid/models/gemini-3.8-flash-tts",
+                code=404,
+                msg="Not Found",
+                hdrs=None,
+                fp=io.BytesIO(b'{"error": {"message": "Model not found"}}'),
+            )
+
+        with mock.patch("urllib.request.urlopen", side_effect=make_404) as mocked_open:
+            with self.assertRaises(ga.NarrationError):
+                client.verify_model_available("gemini-3.8-flash-tts")
+            self.assertEqual(mocked_open.call_count, 1)
+
+        with mock.patch("urllib.request.urlopen", side_effect=make_404) as mocked_open:
+            with self.assertRaises(ga.NarrationError):
+                client._request_json("POST", "models/gemini-3.8-flash-tts:generateContent", {"contents": []})
+            self.assertEqual(mocked_open.call_count, 1)
+
+    def test_progressive_check_only_accepts_stale_config_and_strict_rejects(self) -> None:
+        self.assertEqual(
+            ga.main(["--locale", "en", "--page", "introduction.md", "--check-only", "--progressive"]),
+            0,
+        )
+        self.assertNotEqual(
+            ga.main(["--locale", "en", "--page", "introduction.md", "--check-only"]),
+            0,
+        )
 
 
 if __name__ == "__main__":

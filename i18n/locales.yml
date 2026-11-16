@@ -41,6 +41,9 @@ locales:
       text_model: "gemini-3.8-flash"
       tts_model: "gemini-3.8-flash-tts"
       voice_name: "Kore"
+      language_code: "en-US"
+      speech_style: "Clear, authoritative, and warm technical documentation narrator in natural American English, with steady pacing and crisp enunciation."
+      mp3_bitrate: "128k"
       language_instruction: "Write in clear, natural spoken English prose without Markdown formatting, bullet points, or code fences."
     site:
       title: "SoftCloud — Executable Handbook"
@@ -107,6 +110,9 @@ locales:
       text_model: "gemini-3.8-flash"
       tts_model: "gemini-3.8-flash-tts"
       voice_name: "Kore"
+      language_code: "pl-PL"
+      speech_style: "Clear, natural, articulate native Polish technical documentation narrator in standard Polish (język polski), with steady pacing and accurate pronunciation of technical terms."
+      mp3_bitrate: "128k"
       language_instruction: "Write in clear, natural spoken Polish (język polski) prose without Markdown formatting, bullet points, or code fences."
     site:
       title: "SoftCloud — Podręcznik wykonywalny"

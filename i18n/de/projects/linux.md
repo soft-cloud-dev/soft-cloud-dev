@@ -5,6 +5,13 @@ description: Linux-Knotenarchitektur und Build-Dokumentation für FreeBSD bhyve.
 
 # SoftCloud Node Linux
 
+```{anywidget} ../widgets/voice-player.mjs
+{
+  "page": "projects-linux",
+  "locale": "de"
+}
+```
+
 SoftCloud Node Linux untersucht Linux-Kubernetes-Knoten, die als virtuelle Maschinen unter FreeBSD bhyve ausgeführt werden. Die Projektdokumentation behandelt den Image-Build-Prozess, die Boot-Architektur, die Container-Laufzeitumgebung, das Netzwerk sowie die Validierungsarbeiten.
 
 ## Einstieg

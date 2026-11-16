@@ -130,6 +130,21 @@ class ProtectionTests(unittest.TestCase):
         prompt = ts.build_translation_prompt("x", "pl", "Polish", g)
         self.assertIn("\u27e6SC", prompt)
 
+    def test_localize_widget_blocks_handles_all_pages(self) -> None:
+        subdir_en = (
+            "# SoftCloud Node Linux\n\n"
+            "```{anywidget} ../widgets/voice-player.mjs\n"
+            '{\n  "page": "projects-linux"\n}\n'
+            "```\n"
+        )
+        localized_pl = ts.localize_widget_blocks(subdir_en, "pl")
+        self.assertIn('"page": "projects-linux",\n  "locale": "pl"', localized_pl)
+        self.assertIn("../widgets/voice-player.mjs", localized_pl)
+
+        relocalized_fr = ts.localize_widget_blocks(localized_pl, "fr")
+        self.assertIn('"page": "projects-linux",\n  "locale": "fr"', relocalized_fr)
+        self.assertNotIn('"locale": "pl"', relocalized_fr)
+
 
 class UpdateTests(Base):
     def test_stale_existing_translation_is_updated_not_skipped(self) -> None:

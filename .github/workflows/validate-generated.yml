@@ -40,7 +40,7 @@ jobs:
       - name: Verify localized narration audio checksums (API-free)
         run: |
           . .venv/bin/activate
-          python tools/generate_audio.py --all-locales --narrated-only --check-only
+          python tools/generate_audio.py --all-locales --narrated-only --check-only --progressive
 
       - name: Verify multilingual configuration and progressive publication
         run: |
