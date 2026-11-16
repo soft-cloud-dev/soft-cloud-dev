@@ -651,7 +651,6 @@
       "translation_model": "gemini-2.5-flash"
     },
     "projects/freeipa.md": {
-      "accepted_from": "human_edit",
       "code_block_count": 0,
       "code_fingerprint_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "dependency_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
@@ -678,9 +677,9 @@
         {
           "index": "1",
           "source_heading": "FreeIPA Identity & Directory",
-          "source_sha256": "94b81158784c9e3ea773d1b8814c23e7122e93fe013dd678d53a6b7b5b900767",
+          "source_sha256": "5e9c568b90be8eeae921df95627945940c70d16dfb2f1af2654ea0eab7580435",
           "translated_heading": "FreeIPA-Identität & Verzeichnis",
-          "translated_sha256": "c32fe8733ac786c43c6cd799719993a9d15037fad0a7f2661954c807682e3465"
+          "translated_sha256": "5ea2f4df9c247e8faa7ea39b3583837c101eb8ec07fa4f0f47a2b93cb6ea8cd4"
         },
         {
           "index": "2",
@@ -690,10 +689,10 @@
           "translated_sha256": "dea4273583bd2458c59af651f166eba01c789845efd2b61d831e4fddae01ca37"
         }
       ],
-      "source_commit": "e5f63d7112d050ab36c51c598eac405c6244dd45",
+      "source_commit": "36a0bf1724f5bda9997cf9a9d24431096de2b907",
       "source_path": "projects/freeipa.md",
-      "source_sha256": "ae43d6974c92c50ab6f72d563d47a21ba46d9aa06d7f5ab59430bbdb179e20e1",
-      "translated_sha256": "216d09c8139e3c9906d9703de5308010d24cc44386f808bc109f2fb3d203776c",
+      "source_sha256": "bf484e5f3e167464649599642dd073894ab08d01504a940217eb6e8a1e57d81e",
+      "translated_sha256": "dc31ce6a13737ee440808b85cd6825983144bc69a77da701ab786f9980eaf279",
       "translation_model": "gemini-2.5-flash"
     },
     "projects/linux.md": {
@@ -723,9 +722,9 @@
         {
           "index": "1",
           "source_heading": "SoftCloud Node Linux",
-          "source_sha256": "4cd21f6b78c40916a969968a84f89cf473b4ea35648007e21237c2373fa27a3f",
+          "source_sha256": "98d433d6001ced043b6605bc042f896913d6a9f6169948b80821bbbdbad3381e",
           "translated_heading": "SoftCloud Node Linux",
-          "translated_sha256": "b443dbbd9bdb2682cfe0757b0ecc423f3ad7fb3fab59298cae72d2c8215e8dfa"
+          "translated_sha256": "35ecd1eb3f8fdc263eb1f7e0ae8a2f17e852a04809c8f0ce2dde94fcb567e1ef"
         },
         {
           "index": "2",
@@ -742,10 +741,10 @@
           "translated_sha256": "0943578eca6108882e88f70e9be13b82c81109f05c0cfadc747ee478adad1acf"
         }
       ],
-      "source_commit": "d6884008eda9ef4cd996b72a2061a67e4e5386f0",
+      "source_commit": "36a0bf1724f5bda9997cf9a9d24431096de2b907",
       "source_path": "projects/linux.md",
-      "source_sha256": "02803cf87db79bbb6f665dcd5e1f87f912a994fa7906997c04ab7bdbdc77a933",
-      "translated_sha256": "12aa58a33b83d1d3f458a206a3c21730eae83399d0ee9ba595456c3b211f0ec1",
+      "source_sha256": "ab6cb3d31327735e571f3a8c29d9fd96461d39a924d909c3cbe953f20e13a6dc",
+      "translated_sha256": "d2b55e99c05624092766b0fe277b628959237530976df93049f21f172d58aa3d",
       "translation_model": "gemini-2.5-flash"
     },
     "ui-library.md": {
@@ -803,7 +802,7 @@
   },
   "glossary_sha256": "49d88d6d5cc4d25bd538b6e7621497026343e7944687c1c6758b3f91848eadc4",
   "locale": "de",
-  "provenance_sha256": "90811be2454fa05325b7c468001e15deddd4b20b42abfbea1c03902dc71d71e4",
+  "provenance_sha256": "07f0d14148e9619777f2a939fd9ba1d7abd1ec4867708d2e1e0e2f02588d9bcd",
   "schema_version": "1.0",
   "source_locale": "en"
 }

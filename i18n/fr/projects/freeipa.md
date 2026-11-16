@@ -5,6 +5,13 @@ description: "Point d'entrée pour le laboratoire SoftCloud FreeIPA publié de m
 
 # Identité et annuaire FreeIPA
 
+```{anywidget} ../widgets/voice-player.mjs
+{
+  "page": "projects-freeipa",
+  "locale": "fr"
+}
+```
+
 FreeIPA est le laboratoire de SoftCloud axé sur l'identité, les services d'annuaire, l'authentification et les politiques d'accès.
 
 Cette page est un **point d'entrée de découverte**, et non un duplicata de la documentation technique du laboratoire. Les détails d'implémentation, le statut opérationnel, les instructions de configuration et les preuves de publication relèvent de la publication dédiée.

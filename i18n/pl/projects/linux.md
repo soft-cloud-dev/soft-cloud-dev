@@ -5,6 +5,13 @@ description: Architektura węzłów Linux i dokumentacja budowania dla hiperwizo
 
 # SoftCloud Node Linux
 
+```{anywidget} ../widgets/voice-player.mjs
+{
+  "page": "projects-linux",
+  "locale": "pl"
+}
+```
+
 Projekt SoftCloud Node Linux bada węzły Kubernetes z systemem Linux działające jako maszyny wirtualne pod kontrolą hiperwizora FreeBSD bhyve. Dokumentacja projektu obejmuje proces budowania obrazów, architekturę rozruchu, środowisko uruchomieniowe kontenerów, sieć oraz prace walidacyjne.
 
 ## Zacznij tutaj

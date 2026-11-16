@@ -183,6 +183,45 @@ class TestProgressivePublication(unittest.TestCase):
             "/components",
         )
 
+    def test_all_main_pages_include_voice_player_widget(self) -> None:
+        import json
+        import re
+
+        widget_re = re.compile(
+            r"```\{anywidget\}\s+([^\n]+)\n(\{.*?\})\n```",
+            re.DOTALL,
+        )
+        main_pages = [
+            ("README.md", "./widgets/voice-player.mjs", "readme", True),
+            ("introduction.md", "./widgets/voice-player.mjs", "introduction", True),
+            ("guides.md", "./widgets/voice-player.mjs", "guides", True),
+            ("notebooks.md", "./widgets/voice-player.mjs", "notebooks", True),
+            ("ui-library.md", "./widgets/voice-player.mjs", "ui-library", True),
+            ("projects.md", "./widgets/voice-player.mjs", "projects", True),
+            ("architecture.md", "./widgets/voice-player.mjs", "architecture", True),
+            ("contributing.md", "./widgets/voice-player.mjs", "contributing", True),
+            ("projects/linux.md", "../widgets/voice-player.mjs", "projects-linux", True),
+            ("projects/freeipa.md", "../widgets/voice-player.mjs", "projects-freeipa", True),
+            ("components/index.md", "../widgets/voice-player.mjs", "components-index", False),
+        ]
+        for rel, expected_widget, expected_page, is_translated in main_pages:
+            content = (ROOT / rel).read_text(encoding="utf-8")
+            match = widget_re.search(content)
+            self.assertIsNotNone(match, f"Missing anywidget voice-player in {rel}")
+            self.assertEqual(match.group(1).strip(), expected_widget, rel)
+            payload = json.loads(match.group(2))
+            self.assertEqual(payload, {"page": expected_page}, rel)
+
+            if is_translated:
+                for loc in ("de", "es", "fr", "pl"):
+                    loc_path = ROOT / "i18n" / loc / rel
+                    loc_content = loc_path.read_text(encoding="utf-8")
+                    loc_match = widget_re.search(loc_content)
+                    self.assertIsNotNone(loc_match, f"Missing anywidget voice-player in i18n/{loc}/{rel}")
+                    self.assertEqual(loc_match.group(1).strip(), expected_widget, f"i18n/{loc}/{rel}")
+                    loc_payload = json.loads(loc_match.group(2))
+                    self.assertEqual(loc_payload, {"page": expected_page, "locale": loc}, f"i18n/{loc}/{rel}")
+
 
 if __name__ == "__main__":
     unittest.main()

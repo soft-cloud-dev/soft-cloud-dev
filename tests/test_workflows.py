@@ -76,6 +76,7 @@ class WorkflowIntegrityTests(unittest.TestCase):
         self.assertNotIn("GEMINI_API_KEY", content, "validate-generated.yml must not reference GEMINI_API_KEY")
         self.assertIn("--check-only", content)
         self.assertIn("--progressive", content)
+        self.assertIn("generate_audio.py --all-locales --narrated-only --check-only --progressive", content)
 
     def test_reconcile_localization_workflow_structure(self):
         reconcile_path = self.workflows_dir / "reconcile-localization.yml"

@@ -106,6 +106,33 @@ class PlannerTests(unittest.TestCase):
         self.assertEqual(en["narration"], "stale")
         self.assertIn("voice changed", en["narration_reasons"])
 
+    def test_tts_quality_metadata_changes_invalidate_audio_only(self) -> None:
+        import re
+
+        cfg = self.root / "i18n/locales.yml"
+        text = cfg.read_text(encoding="utf-8")
+        updated = re.sub(
+            r'(mp3_bitrate:\s*["\']?)\d+[kK](["\']?)',
+            r"\g<1>192k\g<2>",
+            text,
+            count=1,
+        )
+        updated = re.sub(
+            r'^([ \t]*)(voice_name:\s*"Kore".*)$',
+            r'\1\2\n\1language_code: "en-US"\n\1speech_style: "Studio overview."',
+            updated,
+            count=1,
+            flags=re.MULTILINE,
+        )
+        cfg.write_text(updated, encoding="utf-8")
+        plan = pl.build_plan(self.root)
+        en = next(d for d in plan["locales"]["en"]["documents"] if d["document"] == "introduction.md")
+        self.assertEqual(en["narration"], "stale")
+        self.assertEqual(en["actions"], ["narrate"])
+        self.assertIn("MP3 bitrate changed", en["narration_reasons"])
+        self.assertIn("language code changed", en["narration_reasons"])
+        self.assertIn("speech style changed", en["narration_reasons"])
+
     def test_glossary_change_reassesses_translations(self) -> None:
         g = self.root / "i18n/glossary.yml"
         g.write_text(g.read_text(encoding="utf-8") + "\n# policy edit\ninvariant_terms_extra: [\"X\"]\n", encoding="utf-8")

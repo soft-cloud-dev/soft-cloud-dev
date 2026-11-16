@@ -133,11 +133,17 @@ class NarrationConfig:
     sample_rate: int = DEFAULT_SAMPLE_RATE
     mp3_bitrate: str = DEFAULT_MP3_BITRATE
     max_chunk_chars: int = DEFAULT_MAX_CHUNK_CHARS
+    language_code: str = ""
+    speech_style: str = ""
 
     def __post_init__(self) -> None:
         validate_tts_model_identifier(self.tts_model)
         if not (self.text_model or "").strip():
             raise NarrationError("Text model identifier cannot be empty.")
+        if not re.match(r"^\d+[kK]$", (self.mp3_bitrate or "").strip()):
+            raise NarrationError(f"Invalid MP3 bitrate: {self.mp3_bitrate!r}")
+        if self.sample_rate <= 0:
+            raise NarrationError(f"Invalid sample rate: {self.sample_rate!r}")
 
     def text_config_dict(self) -> dict[str, Any]:
         return {
@@ -149,7 +155,7 @@ class NarrationConfig:
         }
 
     def tts_config_dict(self) -> dict[str, Any]:
-        return {
+        cfg: dict[str, Any] = {
             "schema_version": self.schema_version,
             "locale": self.locale,
             "tts_model": self.tts_model,
@@ -158,6 +164,11 @@ class NarrationConfig:
             "sample_rate": self.sample_rate,
             "mp3_bitrate": self.mp3_bitrate,
         }
+        if self.language_code:
+            cfg["language_code"] = self.language_code
+        if self.speech_style:
+            cfg["speech_style"] = self.speech_style
+        return cfg
 
     def full_config_dict(self) -> dict[str, Any]:
         return {
@@ -198,6 +209,10 @@ def resolve_locale_narration_config(
     cli_text_model: str | None = None,
     cli_tts_model: str | None = None,
     cli_voice: str | None = None,
+    cli_mp3_bitrate: str | None = None,
+    cli_sample_rate: int | None = None,
+    cli_language_code: str | None = None,
+    cli_speech_style: str | None = None,
 ) -> NarrationConfig:
     """Resolve NarrationConfig for a locale from i18n/locales.yml, respecting explicit CLI overrides."""
     norm_locale = (locale or DEFAULT_LOCALE).strip().lower()
@@ -225,6 +240,26 @@ def resolve_locale_narration_config(
         if (cli_voice and cli_voice != DEFAULT_VOICE_NAME)
         else str(voice_cfg.get("voice_name") or DEFAULT_VOICE_NAME)
     )
+    mp3_bitrate = (
+        cli_mp3_bitrate.strip()
+        if (cli_mp3_bitrate and cli_mp3_bitrate.strip())
+        else str(voice_cfg.get("mp3_bitrate") or DEFAULT_MP3_BITRATE).strip()
+    )
+    sample_rate = (
+        int(cli_sample_rate)
+        if cli_sample_rate is not None
+        else int(voice_cfg.get("sample_rate") or DEFAULT_SAMPLE_RATE)
+    )
+    language_code = (
+        cli_language_code.strip()
+        if cli_language_code is not None
+        else str(voice_cfg.get("language_code") or "").strip()
+    )
+    speech_style = (
+        cli_speech_style.strip()
+        if cli_speech_style is not None
+        else str(voice_cfg.get("speech_style") or "").strip()
+    )
     prompt = build_code_summary_system_prompt(norm_locale)
 
     return NarrationConfig(
@@ -232,6 +267,10 @@ def resolve_locale_narration_config(
         text_model=text_model,
         tts_model=tts_model,
         voice_name=voice_name,
+        sample_rate=sample_rate,
+        mp3_bitrate=mp3_bitrate,
+        language_code=language_code,
+        speech_style=speech_style,
         text_system_prompt=prompt,
     )
 
@@ -851,15 +890,9 @@ class GeminiClient:
                     ) from exc
 
                 if status == 404:
-                    if "models/gemini-3.8-flash-tts" in endpoint or "models/gemini-2.5-flash-preview-tts" in endpoint:
-                        for fb_tts in ("gemini-3.8-flash-lite-tts", "gemini-3.1-flash-tts-preview", "gemini-2.5-flash-preview-tts", "gemini-2.0-flash-preview-tts"):
-                            if f"models/{fb_tts}" not in endpoint:
-                                fb_ep = re.sub(r"models/[^/]+-tts", f"models/{fb_tts}", endpoint)
-                                try:
-                                    return self._request_json(method, fb_ep, payload)
-                                except Exception:
-                                    continue
-                    elif "models/gemini-3.8-flash" in endpoint or "models/gemini-2.5-flash" in endpoint:
+                    if "-tts" not in endpoint and (
+                        "models/gemini-3.8-flash" in endpoint or "models/gemini-2.5-flash" in endpoint
+                    ):
                         for fb_text in ("gemini-3.5-flash-lite", "gemini-3-flash-preview", "gemini-3.5-flash", "gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"):
                             if f"models/{fb_text}" not in endpoint:
                                 fb_ep = re.sub(r"models/gemini-[0-9.]+-flash", f"models/{fb_text}", endpoint)
@@ -899,7 +932,8 @@ class GeminiClient:
         try:
             info = self._request_json("GET", f"models/{model_id}")
         except NarrationError as exc:
-            if "404" in str(exc):
+            # Never silently fall back to lower-tier or text models when verifying a TTS model.
+            if "-tts" not in model_id.lower() and "404" in str(exc):
                 for fb in ("gemini-3.5-flash-lite", "gemini-3-flash-preview", "gemini-3.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"):
                     try:
                         info = self._request_json("GET", f"models/{fb}")
@@ -968,25 +1002,30 @@ class GeminiClient:
         Returns (raw_audio_bytes, mime_type).
         """
         self.verify_model_available(config.tts_model)
+        part: dict[str, Any] = {"text": text}
+        if config.speech_style:
+            part["speechMetadata"] = {"style": config.speech_style}
+
+        speech_config: dict[str, Any] = {
+            "voiceConfig": {
+                "prebuiltVoiceConfig": {
+                    "voiceName": config.voice_name,
+                }
+            }
+        }
+        if config.language_code:
+            speech_config["languageCode"] = config.language_code
+
         payload: dict[str, Any] = {
             "contents": [
                 {
-                    "parts": [
-                        {
-                            "text": text,
-                        }
-                    ]
+                    "role": "user",
+                    "parts": [part],
                 }
             ],
             "generationConfig": {
                 "responseModalities": ["AUDIO"],
-                "speechConfig": {
-                    "voiceConfig": {
-                        "prebuiltVoiceConfig": {
-                            "voiceName": config.voice_name,
-                        }
-                    }
-                },
+                "speechConfig": speech_config,
             },
         }
         resp = self._request_json(
@@ -1445,7 +1484,7 @@ def transcode_to_mp3(
     return proc.stdout
 
 
-def probe_mp3_file(path: Path) -> float:
+def probe_mp3_file(path: Path, mp3_bitrate: str = DEFAULT_MP3_BITRATE) -> float:
     """Validate that path is a readable, well-formed MP3 file with positive duration."""
     if not path.is_file():
         raise NarrationError(f"Audio file does not exist: {path}")
@@ -1490,8 +1529,10 @@ def probe_mp3_file(path: Path) -> float:
         return round(duration, 3)
 
     # Pure-Python MP3 frame duration fallback when ffprobe is absent
-    # At 64 kbps (8000 bytes/sec), estimate duration from file size
-    estimated_duration = len(data) / 8000.0
+    bitrate_match = re.match(r"^\s*(\d+)\s*[kK]\s*$", mp3_bitrate or "")
+    kbps = int(bitrate_match.group(1)) if bitrate_match else 64
+    bytes_per_sec = max(1000.0, (kbps * 1000.0) / 8.0)
+    estimated_duration = len(data) / bytes_per_sec
     if estimated_duration <= 0.05:
         raise NarrationError(f"Estimated MP3 duration too short ({estimated_duration}s) in {path}")
     return round(estimated_duration, 3)
@@ -1571,7 +1612,7 @@ def validate_chunk_artifact(
         actual_size = audio_path.stat().st_size
         if actual_size != manifest_chunk.get("size_bytes"):
             return False
-        duration = probe_mp3_file(audio_path)
+        duration = probe_mp3_file(audio_path, mp3_bitrate=config.mp3_bitrate)
         rec_duration = float(manifest_chunk.get("duration_seconds", 0.0))
         if rec_duration <= 0.05 or abs(duration - rec_duration) > 0.5:
             return False
@@ -1586,6 +1627,38 @@ def validate_chunk_artifact(
 # ---------------------------------------------------------------------------
 
 
+def _recorded_config_from_manifest(
+    manifest: dict[str, Any],
+    target_config: NarrationConfig,
+) -> NarrationConfig | None:
+    """Build a NarrationConfig from a previously generated manifest for progressive check-only verification."""
+    cfg_dict = manifest.get("narration_config")
+    if not isinstance(cfg_dict, dict):
+        return None
+    if cfg_dict.get("locale") != target_config.locale:
+        return None
+    if cfg_dict.get("tts_model") != target_config.tts_model:
+        return None
+    try:
+        return NarrationConfig(
+            schema_version=str(cfg_dict.get("schema_version") or target_config.schema_version),
+            locale=target_config.locale,
+            text_model=str(cfg_dict.get("text_model") or target_config.text_model),
+            text_temperature=float(cfg_dict.get("text_temperature", target_config.text_temperature)),
+            text_system_prompt=str(cfg_dict.get("text_system_prompt") or target_config.text_system_prompt),
+            tts_model=str(cfg_dict.get("tts_model") or target_config.tts_model),
+            voice_name=str(cfg_dict.get("voice_name") or target_config.voice_name),
+            audio_format=str(cfg_dict.get("audio_format") or target_config.audio_format),
+            sample_rate=int(cfg_dict.get("sample_rate") or DEFAULT_SAMPLE_RATE),
+            mp3_bitrate=str(cfg_dict.get("mp3_bitrate") or DEFAULT_MP3_BITRATE),
+            max_chunk_chars=int(cfg_dict.get("max_chunk_chars") or DEFAULT_MAX_CHUNK_CHARS),
+            language_code=str(cfg_dict.get("language_code") or ""),
+            speech_style=str(cfg_dict.get("speech_style") or ""),
+        )
+    except Exception:
+        return None
+
+
 def process_page(
     source_path: Path,
     root: Path,
@@ -1594,8 +1667,56 @@ def process_page(
     client: GeminiClient | None,
     check_only: bool = False,
     offline_mode: bool = False,
+    progressive: bool = False,
 ) -> dict[str, Any]:
     """Process and validate a single documentation page for a specific locale."""
+    try:
+        return _process_page_with_config(
+            source_path=source_path,
+            root=root,
+            audio_root=audio_root,
+            config=config,
+            client=client,
+            check_only=check_only,
+            offline_mode=offline_mode,
+        )
+    except NarrationError:
+        if not (check_only and progressive):
+            raise
+        doc = extract_document(source_path, root, locale=config.locale)
+        manifest_path = audio_root / doc.page_id / "manifest.json"
+        if not manifest_path.is_file():
+            raise
+        try:
+            stored_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except Exception:
+            stored_manifest = None
+        if not isinstance(stored_manifest, dict):
+            raise
+        recorded_config = _recorded_config_from_manifest(stored_manifest, config)
+        if recorded_config is None or recorded_config.config_hash() == config.config_hash():
+            raise
+        return _process_page_with_config(
+            source_path=source_path,
+            root=root,
+            audio_root=audio_root,
+            config=recorded_config,
+            client=None,
+            check_only=True,
+            offline_mode=offline_mode,
+        )
+
+
+def _process_page_with_config(
+    source_path: Path,
+    root: Path,
+    audio_root: Path,
+    config: NarrationConfig,
+    client: GeminiClient | None,
+    check_only: bool = False,
+    offline_mode: bool = False,
+) -> dict[str, Any]:
+    """Process and validate a single documentation page for a specific NarrationConfig."""
     doc = extract_document(source_path, root, locale=config.locale)
     page_audio_dir = audio_root / doc.page_id
     transcript_path = page_audio_dir / "transcript.json"
@@ -1765,7 +1886,7 @@ def process_page(
             bitrate=config.mp3_bitrate,
         )
         atomic_write_bytes(audio_path, mp3_bytes)
-        duration = probe_mp3_file(audio_path)
+        duration = probe_mp3_file(audio_path, mp3_bitrate=config.mp3_bitrate)
         audio_sha = sha256_file(audio_path)
 
         new_entry = {
@@ -2127,6 +2248,11 @@ def main(argv: list[str] | None = None) -> int:
         help="Verify completeness, checksums, formats, and source hashes without writing or calling APIs.",
     )
     parser.add_argument(
+        "--progressive",
+        action="store_true",
+        help="In --check-only mode, allow complete valid manifests from an earlier narration config awaiting reconciliation.",
+    )
+    parser.add_argument(
         "--verify-build-dir",
         default="",
         help="Verify and sync published static audio assets inside the built HTML directory (e.g. _build/html).",
@@ -2160,6 +2286,21 @@ def main(argv: list[str] | None = None) -> int:
         "--voice",
         default=None,
         help="Prebuilt voice name for TTS synthesis (defaults to voice config in i18n/locales.yml).",
+    )
+    parser.add_argument(
+        "--mp3-bitrate",
+        default=None,
+        help="Target MP3 bitrate for TTS transcoding (defaults to voice config in i18n/locales.yml).",
+    )
+    parser.add_argument(
+        "--language-code",
+        default=None,
+        help="Optional BCP-47 speechConfig.languageCode override (defaults to voice config in i18n/locales.yml).",
+    )
+    parser.add_argument(
+        "--speech-style",
+        default=None,
+        help="Optional speechMetadata.style delivery instruction (defaults to voice config in i18n/locales.yml).",
     )
     args = parser.parse_args(argv)
 
@@ -2196,6 +2337,9 @@ def main(argv: list[str] | None = None) -> int:
                 cli_text_model=args.text_model or os.environ.get("SOFTCLOUD_TEXT_MODEL"),
                 cli_tts_model=args.tts_model or os.environ.get("SOFTCLOUD_TTS_MODEL"),
                 cli_voice=args.voice or os.environ.get("SOFTCLOUD_TTS_VOICE"),
+                cli_mp3_bitrate=args.mp3_bitrate or os.environ.get("SOFTCLOUD_MP3_BITRATE"),
+                cli_language_code=args.language_code,
+                cli_speech_style=args.speech_style,
             )
 
             plan_path_obj = Path(args.plan).resolve() if args.plan else None
@@ -2225,12 +2369,14 @@ def main(argv: list[str] | None = None) -> int:
                     client=client,
                     check_only=args.check_only,
                     offline_mode=is_offline,
+                    progressive=args.progressive,
                 )
                 manifests.append(manifest)
+                pending_recon = manifest.get("config_hash") != config.config_hash()
                 mode_label = (
-                    "Verified"
-                    if (args.check_only or is_offline)
-                    else "Generated/Validated"
+                    "Verified (pending reconciliation)"
+                    if (args.check_only and pending_recon)
+                    else ("Verified" if (args.check_only or is_offline) else "Generated/Validated")
                 )
                 audio_rel_dir = audio_root.relative_to(root).as_posix()
                 print(

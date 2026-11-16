@@ -5,6 +5,12 @@ description: Linux node architecture and build documentation for FreeBSD bhyve.
 
 # SoftCloud Node Linux
 
+```{anywidget} ../widgets/voice-player.mjs
+{
+  "page": "projects-linux"
+}
+```
+
 SoftCloud Node Linux explores Linux Kubernetes nodes running as virtual machines under FreeBSD bhyve. The project documentation covers the image build process, boot architecture, container runtime, networking, and validation work.
 
 ## Start here
