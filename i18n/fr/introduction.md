@@ -9,6 +9,15 @@
 
 **Software Cloud** fournit un cadre ouvert et reproductible pour la recherche informatique, la documentation architecturale et l'ingénierie logicielle cloud.
 
+## SoftCloud en mouvement
+
+:::{figure} assets/static/softcloud-campaign.svg
+:alt: Publicité animée de Software Cloud : la silhouette noire d'origine danse avec des câbles d'écouteurs blancs sur fond rose, près du logo softcloud.dev et du slogan Build. Deploy. Scale.
+:width: 100%
+
+Concevoir. Déployer. Faire évoluer. — [softcloud.dev](https://softcloud.dev/)
+:::
+
 ---
 
 ## Le défi de la reproductibilité informatique
