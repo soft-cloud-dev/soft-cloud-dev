@@ -5,6 +5,12 @@ description: Entry point for the independently published SoftCloud FreeIPA labor
 
 # FreeIPA Identity & Directory
 
+```{anywidget} ../widgets/voice-player.mjs
+{
+  "page": "projects-freeipa"
+}
+```
+
 FreeIPA is the SoftCloud laboratory focused on identity, directory services, authentication, and access policy.
 
 This page is a **discovery entry point**, not a duplicate of the laboratory's technical documentation. Implementation details, operational status, configuration instructions, and release evidence belong to the dedicated publication.

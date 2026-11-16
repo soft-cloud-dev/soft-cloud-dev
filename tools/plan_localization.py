@@ -116,6 +116,14 @@ def audio_state(
         reasons.append("TTS model changed")
     if voice.get("text_model") and cfg.get("text_model") != voice["text_model"]:
         reasons.append("code-explanation model changed")
+    if voice.get("mp3_bitrate") and cfg.get("mp3_bitrate") != voice["mp3_bitrate"]:
+        reasons.append("MP3 bitrate changed")
+    if voice.get("sample_rate") and cfg.get("sample_rate") != int(voice["sample_rate"]):
+        reasons.append("sample rate changed")
+    if voice.get("language_code") and cfg.get("language_code") != voice["language_code"]:
+        reasons.append("language code changed")
+    if voice.get("speech_style") and cfg.get("speech_style") != voice["speech_style"]:
+        reasons.append("speech style changed")
     corrupt: list[str] = []
     if not (page_dir / str(manifest.get("transcript_file", "transcript.json"))).is_file():
         corrupt.append("transcript missing")

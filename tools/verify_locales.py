@@ -691,6 +691,8 @@ def main(argv: list[str] | None = None) -> int:
 
     # 3. Localized Narration Audio Verification across all enabled locales
     ga_args = ["--all-locales", "--narrated-only", "--check-only"]
+    if args.progressive:
+        ga_args.append("--progressive")
     if args.verify_build_dir:
         ga_args.extend(["--verify-build-dir", args.verify_build_dir])
     if ga.main(ga_args) != 0:
