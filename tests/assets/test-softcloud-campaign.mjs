@@ -28,8 +28,12 @@ test('SoftCloud animation has branding, accessibility and reduced motion', () =>
   assert.doesNotMatch(animated, /<c2pa:manifest>/);
 });
 
-test('Introduction references the checked-in animated SVG via a MyST figure', () => {
-  assert.match(introduction, /:::\{figure\} assets\/static\/softcloud-campaign\.svg/);
-  assert.match(introduction, /:alt: Animated Software Cloud advertisement/);
-  assert.match(introduction, /:width: 100%/);
+test('Introduction campaign is mounted only by its widget without altering narrated Markdown', () => {
+  const widget = readFileSync(new URL('../../widgets/voice-player.mjs', import.meta.url), 'utf8');
+  assert.match(introduction, /\{anywidget\} \.\/widgets\/voice-player\.mjs/);
+  assert.doesNotMatch(introduction, /softcloud-campaign\.svg/);
+  assert.match(widget, /model\.get\("page"\) === "introduction"/);
+  assert.match(widget, /campaignImage\.src = "\/assets\/static\/softcloud-campaign\.svg"/);
+  assert.match(widget, /campaignImage\.alt = "/);
+  assert.match(widget, /campaignFigure\?\.remove\(\)/);
 });
