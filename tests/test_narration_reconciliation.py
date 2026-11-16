@@ -130,11 +130,11 @@ locales:
     def test_visual_images_do_not_change_spoken_content(self) -> None:
         """Adding standalone or inline images must not invalidate audio chunks."""
         page = self.tmp_dir / "media.md"
-        plain = "# Introduction\\n\\nThe content stays the same.\\n\\n## Next\\n\\nContinue reading.\\n"
+        plain = "# Introduction\n\nThe content stays the same.\n\n## Next\n\nContinue reading.\n"
         with_standalone_image = plain.replace(
-            "The content stays the same.\\n\\n",
-            "The content stays the same.\\n\\n"
-            "![Animated silhouette with earphones](assets/static/animations/softcloud-introduction.gif)\\n\\n",
+            "The content stays the same.\n\n",
+            "The content stays the same.\n\n"
+            "![Animated silhouette with earphones](assets/static/animations/softcloud-introduction.gif)\n\n",
         )
         with_inline_image = plain.replace(
             "The content stays the same.",
