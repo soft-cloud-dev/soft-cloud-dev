@@ -70,7 +70,7 @@
   "config_hash": "699663dab374726886e538e3564c70a1712d5e0736b0e01565f579a19f9afcfa",
   "locale": "fr",
   "logical_source_path": "projects/linux.md",
-  "manifest_sha256": "776656a83ef4c23eb13581da043a6c944c7adeba1307593825fc0f36829499a2",
+  "manifest_sha256": "8f69598ff0e021a17c7e66ececb16bda2e0a2c58e1b622068dedbe1117e66948",
   "narration_config": {
     "audio_format": "mp3",
     "locale": "fr",
@@ -87,11 +87,11 @@
   "page_id": "projects-linux",
   "page_source_hash": "12b54e98de0c99e5b3529ba5701ab93f5b7e59b3dbc348c5c4f6c3b52ac1a35e",
   "schema_version": "1.0.0",
-  "source_file_sha256": "1818fe79e33fd146f30481c64a6894710219450688bf4313639f6bb4a6fda375",
+  "source_file_sha256": "8c07340919cf6d5c69802c12b69383f772b546a4ac3e978e94d04beb7f8d979e",
   "source_path": "i18n/fr/projects/linux.md",
   "status": "complete",
   "total_chunks": 3,
   "total_duration_seconds": 43.776,
   "transcript_file": "transcript.json",
-  "transcript_sha256": "a6f3e931735843fba8b1e8fa9084e6b3bb68a5b5f413d7cc1e3c30250567594b"
+  "transcript_sha256": "b9ff63d28a4456f95b87c4964b030659975ba72d905eb0a94feb25034db4cf85"
 }
