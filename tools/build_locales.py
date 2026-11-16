@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import html as html_lib
 import json
 import os
 import re
@@ -37,6 +38,7 @@ if str(TOOLS_DIR) not in sys.path:
     sys.path.insert(0, str(TOOLS_DIR))
 
 from i18n_utils import (
+    BREADCRUMB_LABELS,
     DEFAULT_LOCALE_FLAGS,
     SEARCH_LABELS,
     SWITCHER_UI_KEYS,
@@ -46,8 +48,10 @@ from i18n_utils import (
     discover_toc_files,
     dump_yaml_text,
     get_enabled_locales,
+    infer_locale_and_slug,
     load_locales_config,
     load_yaml_file,
+    load_yaml_text,
     page_slug_from_rel_path,
     route_url_for_page,
     sha256_file,
@@ -647,6 +651,220 @@ def run_jupyter_book_in_workspace(ws: Path, locale_code: str, locale_base_url: s
     return html_out
 
 
+def _clean_inline_markdown(text: str) -> str:
+    """Strip inline Markdown markers from headings/titles for plain-text breadcrumb labels."""
+    cleaned = re.sub(r"`([^`]+)`", r"\1", text)
+    cleaned = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", cleaned)
+    cleaned = re.sub(r"\*\*([^*]+)\*\*", r"\1", cleaned)
+    cleaned = re.sub(r"\*([^*]+)\*", r"\1", cleaned)
+    return re.sub(r"\s+", " ", cleaned).strip()
+
+
+def _extract_document_title(doc_path: Path, fallback: str) -> str:
+    """Resolve a human-readable document title from frontmatter or first H1 heading."""
+    if not doc_path.is_file():
+        return fallback
+    try:
+        raw = doc_path.read_text(encoding="utf-8")
+    except Exception:
+        return fallback
+
+    if doc_path.suffix.lower() == ".ipynb":
+        try:
+            nb = json.loads(raw)
+            for cell in nb.get("cells", []):
+                if cell.get("cell_type") == "markdown":
+                    txt = "".join(cell.get("source", []))
+                    m = re.search(r"^#\s+(.+)$", txt, re.MULTILINE)
+                    if m:
+                        return _clean_inline_markdown(m.group(1))
+        except Exception:
+            return fallback
+        return fallback
+
+    body = raw
+    fm_match = FRONTMATTER_BLOCK_RE.match(raw)
+    if fm_match:
+        body = raw[fm_match.end() :]
+        try:
+            fm_data = load_yaml_text(fm_match.group(1))
+            if isinstance(fm_data, dict):
+                for key in ("short_title", "title"):
+                    val = fm_data.get(key)
+                    if isinstance(val, str) and val.strip():
+                        return _clean_inline_markdown(val)
+        except Exception:
+            pass
+
+    in_fence = False
+    fence_char = ""
+    fence_len = 0
+    for line in body.splitlines():
+        fence_m = re.match(r"^[ \t]*(`{3,}|~{3,}|:{3,})", line)
+        if not in_fence and fence_m:
+            in_fence = True
+            fence_char = fence_m.group(1)[0]
+            fence_len = len(fence_m.group(1))
+            continue
+        if in_fence:
+            if re.match(rf"^[ \t]*{re.escape(fence_char)}{{{fence_len},}}[ \t]*$", line):
+                in_fence = False
+            continue
+        h1_m = re.match(r"^#\s+(.+?)\s*$", line.strip())
+        if h1_m:
+            return _clean_inline_markdown(h1_m.group(1))
+
+    return fallback
+
+
+def _find_folder_landing_file(
+    folder_entry: dict[str, Any],
+    source_root: Path,
+    fallback_root: Path,
+    staged_files: set[str],
+) -> str | None:
+    """Identify a direct child page that serves as a TOC folder's landing/index page."""
+    folder_title = str(folder_entry.get("title") or "").strip().casefold()
+    for child in folder_entry.get("children", []):
+        if not isinstance(child, dict):
+            continue
+        rel_file = child.get("file")
+        if not isinstance(rel_file, str) or rel_file not in staged_files:
+            continue
+        if Path(rel_file).stem.lower() == "index":
+            return rel_file
+        if folder_title:
+            doc_path = (source_root / rel_file) if (source_root / rel_file).is_file() else (fallback_root / rel_file)
+            doc_title = _extract_document_title(doc_path, "").casefold()
+            if doc_title and doc_title == folder_title:
+                return rel_file
+    return None
+
+
+def _build_breadcrumbs_index(
+    root: Path,
+    locales_cfg: dict[str, Any],
+    base_myst: dict[str, Any],
+    outer_base_url: str,
+    file_slug_map: dict[str, str],
+    file_key_map: dict[str, str],
+    prov_cache: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    """Build normalized per-locale breadcrumb node tables and trails from project.toc."""
+    default_locale = str(locales_cfg.get("default_locale", "en"))
+    enabled_locales = get_enabled_locales(locales_cfg)
+    toc_files = discover_toc_files(base_myst.get("project", {}).get("toc", []))
+    breadcrumbs: dict[str, Any] = {}
+
+    for code, info in enabled_locales.items():
+        prefix = str(info.get("prefix", ""))
+        source_root = (
+            root
+            if code == default_locale
+            else (root / str(info.get("source_dir", f"i18n/{code}")))
+        )
+        staged_files = {
+            rel_file
+            for rel_file in toc_files
+            if is_page_translation_current(root, code, default_locale, rel_file, prov_cache)
+        }
+        loc_myst = build_localized_myst_config(base_myst, code, info, staged_files=staged_files)
+        loc_toc = loc_myst.get("project", {}).get("toc", [])
+
+        home_label = str(loc_myst.get("project", {}).get("short_title") or "SoftCloud Hub").strip()
+        for entry in loc_toc:
+            if isinstance(entry, dict) and isinstance(entry.get("file"), str):
+                if page_slug_from_rel_path(entry["file"]) == "":
+                    if entry.get("title"):
+                        home_label = str(entry["title"]).strip()
+                    break
+        home_href = route_url_for_page(prefix, "", base_url=outer_base_url)
+
+        nodes: list[dict[str, Any]] = []
+        node_index: dict[tuple[str, str | None], int] = {}
+        trails: dict[str, list[int]] = {}
+
+        def add_node(label: str, href: str | None = None) -> int:
+            clean_label = str(label).strip()
+            clean_href = href if (isinstance(href, str) and href.startswith("/") and not href.startswith("//")) else None
+            key = (clean_label, clean_href)
+            if key not in node_index:
+                node_index[key] = len(nodes)
+                node_obj: dict[str, Any] = {"label": clean_label}
+                if clean_href is not None:
+                    node_obj["href"] = clean_href
+                nodes.append(node_obj)
+            return node_index[key]
+
+        home_idx = add_node(home_label, home_href)
+
+        def walk_toc(
+            entries: list[dict[str, Any]],
+            ancestors: list[tuple[str, str | None, str | None]],
+        ) -> None:
+            for entry in entries:
+                if not isinstance(entry, dict):
+                    continue
+                rel_file = entry.get("file")
+                children = entry.get("children")
+                if isinstance(rel_file, str) and rel_file.strip():
+                    rel_clean = rel_file.strip()
+                    if page_slug_from_rel_path(rel_clean) != "":
+                        leaf_slug = file_slug_map.get(rel_clean, page_slug_from_rel_path(rel_clean))
+                        leaf_key = file_key_map.get(rel_clean, leaf_slug)
+                        leaf_href = route_url_for_page(prefix, leaf_slug, base_url=outer_base_url)
+                        doc_path = (
+                            (source_root / rel_clean)
+                            if (source_root / rel_clean).is_file()
+                            else (root / rel_clean)
+                        )
+                        leaf_label = (
+                            str(entry.get("title") or "").strip()
+                            or _extract_document_title(doc_path, leaf_slug)
+                        )
+
+                        indices = [home_idx]
+                        for anc_title, anc_file, anc_href in ancestors:
+                            if anc_file == rel_clean:
+                                continue
+                            indices.append(add_node(anc_title, anc_href))
+                        indices.append(add_node(leaf_label, leaf_href))
+                        trails[leaf_key] = indices
+
+                if isinstance(children, list) and children:
+                    folder_title = str(entry.get("title") or "").strip()
+                    next_ancestors = list(ancestors)
+                    if folder_title:
+                        landing_file = _find_folder_landing_file(
+                            entry, source_root, root, staged_files
+                        )
+                        landing_href: str | None = None
+                        if landing_file:
+                            landing_slug = file_slug_map.get(
+                                landing_file, page_slug_from_rel_path(landing_file)
+                            )
+                            landing_href = route_url_for_page(
+                                prefix, landing_slug, base_url=outer_base_url
+                            )
+                        next_ancestors.append((folder_title, landing_file, landing_href))
+                    walk_toc(children, next_ancestors)
+
+        walk_toc(loc_toc, [])
+
+        raw_ui = info.get("ui", {})
+        aria_label = str(
+            (raw_ui.get("breadcrumbs_label") if isinstance(raw_ui, dict) else None)
+            or BREADCRUMB_LABELS.get(code, "Breadcrumbs")
+        )
+        breadcrumbs[code] = {
+            "label": aria_label,
+            "nodes": nodes,
+            "trails": trails,
+        }
+
+    return breadcrumbs
+
+
 def build_route_manifest(
     root: Path,
     locales_cfg: dict[str, Any],
@@ -681,6 +899,8 @@ def build_route_manifest(
     prov_cache: dict[str, dict[str, Any]] = {}
     pages_meta: dict[str, Any] = {}
     aliases: dict[str, str] = {}
+    file_slug_map: dict[str, str] = {}
+    file_key_map: dict[str, str] = {}
     for rel_file in toc_files:
         raw_slug = page_slug_from_rel_path(rel_file)
         flat_name = Path(raw_slug).name if raw_slug else ""
@@ -724,6 +944,8 @@ def build_route_manifest(
         if flat_slug and flat_slug != canonical_key:
             aliases[flat_slug] = canonical_key
 
+        effective_slug = active_slug
+        effective_key = canonical_key
         explicit_slug = extract_explicit_frontmatter_slug(root / rel_file)
         if explicit_slug and explicit_slug != canonical_key:
             explicit_translations: dict[str, Any] = {}
@@ -743,6 +965,30 @@ def build_route_manifest(
                 "slug": explicit_slug,
                 "translations": explicit_translations,
             }
+            if (
+                output_html_dir is None
+                or (output_html_dir / explicit_slug / "index.html").is_file()
+            ):
+                aliases[canonical_key] = explicit_slug
+                if slug_key != explicit_slug:
+                    aliases[slug_key] = explicit_slug
+                if flat_slug and flat_slug != explicit_slug:
+                    aliases[flat_slug] = explicit_slug
+                effective_slug = explicit_slug
+                effective_key = explicit_slug
+
+        file_slug_map[rel_file] = effective_slug
+        file_key_map[rel_file] = effective_key
+
+    breadcrumbs_index = _build_breadcrumbs_index(
+        root=root,
+        locales_cfg=locales_cfg,
+        base_myst=base_myst,
+        outer_base_url=outer_base_url,
+        file_slug_map=file_slug_map,
+        file_key_map=file_key_map,
+        prov_cache=prov_cache,
+    )
 
     return {
         "schema_version": "1.0",
@@ -752,6 +998,7 @@ def build_route_manifest(
         "locales": locales_meta,
         "pages": pages_meta,
         "aliases": aliases,
+        "breadcrumbs": breadcrumbs_index,
     }
 
 
@@ -832,6 +1079,176 @@ def inject_language_switcher_into_html(
     return count
 
 
+def _resolve_trail_from_manifest(
+    route_manifest: dict[str, Any],
+    locale_code: str,
+    slug: str,
+) -> tuple[str, str, list[dict[str, Any]]] | None:
+    """Resolve `(aria_label, rendered_key, items)` for `(locale_code, slug)` from route_manifest."""
+    clean_slug = slug.strip("/")
+    if not clean_slug or clean_slug.lower() in ("index", "readme"):
+        return None
+    bc_root = route_manifest.get("breadcrumbs")
+    if not isinstance(bc_root, dict):
+        return None
+    locale_bc = bc_root.get(locale_code)
+    if not isinstance(locale_bc, dict):
+        return None
+
+    nodes = locale_bc.get("nodes", [])
+    trails = locale_bc.get("trails", {})
+    aliases = route_manifest.get("aliases", {})
+    if not isinstance(nodes, list) or not isinstance(trails, dict):
+        return None
+
+    alias_target = aliases.get(clean_slug) if isinstance(aliases, dict) else None
+    resolved_key: str | None = None
+    if isinstance(trails.get(clean_slug), list):
+        resolved_key = clean_slug
+    elif alias_target and isinstance(trails.get(alias_target), list):
+        resolved_key = alias_target
+    else:
+        for cand_key in trails:
+            if cand_key.endswith(f"/{clean_slug}"):
+                resolved_key = cand_key
+                break
+
+    if not resolved_key:
+        return None
+
+    indices = trails.get(resolved_key, [])
+    if not indices:
+        return None
+
+    aria_label = str(locale_bc.get("label") or BREADCRUMB_LABELS.get(locale_code, "Breadcrumbs"))
+    items: list[dict[str, Any]] = []
+    for idx_pos, node_idx in enumerate(indices):
+        if not isinstance(node_idx, int) or node_idx < 0 or node_idx >= len(nodes):
+            continue
+        node = nodes[node_idx]
+        if not isinstance(node, dict):
+            continue
+        label = str(node.get("label") or "").strip()
+        if not label:
+            continue
+        is_current = idx_pos == len(indices) - 1
+        href = node.get("href")
+        clean_href = href if (isinstance(href, str) and href.startswith("/") and not href.startswith("//")) else None
+        items.append({"label": label, "href": clean_href, "current": is_current})
+
+    if not items:
+        return None
+    return aria_label, f"{locale_code}:{resolved_key}", items
+
+
+def render_breadcrumbs_html(
+    items: list[dict[str, Any]],
+    aria_label: str,
+    rendered_key: str,
+) -> str:
+    """Render semantic `<nav aria-label="..."><ol>...</ol></nav>` HTML for a breadcrumb trail."""
+    escaped_label = html_lib.escape(aria_label, quote=True)
+    escaped_key = html_lib.escape(rendered_key, quote=True)
+    li_parts: list[str] = []
+    for item in items:
+        text_html = html_lib.escape(str(item.get("label") or ""), quote=False)
+        href = item.get("href")
+        is_current = bool(item.get("current"))
+        if isinstance(href, str) and href.startswith("/") and not href.startswith("//"):
+            href_esc = html_lib.escape(href, quote=True)
+            current_attr = ' aria-current="page"' if is_current else ""
+            li_parts.append(
+                f'<li class="sc-breadcrumbs__item">'
+                f'<a class="sc-breadcrumbs__link" href="{href_esc}"{current_attr}>{text_html}</a>'
+                f"</li>"
+            )
+        else:
+            li_parts.append(
+                f'<li class="sc-breadcrumbs__item">'
+                f'<span class="sc-breadcrumbs__label">{text_html}</span>'
+                f"</li>"
+            )
+    return (
+        f'<nav class="sc-breadcrumbs not-prose" aria-label="{escaped_label}" '
+        f'data-sc-rendered-key="{escaped_key}">'
+        f'<ol class="sc-breadcrumbs__list">{"".join(li_parts)}</ol>'
+        f"</nav>"
+    )
+
+
+def inject_breadcrumbs_into_html(
+    html_dir: Path,
+    route_manifest: dict[str, Any],
+    locales_cfg: dict[str, Any],
+    outer_base_url: str = "",
+) -> int:
+    """Inject server-rendered breadcrumb trails on subpages and SPA sync script on all HTML pages."""
+    clean_base = outer_base_url.rstrip("/")
+    widget_src = f"{clean_base}/widgets/breadcrumbs.mjs"
+    default_locale = str(locales_cfg.get("default_locale", "en"))
+    enabled_locales = get_enabled_locales(locales_cfg)
+
+    script_snippet = (
+        f'<script type="module" data-softcloud-breadcrumbs="1">\n'
+        f'import {{ initSiteBreadcrumbs, installBreadcrumbsSync }} from "{widget_src}";\n'
+        f'const baseUrl = {json.dumps(clean_base)};\n'
+        f'initSiteBreadcrumbs({{ baseUrl }});\n'
+        f'installBreadcrumbsSync({{ baseUrl }});\n'
+        f'</script>\n'
+    )
+
+    fm_marker_re = re.compile(
+        r'(<div\b[^>]*\bid=["\']skip-to-frontmatter["\'][^>]*>)',
+        re.IGNORECASE,
+    )
+    article_open_re = re.compile(r'(<article\b[^>]*>(?:\s*<div\b[^>]*\bclass=["\'][^"\']*\bhidden\b[^"\']*["\'][^>]*>\s*</div>)?)', re.IGNORECASE)
+    existing_host_re = re.compile(
+        r'<div\b[^>]*\bid=["\']softcloud-breadcrumbs-root["\'][^>]*>.*?</nav></div>',
+        re.DOTALL | re.IGNORECASE,
+    )
+    existing_script_re = re.compile(
+        r'<script\b[^>]*\bdata-softcloud-breadcrumbs=["\']1["\'][^>]*>.*?</script>\s*',
+        re.DOTALL | re.IGNORECASE,
+    )
+
+    count = 0
+    for html_file in sorted(html_dir.rglob("*.html")):
+        if html_file.name.startswith("404") or "_locales" in html_file.parts:
+            continue
+        rel = html_file.relative_to(html_dir).as_posix()
+        loc_code, slug = infer_locale_and_slug(rel, enabled_locales, default_locale)
+        text = html_file.read_text(encoding="utf-8")
+        updated = text
+
+        trail_res = _resolve_trail_from_manifest(route_manifest, loc_code, slug)
+        if trail_res is not None:
+            aria_label, rendered_key, items = trail_res
+            nav_html = render_breadcrumbs_html(items, aria_label, rendered_key)
+            slug_esc = html_lib.escape(slug, quote=True)
+            base_esc = html_lib.escape(clean_base, quote=True)
+            host_markup = (
+                f'<div id="softcloud-breadcrumbs-root" class="sc-breadcrumbs-host" '
+                f'data-sc-breadcrumbs="1" data-sc-page-slug="{slug_esc}" '
+                f'data-sc-base-url="{base_esc}">{nav_html}</div>'
+            )
+            if 'id="softcloud-breadcrumbs-root"' in updated:
+                updated = existing_host_re.sub(lambda _: host_markup, updated, count=1)
+            elif fm_marker_re.search(updated):
+                updated = fm_marker_re.sub(lambda m: f"{host_markup}{m.group(1)}", updated, count=1)
+            elif article_open_re.search(updated):
+                updated = article_open_re.sub(lambda m: f"{m.group(1)}{host_markup}", updated, count=1)
+
+        if 'data-softcloud-breadcrumbs="1"' in updated:
+            updated = existing_script_re.sub("", updated, count=1)
+        if "</body>" in updated:
+            updated = updated.replace("</body>", f"{script_snippet}</body>", 1)
+
+        if updated != text:
+            atomic_write_text(html_file, updated)
+            count += 1
+    return count
+
+
 def assemble_combined_html(
     root: Path,
     locale_html_dirs: dict[str, Path],
@@ -902,6 +1319,12 @@ def assemble_combined_html(
     )
     print(f"[OK] Injected language switcher into {injected_count} HTML files in {output_html_dir}")
 
+    # 7. Inject breadcrumb navigation on subpages and SPA sync on all HTML files
+    bc_count = inject_breadcrumbs_into_html(
+        output_html_dir, route_manifest, locales_cfg, outer_base_url=outer_base_url
+    )
+    print(f"[OK] Injected breadcrumb navigation into {bc_count} HTML files in {output_html_dir}")
+
     return route_manifest
 
 
@@ -964,7 +1387,8 @@ def main(argv: list[str] | None = None) -> int:
             staging_root=staging_root,
         )
         staged_workspaces[code] = ws
-        print(f"[OK] Staged isolated workspace for locale '{code}' -> {ws.relative_to(root)}")
+        ws_disp = ws.relative_to(root) if ws.is_relative_to(root) else ws
+        print(f"[OK] Staged isolated workspace for locale '{code}' -> {ws_disp}")
 
     if args.stage_only:
         return 0
@@ -985,7 +1409,8 @@ def main(argv: list[str] | None = None) -> int:
         else:
             html_out = run_jupyter_book_in_workspace(ws, code, loc_base_url)
         locale_html_dirs[code] = html_out
-        print(f"[OK] Built HTML for locale '{code}' (BASE_URL={loc_base_url!r}) -> {html_out.relative_to(root)}")
+        out_disp = html_out.relative_to(root) if html_out.is_relative_to(root) else html_out
+        print(f"[OK] Built HTML for locale '{code}' (BASE_URL={loc_base_url!r}) -> {out_disp}")
 
     assemble_combined_html(
         root=root,
@@ -995,7 +1420,8 @@ def main(argv: list[str] | None = None) -> int:
         output_html_dir=output_html_dir,
         outer_base_url=outer_base_url,
     )
-    print(f"[OK] Assembled combined multilingual site in {output_html_dir.relative_to(root)}")
+    final_disp = output_html_dir.relative_to(root) if output_html_dir.is_relative_to(root) else output_html_dir
+    print(f"[OK] Assembled combined multilingual site in {final_disp}")
     return 0
 
 

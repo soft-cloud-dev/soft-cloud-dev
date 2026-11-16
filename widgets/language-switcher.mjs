@@ -43,6 +43,7 @@ export const DEFAULT_LOCALES = {
       translation_unavailable: "Translation unavailable for this page",
       go_to_locale_home: "Go to {language} home",
       current_language: "Current language",
+      breadcrumbs_label: "Breadcrumbs",
     },
   },
   pl: {
@@ -59,6 +60,7 @@ export const DEFAULT_LOCALES = {
       translation_unavailable: "Tłumaczenie tej strony jest niedostępne",
       go_to_locale_home: "Przejdź do strony głównej ({language})",
       current_language: "Bieżący język",
+      breadcrumbs_label: "Nawigacja okruszkowa",
     },
   },
   de: {
@@ -75,6 +77,7 @@ export const DEFAULT_LOCALES = {
       translation_unavailable: "Übersetzung für diese Seite nicht verfügbar",
       go_to_locale_home: "Zur Startseite ({language})",
       current_language: "Aktuelle Sprache",
+      breadcrumbs_label: "Brotkrümelnavigation",
     },
   },
   es: {
@@ -91,6 +94,7 @@ export const DEFAULT_LOCALES = {
       translation_unavailable: "Traducción no disponible para esta página",
       go_to_locale_home: "Ir al inicio ({language})",
       current_language: "Idioma actual",
+      breadcrumbs_label: "Migas de pan",
     },
   },
   fr: {
@@ -107,6 +111,7 @@ export const DEFAULT_LOCALES = {
       translation_unavailable: "Traduction indisponible pour cette page",
       go_to_locale_home: "Aller à l'accueil ({language})",
       current_language: "Langue actuelle",
+      breadcrumbs_label: "Fil d'Ariane",
     },
   },
 };
@@ -163,7 +168,7 @@ function decodeComponentSafe(value) {
   }
 }
 
-function sanitizeRelativeHref(rawHref) {
+export function sanitizeRelativeHref(rawHref) {
   const input = String(rawHref || "/");
   const hashIdx = input.indexOf("#");
   const rawBeforeHash = hashIdx === -1 ? input : input.slice(0, hashIdx);
@@ -1560,6 +1565,7 @@ export default {
   DEFAULT_LOCALES,
   parsePathnameRoute,
   normalizePageSlug,
+  sanitizeRelativeHref,
   buildLocalizedRouteUrl,
   lookupPageTranslation,
   isTranslationAvailable,

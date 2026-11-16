@@ -275,6 +275,54 @@ class TestFixThebeStorageResilience(unittest.TestCase):
         re_patched = fix_html_accessibility(patched_pl, loc_code="pl")
         self.assertEqual(re_patched, patched_pl)
 
+    def test_breadcrumbs_host_jsx_and_hydration_patch_are_idempotent(self) -> None:
+        bundle = (
+            'function Dc(l,t){return l==="textarea"||l==="noscript"||typeof t.children==="string"}'
+            'children:[!M&&(0,ki.jsx)(_5,{kind:f.kind,frontmatter:{...f.frontmatter,downloads:S},'
+            'className:"mb-8 pt-9",thebe:I,location:T,hideAuthors:_}),!p&&(0,ki.jsx)("div",{})]'
+        )
+        patched, hyd_count = ft.patch_myst_hydration_and_lang(bundle)
+        self.assertEqual(hyd_count, 2)
+        self.assertIn('id:"softcloud-breadcrumbs-root"', patched)
+        self.assertIn('f.slug&&f.slug!=="index"', patched)
+        self.assertIn('t.id==="softcloud-breadcrumbs-root"', patched)
+
+        node_check = patched.replace("children:[", "const rendered=[")
+        node_script = (
+            "const ki = { jsx: (type, props) => ({ type, props }) };\n"
+            "const _5 = 'Frontmatter';\n"
+            "const M = false, p = true, S = [], I = {}, T = '/guides.md', _ = false;\n"
+            "function evalS5(f) {\n"
+            + (
+                'const Dc = '
+                + patched[patched.index('function Dc') : patched.index('children:[')]
+                + '\n'
+                'const children = '
+                + patched[patched.index('children:[') + len('children:'):]
+                + ';\n'
+                'return { Dc, children };\n'
+            )
+            + "}\n"
+            "const home = evalS5({ slug: 'index', kind: 'Article', frontmatter: {} });\n"
+            "if (home.children[0]) throw new Error('Homepage must omit breadcrumbs host');\n"
+            "const sub = evalS5({ slug: 'guides', kind: 'Article', frontmatter: {} });\n"
+            "if (!sub.children[0] || sub.children[0].props.id !== 'softcloud-breadcrumbs-root') {\n"
+            "  throw new Error('Subpage must render softcloud-breadcrumbs-root');\n"
+            "}\n"
+            "if (sub.children[0].props['data-sc-page-slug'] !== 'guides') {\n"
+            "  throw new Error('Expected data-sc-page-slug=guides');\n"
+            "}\n"
+            "if (!sub.Dc('div', { id: 'softcloud-breadcrumbs-root' })) {\n"
+            "  throw new Error('Dc must ignore softcloud-breadcrumbs-root children');\n"
+            "}\n"
+        )
+        res = subprocess.run(["node", "-e", node_script], capture_output=True, text=True)
+        self.assertEqual(res.returncode, 0, msg=res.stderr or res.stdout)
+
+        again, second_count = ft.patch_myst_hydration_and_lang(patched)
+        self.assertEqual(second_count, 0)
+        self.assertEqual(again, patched)
+
 
 if __name__ == "__main__":
     unittest.main()
