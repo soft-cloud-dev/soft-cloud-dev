@@ -426,9 +426,9 @@
         {
           "index": "cell-2",
           "source_heading": "markdown-2",
-          "source_sha256": "68949167225af385405385b6313478a2071369e1ae46cdff5ca34b969146c0aa",
+          "source_sha256": "d86542d2a5dfee92ac507891277c111c746f50a345c0c94f876a35b495b260a8",
           "translated_heading": "markdown-2",
-          "translated_sha256": "68949167225af385405385b6313478a2071369e1ae46cdff5ca34b969146c0aa"
+          "translated_sha256": "d86542d2a5dfee92ac507891277c111c746f50a345c0c94f876a35b495b260a8"
         },
         {
           "index": "cell-3",
@@ -592,10 +592,10 @@
           "translated_sha256": "cc18bd43b3140dcf9855dce7b95a621439a4de730e95891265d534f5e634d870"
         }
       ],
-      "source_commit": "84ed7f14e482dbfd0d78456deeb7bfe5c5fcfef1",
+      "source_commit": "be9ac4d13ab993b96d7da0344dc3e850801d56e2",
       "source_path": "notebooks/webawesome-docs.ipynb",
-      "source_sha256": "a8d3910b6c4e092941648fe813c38b59b6a49be3790145e9c4de963d13198d24",
-      "translated_sha256": "a8d3910b6c4e092941648fe813c38b59b6a49be3790145e9c4de963d13198d24",
+      "source_sha256": "44b9896ef8261a0f4e6bccbc50b4acf80c276b41eac20e77cf4a32978cca5533",
+      "translated_sha256": "44b9896ef8261a0f4e6bccbc50b4acf80c276b41eac20e77cf4a32978cca5533",
       "translation_model": "gemini-2.5-flash"
     },
     "projects.md": {
@@ -803,7 +803,7 @@
   },
   "glossary_sha256": "49d88d6d5cc4d25bd538b6e7621497026343e7944687c1c6758b3f91848eadc4",
   "locale": "de",
-  "provenance_sha256": "504a41184d883a9002fb890234c0cc4cefe0f8288e01f5f101c8eacda2874b91",
+  "provenance_sha256": "90811be2454fa05325b7c468001e15deddd4b20b42abfbea1c03902dc71d71e4",
   "schema_version": "1.0",
   "source_locale": "en"
 }
