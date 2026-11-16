@@ -9,15 +9,6 @@
 
 **Software Cloud** bietet ein offenes, reproduzierbares Framework für computergestützte Forschung, Architekturdokumentation und Cloud-Software-Engineering.
 
-## SoftCloud in Bewegung
-
-:::{figure} assets/static/softcloud-campaign.svg
-:alt: Animierte Software-Cloud-Werbung: Die ursprüngliche schwarze Silhouette tanzt mit weißen Kopfhörerkabeln vor rosa Hintergrund neben dem Logo softcloud.dev und dem Slogan Build. Deploy. Scale.
-:width: 100%
-
-Entwickeln. Bereitstellen. Skalieren. — [softcloud.dev](https://softcloud.dev/)
-:::
-
 ---
 
 ## Die Herausforderung der rechnerischen Reproduzierbarkeit
