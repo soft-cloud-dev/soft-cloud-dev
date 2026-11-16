@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0037-code_block",
+  "generation_config": {
+    "locale": "es",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in Spanish (español) matching document locale 'es'.",
+    "text_temperature": 0.0
+  },
+  "language": "sh",
+  "locale": "es",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "e18a46abd68e4fb603c06533c176a3d147c7af53080358c490f09b1c973f201d",
+  "text_config_hash": "0ae7c213c19fa3769f2d0eb3191e42fb2c5d0d4339b800b6a5bd864decd76d60",
+  "transcript": "Este script de shell automatiza el proceso de compilación, limpieza y validación de la documentación generada mediante Jupyter Book en la plataforma Software Cloud. Su propósito principal es asegurar que los manuales técnicos y libros basados en Jupyter se construyan correctamente y sin errores desde un entorno limpio. Como decisiones de implementación significativas, el script inicia con la configuración estricta de ejecución mediante set -eu, lo que garantiza que cualquier fallo en un comando detenga inmediatamente la ejecución y que se detecten variables no inicializadas. Asimismo, desactiva la creación automática de entornos de Node mediante la variable de entorno JB_ALLOW_NODEENV configurada en cero, obligando al sistema a utilizar los binarios preinstalados. El flujo operativo valida primero la disponibilidad y versión de las dependencias críticas del sistema mediante la ejecución de comandos para Node.js, npm, Python, pip y Jupyter Book. A continuación, el script invoca una herramienta interna de validación de perfiles en Python, tools/check_profile.py. Una vez superadas las comprobaciones, procede a limpiar cualquier artefacto de compilación previo con jupyter book clean, ejecuta la construcción del sitio en formato HTML bajo un modo estricto que falla ante cualquier advertencia, y finalmente verifica mediante la prueba test que el archivo index.html raíz se haya generado correctamente y no esté vacío. Las entradas del proceso dependen del estado del repositorio de código y de la configuración del perfil de Python, mientras que las salidas principales consisten en el sitio de documentación compilado en el directorio _build/html. Entre los riesgos y limitaciones materiales se encuentran la dependencia estricta de que Node.js, Python y Jupyter Book estén correctamente instalados en el entorno de ejecución, además de que cualquier advertencia en los cuadernos de Jupyter detendrá el proceso de compilación debido al parámetro estricto activado.",
+  "transcript_sha256": "af1ee6a60ed7c49400190220ae255ee0da2d037259705ebb4638355205024e1a"
+}
