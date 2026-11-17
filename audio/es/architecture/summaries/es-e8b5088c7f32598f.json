@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0043-code_block",
+  "generation_config": {
+    "locale": "es",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in Spanish (español) matching document locale 'es'.",
+    "text_temperature": 0.0
+  },
+  "language": "sh",
+  "locale": "es",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "06b6c004774a049cc73c3135071ef3626dd308960b8f637bf2f19468200b9863",
+  "text_config_hash": "0ae7c213c19fa3769f2d0eb3191e42fb2c5d0d4339b800b6a5bd864decd76d60",
+  "transcript": "Este script de intérprete de comandos automatiza la generación de un archivo de bloqueo de dependencias en un entorno aislado de Python. Su propósito principal es descargar de forma segura los paquetes binarios especificados en el archivo requirements.in y procesarlos para crear un archivo requirements.lock determinista, utilizando exclusivamente binarios precompilados para garantizar la reproducibilidad. El flujo de trabajo comienza creando un entorno virtual temporal llamado punto lock guion venv utilizando Python 3.12, junto con un directorio temporal llamado punto wheelhouse para almacenar los archivos descargados. A continuación, ejecuta el comando pip download dentro del entorno virtual, configurado con la bandera solo binarios para evitar la compilación de código fuente. Posteriormente, ejecuta un script auxiliar interno ubicado en tools guion barra baja lock from wheels punto py, el cual analiza los archivos wheel descargados y genera el archivo requirements.lock final. Finalmente, el script realiza una limpieza eliminando tanto el entorno virtual temporal como el directorio wheelhouse para dejar el espacio de trabajo intacto. Como efectos secundarios notables, este proceso interactúa con el sistema de archivos creando y destruyendo directorios temporales, y realiza solicitudes de red para descargar los paquetes desde el índice de paquetes de Python. Depende de la presencia de los archivos requirements.in y tools/lock_from_wheels.py, así como de acceso a internet y de una instalación válida de Python 3.12 en el sistema host.",
+  "transcript_sha256": "2cd5d1a9ab67268cbcce28ecd6f2ea0d680c38f2f844ed41274ca102ee7ccf91"
+}
