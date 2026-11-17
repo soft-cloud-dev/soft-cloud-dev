@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0034-code_block",
+  "generation_config": {
+    "locale": "fr",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in French (français) matching document locale 'fr'.",
+    "text_temperature": 0.0
+  },
+  "language": "python",
+  "locale": "fr",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "a30e9c2499e0b7150b674adf92a78dedc58a96d96eea6573a4910290f3651d78",
+  "text_config_hash": "4714c98f9b38cf8df7f86efa85c71af3e422ea6753297c5c66a1f16e5138bf9b",
+  "transcript": "Ce script effectue un contrôle préalable rigoureux de l'environnement d'exécution et du contenu d'un projet de documentation Jupyter Book basé sur MyST. Son objectif principal est de garantir la reproductibilité et la conformité stricte du projet avant le processus de génération du site. Pour fonctionner, le script s'appuie sur la bibliothèque standard de Python, ainsi que sur les modules externes PyYAML et Jupyter Client. Il prend en entrée l'environnement Python actif, les variables d'environnement système, le fichier de configuration myst point yml, ainsi que l'arborescence des fichiers Markdown et des carnets Jupyter. Si l'ensemble des validations réussit, il affiche un message de validation indiquant le nombre de fichiers analysés. À l'inverse, toute incohérence déclenche une interruption immédiate du processus avec un message d'erreur explicite. Sur le plan des opérations, le script applique une série de vérifications délibérément inflexibles. Il exige l'interpréteur CPython en version exacte trois point douze point quatorze dans un environnement virtuel actif, et vérifie les numéros de version précis de dépendances clés telles que jupyter-book, ipykernel et PyYAML. Il valide le formatage de la variable d'environnement relative à l'URL de base et confirme que la spécification du noyau Jupyter utilise bien l'exécutable Python de l'environnement courant. Le script inspecte ensuite le fichier myst point yml, rejette les extensions et configurations héritées, et parcourt récursivement la table des matières pour vérifier que tous les fichiers référencés existent localement et sans doublons. Enfin, il contrôle chaque carnet et document Markdown afin de proscrire le saut d'exécution de code ou la tolérance d'exceptions, tout en imposant la déclaration explicite du noyau Jupyter approprié pour tout contenu calculable. En termes de risques et de limites, la principale contrainte réside dans la grande rigidité des critères de validation. L'interruption immédiate via SystemExit bloque la suite du pipeline dès la moindre divergence de version, de balise interdite ou de fichier manquant. Ce verrouillage garantit l'intégrité de la publication mais nécessite une maintenance attentive lors des montées de version logicielles.",
+  "transcript_sha256": "0a5eeafd821948fea9342b1bfe0b2487a4a9697990612541fa668e4a9b0ccd40"
+}

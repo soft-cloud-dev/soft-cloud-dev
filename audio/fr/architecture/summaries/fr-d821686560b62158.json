@@ -1,0 +1,18 @@
+{
+  "element_id": "el-0037-code_block",
+  "generation_config": {
+    "locale": "fr",
+    "schema_version": "1.0.0",
+    "text_model": "gemini-3.8-flash",
+    "text_system_prompt": "You are a technical documentation narrator for the Software Cloud platform. Provide a concise, technically accurate spoken explanation of the provided code block suitable for audio narration. Describe:\n1. Purpose and functionality.\n2. Significant inputs, outputs and dependencies.\n3. Important operations and implementation decisions.\n4. Material side effects, limitations or risks.\nRules:\n- Do NOT invent behavior unsupported by the code.\n- Do NOT read the code character-by-character or line-by-line.\n- Write in clear, natural spoken prose without Markdown formatting, bullet points, or code fences.\n- Write the entire spoken explanation in French (français) matching document locale 'fr'.",
+    "text_temperature": 0.0
+  },
+  "language": "sh",
+  "locale": "fr",
+  "model": "gemini-3.8-flash",
+  "schema_version": "1.0.0",
+  "source_hash": "e18a46abd68e4fb603c06533c176a3d147c7af53080358c490f09b1c973f201d",
+  "text_config_hash": "4714c98f9b38cf8df7f86efa85c71af3e422ea6753297c5c66a1f16e5138bf9b",
+  "transcript": "Ce script shell automatise la validation et la construction d'un projet Jupyter Book dans un environnement strict. Il commence par configurer des options de sécurité avec l'option set -eu pour interrompre l'exécution en cas d'erreur ou de variable non définie, et désactive l'utilisation de nodeenv. Le script vérifie ensuite la présence et les versions des dépendances système requises, notamment Node.js, npm, Python, pip et Jupyter Book. Il exécute ensuite un script de vérification de profil Python personnalisé avant de procéder au nettoyage complet des builds précédents et à la génération du site au format HTML en mode strict avec exécution des notebooks. Enfin, il valide le succès de la construction en s'assurant que le fichier index.html est présent et non vide dans le répertoire de sortie. Le principal risque réside dans l'échec de la construction si une seule dépendance est manquante ou si une erreur survient lors de l'exécution des notebooks.",
+  "transcript_sha256": "07124f9b7a3fbaadd062d7dc28736e6f1284c9a02d775c3a82a066fd26635224"
+}
