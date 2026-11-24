@@ -18,6 +18,8 @@ project:
   toc:
     - file: README.md
       title: SoftCloud Hub
+    - file: video-player.md
+      title: Video
     - title: Systems & Laboratories
       children:
         - file: projects.md
